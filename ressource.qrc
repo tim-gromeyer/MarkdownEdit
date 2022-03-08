@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>default.md</file>
+        <file>Icon.svg</file>
+        <file>Icon_dark.svg</file>
+    </qresource>
+</RCC>

@@ -3,15 +3,22 @@ MarkdownEdit, as the name suggests, is a simple and easy program to create and e
 
 # Features:
 - Save and load Markdown files
-- Undo-Redo(next update)
+- Undo-Redo
 - Preview Markdown files
+- Auto complete(Close brackets, list, ...)
+- Find/Replace
 
 ![Example](doc/images/Example.png)
 
 # To do:
-- Print Markddown files
+- convert to html using [md4c](https://github.com/mity/md4c)
+- Print Markdown files
 - Print preview dialog
-- Undo-Redo
 - Export HTML
 - Fix images
-- Multi-language support
+- Fix Icon theme(Include standart icons)
+- implement recently open menu
+- Add option for disabling highligthing
+
+# Credits
+- [Pbek](https://github.com/pbek) for creting the [QMarkdownTextEdit](https://github.com/pbek/qmarkdowntextedit) class

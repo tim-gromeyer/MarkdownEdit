@@ -1,37 +1,37 @@
 #include "mainwindow.h"
-#include "previewpage.h"
 #include "ui_mainwindow.h"
 #include "about.h"
 
-#include <QFile>
-#include <QFileDialog>
-#include <QFontDatabase>
 #include <QMessageBox>
-#include <QStatusBar>
-#include <QTextStream>
-#include <QWebChannel>
+#include <QFileDialog>
 #include <QFileInfo>
+#include <QTextStream>
+#include <QScreen>
+#include <QtPrintSupport/QPrintDialog>
+
+// ensure the Q_OS_ makros are defined
+#ifndef QSYSTEMDETECTION_H
+#include <qsystemdetection.h>
+#endif
+
+#include "3dparty/qmarkdowntextedit/qplaintexteditsearchwidget.h"
+// #include "3dparty/md4c/src/md4c-html.h"
 
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+#if defined(Q_OS_BLACKBERRY) || defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_WP)
+#define Q_OS_MOBILE
+#else
+#define Q_OS_DESKTOP
+#endif
+#ifdef Q_OS_LINUX
+#endif
+
+
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+    , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->editor->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
-    ui->preview->setContextMenuPolicy(Qt::NoContextMenu);
-
-    PreviewPage *page = new PreviewPage(this);
-    ui->preview->setPage(page);
-
-    connect(ui->editor, &QPlainTextEdit::textChanged, this,
-            [this]() { m_content.setText(ui->editor->toPlainText()); });
-
-    QWebChannel *channel = new QWebChannel(this);
-    channel->registerObject(QStringLiteral("content"), &m_content);
-    page->setWebChannel(channel);
-
-    ui->preview->setUrl(QUrl("qrc:/index.html"));
 
     connect(ui->actionNew, &QAction::triggered, this, &MainWindow::onFileNew);
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::onFileOpen);
@@ -40,36 +40,86 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionExit, &QAction::triggered, this, &QWidget::close);
     connect(ui->actionAbout, &QAction::triggered, this, &MainWindow::onHelpAbout);
     connect(ui->actionAboutQt, &QAction::triggered, qApp, &QApplication::aboutQt);
+    connect(ui->editor, &QPlainTextEdit::textChanged, this, &MainWindow::onTextChanged);
 
     connect(ui->editor->document(), &QTextDocument::modificationChanged,
             ui->actionSave, &QAction::setEnabled);
     connect(ui->editor->document(), &QTextDocument::modificationChanged,
             this, &QMainWindow::setWindowModified);
+    connect(ui->editor->document(), &QTextDocument::undoAvailable,
+            ui->actionUndo, &QAction::setEnabled);
+    connect(ui->editor->document(), &QTextDocument::redoAvailable,
+            ui->actionRedo, &QAction::setEnabled);
 
-    QFile defaultTextFile(":/default.md");
-    defaultTextFile.open(QIODevice::ReadOnly);
-    ui->editor->setPlainText(defaultTextFile.readAll());
-    setWindowFilePath(QFileInfo(defaultTextFile).fileName());
+    ui->actionSave->setEnabled(ui->editor->document()->isModified());
+    ui->actionUndo->setEnabled(ui->editor->document()->isUndoAvailable());
+    ui->actionRedo->setEnabled(ui->editor->document()->isRedoAvailable());
 
+    ui->toolBar->addAction(ui->actionNew);
+    ui->toolBar->addAction(ui->actionOpen);
+    ui->toolBar->addAction(ui->actionSave);
+    ui->toolBar->addSeparator();
+    ui->toolBar->addAction(ui->actionUndo);
+    ui->toolBar->addAction(ui->actionRedo);
+    ui->toolBar->addAction(ui->actionCut);
+    ui->toolBar->addAction(ui->actionCopy);
+    ui->toolBar->addAction(ui->actionPaste);
 
-    ui->toolBar->addActions(QList<QAction*>({ui->actionNew, ui->actionOpen, ui->actionSave}));
+    QPalette p = ui->editor->palette();
+    QColor back = p.base().color();
+    int r;
+    int g;
+    int b;
+    int a;
+    back.getRgb(&r, &g, &b, &a);
+
+    bool dark = ((r + g + b + a) / 4) < 127;
+    ui->editor->searchWidget()->setDarkMode(dark);
+    if (dark)
+        setWindowIcon(QIcon(":/Icon_dark.svg"));
+    else
+        setWindowIcon(QIcon(":/Icon.svg"));
+
+#ifdef Q_OS_MACOS
+    // Use dark text on light background on macOS, also in dark mode.
+    QPalette pal = textEdit->palette();
+    pal.setColor(QPalette::Base, QColor(Qt::white));
+    pal.setColor(QPalette::Text, QColor(Qt::black));
+    textEdit->setPalette(pal);
+#endif
+#ifdef Q_OS_ANDROID
+    settings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/SME_MarkdownEdit.ini", QSettings::IniFormat);
+#else
+    settings = new QSettings("SME", "MarkdownEdit", this);
+#endif
+    loadSettings();
+
+    QFile f(":/default.md", this);
+    if (f.open(QFile::ReadOnly | QFile::Text)) {
+        QTextStream in(&f);
+        ui->editor->setPlainText(in.readAll());
+        setWindowFilePath(f.fileName());
+    }
+    else {
+        setWindowFilePath(QFileInfo("new.md").fileName());
+    }
 }
 
-MainWindow::~MainWindow()
+void MainWindow::onTextChanged()
 {
-    delete ui;
+    // TODO: Implement
 }
 
-void MainWindow::openFile(const QString &path)
+void MainWindow::openFile(const QString &newFile)
 {
-    QFile f(path);
+    QFile f(newFile);
     if (!f.open(QIODevice::ReadOnly)) {
         QMessageBox::warning(this, windowTitle(),
                              tr("Could not open file %1: %2").arg(
-                                 QDir::toNativeSeparators(path), f.errorString()));
+                                 QDir::toNativeSeparators(newFile), f.errorString()));
         return;
     }
-    m_filePath = path;
+    path = newFile;
     ui->editor->setPlainText(f.readAll());
     setWindowFilePath(QFileInfo(path).fileName());
     statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)));
@@ -85,12 +135,12 @@ void MainWindow::onFileNew()
 {
     if (isModified()) {
         int button = QMessageBox::question(this, windowTitle(),
-                             tr("You have unsaved changes. Do you want to create a new document anyway?"));
+                                           tr("You have unsaved changes. Do you want to create a new document anyway?"));
         if (button != QMessageBox::Yes)
             return;
     }
 
-    m_filePath.clear();
+    path.clear();
     ui->editor->setPlainText(tr("## New document"));
     ui->editor->document()->setModified(false);
     setWindowFilePath(QFileInfo("new.md").fileName());
@@ -99,8 +149,8 @@ void MainWindow::onFileNew()
 void MainWindow::onFileOpen()
 {
     if (isModified()) {
-        int  button = QMessageBox::question(this, windowTitle(),
-                                            tr("You have unsaved changes. Do you want to open a new document anyway?"));
+        int button = QMessageBox::question(this, windowTitle(),
+                                           tr("You have unsaved changes. Do you want to open a new document anyway?"));
         if (button != QMessageBox::Yes)
             return;
     }
@@ -114,16 +164,16 @@ void MainWindow::onFileOpen()
 
 void MainWindow::onFileSave()
 {
-    if (m_filePath.isEmpty()) {
+    if (path.isEmpty()) {
         onFileSaveAs();
         return;
     }
 
-    QFile f(m_filePath);
+    QFile f(path, this);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Text))  {
         QMessageBox::warning(this, windowTitle(),
                              tr("Could not write to file %1: %2").arg(
-                                 QDir::toNativeSeparators(m_filePath), f.errorString()));
+                                 QDir::toNativeSeparators(path), f.errorString()));
         return;
     }
     QTextStream str(&f);
@@ -131,7 +181,7 @@ void MainWindow::onFileSave()
 
     ui->editor->document()->setModified(false);
 
-    statusBar()->showMessage(tr("Wrote %1").arg(QDir::toNativeSeparators(m_filePath)));
+    statusBar()->showMessage(tr("Wrote %1").arg(QDir::toNativeSeparators(path)));
 }
 
 void MainWindow::onFileSaveAs()
@@ -144,10 +194,10 @@ void MainWindow::onFileSaveAs()
         return;
 
     QStringList selectedFiles = dialog.selectedFiles();
-    m_filePath = selectedFiles.first();
-    if (!m_filePath.endsWith(".md"))
-        m_filePath.append(".md");
-    setWindowFilePath(QFileInfo(m_filePath).fileName());
+    path = selectedFiles.first();
+    if (!path.endsWith(".md"))
+        path.append(".md");
+    setWindowFilePath(QFileInfo(path).fileName());
     onFileSave();
 }
 
@@ -164,8 +214,41 @@ void MainWindow::closeEvent(QCloseEvent *e)
 {
     if (isModified()) {
         int button = QMessageBox::question(this, windowTitle(),
-                             tr("You have unsaved changes. Do you want to exit anyway?"));
-        if (button != QMessageBox::Yes)
+                                           tr("You have unsaved changes. Do you want to exit anyway?"));
+        if (button == QMessageBox::No)
             e->ignore();
+        else {
+            saveSettings();
+            e->accept();
+        }
     }
+}
+
+void MainWindow::loadSettings() {
+#ifdef Q_OS_DESKTOP
+    const QByteArray geo = settings->value("geometry", QByteArray({})).toByteArray();
+    if (geo.isEmpty()) {
+        const QRect availableGeometry = qApp->screenAt(pos())->availableGeometry();
+        resize(availableGeometry.width() / 2, (availableGeometry.height() * 2) / 3);
+        move((availableGeometry.width() - width()) / 2,
+             (availableGeometry.height() - height()) / 2);
+    }
+    else {
+        restoreGeometry(geo);
+    }
+#endif
+    restoreState(settings->value("state", QByteArray({})).toByteArray());
+}
+
+void MainWindow::saveSettings() {
+#ifdef Q_OS_DESKTOP
+    settings->setValue("geometry", saveGeometry());
+#endif
+    settings->setValue("state", saveState());
+    settings->sync();
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
 }

@@ -1,15 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "document.h"
-
 #include <QMainWindow>
-#include <QString>
+#include <QSettings>
 
 QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
+namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -17,7 +13,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
     void openFile(const QString &path);
@@ -31,13 +27,17 @@ private slots:
     void onFileSave();
     void onFileSaveAs();
     void onHelpAbout();
+    void onTextChanged();
 
 private:
     bool isModified() const;
+    void loadSettings();
+    void saveSettings();
 
     Ui::MainWindow *ui;
-    QString m_filePath;
-    Document m_content;
-};
 
+    QString path;
+
+    QSettings *settings;
+};
 #endif // MAINWINDOW_H
