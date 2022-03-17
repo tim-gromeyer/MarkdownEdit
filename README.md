@@ -26,5 +26,5 @@ MarkdownEdit, as the name suggests, is a simple and easy program to create and e
 
 # Credits
 
-- The conversion from Markdown to HTML is done with the help of the [md4c](\"https://github.com/mity/md4c\") library by _Martin Mitáš_.
-- The [widget](\"https://github.com/pbek/qmarkdowntextedit\") used for writing was created by _Patrizio Bekerle_
+- The conversion from Markdown to HTML is done with the help of the [md4c](https://github.com/mity/md4c) library by _Martin Mitáš_.
+- The [widget](https://github.com/pbek/qmarkdowntextedit) used for writing was created by _Patrizio Bekerle_
