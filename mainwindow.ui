@@ -21,8 +21,26 @@
        <enum>Qt::Horizontal</enum>
       </property>
       <widget class="QMarkdownTextEdit" name="editor"/>
-      <widget class="QTextEdit" name="textEdit">
+      <widget class="QTextBrowser" name="preview">
        <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="undoRedoEnabled">
+        <bool>false</bool>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="acceptRichText">
+        <bool>false</bool>
+       </property>
+       <property name="textInteractionFlags">
+        <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+       </property>
+       <property name="openExternalLinks">
+        <bool>true</bool>
+       </property>
+       <property name="openLinks">
         <bool>false</bool>
        </property>
       </widget>
@@ -36,7 +54,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -81,12 +99,13 @@
    </widget>
    <widget class="QMenu" name="menuExtras">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="title">
      <string>E&amp;xtras</string>
     </property>
-    <addaction name="actionExport_Html"/>
+    <addaction name="separator"/>
+    <addaction name="actionExportHtml"/>
     <addaction name="separator"/>
     <addaction name="actionOptions"/>
    </widget>
@@ -164,7 +183,7 @@
   </action>
   <action name="actionPrint">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="icon">
     <iconset theme="document-print">
@@ -179,7 +198,7 @@
   </action>
   <action name="actionPrintPreview">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="icon">
     <iconset theme="document-print-preview">
@@ -294,9 +313,13 @@
     <string>Ctrl+F</string>
    </property>
   </action>
-  <action name="actionExport_Html">
+  <action name="actionExportHtml">
    <property name="enabled">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset theme="text-html">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Export Html</string>
@@ -304,7 +327,7 @@
   </action>
   <action name="actionOptions">
    <property name="enabled">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>Options</string>
@@ -343,6 +366,14 @@
     <string>Ctrl+R</string>
    </property>
   </action>
+  <action name="actionShow_line_numbers">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show line numbers</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -350,10 +381,12 @@
    <extends>QPlainTextEdit</extends>
    <header>3dparty/qmarkdowntextedit/qmarkdowntextedit.h</header>
    <slots>
+    <signal>urlClicked(QString)</signal>
     <signal>urlClicked(QStringurl)</signal>
     <slot>duplicateText()</slot>
-    <slot>setLineNumberEnabled(boolenabled)</slot>
+    <slot>setLineNumberEnabled(bool)</slot>
     <slot>openLinkAtCursorPosition()</slot>
+    <slot>setText(QString)</slot>
     <slot>setText(constQStringtext)</slot>
    </slots>
   </customwidget>

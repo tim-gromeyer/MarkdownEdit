@@ -8,11 +8,14 @@ class Parser
 public:
     Parser();
 
-    QString Parse(QString markdown, bool ok);
-    QString errorString() { return _errorString; };
+    enum Mode {
+        Commonmark = 0,
+        GitHub = 1
+    };
 
-private:
-    QString _errorString;
+    static QString Parse(QString markdown, Mode mode = GitHub);
+
+
 };
 
 #endif // PARSER_H

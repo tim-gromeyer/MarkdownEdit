@@ -91,8 +91,8 @@ Now a nested list:
 Notice again how text always lines up on 4-space indents (including
 that last line which continues item 3 above).
 
-Here's a link to [a website](http://foo.bar), to a [local
-doc](local-doc.html), and to a [section heading in the current
+Here's a link to [a website](https://example.com), to a [local
+doc](:/default.md), and to a [section heading in the current
 doc](#an-h2-header). Here's a footnote [^1].
 
 [^1]: Some footnote text.
@@ -148,7 +148,7 @@ Here's a "line block" (note how whitespace is honored):
 
 and images can be specified like so:
 
-![example image](Icon.svg "An exemplary image")
+![example image](:/Icon.svg "An exemplary image")
 
 And note that you can backslash-escape any punctuation characters
 which you wish to be displayed literally, ex.: \`foo\`, \*bar\*, etc.

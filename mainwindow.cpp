@@ -8,6 +8,18 @@
 #include <QTextStream>
 #include <QScreen>
 #include <QtPrintSupport/QPrintDialog>
+#include <QComboBox>
+#include <QProcess>
+#include <QScrollBar>
+#if QT_CONFIG(printdialog)
+#include <QtPrintSupport/QPrinter>
+#include <QtPrintSupport/QPrintPreviewDialog>
+// #include
+#endif
+
+#ifdef QT_DEBUG
+#include "parser.h"
+#endif
 
 // ensure the Q_OS_ makros are defined
 #ifndef QSYSTEMDETECTION_H
@@ -32,6 +44,10 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    QComboBox *mode = new QComboBox(ui->toolBar);
+    mode->addItems({"Commonmark", "GitHub"});
+    mode->setCurrentIndex(1);
+    _mode = Parser::GitHub;
 
     connect(ui->actionNew, &QAction::triggered, this, &MainWindow::onFileNew);
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::onFileOpen);
@@ -41,6 +57,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionAbout, &QAction::triggered, this, &MainWindow::onHelpAbout);
     connect(ui->actionAboutQt, &QAction::triggered, qApp, &QApplication::aboutQt);
     connect(ui->editor, &QPlainTextEdit::textChanged, this, &MainWindow::onTextChanged);
+    connect(mode, &QComboBox::currentTextChanged, this, &MainWindow::changeMode);
+    connect(ui->actionExportHtml, &QAction::triggered, this, &MainWindow::exportHtml);
+    connect(ui->actionPrint, &QAction::triggered, this, &MainWindow::filePrint);
+    connect(ui->actionPrintPreview, &QAction::triggered, this, &MainWindow::filePrintPreview);
 
     connect(ui->editor->document(), &QTextDocument::modificationChanged,
             ui->actionSave, &QAction::setEnabled);
@@ -50,6 +70,8 @@ MainWindow::MainWindow(QWidget *parent)
             ui->actionUndo, &QAction::setEnabled);
     connect(ui->editor->document(), &QTextDocument::redoAvailable,
             ui->actionRedo, &QAction::setEnabled);
+    connect(ui->actionUndo, &QAction::triggered,
+            ui->editor, &QMarkdownTextEdit::undo);
 
     ui->actionSave->setEnabled(ui->editor->document()->isModified());
     ui->actionUndo->setEnabled(ui->editor->document()->isUndoAvailable());
@@ -64,6 +86,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->toolBar->addAction(ui->actionCut);
     ui->toolBar->addAction(ui->actionCopy);
     ui->toolBar->addAction(ui->actionPaste);
+    ui->toolBar->addSeparator();
+    ui->toolBar->addWidget(mode);
 
     QPalette p = ui->editor->palette();
     QColor back = p.base().color();
@@ -80,13 +104,7 @@ MainWindow::MainWindow(QWidget *parent)
     else
         setWindowIcon(QIcon(":/Icon.svg"));
 
-#ifdef Q_OS_MACOS
-    // Use dark text on light background on macOS, also in dark mode.
-    QPalette pal = textEdit->palette();
-    pal.setColor(QPalette::Base, QColor(Qt::white));
-    pal.setColor(QPalette::Text, QColor(Qt::black));
-    textEdit->setPalette(pal);
-#endif
+    // Settings
 #ifdef Q_OS_ANDROID
     settings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/SME_MarkdownEdit.ini", QSettings::IniFormat);
 #else
@@ -103,11 +121,84 @@ MainWindow::MainWindow(QWidget *parent)
     else {
         setWindowFilePath(QFileInfo("new.md").fileName());
     }
+
+    // Tests
+#ifdef QT_DEBUG
+
+#endif
+}
+
+void MainWindow::filePrint()
+{
+#if QT_CONFIG(printdialog)
+    QPrinter printer(QPrinter::HighResolution);
+    QPrintDialog *dlg = new QPrintDialog(&printer, this);
+
+    dlg->setWindowTitle(tr("Print Document"));
+    if (dlg->exec() == QDialog::Accepted)
+        ui->preview->print(&printer);
+    delete dlg;
+#endif
+}
+
+void MainWindow::filePrintPreview()
+{
+#if QT_CONFIG(printpreviewdialog)
+    QPrinter printer(QPrinter::HighResolution);
+    QPrintPreviewDialog preview(&printer, this);
+    connect(&preview, &QPrintPreviewDialog::paintRequested, this, &MainWindow::printPreview);
+    preview.exec();
+#endif
+}
+
+void MainWindow::printPreview(QPrinter *printer)
+{
+#ifdef QT_NO_PRINTER
+    Q_UNUSED(printer);
+#else
+    ui->preview->print(printer);
+#endif
+}
+
+void MainWindow::exportHtml()
+{
+    QFileDialog dialog(this, tr("Export HTML"));
+    dialog.setMimeTypeFilters({"text/html"});
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setDefaultSuffix("html");
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    QStringList selectedFiles = dialog.selectedFiles();
+    QString file = selectedFiles.first();
+    if (!file.endsWith(".html"))
+        file.append(".html");
+
+    QFile f(file, this);
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Text))  {
+        QMessageBox::warning(this, tr("Warning"),
+                             tr("Could not write to file %1: %2").arg(
+                                 QDir::toNativeSeparators(path), f.errorString()));
+        return;
+    }
+    QTextStream str(&f);
+
+    str << Parser::Parse(ui->editor->toPlainText(), _mode);
+}
+
+void MainWindow::changeMode(const QString &text)
+{
+    _mode = text == "GitHub" ? Parser::GitHub
+                             : Parser::Commonmark;
+    onTextChanged();
 }
 
 void MainWindow::onTextChanged()
 {
-    // TODO: Implement
+    QString html = Parser::Parse(ui->editor->toPlainText(), _mode);
+    int value = ui->preview->verticalScrollBar()->value();
+    ui->preview->setHtml(html);
+    ui->preview->verticalScrollBar()->setValue(value);
 }
 
 void MainWindow::openFile(const QString &newFile)
@@ -119,6 +210,7 @@ void MainWindow::openFile(const QString &newFile)
                                  QDir::toNativeSeparators(newFile), f.errorString()));
         return;
     }
+
     path = newFile;
     ui->editor->setPlainText(f.readAll());
     setWindowFilePath(QFileInfo(path).fileName());
@@ -205,8 +297,8 @@ void MainWindow::onHelpAbout()
 {
     About dialog(tr("About MarkdownEdit"), this);
     dialog.setAppUrl("https://github.com/software-made-easy/MarkdownEdit");
-    dialog.addCredit(tr("<p>The conversion from Markdown to HTML is done with the help of the <a href=\"https://github.com/chjj/marked\">marked JavaScript library</a> by <em>Christopher Jeffrey</em>.</p>"));
-    dialog.addCredit(tr("<p>The <a href=\"https://bitbucket.org/kevinburke/markdowncss/src/master/\">style sheet</a> was created by <em>Kevin Burke</em>.</p>"));
+    dialog.addCredit(tr("<p>The conversion from Markdown to HTML is done with the help of the <a href=\"https://github.com/mity/md4c\">md4c</a> library by <em>Martin Mitáš</em>.</p>"));
+    dialog.addCredit(tr("<p>The <a href=\"https://github.com/pbek/qmarkdowntextedit\">widget</a> used for writing was created by <em>Patrizio Bekerle</em></p>"));
     dialog.exec();
 }
 

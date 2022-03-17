@@ -1,4 +1,4 @@
-QT       += core gui svg
+QT       += core gui svg printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -11,11 +11,13 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x051208    # disables all the APIs depr
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    about.cpp
+    about.cpp \
+    parser.cpp
 
 HEADERS += \
     mainwindow.h \
-    about.h
+    about.h \
+    parser.h
 
 FORMS += \
     mainwindow.ui
