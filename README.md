@@ -19,7 +19,6 @@ MarkdownEdit, as the name suggests, is a simple and easy program to create and e
 - Export to HTML
 - Print
 - Poor in resources
-- Edit HTML files
 
 ![Example](doc/images/Example.png)
 
