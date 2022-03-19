@@ -13,6 +13,7 @@ Parser::Parser()
 #include <QByteArray>
 
 #include "3dparty/md4c/src/md4c-html.h"
+#include "3dparty/html2md/html2md.hpp"
 
 
 
@@ -85,75 +86,66 @@ process_output(const MD_CHAR* text, MD_SIZE size, void* userdata)
     membuf_append((struct membuffer*) userdata, text, size);
 }
 
-QString Parser::Parse(QString markdown, Mode mode)
+QString Parser::Parse(QString markdown, Mode mode, Dialect dia)
 {
-    if (mode == GitHub)
-        parser_flags |= MD_DIALECT_GITHUB;
-    else
-        parser_flags |= MD_DIALECT_COMMONMARK;
+    if (mode == MD2HTML) {
+        if (dia == GitHub)
+            parser_flags |= MD_DIALECT_GITHUB;
+        else
+            parser_flags |= MD_DIALECT_COMMONMARK;
 
-    parser_flags |= MD_FLAG_TABLES | MD_FLAG_TASKLISTS;
-    // size_t n;
-    struct membuffer buf_in = {nullptr, 0, 0};
-    struct membuffer buf_out = {nullptr, 0, 0};
+        parser_flags |= MD_FLAG_TABLES | MD_FLAG_TASKLISTS;
+        // size_t n;
+        struct membuffer buf_in = {nullptr, 0, 0};
+        struct membuffer buf_out = {nullptr, 0, 0};
 
-    QString out;
+        QString out;
 
 
-    membuf_init(&buf_in, 32 * 1024);
+        membuf_init(&buf_in, 32 * 1024);
 
-    QByteArray array = markdown.toLocal8Bit();
-    buf_in.data = array.data();
-    buf_in.size = strlen(buf_in.data);
+        QByteArray array = markdown.toLocal8Bit();
+        buf_in.data = array.data();
+        buf_in.size = strlen(buf_in.data);
 
-    // FILE* in = fmemopen(markdown.toLocal8Bit().data(), markdown.length(), "r");
-
-    /* Read the input file into a buffer.
-    while(1) {
-        if(buf_in.size >= buf_in.asize)
-            membuf_grow(&buf_in, buf_in.asize + buf_in.asize / 2);
-
-        n = fread(buf_in.data + buf_in.size, 1, buf_in.asize - buf_in.size, in);
-        if(n == 0)
-            break;
-        buf_in.size += n;
-    }
-    */
-
-    /* Input size is good estimation of output size. Add some more reserve to
+        /* Input size is good estimation of output size. Add some more reserve to
      * deal with the HTML header/footer and tags. */
-    membuf_init(&buf_out, (MD_SIZE)(buf_in.size + buf_in.size/8 + 64));
+        membuf_init(&buf_out, (MD_SIZE)(buf_in.size + buf_in.size/8 + 64));
 
-    /* Parse the document. This shall call our callbacks provided via the
+        /* Parse the document. This shall call our callbacks provided via the
      * md_renderer_t structure. */
 
-    md_html(buf_in.data, (MD_SIZE)buf_in.size, process_output, (void*) &buf_out,
-                  parser_flags, renderer_flags);
+        md_html(buf_in.data, (MD_SIZE)buf_in.size, process_output, (void*) &buf_out,
+                parser_flags, renderer_flags);
 
 
-    /* Write down the document in the HTML format. */
-    if(want_fullhtml) {
-        out.append("<!DOCTYPE html>\n");
-        out.append("<html>\n");
-        out.append("<head>\n");
-        out.append("<title></title>\n");
-        out.append("<meta name=\"generator\" content=\"md2html\">\n");
-        out.append("</head>\n");
-        out.append("<body>\n");
+        /* Write down the document in the HTML format. */
+        if(want_fullhtml) {
+            out.append("<!DOCTYPE html>\n");
+            out.append("<html>\n");
+            out.append("<head>\n");
+            out.append("<title></title>\n");
+            out.append("<meta name=\"generator\" content=\"md2html\">\n");
+            out.append("</head>\n");
+            out.append("<body>\n");
+        }
+
+        out.append(buf_out.data);
+
+        if(want_fullhtml) {
+            out.append("</body>\n");
+            out.append("</html>\n");
+        }
+
+
+        membuf_fini(&buf_in);
+        membuf_fini(&buf_out);
+
+        return out;
     }
-
-    out.append(buf_out.data);
-
-    if(want_fullhtml) {
-        out.append("</body>\n");
-        out.append("</html>\n");
+    else {
+        QString out;
+        out = QString::fromStdString(html2md::Convert(markdown.toStdString()));
+        return out;
     }
-
-    // qDebug() << buf_in.data;
-
-
-    membuf_fini(&buf_in);
-    membuf_fini(&buf_out);
-
-    return out;
 }

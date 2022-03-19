@@ -18,46 +18,35 @@ MarkdownEdit, as the name suggests, is a simple and easy program to create and e
 - Find/Replace
 - Export to HTML
 - Print
-- poor in resources
+- Poor in resources
+- Edit HTML files
 
 ![Example](doc/images/Example.png)
 
 # Dependecies:
 Note: Most of them should already be installed
 
-- libbsd0
-- libc6
 - libdouble-conversion3
-- libfreetype6
 - libgcc-s1
 - libgl1
-- libg- lib2.0-0
 - libglvnd0
 - libglx0
 - libgraphite2-3
 - libharfbuzz0b
 - libicu66
 - libpcre2-16-0
-- libpcre3
 - libpng16-16
 - libqt5core5a
 - libqt5gui5
 - libqt5printsupport5
 - libqt5widgets5
-- libx11-6
-- libxau6
-- libxcb1
-- libxdmcp6
-- zlib1g
 
-On Debian based systems basicly call `apt-get install libbsd0 libc6 libdouble-conversion3 libfreetype6 libgcc-s1 libgl1 libglib2.0-0 libglvnd0 libglx0 libgraphite2-3 libharfbuzz0b libicu66 libpcre2-16-0 libpcre3 libpng16-16 libqt5core5a libqt5gui5 libqt5printsupport5 libqt5widgets5 libx11-6 libxau6 libxcb1 libxdmcp6 zlib1g`
+On Debian based systems basicly call `apt-get install libdouble-conversion3 libgcc-s1 libgl1 libglvnd0 libglx0 libgraphite2-3 libharfbuzz0b libicu66 libpcre2-16-0 libpng16-16 libqt5core5a libqt5gui5 libqt5printsupport5 libqt5widgets5` to install these dependecies.
 
 # To do:
 
 - Fix Icon theme(Include standart icons)
-- implement recently open menu
-- Add option for disabling highligthing
-- Open HTML files and convert them to Markdown
+- Open HTML files and convert them to Markdown(it works, but it's a bit buggy, that's why it's not available)
 - Finish translations
 
 # Credits

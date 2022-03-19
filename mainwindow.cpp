@@ -11,10 +11,16 @@
 #include <QComboBox>
 #include <QProcess>
 #include <QScrollBar>
+#include <QSettings>
+#include <QDebug>
+
+#ifdef Q_OS_ANDROID
+#include <QStandardPaths>
+#endif
+
 #if QT_CONFIG(printdialog)
 #include <QtPrintSupport/QPrinter>
 #include <QtPrintSupport/QPrintPreviewDialog>
-// #include
 #endif
 
 #ifdef QT_DEBUG
@@ -58,9 +64,15 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionAboutQt, &QAction::triggered, qApp, &QApplication::aboutQt);
     connect(ui->editor, &QPlainTextEdit::textChanged, this, &MainWindow::onTextChanged);
     connect(mode, &QComboBox::currentTextChanged, this, &MainWindow::changeMode);
-    connect(ui->actionExportHtml, &QAction::triggered, this, &MainWindow::exportHtml);
+    connect(ui->actionExportHtml, &QAction::triggered, this, [this]{ exportHtml(); });
     connect(ui->actionPrint, &QAction::triggered, this, &MainWindow::filePrint);
     connect(ui->actionPrintPreview, &QAction::triggered, this, &MainWindow::filePrintPreview);
+    connect(ui->actionHighlighting_activated, &QAction::triggered,
+            this, &MainWindow::changeHighlighting);
+    /*connect(ui->actionSearch, &QAction::triggered, ui->editor->searchWidget(),
+            &QPlainTextEditSearchWidget::activate);*/
+    connect(ui->actionSearch, &QAction::triggered, ui->editor->searchWidget(),
+            &QPlainTextEditSearchWidget::activateReplace);
 
     connect(ui->editor->document(), &QTextDocument::modificationChanged,
             ui->actionSave, &QAction::setEnabled);
@@ -80,6 +92,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->toolBar->addAction(ui->actionNew);
     ui->toolBar->addAction(ui->actionOpen);
     ui->toolBar->addAction(ui->actionSave);
+    ui->toolBar->addSeparator();
+    ui->toolBar->addAction(ui->actionExportHtml);
+#ifdef Q_OS_DESKTOP
+    ui->toolBar->addAction(ui->actionPrint);
+    ui->toolBar->addAction(ui->actionPrintPreview);
+#endif
     ui->toolBar->addSeparator();
     ui->toolBar->addAction(ui->actionUndo);
     ui->toolBar->addAction(ui->actionRedo);
@@ -111,21 +129,28 @@ MainWindow::MainWindow(QWidget *parent)
     settings = new QSettings("SME", "MarkdownEdit", this);
 #endif
     loadSettings();
+    updateOpened();
 
-    QFile f(":/default.md", this);
-    if (f.open(QFile::ReadOnly | QFile::Text)) {
-        QTextStream in(&f);
-        ui->editor->setPlainText(in.readAll());
-        setWindowFilePath(f.fileName());
-    }
-    else {
-        setWindowFilePath(QFileInfo("new.md").fileName());
+    if (ui->editor->toPlainText().isEmpty()) {
+        QFile f(":/default.md", this);
+        if (f.open(QFile::ReadOnly | QFile::Text)) {
+            QTextStream in(&f);
+            ui->editor->setPlainText(in.readAll());
+            setWindowFilePath(f.fileName());
+        }
+        else {
+            setWindowFilePath(QFileInfo("new.md").fileName());
+        }
     }
 
     // Tests
 #ifdef QT_DEBUG
-
 #endif
+}
+
+void MainWindow::changeHighlighting(bool enabled)
+{
+    ui->editor->setHighlightingEnabled(enabled);
 }
 
 void MainWindow::filePrint()
@@ -160,19 +185,21 @@ void MainWindow::printPreview(QPrinter *printer)
 #endif
 }
 
-void MainWindow::exportHtml()
+void MainWindow::exportHtml(QString file)
 {
-    QFileDialog dialog(this, tr("Export HTML"));
-    dialog.setMimeTypeFilters({"text/html"});
-    dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.setDefaultSuffix("html");
-    if (dialog.exec() != QDialog::Accepted)
-        return;
+    if (file.isEmpty()) {
+        QFileDialog dialog(this, tr("Export HTML"));
+        dialog.setMimeTypeFilters({"text/html"});
+        dialog.setAcceptMode(QFileDialog::AcceptSave);
+        dialog.setDefaultSuffix("html");
+        if (dialog.exec() != QDialog::Accepted)
+            return;
 
-    QStringList selectedFiles = dialog.selectedFiles();
-    QString file = selectedFiles.first();
-    if (!file.endsWith(".html"))
-        file.append(".html");
+        QStringList selectedFiles = dialog.selectedFiles();
+        file = selectedFiles.first();
+        if (!file.endsWith(".html"))
+            file.append(".html");
+    }
 
     QFile f(file, this);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Text))  {
@@ -183,7 +210,13 @@ void MainWindow::exportHtml()
     }
     QTextStream str(&f);
 
-    str << Parser::Parse(ui->editor->toPlainText(), _mode);
+    str << Parser::Parse(ui->editor->toPlainText(), Parser::MD2HTML, _mode);
+
+    statusBar()->showMessage(tr("HTML exported to %1").arg(QDir::toNativeSeparators(file)));
+
+    if (!file.isEmpty()) {
+        setWindowModified(false);
+    }
 }
 
 void MainWindow::changeMode(const QString &text)
@@ -195,7 +228,7 @@ void MainWindow::changeMode(const QString &text)
 
 void MainWindow::onTextChanged()
 {
-    QString html = Parser::Parse(ui->editor->toPlainText(), _mode);
+    QString html = Parser::Parse(ui->editor->document()->toPlainText(), Parser::MD2HTML, _mode);
     int value = ui->preview->verticalScrollBar()->value();
     ui->preview->setHtml(html);
     ui->preview->verticalScrollBar()->setValue(value);
@@ -204,18 +237,27 @@ void MainWindow::onTextChanged()
 void MainWindow::openFile(const QString &newFile)
 {
     QFile f(newFile);
-    if (!f.open(QIODevice::ReadOnly)) {
-        QMessageBox::warning(this, windowTitle(),
+    if (!f.open(QIODevice::ReadWrite)) {
+        QMessageBox::warning(this, tr("Couldn't open file"),
                              tr("Could not open file %1: %2").arg(
                                  QDir::toNativeSeparators(newFile), f.errorString()));
         return;
     }
 
     path = newFile;
-    ui->editor->setPlainText(f.readAll());
+    if (!newFile.endsWith(".md")) {
+        QString md = Parser::Parse(f.readAll(), Parser::HTML2MD);
+        ui->editor->setPlainText(md);
+    }
+    else {
+        ui->editor->setPlainText(f.readAll());
+    }
+
     setWindowFilePath(QFileInfo(path).fileName());
     statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)));
     ui->editor->document()->setModified(false);
+
+    updateOpened();
 }
 
 bool MainWindow::isModified() const
@@ -247,8 +289,15 @@ void MainWindow::onFileOpen()
             return;
     }
 
+    QStringList mimes;
+    mimes << "text/markdown";
+#ifdef QT_DEBUG
+    mimes << "text/html";
+#endif
+
     QFileDialog dialog(this, tr("Open MarkDown File"));
-    dialog.setMimeTypeFilters({"text/markdown"});
+    // dialog.setMimeTypeFilters({"text/markdown", "text/html"});
+    dialog.setMimeTypeFilters(mimes);
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
     if (dialog.exec() == QDialog::Accepted)
         openFile(dialog.selectedFiles().constFirst());
@@ -258,6 +307,11 @@ void MainWindow::onFileSave()
 {
     if (path.isEmpty()) {
         onFileSaveAs();
+        return;
+    }
+
+    if (path.endsWith(".html")) {
+        exportHtml(path);
         return;
     }
 
@@ -271,9 +325,12 @@ void MainWindow::onFileSave()
     QTextStream str(&f);
     str << ui->editor->toPlainText();
 
+
     ui->editor->document()->setModified(false);
 
     statusBar()->showMessage(tr("Wrote %1").arg(QDir::toNativeSeparators(path)));
+
+    updateOpened();
 }
 
 void MainWindow::onFileSaveAs()
@@ -302,6 +359,46 @@ void MainWindow::onHelpAbout()
     dialog.exec();
 }
 
+void MainWindow::openRecent() {
+    // A QAction represents the action of the user clicking
+    QAction *action = qobject_cast<QAction *>(sender());
+    QString filename = action->data().toString();
+
+    if (!QFile::exists(filename)) {
+        QMessageBox::warning(this, tr("Warning"),
+                             tr("This file could not be found:\n%1.").arg(
+                                 QDir::toNativeSeparators(filename)));
+        return;
+    }
+
+    recentOpened.move(recentOpened.indexOf(filename), 0);
+
+    openFile(filename);
+    updateOpened();
+}
+
+void MainWindow::updateOpened() {
+    ui->menuRecentlyOpened->clear();
+
+    if (!path.isEmpty() && recentOpened.indexOf(path) == -1) {
+        recentOpened.insert(0, path);
+    }
+
+    if (recentOpened.size() > 7) {
+        recentOpened.takeLast();
+    }
+
+    for (int i = 0; i < recentOpened.size(); i++) {
+        QString document = recentOpened.at(i);
+        QString title("&" + QString::number(recentOpened.indexOf(document) + 1) + " | " + document);
+        QAction *action = new QAction(title, this);
+        connect(action, &QAction::triggered, this, &MainWindow::openRecent);
+
+        action->setData(document);
+        ui->menuRecentlyOpened->addAction(action);
+    }
+}
+
 void MainWindow::closeEvent(QCloseEvent *e)
 {
     if (isModified()) {
@@ -313,6 +410,17 @@ void MainWindow::closeEvent(QCloseEvent *e)
             saveSettings();
             e->accept();
         }
+    }
+    else {
+        saveSettings();
+        e->accept();
+    }
+}
+
+void MainWindow::loadIcons(bool dark)
+{
+    if (dark) {
+
     }
 }
 
@@ -330,6 +438,27 @@ void MainWindow::loadSettings() {
     }
 #endif
     restoreState(settings->value("state", QByteArray({})).toByteArray());
+    bool Highlighting = settings->value("highlighting", QString::number(true)).toBool();
+    ui->actionHighlighting_activated->setChecked(Highlighting);
+    ui->editor->setHighlightingEnabled(Highlighting);
+
+    recentOpened = settings->value("recent", QStringList()).toStringList();
+    if (!recentOpened.isEmpty()) {
+        if (recentOpened.first().isEmpty()) {
+            recentOpened.takeFirst();
+        }
+    }
+
+    const bool openLast = settings->value("openLast", QString::number(false)).toBool();
+    if (openLast) {
+        ui->actionOpen_last_document_on_start->setChecked(openLast);
+
+        QString last = settings->value("last", QString()).toString();
+        if (!last.isEmpty()) {
+            // Nothing needs to be checked, its done in openFile
+            openFile(last);
+        }
+    }
 }
 
 void MainWindow::saveSettings() {
@@ -337,6 +466,10 @@ void MainWindow::saveSettings() {
     settings->setValue("geometry", saveGeometry());
 #endif
     settings->setValue("state", saveState());
+    settings->setValue("highlighting", QString::number(ui->actionHighlighting_activated->isChecked()));
+    settings->setValue("recent", recentOpened);
+    settings->setValue("openLast", QString::number(ui->actionOpen_last_document_on_start->isChecked()));
+    settings->setValue("last", path);
     settings->sync();
 }
 

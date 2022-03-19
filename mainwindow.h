@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QSettings>
 
 
 #include "parser.h"
@@ -11,6 +10,7 @@
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 class QPrinter;
+class QSettings;
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -34,11 +34,18 @@ private slots:
     void onHelpAbout();
     void onTextChanged();
     void changeMode(const QString &text);
-    void exportHtml();
+    void exportHtml(QString file = "");
 
     void filePrint();
     void filePrintPreview();
     void printPreview(QPrinter *);
+
+    void changeHighlighting(bool enabled);
+
+    void loadIcons(bool dark = false);
+
+    void updateOpened();
+    void openRecent();
 
 private:
     bool isModified() const;
@@ -48,8 +55,10 @@ private:
     Ui::MainWindow *ui;
 
     QString path;
-    Parser::Mode _mode;
+    Parser::Dialect _mode;
 
     QSettings *settings;
+
+    QStringList recentOpened;
 };
 #endif // MAINWINDOW_H
