@@ -1,4 +1,4 @@
-QT       += core gui svg printsupport
+QT       += core gui svg printsupport webenginewidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -20,6 +20,7 @@ SOURCES += \
     3dparty/md4c/src/md4c.c \
     3dparty/md4c/src/entity.c \
     3dparty/md4c/src/md4c-html.c \
+    settings.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -27,16 +28,17 @@ HEADERS += \
     parser.h \
     3dparty/md4c/src/md4c.h \
     3dparty/md4c/src/entity.h \
-    3dparty/md4c/src/md4c-html.h
+    3dparty/md4c/src/md4c-html.h \
+    settings.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    settings.ui
 
 TRANSLATIONS += \
-    MarkdownEdit_de.ts
+    translations/MarkdownEdit_de.ts
 
 include(3dparty/qmarkdowntextedit/qmarkdowntextedit.pri)
-# include(3dparty/md4c/md4c.pri)
 
 CONFIG += lrelease
 CONFIG += embed_translations

@@ -9,10 +9,9 @@
 #include <QScreen>
 #include <QtPrintSupport/QPrintDialog>
 #include <QComboBox>
-#include <QProcess>
 #include <QScrollBar>
 #include <QSettings>
-#include <QDebug>
+
 
 #ifdef Q_OS_ANDROID
 #include <QStandardPaths>
@@ -23,9 +22,8 @@
 #include <QtPrintSupport/QPrintPreviewDialog>
 #endif
 
-#ifdef QT_DEBUG
 #include "parser.h"
-#endif
+#include "settings.h"
 
 // ensure the Q_OS_ makros are defined
 #ifndef QSYSTEMDETECTION_H
@@ -33,15 +31,12 @@
 #endif
 
 #include "3dparty/qmarkdowntextedit/qplaintexteditsearchwidget.h"
-// #include "3dparty/md4c/src/md4c-html.h"
 
 
-#if defined(Q_OS_BLACKBERRY) || defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_WP)
-#define Q_OS_MOBILE
-#else
+#if !(defined(Q_OS_BLACKBERRY) || defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_WP))
 #define Q_OS_DESKTOP
-#endif
-#ifdef Q_OS_LINUX
+#else
+#error This application was developed for desktop only due to web engine module
 #endif
 
 
@@ -50,6 +45,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->textBrowser->hide();
+
     QComboBox *mode = new QComboBox(ui->toolBar);
     mode->addItems({"Commonmark", "GitHub"});
     mode->setCurrentIndex(1);
@@ -69,10 +66,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionPrintPreview, &QAction::triggered, this, &MainWindow::filePrintPreview);
     connect(ui->actionHighlighting_activated, &QAction::triggered,
             this, &MainWindow::changeHighlighting);
-    /*connect(ui->actionSearch, &QAction::triggered, ui->editor->searchWidget(),
-            &QPlainTextEditSearchWidget::activate);*/
-    connect(ui->actionSearch, &QAction::triggered, ui->editor->searchWidget(),
-            &QPlainTextEditSearchWidget::activateReplace);
+    connect(ui->actionOptions, &QAction::triggered, this, &MainWindow::settingsDialog);
 
     connect(ui->editor->document(), &QTextDocument::modificationChanged,
             ui->actionSave, &QAction::setEnabled);
@@ -123,11 +117,8 @@ MainWindow::MainWindow(QWidget *parent)
         setWindowIcon(QIcon(":/Icon.svg"));
 
     // Settings
-#ifdef Q_OS_ANDROID
-    settings = new QSettings(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/SME_MarkdownEdit.ini", QSettings::IniFormat);
-#else
     settings = new QSettings("SME", "MarkdownEdit", this);
-#endif
+
     loadSettings();
     updateOpened();
 
@@ -145,12 +136,55 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Tests
 #ifdef QT_DEBUG
+
 #endif
+}
+
+void MainWindow::settingsDialog()
+{
+    Settings dialog;
+    dialog.setUseWebBrowser(useWebBrowser);
+    dialog.setAddPath(setPath);
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    if (useWebBrowser != dialog.useWebBrowser()) {
+        useWebBrowser = !useWebBrowser;
+        dialog.useWebBrowser();
+        if (useWebBrowser) {
+            ui->textBrowser->hide();
+            ui->preview->show();
+        }
+        else {
+            ui->preview->hide();
+            ui->textBrowser->show();
+        }
+        onTextChanged();
+    }
+
+    if (setPath != dialog.addPath()) {
+        setPath = !setPath;
+
+        QStringList searchPaths = ui->textBrowser->searchPaths();
+        bool contains = searchPaths.contains(QFileInfo(path).path());
+        if (contains && !setPath) {
+            searchPaths.removeAll(QFileInfo(path).path());
+            ui->textBrowser->setSearchPaths(searchPaths);
+            onTextChanged();
+        }
+        else if (!contains && setPath) {
+            searchPaths.append(QFileInfo(path).path());
+            ui->textBrowser->setSearchPaths(searchPaths);
+            onTextChanged();
+        }
+    }
 }
 
 void MainWindow::changeHighlighting(bool enabled)
 {
+    dontUpdate = true;
     ui->editor->setHighlightingEnabled(enabled);
+    dontUpdate = false;
 }
 
 void MainWindow::filePrint()
@@ -161,7 +195,7 @@ void MainWindow::filePrint()
 
     dlg->setWindowTitle(tr("Print Document"));
     if (dlg->exec() == QDialog::Accepted)
-        ui->preview->print(&printer);
+        printPreview(&printer);
     delete dlg;
 #endif
 }
@@ -181,7 +215,11 @@ void MainWindow::printPreview(QPrinter *printer)
 #ifdef QT_NO_PRINTER
     Q_UNUSED(printer);
 #else
-    ui->preview->print(printer);
+    if (useWebBrowser) {
+        QString html = Parser::Parse(ui->editor->document()->toPlainText(), Parser::MD2HTML, _mode);
+        ui->textBrowser->setHtml(html);
+    }
+    ui->textBrowser->print(printer);
 #endif
 }
 
@@ -228,10 +266,18 @@ void MainWindow::changeMode(const QString &text)
 
 void MainWindow::onTextChanged()
 {
-    QString html = Parser::Parse(ui->editor->document()->toPlainText(), Parser::MD2HTML, _mode);
-    int value = ui->preview->verticalScrollBar()->value();
-    ui->preview->setHtml(html);
-    ui->preview->verticalScrollBar()->setValue(value);
+    if (!dontUpdate) {
+        if (!useWebBrowser) {
+            QString html = Parser::Parse(ui->editor->document()->toPlainText(), Parser::MD2HTML, _mode);
+            int value = ui->textBrowser->verticalScrollBar()->value();
+            ui->textBrowser->setHtml(html);
+            ui->textBrowser->verticalScrollBar()->setValue(value);
+        }
+        else {
+            QString html = Parser::Parse(ui->editor->document()->toPlainText(), Parser::MD2HTML, _mode);
+            ui->preview->setHtml(html, QUrl(QFileInfo(path).path()));
+        }
+    }
 }
 
 void MainWindow::openFile(const QString &newFile)
@@ -241,6 +287,8 @@ void MainWindow::openFile(const QString &newFile)
         QMessageBox::warning(this, tr("Couldn't open file"),
                              tr("Could not open file %1: %2").arg(
                                  QDir::toNativeSeparators(newFile), f.errorString()));
+        recentOpened.removeAll(newFile);
+        updateOpened();
         return;
     }
 
@@ -256,6 +304,11 @@ void MainWindow::openFile(const QString &newFile)
     setWindowFilePath(QFileInfo(path).fileName());
     statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)));
     ui->editor->document()->setModified(false);
+
+    if (setPath) {
+        if (!ui->textBrowser->searchPaths().contains(QFileInfo(newFile).path()))
+            ui->textBrowser->setSearchPaths(ui->textBrowser->searchPaths() << QFileInfo(newFile).path());
+    }
 
     updateOpened();
 }
@@ -355,7 +408,7 @@ void MainWindow::onHelpAbout()
     About dialog(tr("About MarkdownEdit"), this);
     dialog.setAppUrl("https://github.com/software-made-easy/MarkdownEdit");
     dialog.addCredit(tr("<p>The conversion from Markdown to HTML is done with the help of the <a href=\"https://github.com/mity/md4c\">md4c</a> library by <em>Martin Mitáš</em>.</p>"));
-    dialog.addCredit(tr("<p>The <a href=\"https://github.com/pbek/qmarkdowntextedit\">widget</a> used for writing was created by <em>Patrizio Bekerle</em></p>"));
+    dialog.addCredit(tr("<p>The <a href=\"https://github.com/pbek/qmarkdowntextedit\">widget</a> used for writing was created by <em>Patrizio Bekerle</em>.</p>"));
     dialog.exec();
 }
 
@@ -419,13 +472,13 @@ void MainWindow::closeEvent(QCloseEvent *e)
 
 void MainWindow::loadIcons(bool dark)
 {
+    // TODO: Implement
     if (dark) {
 
     }
 }
 
 void MainWindow::loadSettings() {
-#ifdef Q_OS_DESKTOP
     const QByteArray geo = settings->value("geometry", QByteArray({})).toByteArray();
     if (geo.isEmpty()) {
         const QRect availableGeometry = qApp->screenAt(pos())->availableGeometry();
@@ -436,11 +489,14 @@ void MainWindow::loadSettings() {
     else {
         restoreGeometry(geo);
     }
-#endif
+
     restoreState(settings->value("state", QByteArray({})).toByteArray());
-    bool Highlighting = settings->value("highlighting", QString::number(true)).toBool();
+
+    const bool Highlighting = settings->value("highlighting", QString::number(true)).toBool();
     ui->actionHighlighting_activated->setChecked(Highlighting);
     ui->editor->setHighlightingEnabled(Highlighting);
+
+    setPath = settings->value("setPath", QString::number(true)).toBool();
 
     recentOpened = settings->value("recent", QStringList()).toStringList();
     if (!recentOpened.isEmpty()) {
@@ -449,7 +505,7 @@ void MainWindow::loadSettings() {
         }
     }
 
-    const bool openLast = settings->value("openLast", QString::number(false)).toBool();
+    const bool openLast = settings->value("openLast", QString::number(true)).toBool();
     if (openLast) {
         ui->actionOpen_last_document_on_start->setChecked(openLast);
 
@@ -459,6 +515,18 @@ void MainWindow::loadSettings() {
             openFile(last);
         }
     }
+
+    useWebBrowser = settings->value("useWebBrowser", QString::number(false)).toBool();
+    if (useWebBrowser) {
+        ui->textBrowser->hide();
+        ui->preview->show();
+    }
+    else {
+        ui->preview->hide();
+        ui->textBrowser->show();
+    }
+
+    onTextChanged();
 }
 
 void MainWindow::saveSettings() {
@@ -470,6 +538,8 @@ void MainWindow::saveSettings() {
     settings->setValue("recent", recentOpened);
     settings->setValue("openLast", QString::number(ui->actionOpen_last_document_on_start->isChecked()));
     settings->setValue("last", path);
+    settings->setValue("useWebBrowser", useWebBrowser);
+    settings->setValue("setPath", QString::number(setPath));
     settings->sync();
 }
 

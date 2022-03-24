@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>MarkdownEdit</DisplayName>
+    <Description>Install MarkdownEdit.</Description>
+    <Version>0.5.0</Version>
+    <ReleaseDate>2022-03-20</ReleaseDate>
+    <Licenses>
+        <License name="GNU General Public License v3.0" file="LICENSE" />
+    </Licenses>
+    <Script>manager.qs</Script>
+    <Default>true</Default>
+    <ForcedInstallation>true</ForcedInstallation>
+</Package>

@@ -44,13 +44,14 @@ private slots:
 
     void loadIcons(bool dark = false);
 
-    void updateOpened();
-    void openRecent();
+    void settingsDialog();
 
 private:
     bool isModified() const;
     void loadSettings();
     void saveSettings();
+    void updateOpened();
+    void openRecent();
 
     Ui::MainWindow *ui;
 
@@ -60,5 +61,9 @@ private:
     QSettings *settings;
 
     QStringList recentOpened;
+
+    bool dontUpdate = false;
+    bool useWebBrowser = false;
+    bool setPath = true;
 };
 #endif // MAINWINDOW_H

@@ -55,8 +55,7 @@ static void
 membuf_fini(struct membuffer* buf)
 {
     if(buf->data)
-        buf->data = nullptr;
-        // free(buf->data);
+        free(buf->data);
 }
 
 static void
@@ -89,6 +88,7 @@ process_output(const MD_CHAR* text, MD_SIZE size, void* userdata)
 QString Parser::Parse(QString markdown, Mode mode, Dialect dia)
 {
     if (mode == MD2HTML) {
+        // FIXME: Fix the weird symbols at the end
         if (dia == GitHub)
             parser_flags |= MD_DIALECT_GITHUB;
         else
@@ -96,24 +96,25 @@ QString Parser::Parse(QString markdown, Mode mode, Dialect dia)
 
         parser_flags |= MD_FLAG_TABLES | MD_FLAG_TASKLISTS;
         // size_t n;
-        struct membuffer buf_in = {nullptr, 0, 0};
-        struct membuffer buf_out = {nullptr, 0, 0};
+        struct membuffer buf_in = {0, 0, 0};
+        struct membuffer buf_out = {0, 0, 0};
 
         QString out;
 
 
-        membuf_init(&buf_in, 32 * 1024);
+        // membuf_init(&buf_in, 32 * 1024);
 
         QByteArray array = markdown.toLocal8Bit();
         buf_in.data = array.data();
         buf_in.size = strlen(buf_in.data);
+        buf_in.asize = 32 * 1024;
 
         /* Input size is good estimation of output size. Add some more reserve to
-     * deal with the HTML header/footer and tags. */
+         * deal with the HTML header/footer and tags. */
         membuf_init(&buf_out, (MD_SIZE)(buf_in.size + buf_in.size/8 + 64));
 
         /* Parse the document. This shall call our callbacks provided via the
-     * md_renderer_t structure. */
+         * md_renderer_t structure. */
 
         md_html(buf_in.data, (MD_SIZE)buf_in.size, process_output, (void*) &buf_out,
                 parser_flags, renderer_flags);
@@ -137,8 +138,6 @@ QString Parser::Parse(QString markdown, Mode mode, Dialect dia)
             out.append("</html>\n");
         }
 
-
-        membuf_fini(&buf_in);
         membuf_fini(&buf_out);
 
         return out;

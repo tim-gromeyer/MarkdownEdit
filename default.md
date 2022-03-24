@@ -126,27 +126,8 @@ A horizontal rule follows.
 
 ***
 
-Here's a definition list:
 
-apples
-  : Good for making applesauce.
-
-oranges
-  : Citrus!
-
-tomatoes
-  : There's no "e" in tomatoe.
-
-Again, text is indented 4 spaces. (Put a blank line between each
-term and  its definition to spread things out more.)
-
-Here's a "line block" (note how whitespace is honored):
-
-| Line one
-|   Line too
-| Line tree
-
-and images can be specified like so:
+Images can be specified like so:
 
 ![example image](:/Icon.svg "An exemplary image")
 

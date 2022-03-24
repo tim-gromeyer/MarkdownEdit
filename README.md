@@ -4,7 +4,7 @@
 [![GitHub release](https://img.shields.io/github/release/software-made-easy/MarkdownEdit.svg)](https://github.com/software-made-easy/MarkdownEdit/releases/)
 
 
-# MarkdownEdit 
+# MarkdownEdit
 
 MarkdownEdit, as the name suggests, is a simple and easy program to create and edit Markdown files.
 
@@ -12,41 +12,40 @@ MarkdownEdit, as the name suggests, is a simple and easy program to create and e
 
 - Save and load Markdown files
 - Undo-Redo
-- Preview Markdown files
+- Preview markdown files in real time
 - Highlighting
 - Auto complete(Close brackets, list, ...)
 - Find/Replace
 - Export to HTML
 - Print
 - Poor in resources
+- Edit HTML files
 
 ![Example](doc/images/Example.png)
 
 # Dependecies:
-Note: Most of them should already be installed
+NOTE: There is a [script](scripts/requirements.sh) to find all dependencies. The script dependencies are 'libc-bin' and 'dlocate'
 
-- libdouble-conversion3
-- libgcc-s1
-- libgl1
-- libglvnd0
-- libglx0
-- libgraphite2-3
-- libharfbuzz0b
-- libicu66
-- libpcre2-16-0
-- libpng16-16
 - libqt5core5a
 - libqt5gui5
+- libqt5network5
+- libqt5positioning5
 - libqt5printsupport5
+- libqt5qml5
+- libqt5quick5
+- libqt5quickwidgets5
+- libqt5webchannel5
+- libqt5webenginecore5
+- libqt5webenginewidgets5
 - libqt5widgets5
 
-On Debian based systems basicly call `apt-get install libdouble-conversion3 libgcc-s1 libgl1 libglvnd0 libglx0 libgraphite2-3 libharfbuzz0b libicu66 libpcre2-16-0 libpng16-16 libqt5core5a libqt5gui5 libqt5printsupport5 libqt5widgets5` to install these dependecies.
+On Debian based systems basicly call `apt-get install libqt5core5a libqt5gui5 libqt5network5 libqt5positioning5 libqt5printsupport5 libqt5qml5 libqt5quick5 libqt5quickwidgets5 libqt5webchannel5 libqt5webenginecore5 libqt5webenginewidgets5 libqt5widgets5` to install these dependecies.
 
 # To do:
 
 - Fix Icon theme(Include standart icons)
-- Open HTML files and convert them to Markdown(it works, but it's a bit buggy, that's why it's not available)
-- Finish translations
+- Open HTML files and convert them to Markdown(it works, but it's a bit buggy, that's why it's not available, to enable it anyways, define _QT_DEBUG_ when compiling [mainwindow.cpp](mainwindow.cpp))
+- Synchronize scrolling
 
 # Credits
 

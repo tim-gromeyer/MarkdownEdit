@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>MarkdownEdit</Name>
+    <Version>0.5.0</Version>
+    <Title>MarkdownEdit</Title>
+    <Publisher>Tim Gromeyer</Publisher>
+    <StartMenuDir>MarkdownEdit</StartMenuDir>
+    <TargetDir>@ApplicationsDirUser@/MarkdownEdit</TargetDir>
+</Installer>
