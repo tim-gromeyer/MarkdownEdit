@@ -17,14 +17,12 @@ SOURCES += \
     mainwindow.cpp \
     about.cpp \
     parser.cpp \
-    random.cpp \
     settings.cpp
 
 HEADERS += \
     mainwindow.h \
     about.h \
     parser.h \
-    random.h \
     settings.h
 
 FORMS += \
