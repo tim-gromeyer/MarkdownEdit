@@ -11,11 +11,9 @@
 #include <QComboBox>
 #include <QScrollBar>
 #include <QSettings>
+#include <QTimer>
+#include <QtSpell-qt5/QtSpell.hpp>
 
-
-#ifdef Q_OS_ANDROID
-#include <QStandardPaths>
-#endif
 
 #if QT_CONFIG(printdialog)
 #include <QtPrintSupport/QPrinter>
@@ -24,18 +22,10 @@
 
 #include "parser.h"
 #include "settings.h"
-
-// ensure the Q_OS_ makros are defined
-#ifndef QSYSTEMDETECTION_H
-#include <qsystemdetection.h>
-#endif
-
-#include "3dparty/qmarkdowntextedit/qplaintexteditsearchwidget.h"
+#include "3rdparty/qmarkdowntextedit/qplaintexteditsearchwidget.h"
 
 
-#if !(defined(Q_OS_BLACKBERRY) || defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_WP))
-#define Q_OS_DESKTOP
-#else
+#if (defined(Q_OS_BLACKBERRY) || defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_WP))
 #error This application was developed for desktop only due to web engine module
 #endif
 
@@ -50,7 +40,25 @@ MainWindow::MainWindow(QWidget *parent)
     QComboBox *mode = new QComboBox(ui->toolBar);
     mode->addItems({"Commonmark", "GitHub"});
     mode->setCurrentIndex(1);
-    _mode = Parser::GitHub;
+    _mode = 1;
+
+    // FIXME: Fix check modified status
+
+    /*
+    timer = new QTimer(this);
+    timer->setInterval(60000);
+
+
+    connect(timer, &QTimer::timeout, this, &MainWindow::autoSave);
+
+    timer->start();
+    */
+
+    checker = new QtSpell::TextEditChecker(this);
+    checker->setTextEdit(ui->editor);
+    checker->setDecodeLanguageCodes(true);
+    checker->setShowCheckSpellingCheckbox(true);
+    checker->setUndoRedoEnabled(true);
 
     connect(ui->actionNew, &QAction::triggered, this, &MainWindow::onFileNew);
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::onFileOpen);
@@ -64,22 +72,34 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionExportHtml, &QAction::triggered, this, [this]{ exportHtml(); });
     connect(ui->actionPrint, &QAction::triggered, this, &MainWindow::filePrint);
     connect(ui->actionPrintPreview, &QAction::triggered, this, &MainWindow::filePrintPreview);
+
+    connect(ui->actionPaste, &QAction::triggered,
+            this, [this]{ ui->editor->paste(); changeHighlighting(highlighting); });
     connect(ui->actionHighlighting_activated, &QAction::triggered,
             this, &MainWindow::changeHighlighting);
-    connect(ui->actionOptions, &QAction::triggered, this, &MainWindow::settingsDialog);
-
-    connect(ui->editor->document(), &QTextDocument::modificationChanged,
-            ui->actionSave, &QAction::setEnabled);
-    connect(ui->editor->document(), &QTextDocument::modificationChanged,
+    connect(ui->actionOptions, &QAction::triggered,
+            this, &MainWindow::settingsDialog);
+    /*connect(ui->raw->document(), &QTextDocument::modificationChanged,
+            ui->actionSave, &QAction::setEnabled);*/
+    connect(ui->raw->document(), &QTextDocument::modificationChanged,
             this, &QMainWindow::setWindowModified);
-    connect(ui->editor->document(), &QTextDocument::undoAvailable,
+    connect(checker, &QtSpell::TextEditChecker::undoAvailable,
             ui->actionUndo, &QAction::setEnabled);
-    connect(ui->editor->document(), &QTextDocument::redoAvailable,
+    connect(checker, &QtSpell::TextEditChecker::redoAvailable,
             ui->actionRedo, &QAction::setEnabled);
     connect(ui->actionUndo, &QAction::triggered,
-            ui->editor, &QMarkdownTextEdit::undo);
+            this, &MainWindow::undo);
+    connect(ui->actionRedo, &QAction::triggered,
+            this, &MainWindow::redo);
+    connect(ui->actionDisable_preview, &QAction::triggered,
+            this, &MainWindow::disablePreview);
+    connect(ui->actionPause_preview, &QAction::triggered,
+            this, &MainWindow::pausePreview);
+    connect(ui->actionSpell_checking, &QAction::triggered,
+            this, &MainWindow::changeSpelling);
 
-    ui->actionSave->setEnabled(ui->editor->document()->isModified());
+    // WARNING: Activate when isModified() works
+    // ui->actionSave->setEnabled(ui->editor->document()->isModified());
     ui->actionUndo->setEnabled(ui->editor->document()->isUndoAvailable());
     ui->actionRedo->setEnabled(ui->editor->document()->isRedoAvailable());
 
@@ -88,10 +108,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->toolBar->addAction(ui->actionSave);
     ui->toolBar->addSeparator();
     ui->toolBar->addAction(ui->actionExportHtml);
-#ifdef Q_OS_DESKTOP
     ui->toolBar->addAction(ui->actionPrint);
     ui->toolBar->addAction(ui->actionPrintPreview);
-#endif
     ui->toolBar->addSeparator();
     ui->toolBar->addAction(ui->actionUndo);
     ui->toolBar->addAction(ui->actionRedo);
@@ -109,7 +127,7 @@ MainWindow::MainWindow(QWidget *parent)
     int a;
     back.getRgb(&r, &g, &b, &a);
 
-    bool dark = ((r + g + b + a) / 4) < 127;
+    const bool dark = ((r + g + b + a) / 4) < 127;
     ui->editor->searchWidget()->setDarkMode(dark);
     if (dark)
         setWindowIcon(QIcon(":/Icon_dark.svg"));
@@ -130,7 +148,7 @@ MainWindow::MainWindow(QWidget *parent)
             setWindowFilePath(f.fileName());
         }
         else {
-            setWindowFilePath(QFileInfo("new.md").fileName());
+            setWindowFilePath(QFileInfo(tr("new.md")).fileName());
         }
     }
 
@@ -138,6 +156,77 @@ MainWindow::MainWindow(QWidget *parent)
 #ifdef QT_DEBUG
 
 #endif
+}
+
+void MainWindow::changeSpelling(bool checked)
+{
+    checker->setSpellingEnabled(checked);
+    ui->actionSpell_checking->setChecked(checked);
+    spelling = checked;
+}
+
+void MainWindow::clearAutoSave()
+{
+    if (QFile::exists(path + ".autosave"))
+        QFile::remove(path + ".autosave");
+}
+
+void MainWindow::autoSave()
+{
+    if (!isModified())
+        return;
+
+    QFile f(path + ".autosave");
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Text))
+        return;
+
+    QTextStream out(&f);
+    out << ui->editor->document()->toPlainText();
+}
+
+void MainWindow::disablePreview(bool checked)
+{
+    if (checked)
+        ui->tabWidget->hide();
+    else
+        ui->tabWidget->show();
+
+    dontUpdate = checked;
+
+    ui->actionPause_preview->setChecked(checked);
+    ui->actionPause_preview->setEnabled(!checked);
+}
+
+void MainWindow::pausePreview(bool checked)
+{
+    dontUpdate = checked;
+}
+
+void MainWindow::undo()
+{
+    if (!useWebBrowser) {
+        dontUpdate = true;
+        checker->undo();
+        ui->textBrowser->undo();
+        dontUpdate = false;
+    }
+    else {
+        checker->undo();
+    }
+
+}
+
+void MainWindow::redo()
+{
+    if (!useWebBrowser) {
+        dontUpdate = true;
+        checker->redo();
+        ui->textBrowser->redo();
+        dontUpdate = false;
+    }
+    else {
+        checker->redo();
+    }
 }
 
 void MainWindow::settingsDialog()
@@ -185,6 +274,7 @@ void MainWindow::changeHighlighting(bool enabled)
     dontUpdate = true;
     ui->editor->setHighlightingEnabled(enabled);
     dontUpdate = false;
+    highlighting = enabled;
 }
 
 void MainWindow::filePrint()
@@ -259,29 +349,47 @@ void MainWindow::exportHtml(QString file)
 
 void MainWindow::changeMode(const QString &text)
 {
-    _mode = text == "GitHub" ? Parser::GitHub
-                             : Parser::Commonmark;
+    _mode = text == "GitHub" ? 1
+                             : 0;
     onTextChanged();
 }
 
 void MainWindow::onTextChanged()
 {
-    if (!dontUpdate) {
-        if (!useWebBrowser) {
-            QString html = Parser::Parse(ui->editor->document()->toPlainText(), Parser::MD2HTML, _mode);
-            int value = ui->textBrowser->verticalScrollBar()->value();
-            ui->textBrowser->setHtml(html);
-            ui->textBrowser->verticalScrollBar()->setValue(value);
-        }
-        else {
-            QString html = Parser::Parse(ui->editor->document()->toPlainText(), Parser::MD2HTML, _mode);
-            ui->preview->setHtml(html, QUrl(QFileInfo(path).path()));
-        }
+    if (dontUpdate)
+        return;
+
+    if (!useWebBrowser) {
+        QString html = Parser::Parse(ui->editor->document()->toPlainText(), Parser::MD2HTML, _mode);
+        int value = ui->textBrowser->verticalScrollBar()->value();
+        ui->textBrowser->setHtml(html);
+        ui->textBrowser->verticalScrollBar()->setValue(value);
+        ui->raw->setPlainText(html);
+    }
+    else {
+        QString html = Parser::Parse(ui->editor->document()->toPlainText(), Parser::MD2HTML, _mode);
+        ui->preview->setHtml(html, QUrl(QFileInfo(path).path()));
+        ui->raw->setPlainText(html);
     }
 }
 
 void MainWindow::openFile(const QString &newFile)
 {
+    /*
+    if (QFile::exists(newFile + ".autosave")) {
+        QMessageBox dlg;
+        dlg.setWindowTitle(tr(""));
+        dlg.setText(tr(""));
+        dlg.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        dlg.setDefaultButton(QMessageBox::Yes);
+
+        // TODO: Finish
+        if (dlg.exec() == QMessageBox::Yes) {
+            QFile f(newFile + ".autosave");
+            if (!f.rename(newFile)) {}
+        }
+    }
+    */
     QFile f(newFile);
     if (!f.open(QIODevice::ReadWrite)) {
         QMessageBox::warning(this, tr("Couldn't open file"),
@@ -293,9 +401,17 @@ void MainWindow::openFile(const QString &newFile)
     }
 
     path = newFile;
+
+    // moved here, because the pictures used to be above the text
+    if (setPath) {
+        if (!ui->textBrowser->searchPaths().contains(QFileInfo(newFile).path()))
+            ui->textBrowser->setSearchPaths(ui->textBrowser->searchPaths() << QFileInfo(newFile).path());
+    }
+
     if (!newFile.endsWith(".md")) {
         QString md = Parser::Parse(f.readAll(), Parser::HTML2MD);
         ui->editor->setPlainText(md);
+        html = true;
     }
     else {
         ui->editor->setPlainText(f.readAll());
@@ -305,17 +421,17 @@ void MainWindow::openFile(const QString &newFile)
     statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)));
     ui->editor->document()->setModified(false);
 
-    if (setPath) {
-        if (!ui->textBrowser->searchPaths().contains(QFileInfo(newFile).path()))
-            ui->textBrowser->setSearchPaths(ui->textBrowser->searchPaths() << QFileInfo(newFile).path());
-    }
+    checker->setSpellingEnabled(spelling);
 
     updateOpened();
+    clearAutoSave();
 }
 
 bool MainWindow::isModified() const
 {
-    return ui->editor->document()->isModified();
+    // FIXME: not working because of spell checking
+    return false;
+    // return ui->editor->document()->isModified();
 }
 
 void MainWindow::onFileNew()
@@ -326,8 +442,9 @@ void MainWindow::onFileNew()
         if (button != QMessageBox::Yes)
             return;
     }
+    clearAutoSave();
 
-    path.clear();
+    path = "new.md";
     ui->editor->setPlainText(tr("## New document"));
     ui->editor->document()->setModified(false);
     setWindowFilePath(QFileInfo("new.md").fileName());
@@ -349,7 +466,6 @@ void MainWindow::onFileOpen()
 #endif
 
     QFileDialog dialog(this, tr("Open MarkDown File"));
-    // dialog.setMimeTypeFilters({"text/markdown", "text/html"});
     dialog.setMimeTypeFilters(mimes);
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
     if (dialog.exec() == QDialog::Accepted)
@@ -363,7 +479,7 @@ void MainWindow::onFileSave()
         return;
     }
 
-    if (path.endsWith(".html")) {
+    if (html) {
         exportHtml(path);
         return;
     }
@@ -378,6 +494,7 @@ void MainWindow::onFileSave()
     QTextStream str(&f);
     str << ui->editor->toPlainText();
 
+    clearAutoSave();
 
     ui->editor->document()->setModified(false);
 
@@ -407,8 +524,12 @@ void MainWindow::onHelpAbout()
 {
     About dialog(tr("About MarkdownEdit"), this);
     dialog.setAppUrl("https://github.com/software-made-easy/MarkdownEdit");
+    dialog.setDescription(tr("MarkdownEdit, as the name suggests, is a simple and easy program to create and edit Markdown files."));
+
     dialog.addCredit(tr("<p>The conversion from Markdown to HTML is done with the help of the <a href=\"https://github.com/mity/md4c\">md4c</a> library by <em>Martin Mitáš</em>.</p>"));
     dialog.addCredit(tr("<p>The <a href=\"https://github.com/pbek/qmarkdowntextedit\">widget</a> used for writing was created by <em>Patrizio Bekerle</em>.</p>"));
+    dialog.addCredit(tr("<p>Spell checking is done using the <a href=\"https://github.com/manisandro/qtspell\">QtSpell</a> library by <em>Sandro Mani</em>.</p>"));
+
     dialog.exec();
 }
 
@@ -470,14 +591,6 @@ void MainWindow::closeEvent(QCloseEvent *e)
     }
 }
 
-void MainWindow::loadIcons(bool dark)
-{
-    // TODO: Implement
-    if (dark) {
-
-    }
-}
-
 void MainWindow::loadSettings() {
     const QByteArray geo = settings->value("geometry", QByteArray({})).toByteArray();
     if (geo.isEmpty()) {
@@ -492,9 +605,9 @@ void MainWindow::loadSettings() {
 
     restoreState(settings->value("state", QByteArray({})).toByteArray());
 
-    const bool Highlighting = settings->value("highlighting", QString::number(true)).toBool();
-    ui->actionHighlighting_activated->setChecked(Highlighting);
-    ui->editor->setHighlightingEnabled(Highlighting);
+    highlighting = settings->value("highlighting", QString::number(true)).toBool();
+    ui->actionHighlighting_activated->setChecked(highlighting);
+    changeHighlighting(highlighting);
 
     setPath = settings->value("setPath", QString::number(true)).toBool();
 
@@ -510,10 +623,8 @@ void MainWindow::loadSettings() {
         ui->actionOpen_last_document_on_start->setChecked(openLast);
 
         QString last = settings->value("last", QString()).toString();
-        if (!last.isEmpty()) {
-            // Nothing needs to be checked, its done in openFile
+        if (!last.isEmpty())
             openFile(last);
-        }
     }
 
     useWebBrowser = settings->value("useWebBrowser", QString::number(false)).toBool();
@@ -527,12 +638,15 @@ void MainWindow::loadSettings() {
     }
 
     onTextChanged();
+    spelling = settings->value("spelling", QString::number(true)).toBool();
+    changeSpelling(spelling);
+    const QString spellLang = settings->value("spellLang", QString()).toString();
+    if (!spellLang.isEmpty())
+        checker->setLanguage(spellLang);
 }
 
 void MainWindow::saveSettings() {
-#ifdef Q_OS_DESKTOP
     settings->setValue("geometry", saveGeometry());
-#endif
     settings->setValue("state", saveState());
     settings->setValue("highlighting", QString::number(ui->actionHighlighting_activated->isChecked()));
     settings->setValue("recent", recentOpened);
@@ -540,10 +654,13 @@ void MainWindow::saveSettings() {
     settings->setValue("last", path);
     settings->setValue("useWebBrowser", useWebBrowser);
     settings->setValue("setPath", QString::number(setPath));
+    settings->setValue("spelling", QString::number(checker->getSpellingEnabled()));
+    settings->setValue("spellLang", checker->getLanguage());
     settings->sync();
 }
 
 MainWindow::~MainWindow()
 {
+    // timer->stop();
     delete ui;
 }

@@ -6,8 +6,6 @@
 class Parser
 {
 public:
-    Parser();
-
     enum Dialect {
         Commonmark = 0,
         GitHub = 1
@@ -17,9 +15,7 @@ public:
         HTML2MD = 1
     };
 
-    static QString Parse(QString in, Mode mode = MD2HTML, Dialect dia = GitHub);
-
-
+    static QString Parse(QString in, Mode mode = MD2HTML, int dia = GitHub);
 };
 
 #endif // PARSER_H

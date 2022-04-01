@@ -25,6 +25,7 @@ public:
     void setAppUrl(QUrl url);
     void setAppUrl(QString url);
     void setAppVersion(QString version);
+    void setDescription(const QString description);
 
 private:
     void setupUi();
@@ -33,6 +34,7 @@ private:
     bool creditPage = true;
     QString homepage;
     QString _version = nullptr;
+    QString _description = nullptr;
 
     QVBoxLayout *verticalLayout;
     QTabWidget *tabWidget;
@@ -44,6 +46,8 @@ private:
     QLabel *label_4;
     QLabel *label_6;
     QLabel *label_7;
+    QLabel *label_9;
+    QLabel *label_10;
     QWidget *tab_2;
     QVBoxLayout *verticalLayout_3;
     QLabel *label_8;
