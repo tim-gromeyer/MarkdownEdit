@@ -4,13 +4,13 @@
 #include <QMainWindow>
 
 
-#include "parser.h"
-
-
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 class QPrinter;
 class QSettings;
+class QTimer;
+namespace QtSpell { class TextEditChecker; }
+class QTextDocument;
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -23,6 +23,8 @@ public:
 
     void openFile(const QString &path);
 
+    void setLanguage(const QString lang) { language = lang; };
+
 protected:
     void closeEvent(QCloseEvent *e) override;
 
@@ -33,7 +35,7 @@ private slots:
     void onFileSaveAs();
     void onHelpAbout();
     void onTextChanged();
-    void changeMode(const QString &text);
+    void changeMode(const QString &);
     void exportHtml(QString file = "");
 
     void filePrint();
@@ -41,10 +43,17 @@ private slots:
     void printPreview(QPrinter *);
 
     void changeHighlighting(bool enabled);
-
-    void loadIcons(bool dark = false);
+    void changeSpelling(bool checked);
+    void pausePreview(bool checked);
+    void disablePreview(bool checked);
 
     void settingsDialog();
+
+    void undo();
+    void redo();
+
+    void autoSave();
+    void clearAutoSave();
 
 private:
     bool isModified() const;
@@ -56,14 +65,23 @@ private:
     Ui::MainWindow *ui;
 
     QString path;
-    Parser::Dialect _mode;
+    int _mode;
+
+    QTimer *timer;
 
     QSettings *settings;
 
     QStringList recentOpened;
 
+    QString language;
+
     bool dontUpdate = false;
     bool useWebBrowser = false;
     bool setPath = true;
+    bool html = false;
+    bool spelling = true;
+    bool highlighting = false;
+
+    QtSpell::TextEditChecker *checker;
 };
 #endif // MAINWINDOW_H

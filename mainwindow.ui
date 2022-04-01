@@ -16,25 +16,58 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QSplitter" name="splitter">
+     <widget class="QSplitter" name="splitter_2">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
       <widget class="QMarkdownTextEdit" name="editor"/>
-      <widget class="QWebEngineView" name="preview" native="true">
-       <property name="url" stdset="0">
-        <url>
-         <string>about:blank</string>
-        </url>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="currentIndex">
+        <number>0</number>
        </property>
-      </widget>
-      <widget class="QTextBrowser" name="textBrowser">
-       <property name="openExternalLinks">
-        <bool>true</bool>
-       </property>
-       <property name="openLinks">
-        <bool>false</bool>
-       </property>
+       <widget class="QWidget" name="tab">
+        <attribute name="title">
+         <string>Preview</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QSplitter" name="splitter">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <widget class="QWebEngineView" name="preview" native="true">
+            <property name="url" stdset="0">
+             <url>
+              <string>about:blank</string>
+             </url>
+            </property>
+           </widget>
+           <widget class="QTextBrowser" name="textBrowser">
+            <property name="openExternalLinks">
+             <bool>true</bool>
+            </property>
+            <property name="openLinks">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_2">
+        <attribute name="title">
+         <string>Raw HTML</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QTextEdit" name="raw">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </widget>
     </item>
@@ -94,7 +127,7 @@
      <string>E&amp;xtras</string>
     </property>
     <addaction name="separator"/>
-    <addaction name="actionHighlighting_activated"/>
+    <addaction name="actionSpell_checking"/>
     <addaction name="separator"/>
     <addaction name="actionExportHtml"/>
     <addaction name="separator"/>
@@ -109,8 +142,18 @@
     <addaction name="actionAbout"/>
     <addaction name="actionAboutQt"/>
    </widget>
+   <widget class="QMenu" name="menu_View">
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+    <addaction name="actionPause_preview"/>
+    <addaction name="actionDisable_preview"/>
+    <addaction name="separator"/>
+    <addaction name="actionHighlighting_activated"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
+   <addaction name="menu_View"/>
    <addaction name="menuExtras"/>
    <addaction name="menu_Help"/>
   </widget>
@@ -323,7 +366,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset theme="preferences-desktop"/>
+    <iconset theme="preferences-desktop">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Options</string>
@@ -399,12 +443,36 @@
     <string>Open last document on startup</string>
    </property>
   </action>
+  <action name="actionPause_preview">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Pause preview</string>
+   </property>
+  </action>
+  <action name="actionDisable_preview">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Disable preview</string>
+   </property>
+  </action>
+  <action name="actionSpell_checking">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Spell check</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
    <class>QMarkdownTextEdit</class>
    <extends>QPlainTextEdit</extends>
-   <header>3dparty/qmarkdowntextedit/qmarkdowntextedit.h</header>
+   <header>3rdparty/qmarkdowntextedit/qmarkdowntextedit.h</header>
    <slots>
     <signal>urlClicked(QString)</signal>
     <signal>urlClicked(QStringurl)</signal>
@@ -444,22 +512,6 @@
    <signal>triggered()</signal>
    <receiver>editor</receiver>
    <slot>cut()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>203</x>
-     <y>307</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionPaste</sender>
-   <signal>triggered()</signal>
-   <receiver>editor</receiver>
-   <slot>paste()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

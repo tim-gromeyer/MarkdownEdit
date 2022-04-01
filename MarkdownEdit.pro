@@ -17,18 +17,14 @@ SOURCES += \
     mainwindow.cpp \
     about.cpp \
     parser.cpp \
-    3dparty/md4c/src/md4c.c \
-    3dparty/md4c/src/entity.c \
-    3dparty/md4c/src/md4c-html.c \
+    random.cpp \
     settings.cpp
 
 HEADERS += \
     mainwindow.h \
     about.h \
     parser.h \
-    3dparty/md4c/src/md4c.h \
-    3dparty/md4c/src/entity.h \
-    3dparty/md4c/src/md4c-html.h \
+    random.h \
     settings.h
 
 FORMS += \
@@ -38,14 +34,19 @@ FORMS += \
 TRANSLATIONS += \
     translations/MarkdownEdit_de.ts
 
-include(3dparty/qmarkdowntextedit/qmarkdowntextedit.pri)
+include(3rdparty/qmarkdowntextedit/qmarkdowntextedit.pri)
 
 CONFIG += lrelease
 CONFIG += embed_translations
+CONFIG += link_pkgconfig
 CONFIG -= qtquickcompiler
+
+PKGCONFIG += QtSpell-qt5 md4c-html
 
 VERSION = 0.5.0
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+CONFIG(release, debug | release): DEFINES += QT_NO_DEBUG_OUTPUT
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

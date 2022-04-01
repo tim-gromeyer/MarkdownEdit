@@ -38,10 +38,23 @@ void About::setupUi() {
     tab->setObjectName(QString::fromUtf8("tab"));
     formLayout = new QFormLayout(tab);
     formLayout->setObjectName(QString::fromUtf8("formLayout"));
+
+    label_9 = new QLabel(tab);
+    label_9->setObjectName(QString::fromUtf8("label_9"));
+
+    formLayout->setWidget(0, QFormLayout::LabelRole, label_9);
+
+    label_10 = new QLabel(tab);
+    label_10->setObjectName(QString::fromUtf8("label_10"));
+    label_10->setWordWrap(true);
+    label_10->setOpenExternalLinks(true);
+
+    formLayout->setWidget(0, QFormLayout::FieldRole, label_10);
+
     label = new QLabel(tab);
     label->setObjectName(QString::fromUtf8("label"));
 
-    formLayout->setWidget(0, QFormLayout::LabelRole, label);
+    formLayout->setWidget(1, QFormLayout::LabelRole, label);
 
 #if defined(APP_VERSION)
     _version = APP_VERSION;
@@ -49,12 +62,12 @@ void About::setupUi() {
     label_2 = new QLabel(tab);
     label_2->setObjectName(QString::fromUtf8("label_2"));
 
-    formLayout->setWidget(0, QFormLayout::FieldRole, label_2);
+    formLayout->setWidget(1, QFormLayout::FieldRole, label_2);
 
     label_3 = new QLabel(tab);
     label_3->setObjectName(QString::fromUtf8("label_3"));
 
-    formLayout->setWidget(1, QFormLayout::LabelRole, label_3);
+    formLayout->setWidget(2, QFormLayout::LabelRole, label_3);
 
     label_4 = new QLabel(tab);
     label_4->setObjectName(QString::fromUtf8("label_4"));
@@ -63,17 +76,17 @@ void About::setupUi() {
 #endif
     label_4->setOpenExternalLinks(true);
 
-    formLayout->setWidget(1, QFormLayout::FieldRole, label_4);
+    formLayout->setWidget(2, QFormLayout::FieldRole, label_4);
 
     label_6 = new QLabel(tab);
     label_6->setObjectName(QString::fromUtf8("label_6"));
 
-    formLayout->setWidget(2, QFormLayout::LabelRole, label_6);
+    formLayout->setWidget(3, QFormLayout::LabelRole, label_6);
 
     label_7 = new QLabel(tab);
     label_7->setObjectName(QString::fromUtf8("label_7"));
 
-    formLayout->setWidget(2, QFormLayout::FieldRole, label_7);
+    formLayout->setWidget(3, QFormLayout::FieldRole, label_7);
 
     tabWidget->addTab(tab, QString());
     tab_2 = new QWidget();
@@ -133,15 +146,19 @@ void About::setupUi() {
 }
 
 void About::retranslateUi() {
-    label->setText(tr("Version:"));
+    label_9->setText(tr("Description:"));
 
+    if (!_description.isNull())
+        label_10->setText(_description);
+
+    label->setText(tr("Version:"));
     if (!_version.isNull())
         label_2->setText(_version);
 
     label_3->setText(tr("Homepage:"));
-    if (!homepage.isEmpty() || !homepage.isNull()) {
+    if (!homepage.isEmpty() || !homepage.isNull())
         label_4->setText(QString("<a href=\"%1\">%1</a>").arg(homepage));
-    }
+
     label_6->setText(tr("Qt Version:"));
 
 #if defined(QT_VERSION_STR)
@@ -841,4 +858,10 @@ void About::setAppUrl(QUrl url) {
 
 void About::setAppVersion(QString version) {
     _version = version;
+    label_2->setText(_version);
+}
+
+void About::setDescription(const QString description) {
+    _description = description;
+    label_10->setText(_description);
 }

@@ -1,19 +1,13 @@
-#include "parser.h"
-
-Parser::Parser()
-{
-
-}
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#include <QDebug>
 #include <QByteArray>
 
-#include "3dparty/md4c/src/md4c-html.h"
-#include "3dparty/html2md/html2md.hpp"
+#include "parser.h"
+#include "md4c-html.h"
+#include "3rdparty/html2md/html2md.hpp"
+// #include "quickjs/quickjs.h"
 
 
 
@@ -85,10 +79,9 @@ process_output(const MD_CHAR* text, MD_SIZE size, void* userdata)
     membuf_append((struct membuffer*) userdata, text, size);
 }
 
-QString Parser::Parse(QString markdown, Mode mode, Dialect dia)
+QString Parser::Parse(QString markdown, Mode mode, int dia)
 {
     if (mode == MD2HTML) {
-        // FIXME: Fix the weird symbols at the end
         if (dia == GitHub)
             parser_flags |= MD_DIALECT_GITHUB;
         else
@@ -100,9 +93,6 @@ QString Parser::Parse(QString markdown, Mode mode, Dialect dia)
         struct membuffer buf_out = {0, 0, 0};
 
         QString out;
-
-
-        // membuf_init(&buf_in, 32 * 1024);
 
         QByteArray array = markdown.toLocal8Bit();
         buf_in.data = array.data();
@@ -132,6 +122,7 @@ QString Parser::Parse(QString markdown, Mode mode, Dialect dia)
         }
 
         out.append(buf_out.data);
+        out.chop(out.length() - out.lastIndexOf(">"));
 
         if(want_fullhtml) {
             out.append("</body>\n");
