@@ -6,7 +6,9 @@
 
 #include "parser.h"
 #include "md4c-html.h"
+#ifdef QT_DEBUG
 #include "3rdparty/html2md/html2md.hpp"
+#endif
 // #include "quickjs/quickjs.h"
 
 
@@ -122,6 +124,8 @@ QString Parser::Parse(QString markdown, Mode mode, int dia)
         }
 
         out.append(buf_out.data);
+
+        // With the folowing line the problem with the symbols should be fixed.
         out.chop(out.length() - out.lastIndexOf(">"));
 
         if(want_fullhtml) {
