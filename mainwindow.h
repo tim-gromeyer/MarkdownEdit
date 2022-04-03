@@ -10,7 +10,8 @@ class QPrinter;
 class QSettings;
 class QTimer;
 namespace QtSpell { class TextEditChecker; }
-class QTextDocument;
+namespace QSourceHighlite { class QSourceHighliter; }
+class QActionGroup;
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -80,8 +81,12 @@ private:
     bool setPath = true;
     bool html = false;
     bool spelling = true;
-    bool highlighting = false;
+    bool highlighting = true;
+
+    QActionGroup *fileActions;
+    QActionGroup *editActions;
 
     QtSpell::TextEditChecker *checker;
+    QSourceHighlite::QSourceHighliter *htmlHighliter;
 };
 #endif // MAINWINDOW_H

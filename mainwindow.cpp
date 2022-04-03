@@ -13,6 +13,7 @@
 #include <QSettings>
 #include <QTimer>
 #include <QtSpell-qt5/QtSpell.hpp>
+#include <QActionGroup>
 
 
 #if QT_CONFIG(printdialog)
@@ -23,6 +24,7 @@
 #include "parser.h"
 #include "settings.h"
 #include "3rdparty/qmarkdowntextedit/qplaintexteditsearchwidget.h"
+#include "3rdparty/QSourceHighlite/qsourcehighliter.h"
 
 
 #if (defined(Q_OS_BLACKBERRY) || defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_WP))
@@ -60,6 +62,10 @@ MainWindow::MainWindow(QWidget *parent)
     checker->setShowCheckSpellingCheckbox(true);
     checker->setUndoRedoEnabled(true);
 
+    htmlHighliter = new QSourceHighlite::QSourceHighliter(ui->raw->document());
+    htmlHighliter->setCurrentLanguage(QSourceHighlite::QSourceHighliter::CodeXML);
+    htmlHighliter->setTheme(QSourceHighlite::QSourceHighliter::Monokai);
+
     connect(ui->actionNew, &QAction::triggered, this, &MainWindow::onFileNew);
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::onFileOpen);
     connect(ui->actionSave, &QAction::triggered, this, &MainWindow::onFileSave);
@@ -79,9 +85,9 @@ MainWindow::MainWindow(QWidget *parent)
             this, &MainWindow::changeHighlighting);
     connect(ui->actionOptions, &QAction::triggered,
             this, &MainWindow::settingsDialog);
-    /*connect(ui->raw->document(), &QTextDocument::modificationChanged,
+    /*connect(ui->editor->document(), &QTextDocument::modificationChanged,
             ui->actionSave, &QAction::setEnabled);*/
-    connect(ui->raw->document(), &QTextDocument::modificationChanged,
+    connect(ui->editor->document(), &QTextDocument::modificationChanged,
             this, &QMainWindow::setWindowModified);
     connect(checker, &QtSpell::TextEditChecker::undoAvailable,
             ui->actionUndo, &QAction::setEnabled);
@@ -98,10 +104,23 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionSpell_checking, &QAction::triggered,
             this, &MainWindow::changeSpelling);
 
-    // WARNING: Activate when isModified() works
+    // NOTE: Activate when isModified() works
     // ui->actionSave->setEnabled(ui->editor->document()->isModified());
+    ui->actionSave->setEnabled(true);
     ui->actionUndo->setEnabled(ui->editor->document()->isUndoAvailable());
     ui->actionRedo->setEnabled(ui->editor->document()->isRedoAvailable());
+
+    fileActions = new QActionGroup(this);
+    fileActions->addAction(ui->actionNew);
+    fileActions->addAction(ui->actionOpen);
+    fileActions->addAction(ui->actionSave);
+    fileActions->addAction(ui->actionSaveAs);
+    editActions = new QActionGroup(this);
+    editActions->addAction(ui->actionUndo);
+    editActions->addAction(ui->actionRedo);
+    editActions->addAction(ui->actionCopy);
+    editActions->addAction(ui->actionPaste);
+    editActions->addAction(ui->actionCut);
 
     ui->toolBar->addAction(ui->actionNew);
     ui->toolBar->addAction(ui->actionOpen);
@@ -154,7 +173,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Tests
 #ifdef QT_DEBUG
-
 #endif
 }
 
@@ -273,6 +291,10 @@ void MainWindow::changeHighlighting(bool enabled)
 {
     dontUpdate = true;
     ui->editor->setHighlightingEnabled(enabled);
+    if (enabled)
+        htmlHighliter->setDocument(ui->raw->document());
+    else
+        htmlHighliter->setDocument(new QTextDocument());
     dontUpdate = false;
     highlighting = enabled;
 }
@@ -340,7 +362,7 @@ void MainWindow::exportHtml(QString file)
 
     str << Parser::Parse(ui->editor->toPlainText(), Parser::MD2HTML, _mode);
 
-    statusBar()->showMessage(tr("HTML exported to %1").arg(QDir::toNativeSeparators(file)));
+    statusBar()->showMessage(tr("HTML exported to %1").arg(QDir::toNativeSeparators(file)), 60000);
 
     if (!file.isEmpty()) {
         setWindowModified(false);
@@ -364,12 +386,20 @@ void MainWindow::onTextChanged()
         int value = ui->textBrowser->verticalScrollBar()->value();
         ui->textBrowser->setHtml(html);
         ui->textBrowser->verticalScrollBar()->setValue(value);
+        int i = ui->raw->verticalScrollBar()->value();
         ui->raw->setPlainText(html);
+        if (highlighting)
+            htmlHighliter->rehighlight();
+        ui->raw->verticalScrollBar()->setValue(i);
     }
     else {
         QString html = Parser::Parse(ui->editor->document()->toPlainText(), Parser::MD2HTML, _mode);
-        ui->preview->setHtml(html, QUrl(QFileInfo(path).path()));
+        ui->preview->setHtml(html);
+        int i = ui->raw->verticalScrollBar()->value();
         ui->raw->setPlainText(html);
+        if (highlighting)
+            htmlHighliter->rehighlight();
+        ui->raw->verticalScrollBar()->setValue(i);
     }
 }
 
@@ -383,7 +413,7 @@ void MainWindow::openFile(const QString &newFile)
         dlg.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         dlg.setDefaultButton(QMessageBox::Yes);
 
-        // TODO: Finish
+        // todo: Finish
         if (dlg.exec() == QMessageBox::Yes) {
             QFile f(newFile + ".autosave");
             if (!f.rename(newFile)) {}
@@ -408,6 +438,8 @@ void MainWindow::openFile(const QString &newFile)
             ui->textBrowser->setSearchPaths(ui->textBrowser->searchPaths() << QFileInfo(newFile).path());
     }
 
+    checker->clearUndoRedo();
+
     if (!newFile.endsWith(".md")) {
         QString md = Parser::Parse(f.readAll(), Parser::HTML2MD);
         ui->editor->setPlainText(md);
@@ -418,7 +450,7 @@ void MainWindow::openFile(const QString &newFile)
     }
 
     setWindowFilePath(QFileInfo(path).fileName());
-    statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)));
+    statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 60000);
     ui->editor->document()->setModified(false);
 
     checker->setSpellingEnabled(spelling);
@@ -443,6 +475,7 @@ void MainWindow::onFileNew()
             return;
     }
     clearAutoSave();
+    checker->clearUndoRedo();
 
     path = "new.md";
     ui->editor->setPlainText(tr("## New document"));
@@ -498,7 +531,7 @@ void MainWindow::onFileSave()
 
     ui->editor->document()->setModified(false);
 
-    statusBar()->showMessage(tr("Wrote %1").arg(QDir::toNativeSeparators(path)));
+    statusBar()->showMessage(tr("Wrote %1").arg(QDir::toNativeSeparators(path)), 60000);
 
     updateOpened();
 }
@@ -529,6 +562,7 @@ void MainWindow::onHelpAbout()
     dialog.addCredit(tr("<p>The conversion from Markdown to HTML is done with the help of the <a href=\"https://github.com/mity/md4c\">md4c</a> library by <em>Martin Mitáš</em>.</p>"));
     dialog.addCredit(tr("<p>The <a href=\"https://github.com/pbek/qmarkdowntextedit\">widget</a> used for writing was created by <em>Patrizio Bekerle</em>.</p>"));
     dialog.addCredit(tr("<p>Spell checking is done using the <a href=\"https://github.com/manisandro/qtspell\">QtSpell</a> library by <em>Sandro Mani</em>.</p>"));
+    dialog.addCredit(tr("<p>The HTML syntax is highlighted using <em>Waqar Ahmed</em>'s <a href=\"https://github.com/Waqar144/QSourceHighlite\">QSourceHighlite</a> library.</p>"));
 
     dialog.exec();
 }

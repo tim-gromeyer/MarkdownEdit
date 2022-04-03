@@ -126,10 +126,10 @@ QString Parser::Parse(QString markdown, Mode mode, int dia)
         out.append(buf_out.data);
 
         // With the folowing line the problem with the symbols should be fixed.
-        out.chop(out.length() - out.lastIndexOf(">"));
+        out.chop((out.length() - out.lastIndexOf(">") - 1));
 
         if(want_fullhtml) {
-            out.append("</body>\n");
+            out.append("\n</body>\n");
             out.append("</html>\n");
         }
 

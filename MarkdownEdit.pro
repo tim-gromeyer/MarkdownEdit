@@ -33,6 +33,7 @@ TRANSLATIONS += \
     translations/MarkdownEdit_de.ts
 
 include(3rdparty/qmarkdowntextedit/qmarkdowntextedit.pri)
+include(3rdparty/QSourceHighlite/QSourceHighlite.pri)
 
 CONFIG += lrelease
 CONFIG += embed_translations
