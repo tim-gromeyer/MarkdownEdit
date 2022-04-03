@@ -1,4 +1,4 @@
-if [[ $0 == "build.sh" || "./build.sh" ]]; then
+if [[ $0 == "*build.sh" ]]; then
     cd ..
 fi
 
