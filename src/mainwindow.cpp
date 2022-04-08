@@ -231,7 +231,6 @@ void MainWindow::undo()
     }
     else {
         checker->undo();
-
     }
     ui->raw->undo();
 }
