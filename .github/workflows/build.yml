@@ -1,0 +1,104 @@
+name: 'Build'
+
+on:
+  push:
+    branches-ignore:
+      - master
+    tags-ignore:
+      - '*'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        # Linux:   https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/
+        # macOS:   https://download.qt.io/online/qtsdkrepository/mac_x64/desktop/
+        # Windows: https://download.qt.io/online/qtsdkrepository/windows_x86/desktop/
+        qt-version: ['5.9.9', '5.13.2', '5.14.2', '5.15.2']
+        experimental: [false]
+        exclude:
+          # win64_mingw73 not found
+          - os: windows-latest
+            qt-version: '5.15.0'
+          # 'D:\\a\\qmarkdowntextedit/Qt\\5.9.9\\mingw73_64\\bin\\qt.conf' not found
+          - os: windows-latest
+            qt-version: '5.9.9'
+        include:
+          - os: ubuntu-latest
+            qt-version: '6.1.0'
+            experimental: true
+          - os: macos-latest
+            qt-version: '6.1.0'
+            experimental: true
+          - os: windows-latest
+            qt-version: '6.1.0'
+            experimental: true
+    steps:
+    - uses: actions/checkout@v2
+
+      #
+      # Install Qt
+      #
+
+    - name: Cache Qt
+      id: cache-qt
+      uses: actions/cache@v1
+      with:
+        path: ../Qt
+        key: ${{ runner.os }}-QtCache-${{ matrix.qt-version }}-2
+    # https://github.com/marketplace/actions/install-qt
+    - if: contains( matrix.os, 'windows') && ( matrix.qt-version == '5.7' )
+      name: Install Qt 5.7 on Windows
+      uses: jurplel/install-qt-action@v2
+      with:
+        version: ${{ matrix.qt-version }}
+        arch: win32_mingw53
+        # try mirror
+#        mirror: 'http://mirrors.ocf.berkeley.edu/qt/'
+        cached: ${{ steps.cache-qt.outputs.cache-hit }}
+        aqtversion: '==0.9.4'
+#        py7zrversion: '==0.9.0'
+    - if: contains( matrix.os, 'windows') && ( matrix.qt-version == '5.15.2' )
+      name: Install Qt 5.15.2 on Windows
+      uses: jurplel/install-qt-action@v2
+      with:
+        version: ${{ matrix.qt-version }}
+        arch: win64_mingw81
+        cached: ${{ steps.cache-qt.outputs.cache-hit }}
+    - if: contains( matrix.os, 'windows') && ( matrix.qt-version != '5.7' ) && ( matrix.qt-version != '5.15.2' )
+      name: Install Qt on Windows
+      uses: jurplel/install-qt-action@v2
+      with:
+        version: ${{ matrix.qt-version }}
+        arch: win64_mingw73
+        cached: ${{ steps.cache-qt.outputs.cache-hit }}
+    - if: false == contains( matrix.os, 'windows') && !startsWith( matrix.qt-version, '6.' )
+      name: Install Qt
+      uses: jurplel/install-qt-action@v2
+      with:
+        version: ${{ matrix.qt-version }}
+        cached: ${{ steps.cache-qt.outputs.cache-hit }}
+    - if: false == contains( matrix.os, 'windows') && startsWith( matrix.qt-version, '6.' )
+      name: Install Qt
+      uses: jurplel/install-qt-action@v2
+      with:
+        version: ${{ matrix.qt-version }}
+        cached: ${{ steps.cache-qt.outputs.cache-hit }}
+
+      #
+      # Build MarkdownEdit
+      #
+
+    - name: Build MarkdownEdit
+      run: |
+        qmake && make
+    - name: make check
+      run: make check
+    - name: make distcheck
+      run: make distcheck
