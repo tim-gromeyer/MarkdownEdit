@@ -72,8 +72,6 @@ MainWindow::MainWindow(QWidget *parent)
         }
     }
 
-    ui->raw->document()->setModified(false);
-
     /*
     timer = new QTimer(this);
     timer->setInterval(60000);
@@ -236,7 +234,6 @@ void MainWindow::undo()
 
     }
     ui->raw->undo();
-
 }
 
 void MainWindow::redo()
@@ -249,7 +246,6 @@ void MainWindow::redo()
     }
     else {
         checker->redo();
-
     }
     ui->raw->redo();
 }
@@ -471,13 +467,11 @@ void MainWindow::openFile(const QString &newFile)
 
     setWindowFilePath(QFileInfo(path).fileName());
     statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 60000);
-    // ui->editor->document()->setModified(false);
-
-    // It's already done in qtspell
-    // checker->setSpellingEnabled(spelling);
 
     updateOpened();
     clearAutoSave();
+
+    emit modificationChanged(false);
 
     QGuiApplication::restoreOverrideCursor();
 }
@@ -504,10 +498,11 @@ void MainWindow::onFileNew()
 
     path = "";
     ui->editor->setPlainText(tr("## New document"));
-    ui->editor->document()->setModified(false);
     setWindowFilePath(QFileInfo("new.md").fileName());
     originalMd = ui->editor->toPlainText();
     originalMdLength = originalMd.length();
+
+    emit modificationChanged(false);
 
     html = false;
 }
@@ -557,8 +552,6 @@ void MainWindow::onFileSave()
     str << ui->editor->toPlainText();
 
     clearAutoSave();
-
-    ui->editor->document()->setModified(false);
 
     statusBar()->showMessage(tr("Wrote %1").arg(QDir::toNativeSeparators(path)), 60000);
 
