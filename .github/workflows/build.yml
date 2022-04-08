@@ -97,7 +97,7 @@ jobs:
       
     - name: Install dependencies
       run: |
-        git clone https://github.com/Waqar144/QSourceHighlite 3rdparty/QSourceHighlite && git clone https://github.com/pbek/qmarkdowntextedit 3rdparty/qmarkdowntextedit && git clone https://github.com/manisandro/qtspell 3rdparty/qtspell && cd 3rdparty/qtspell && cmake && make && make install && cd ../..
+        git clone https://github.com/Waqar144/QSourceHighlite 3rdparty/QSourceHighlite && git clone https://github.com/pbek/qmarkdowntextedit 3rdparty/qmarkdowntextedit && git clone https://github.com/manisandro/qtspell 3rdparty/qtspell && cd 3rdparty/qtspell && cmake . && make && make install && cd ../..
 
 
       #
