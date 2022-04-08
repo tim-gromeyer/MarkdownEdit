@@ -8,22 +8,30 @@ CONFIG += c++11
 # In order to do so, uncomment the following line.
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x051208    # disables all the APIs deprecated before Qt 5.12.8
 
+
 INCLUDEPATH += \
-    3dparty/md4c/src/
+    src/ \
+    3rdparty/md4c/src
 
 
 SOURCES += \
-    main.cpp \
-    mainwindow.cpp \
-    about.cpp \
-    parser.cpp \
-    settings.cpp
+    src/main.cpp \
+    src/mainwindow.cpp \
+    src/about.cpp \
+    src/parser.cpp \
+    src/settings.cpp \
+    3rdparty/md4c/src/entity.c \
+    3rdparty/md4c/src/md4c.c \
+    3rdparty/md4c/src/md4c-html.c
 
 HEADERS += \
-    mainwindow.h \
-    about.h \
-    parser.h \
-    settings.h
+    src/mainwindow.h \
+    src/about.h \
+    src/parser.h \
+    src/settings.h \
+    3rdparty/md4c/src/entity.h \
+    3rdparty/md4c/src/md4c.h \
+    3rdparty/md4c/src/md4c-html.h
 
 FORMS += \
     mainwindow.ui \
@@ -40,7 +48,7 @@ CONFIG += embed_translations
 CONFIG += link_pkgconfig
 CONFIG -= qtquickcompiler
 
-PKGCONFIG += QtSpell-qt5 md4c-html
+PKGCONFIG += QtSpell-qt5
 
 VERSION = 0.5.0
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
