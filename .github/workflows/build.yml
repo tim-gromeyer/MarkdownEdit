@@ -91,6 +91,15 @@ jobs:
         version: ${{ matrix.qt-version }}
         cached: ${{ steps.cache-qt.outputs.cache-hit }}
 
+
+      #
+      # Install enchant-2
+      #
+      
+    - name: Install enchant-2
+      run: |
+        wget https://github.com/AbiWord/enchant/releases/download/v2.2.8/enchant-2.2.8.tar.gz && tar -xf enchant-2.2.8.tar.gz && cd enchant-2.2.8 && ./configure && make && make install && cd ..
+
       #
       # Install dependencies
       #
