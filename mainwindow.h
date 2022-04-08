@@ -29,6 +29,9 @@ public:
 protected:
     void closeEvent(QCloseEvent *e) override;
 
+signals:
+    void modificationChanged(bool);
+
 private slots:
     void onFileNew();
     void onFileOpen();
@@ -75,6 +78,9 @@ private:
     QStringList recentOpened;
 
     QString language;
+
+    QString originalMd = "";
+    int originalMdLength = 0;
 
     bool dontUpdate = false;
     bool useWebBrowser = false;

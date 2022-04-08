@@ -6,8 +6,8 @@
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QTextStream>
+#include <QtPrintSupport/QPrinter>
 #include <QScreen>
-#include <QtPrintSupport/QPrintDialog>
 #include <QComboBox>
 #include <QScrollBar>
 #include <QSettings>
@@ -17,7 +17,7 @@
 
 
 #if QT_CONFIG(printdialog)
-#include <QtPrintSupport/QPrinter>
+#include <QtPrintSupport/QPrintDialog>
 #include <QtPrintSupport/QPrintPreviewDialog>
 #endif
 
@@ -44,7 +44,35 @@ MainWindow::MainWindow(QWidget *parent)
     mode->setCurrentIndex(1);
     _mode = 1;
 
-    // FIXME: Fix check modified status
+    checker = new QtSpell::TextEditChecker(this);
+    checker->setTextEdit(ui->editor);
+    checker->setDecodeLanguageCodes(true);
+    checker->setShowCheckSpellingCheckbox(true);
+    checker->setUndoRedoEnabled(true);
+
+    htmlHighliter = new QSourceHighlite::QSourceHighliter(ui->raw->document());
+    htmlHighliter->setCurrentLanguage(QSourceHighlite::QSourceHighliter::CodeXML);
+    htmlHighliter->setTheme(QSourceHighlite::QSourceHighliter::Monokai);
+
+    // Settings
+    settings = new QSettings("SME", "MarkdownEdit", this);
+
+    loadSettings();
+    updateOpened();
+
+    if (ui->editor->toPlainText().isEmpty()) {
+        QFile f(":/default.md", this);
+        if (f.open(QFile::ReadOnly | QFile::Text)) {
+            QTextStream in(&f);
+            ui->editor->setPlainText(in.readAll());
+            setWindowFilePath(f.fileName());
+        }
+        else {
+            setWindowFilePath(QFileInfo(tr("new.md")).fileName());
+        }
+    }
+
+    ui->raw->document()->setModified(false);
 
     /*
     timer = new QTimer(this);
@@ -55,16 +83,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     timer->start();
     */
-
-    checker = new QtSpell::TextEditChecker(this);
-    checker->setTextEdit(ui->editor);
-    checker->setDecodeLanguageCodes(true);
-    checker->setShowCheckSpellingCheckbox(true);
-    checker->setUndoRedoEnabled(true);
-
-    htmlHighliter = new QSourceHighlite::QSourceHighliter(ui->raw->document());
-    htmlHighliter->setCurrentLanguage(QSourceHighlite::QSourceHighliter::CodeXML);
-    htmlHighliter->setTheme(QSourceHighlite::QSourceHighliter::Monokai);
 
     connect(ui->actionNew, &QAction::triggered, this, &MainWindow::onFileNew);
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::onFileOpen);
@@ -85,9 +103,9 @@ MainWindow::MainWindow(QWidget *parent)
             this, &MainWindow::changeHighlighting);
     connect(ui->actionOptions, &QAction::triggered,
             this, &MainWindow::settingsDialog);
-    /*connect(ui->editor->document(), &QTextDocument::modificationChanged,
-            ui->actionSave, &QAction::setEnabled);*/
-    connect(ui->editor->document(), &QTextDocument::modificationChanged,
+    connect(this, &MainWindow::modificationChanged,
+            ui->actionSave, &QAction::setEnabled);
+    connect(this, &MainWindow::modificationChanged,
             this, &QMainWindow::setWindowModified);
     connect(checker, &QtSpell::TextEditChecker::undoAvailable,
             ui->actionUndo, &QAction::setEnabled);
@@ -104,9 +122,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionSpell_checking, &QAction::triggered,
             this, &MainWindow::changeSpelling);
 
-    // NOTE: Activate when isModified() works
-    // ui->actionSave->setEnabled(ui->editor->document()->isModified());
-    ui->actionSave->setEnabled(true);
+    ui->actionSave->setEnabled(isModified());
     ui->actionUndo->setEnabled(ui->editor->document()->isUndoAvailable());
     ui->actionRedo->setEnabled(ui->editor->document()->isRedoAvailable());
 
@@ -153,24 +169,6 @@ MainWindow::MainWindow(QWidget *parent)
     else
         setWindowIcon(QIcon(":/Icon.svg"));
 
-    // Settings
-    settings = new QSettings("SME", "MarkdownEdit", this);
-
-    loadSettings();
-    updateOpened();
-
-    if (ui->editor->toPlainText().isEmpty()) {
-        QFile f(":/default.md", this);
-        if (f.open(QFile::ReadOnly | QFile::Text)) {
-            QTextStream in(&f);
-            ui->editor->setPlainText(in.readAll());
-            setWindowFilePath(f.fileName());
-        }
-        else {
-            setWindowFilePath(QFileInfo(tr("new.md")).fileName());
-        }
-    }
-
     // Tests
 #ifdef QT_DEBUG
 #endif
@@ -178,7 +176,12 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::changeSpelling(bool checked)
 {
+    if (checked)
+        checker->setTextEdit(ui->editor);
+    else
+        checker->setTextEdit(static_cast<QPlainTextEdit*>(nullptr));
     checker->setSpellingEnabled(checked);
+
     ui->actionSpell_checking->setChecked(checked);
     spelling = checked;
 }
@@ -230,7 +233,9 @@ void MainWindow::undo()
     }
     else {
         checker->undo();
+
     }
+    ui->raw->undo();
 
 }
 
@@ -244,7 +249,9 @@ void MainWindow::redo()
     }
     else {
         checker->redo();
+
     }
+    ui->raw->redo();
 }
 
 void MainWindow::settingsDialog()
@@ -294,7 +301,7 @@ void MainWindow::changeHighlighting(bool enabled)
     if (enabled)
         htmlHighliter->setDocument(ui->raw->document());
     else
-        htmlHighliter->setDocument(new QTextDocument());
+        htmlHighliter->setDocument(static_cast<QTextDocument*>(nullptr));
     dontUpdate = false;
     highlighting = enabled;
 }
@@ -381,26 +388,23 @@ void MainWindow::onTextChanged()
     if (dontUpdate)
         return;
 
-    if (!useWebBrowser) {
-        QString html = Parser::Parse(ui->editor->document()->toPlainText(), Parser::MD2HTML, _mode);
-        int value = ui->textBrowser->verticalScrollBar()->value();
+    QString html = Parser::Parse(ui->editor->document()->toPlainText(), Parser::MD2HTML, _mode);
+
+    if (useWebBrowser)
+        ui->preview->setHtml(html);
+    else {
+        const int value = ui->textBrowser->verticalScrollBar()->value();
         ui->textBrowser->setHtml(html);
         ui->textBrowser->verticalScrollBar()->setValue(value);
-        int i = ui->raw->verticalScrollBar()->value();
-        ui->raw->setPlainText(html);
-        if (highlighting)
-            htmlHighliter->rehighlight();
-        ui->raw->verticalScrollBar()->setValue(i);
     }
-    else {
-        QString html = Parser::Parse(ui->editor->document()->toPlainText(), Parser::MD2HTML, _mode);
-        ui->preview->setHtml(html);
-        int i = ui->raw->verticalScrollBar()->value();
-        ui->raw->setPlainText(html);
-        if (highlighting)
-            htmlHighliter->rehighlight();
-        ui->raw->verticalScrollBar()->setValue(i);
-    }
+
+    const int i = ui->raw->verticalScrollBar()->value();
+    ui->raw->setPlainText(html);
+    if (highlighting)
+        htmlHighliter->rehighlight();
+    ui->raw->verticalScrollBar()->setValue(i);
+
+    emit modificationChanged(isModified());
 }
 
 void MainWindow::openFile(const QString &newFile)
@@ -421,6 +425,15 @@ void MainWindow::openFile(const QString &newFile)
     }
     */
     QFile f(newFile);
+
+    if (f.size() > 10000) {
+        int out = QMessageBox::warning(this, tr("Large file"),
+                                       tr("This is a large file that can potentially cause performance issues."),
+                                       QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok);
+
+        if (out == QMessageBox::Cancel)
+            return;
+    }
     if (!f.open(QIODevice::ReadWrite)) {
         QMessageBox::warning(this, tr("Couldn't open file"),
                              tr("Could not open file %1: %2").arg(
@@ -429,6 +442,8 @@ void MainWindow::openFile(const QString &newFile)
         updateOpened();
         return;
     }
+
+    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
     path = newFile;
 
@@ -444,26 +459,36 @@ void MainWindow::openFile(const QString &newFile)
         QString md = Parser::Parse(f.readAll(), Parser::HTML2MD);
         ui->editor->setPlainText(md);
         html = true;
+        originalMd = md;
+        originalMdLength = md.length();
     }
     else {
         ui->editor->setPlainText(f.readAll());
+        html = false;
+        originalMd = ui->editor->toPlainText();
+        originalMdLength = originalMd.length();
     }
 
     setWindowFilePath(QFileInfo(path).fileName());
     statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 60000);
-    ui->editor->document()->setModified(false);
+    // ui->editor->document()->setModified(false);
 
-    checker->setSpellingEnabled(spelling);
+    // It's already done in qtspell
+    // checker->setSpellingEnabled(spelling);
 
     updateOpened();
     clearAutoSave();
+
+    QGuiApplication::restoreOverrideCursor();
 }
 
 bool MainWindow::isModified() const
 {
-    // FIXME: not working because of spell checking
-    return false;
-    // return ui->editor->document()->isModified();
+    QString text = ui->editor->toPlainText();
+    if (text.length() != originalMdLength)
+        return true;
+    else
+        return text != originalMd;
 }
 
 void MainWindow::onFileNew()
@@ -477,10 +502,14 @@ void MainWindow::onFileNew()
     clearAutoSave();
     checker->clearUndoRedo();
 
-    path = "new.md";
+    path = "";
     ui->editor->setPlainText(tr("## New document"));
     ui->editor->document()->setModified(false);
     setWindowFilePath(QFileInfo("new.md").fileName());
+    originalMd = ui->editor->toPlainText();
+    originalMdLength = originalMd.length();
+
+    html = false;
 }
 
 void MainWindow::onFileOpen()
@@ -534,12 +563,22 @@ void MainWindow::onFileSave()
     statusBar()->showMessage(tr("Wrote %1").arg(QDir::toNativeSeparators(path)), 60000);
 
     updateOpened();
+
+    originalMd = ui->editor->toPlainText();
+    originalMdLength = originalMd.length();
+
+    emit modificationChanged(false);
 }
 
 void MainWindow::onFileSaveAs()
 {
+    QStringList mimes = {"text/markdown"};
+#ifdef QT_DEBUG
+    mimes << "text/html";
+#endif
+
     QFileDialog dialog(this, tr("Save MarkDown File"));
-    dialog.setMimeTypeFilters({"text/markdown"});
+    dialog.setMimeTypeFilters(mimes);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setDefaultSuffix("md");
     if (dialog.exec() != QDialog::Accepted)
@@ -547,8 +586,14 @@ void MainWindow::onFileSaveAs()
 
     QStringList selectedFiles = dialog.selectedFiles();
     path = selectedFiles.first();
-    if (!path.endsWith(".md"))
+
+    if (dialog.selectedMimeTypeFilter() ==  "text/html")
+        html = true;
+
+    if (!path.endsWith(".md") && !html)
         path.append(".md");
+    if (!path.endsWith(".html") && html)
+        path.append(".html");
     setWindowFilePath(QFileInfo(path).fileName());
     onFileSave();
 }
@@ -576,6 +621,7 @@ void MainWindow::openRecent() {
         QMessageBox::warning(this, tr("Warning"),
                              tr("This file could not be found:\n%1.").arg(
                                  QDir::toNativeSeparators(filename)));
+        recentOpened.removeAll(filename);
         return;
     }
 

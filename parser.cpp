@@ -138,8 +138,10 @@ QString Parser::Parse(QString markdown, Mode mode, int dia)
         return out;
     }
     else {
-        QString out;
-        out = QString::fromStdString(html2md::Convert(markdown.toStdString()));
-        return out;
+#ifdef QT_DEBUG
+        return QString::fromStdString(html2md::Convert(markdown.toStdString()));
+#else
+        return QString();
+#endif
     }
 }

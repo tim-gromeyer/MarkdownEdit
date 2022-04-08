@@ -23,7 +23,7 @@
       <widget class="QMarkdownTextEdit" name="editor"/>
       <widget class="QTabWidget" name="tabWidget">
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -56,11 +56,15 @@
        </widget>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">
-         <string>Raw HTML</string>
+         <string>HTML</string>
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
-          <widget class="QPlainTextEdit" name="raw"/>
+          <widget class="QPlainTextEdit" name="raw">
+           <property name="undoRedoEnabled">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -460,7 +464,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Spell check</string>
+    <string>Check spelling</string>
    </property>
   </action>
  </widget>

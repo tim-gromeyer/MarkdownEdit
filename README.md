@@ -21,9 +21,7 @@ MarkdownEdit, as the name suggests, is a simple and easy program to create and e
 - Auto complete(Close brackets, list, ...)
 - Find/Replace(Ctrl+F/Ctrl+R)
 - Export to HTML
-- Print
 - Poor in resources
-- Edit HTML files(In Debug mode)
 - Quickly open recent files
 - Open Source
 
@@ -37,10 +35,8 @@ To improve the performance when using images, disable the "Auto add file path to
 
 # To do:
 
-- Open HTML files and convert them to Markdown(it works, but it's a bit buggy, that's why it's not available, to enable it anyways, define _QT_DEBUG_ when compiling [mainwindow.cpp](mainwindow.cpp))
-- Synchronize scrolling
-- Auto save
-- **FIX CHECK FOR CHANGED STATUS**
+- Open HTML files and convert them to Markdown(it works, but it's a bit buggy, that's why it's not available, to enable it anyways, define _QT_DEBUG_ when compiling [mainwindow.cpp](mainwindow.cpp) and [parser.cpp](parser.cpp))
+- Synchronize scrolling(would be hard)
 
 -------
 

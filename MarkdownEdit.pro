@@ -44,6 +44,8 @@ PKGCONFIG += QtSpell-qt5 md4c-html
 
 VERSION = 0.5.0
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+
+# Only show qDebug() messages in debug mode
 CONFIG(release, debug | release): DEFINES += QT_NO_DEBUG_OUTPUT
 
 
