@@ -16,17 +16,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, macos-latest]
         # Linux:   https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/
-        qt-version: ['5.13.2', '5.14.2', '5.15.2']
+        # macOS:   https://download.qt.io/online/qtsdkrepository/mac_x64/desktop/
+        qt-version: ['5.9.9', '5.13.2', '5.14.2', '5.15.2']
         experimental: [false]
+        include:
+          - os: ubuntu-latest
+            qt-version: '6.1.0'
+            experimental: true
+          - os: macos-latest
+            qt-version: '6.1.0'
+            experimental: true
     steps:
     - uses: actions/checkout@v2
-
       #
       # Install Qt
       #
-
     - name: Cache Qt
       id: cache-qt
       uses: actions/cache@v1
@@ -59,18 +65,6 @@ jobs:
         sudo make install
         cd ..
       #
-      # Build and install qtspell
-      #
-    - name: Build QtSpell
-      run: |
-        git clone https://github.com/software-made-easy/qtspell 3rdparty/qtspell
-        mkdir 3rdparty/qtspell/build
-        cd 3rdparty/qtspell/build
-        cmake ..
-        make
-        sudo make install
-        cd ../../..
-      #
       # Install dependencies
       #
     - name: Install MarkdownEdit`s dependencies
@@ -78,6 +72,7 @@ jobs:
         git clone https://github.com/mity/md4c 3rdparty/md4c
         git clone https://github.com/Waqar144/QSourceHighlite 3rdparty/QSourceHighlite
         git clone https://github.com/pbek/qmarkdowntextedit 3rdparty/qmarkdowntextedit
+        git clone https://github.com/software-made-easy/qtspell 3rdparty/qtspell
       #
       # Build MarkdownEdit
       #
