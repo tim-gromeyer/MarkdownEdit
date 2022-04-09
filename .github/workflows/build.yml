@@ -57,10 +57,10 @@ jobs:
         ./configure
         make
         sudo make install
-        cd .. 
+        cd ..
       #
       # Build and install qtspell
-      # 
+      #
     - name: Build QtSpell
       run: |
         git clone https://github.com/software-made-easy/qtspell 3rdparty/qtspell
