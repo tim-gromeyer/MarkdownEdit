@@ -37,7 +37,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->textBrowser->hide();
 
     QComboBox *mode = new QComboBox(ui->toolBar);
     mode->addItems({"Commonmark", "GitHub"});
@@ -75,7 +74,6 @@ MainWindow::MainWindow(QWidget *parent)
     /*
     timer = new QTimer(this);
     timer->setInterval(60000);
-
 
     connect(timer, &QTimer::timeout, this, &MainWindow::autoSave);
 
@@ -223,53 +221,29 @@ void MainWindow::pausePreview(bool checked)
 
 void MainWindow::undo()
 {
-    if (!useWebBrowser) {
-        dontUpdate = true;
-        checker->undo();
-        ui->textBrowser->undo();
-        dontUpdate = false;
-    }
-    else {
-        checker->undo();
-    }
+    dontUpdate = true;
+    checker->undo();
+    ui->textBrowser->undo();
+    dontUpdate = false;
+    checker->undo();
     ui->raw->undo();
 }
 
 void MainWindow::redo()
 {
-    if (!useWebBrowser) {
-        dontUpdate = true;
-        checker->redo();
-        ui->textBrowser->redo();
-        dontUpdate = false;
-    }
-    else {
-        checker->redo();
-    }
+    dontUpdate = true;
+    checker->redo();
+    ui->textBrowser->redo();
+    dontUpdate = false;
     ui->raw->redo();
 }
 
 void MainWindow::settingsDialog()
 {
     Settings dialog;
-    dialog.setUseWebBrowser(useWebBrowser);
     dialog.setAddPath(setPath);
     if (dialog.exec() != QDialog::Accepted)
         return;
-
-    if (useWebBrowser != dialog.useWebBrowser()) {
-        useWebBrowser = !useWebBrowser;
-        dialog.useWebBrowser();
-        if (useWebBrowser) {
-            ui->textBrowser->hide();
-            ui->preview->show();
-        }
-        else {
-            ui->preview->hide();
-            ui->textBrowser->show();
-        }
-        onTextChanged();
-    }
 
     if (setPath != dialog.addPath()) {
         setPath = !setPath;
@@ -329,10 +303,6 @@ void MainWindow::printPreview(QPrinter *printer)
 #ifdef QT_NO_PRINTER
     Q_UNUSED(printer);
 #else
-    if (useWebBrowser) {
-        QString html = Parser::Parse(ui->editor->document()->toPlainText(), Parser::MD2HTML, _mode);
-        ui->textBrowser->setHtml(html);
-    }
     ui->textBrowser->print(printer);
 #endif
 }
@@ -385,13 +355,9 @@ void MainWindow::onTextChanged()
 
     QString html = Parser::Parse(ui->editor->document()->toPlainText(), Parser::MD2HTML, _mode);
 
-    if (useWebBrowser)
-        ui->preview->setHtml(html);
-    else {
-        const int value = ui->textBrowser->verticalScrollBar()->value();
-        ui->textBrowser->setHtml(html);
-        ui->textBrowser->verticalScrollBar()->setValue(value);
-    }
+    const int value = ui->textBrowser->verticalScrollBar()->value();
+    ui->textBrowser->setHtml(html);
+    ui->textBrowser->verticalScrollBar()->setValue(value);
 
     const int i = ui->raw->verticalScrollBar()->value();
     ui->raw->setPlainText(html);
@@ -699,16 +665,6 @@ void MainWindow::loadSettings() {
             openFile(last);
     }
 
-    useWebBrowser = settings->value("useWebBrowser", QString::number(false)).toBool();
-    if (useWebBrowser) {
-        ui->textBrowser->hide();
-        ui->preview->show();
-    }
-    else {
-        ui->preview->hide();
-        ui->textBrowser->show();
-    }
-
     onTextChanged();
     spelling = settings->value("spelling", QString::number(true)).toBool();
     changeSpelling(spelling);
@@ -724,7 +680,6 @@ void MainWindow::saveSettings() {
     settings->setValue("recent", recentOpened);
     settings->setValue("openLast", QString::number(ui->actionOpen_last_document_on_start->isChecked()));
     settings->setValue("last", path);
-    settings->setValue("useWebBrowser", useWebBrowser);
     settings->setValue("setPath", QString::number(setPath));
     settings->setValue("spelling", QString::number(checker->getSpellingEnabled()));
     settings->setValue("spellLang", checker->getLanguage());

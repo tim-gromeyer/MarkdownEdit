@@ -83,7 +83,6 @@ private:
     int originalMdLength = 0;
 
     bool dontUpdate = false;
-    bool useWebBrowser = false;
     bool setPath = true;
     bool html = false;
     bool spelling = true;
