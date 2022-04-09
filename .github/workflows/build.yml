@@ -91,16 +91,6 @@ jobs:
         version: ${{ matrix.qt-version }}
         cached: ${{ steps.cache-qt.outputs.cache-hit }}
 
-
-      #
-      # Download enchant-2
-      #
-    
-    - name: Download enchant-2
-      uses: wei/wget@v1
-      with:
-        args: -O enchant-2.2.8.tar.gz https://github.com/AbiWord/enchant/releases/download/v2.2.8/enchant-2.2.8.tar.gz
-
       #
       # Install enchant-2
       #
