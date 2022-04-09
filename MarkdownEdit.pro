@@ -42,13 +42,11 @@ TRANSLATIONS += \
 
 include(3rdparty/qmarkdowntextedit/qmarkdowntextedit.pri)
 include(3rdparty/QSourceHighlite/QSourceHighlite.pri)
+include(3rdparty/qtspell/qtspell.pri)
 
 CONFIG += lrelease
 CONFIG += embed_translations
-CONFIG += link_pkgconfig
 CONFIG -= qtquickcompiler
-
-PKGCONFIG += QtSpell-qt5
 
 VERSION = 1.0.0
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"

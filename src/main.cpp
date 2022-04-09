@@ -10,7 +10,7 @@
 int main(int argc, char *argv[])
 {
 #if QT_VERSION < QT_VERSION_CHECK(5, 4, 0)
-#error You must use Qt 5.5 or newer
+#error You must use Qt 5.10 or newer
 #endif
     QApplication a(argc, argv);
     a.setApplicationDisplayName("MarkdownEdit");

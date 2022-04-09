@@ -14,13 +14,13 @@ class Settings : public QDialog
 public:
     explicit Settings(QWidget *parent = nullptr);
     ~Settings();
-    bool addPath() const { return _set; };
+    inline bool addPath() const { return _set; };
 
 public slots:
-    void setAddPath(bool set) { _set = set; updateSet(); };
+    inline void setAddPath(bool set) { _set = set; updateSet(); };
 
 private slots:
-    void onAddPath(bool checked) { _set = checked; };
+    inline void onAddPath(bool checked) { _set = checked; };
     void updateSet();
 
 private:

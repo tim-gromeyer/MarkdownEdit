@@ -12,7 +12,6 @@
 #include <QScrollBar>
 #include <QSettings>
 #include <QTimer>
-#include <QtSpell-qt5/QtSpell.hpp>
 #include <QActionGroup>
 
 
@@ -25,11 +24,14 @@
 #include "settings.h"
 #include "3rdparty/qmarkdowntextedit/qplaintexteditsearchwidget.h"
 #include "3rdparty/QSourceHighlite/qsourcehighliter.h"
+#include "3rdparty/qtspell/src/QtSpell.hpp"
 
 
+/*
 #if (defined(Q_OS_BLACKBERRY) || defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_WP))
 #error This application was developed for desktop only due to web engine module
 #endif
+*/
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -632,7 +634,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
 void MainWindow::loadSettings() {
     const QByteArray geo = settings->value("geometry", QByteArray({})).toByteArray();
     if (geo.isEmpty()) {
-        const QRect availableGeometry = qApp->screenAt(pos())->availableGeometry();
+        const QRect availableGeometry = QGuiApplication::screenAt(pos())->availableGeometry();
         resize(availableGeometry.width() / 2, (availableGeometry.height() * 2) / 3);
         move((availableGeometry.width() - width()) / 2,
              (availableGeometry.height() - height()) / 2);

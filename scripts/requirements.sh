@@ -27,8 +27,12 @@ if [ ! -f "$1" ]; then
     exit 1
 fi
 
+if [ -z "$out" ]; then
+    out="requirements.txt"
+fi
+
 for dependency in $(ldd $1 | awk '{print $3}')
 do
-    dlocate $dependency | awk -F '[: ]' '{print $1}' | head -n 1 >> $out
+    dlocate $dependency | awk -F '[: ]' '{print $1}' | head -n 1 >> "$out"
 done
-sort $out | uniq | tee $out >> /dev/null
+sort "$out" | uniq | tee "$out" >> /dev/null

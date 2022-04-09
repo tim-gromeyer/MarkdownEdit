@@ -24,7 +24,7 @@ public:
 
     void openFile(const QString &path);
 
-    void setLanguage(const QString lang) { language = lang; };
+    inline void setLanguage(const QString lang) { language = lang; };
 
 protected:
     void closeEvent(QCloseEvent *e) override;

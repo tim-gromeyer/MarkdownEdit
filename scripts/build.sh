@@ -21,3 +21,4 @@ if [[ $1 == "install" ]]; then
 fi
 
 chmod +x MarkdownEdit
+
