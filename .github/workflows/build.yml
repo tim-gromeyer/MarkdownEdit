@@ -97,7 +97,6 @@ jobs:
       #
       
     - name: Install enchant-2
-      run: |
     - if: contains( matrix.os, 'windows')
       run: |
         powershell
