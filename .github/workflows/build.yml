@@ -109,7 +109,7 @@ jobs:
         make
         sudo make install
         cd ..
-    - if: false == ${ contains( matrix.os, 'windows') }
+    - if: contains( matrix.os, 'windows') == false
       run: |
         wget https://github.com/AbiWord/enchant/releases/download/v2.2.8/enchant-2.2.8.tar.gz
         tar -xf enchant-2.2.8.tar.gz
