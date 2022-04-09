@@ -95,21 +95,8 @@ jobs:
       #
       # Install enchant-2
       #
-      
-    - if: contains( matrix.os, 'windows')
-      name: Install enchant-2
-      run: |
-        powershell
-        wget https://github.com/AbiWord/enchant/releases/download/v2.2.8/enchant-2.2.8.tar.gz
-        exit
-        tar -xf enchant-2.2.8.tar.gz
-        cd enchant-2.2.8
-        ./configure
-        make
-        sudo make install
-        cd ..
-    - if: contains( matrix.os, 'linux' || 'darwin' )
-      name: Install enchant-2
+    
+    - name: Install enchant-2
       run: |
         wget https://github.com/AbiWord/enchant/releases/download/v2.2.8/enchant-2.2.8.tar.gz
         tar -xf enchant-2.2.8.tar.gz
@@ -128,6 +115,13 @@ jobs:
         git clone https://github.com/mity/md4c 3rdparty/md4c
         git clone https://github.com/Waqar144/QSourceHighlite 3rdparty/QSourceHighlite
         git clone https://github.com/pbek/qmarkdowntextedit 3rdparty/qmarkdowntextedit
+    
+      #
+      # Build and install qtspell
+      #
+      
+    - name: Build QtSpell
+    - run: |
         git clone https://github.com/software-made-easy/qtspell 3rdparty/qtspell
         mkdir 3rdparty/qtspell/build
         cd 3rdparty/qtspell/build
