@@ -98,7 +98,7 @@ jobs:
       
     - name: Install enchant-2
       run: |
-        wget https://github.com/AbiWord/enchant/releases/download/v2.2.8/enchant-2.2.8.tar.gz && tar -xf enchant-2.2.8.tar.gz && cd enchant-2.2.8 && ./configure && make && make install && cd ..
+        wget https://github.com/AbiWord/enchant/releases/download/v2.2.8/enchant-2.2.8.tar.gz && tar -xf enchant-2.2.8.tar.gz && cd enchant-2.2.8 && ./configure && make && sudo make install && cd ..
 
       #
       # Install dependencies
@@ -106,7 +106,7 @@ jobs:
       
     - name: Install dependencies
       run: |
-        git clone https://github.com/Waqar144/QSourceHighlite 3rdparty/QSourceHighlite && git clone https://github.com/pbek/qmarkdowntextedit 3rdparty/qmarkdowntextedit && git clone https://github.com/software-made-easy/qtspell 3rdparty/qtspell && cd 3rdparty/qtspell && cmake . && make && make install && cd ../..
+        git clone https://github.com/Waqar144/QSourceHighlite 3rdparty/QSourceHighlite && git clone https://github.com/pbek/qmarkdowntextedit 3rdparty/qmarkdowntextedit && git clone https://github.com/software-made-easy/qtspell 3rdparty/qtspell && cd 3rdparty/qtspell && cmake . && make && sudo make install && cd ../..
 
 
       #
