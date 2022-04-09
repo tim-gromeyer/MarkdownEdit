@@ -121,7 +121,7 @@ jobs:
       #
       
     - name: Build QtSpell
-    - run: |
+      run: |
         git clone https://github.com/software-made-easy/qtspell 3rdparty/qtspell
         mkdir 3rdparty/qtspell/build
         cd 3rdparty/qtspell/build
