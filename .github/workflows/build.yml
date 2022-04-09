@@ -96,8 +96,8 @@ jobs:
       # Install enchant-2
       #
       
-    - name: Install enchant-2
     - if: contains( matrix.os, 'windows')
+    - name: Install enchant-2
       run: |
         powershell
         wget https://github.com/AbiWord/enchant/releases/download/v2.2.8/enchant-2.2.8.tar.gz
@@ -108,7 +108,8 @@ jobs:
         make
         sudo make install
         cd ..
-    - if: contains( matrix.os, 'windows') == false
+    - if: contains( matrix.os, 'linux' || 'darwin' )
+    - name: Install enchant-2
       run: |
         wget https://github.com/AbiWord/enchant/releases/download/v2.2.8/enchant-2.2.8.tar.gz
         tar -xf enchant-2.2.8.tar.gz
@@ -122,7 +123,7 @@ jobs:
       # Install dependencies
       #
       
-    - name: Install MarkdownEdits dependencies
+    - name: Install MarkdownEdit`s dependencies
       run: |
         git clone https://github.com/mity/md4c 3rdparty/md4c
         git clone https://github.com/Waqar144/QSourceHighlite 3rdparty/QSourceHighlite
