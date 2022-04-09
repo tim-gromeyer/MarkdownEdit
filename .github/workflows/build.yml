@@ -51,7 +51,6 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ../Qt
-        modules: qtwebenginewidgets
         key: ${{ runner.os }}-QtCache-${{ matrix.qt-version }}-2
     # https://github.com/marketplace/actions/install-qt
     - if: contains( matrix.os, 'windows') && ( matrix.qt-version == '5.7' )
@@ -99,16 +98,43 @@ jobs:
       
     - name: Install enchant-2
       run: |
-        wget https://github.com/AbiWord/enchant/releases/download/v2.2.8/enchant-2.2.8.tar.gz && tar -xf enchant-2.2.8.tar.gz && cd enchant-2.2.8 && ./configure && make && sudo make install && cd ..
+    - if: contains( matrix.os, 'windows')
+      run: |
+        powershell
+        wget https://github.com/AbiWord/enchant/releases/download/v2.2.8/enchant-2.2.8.tar.gz
+        exit
+        tar -xf enchant-2.2.8.tar.gz
+        cd enchant-2.2.8
+        ./configure
+        make
+        sudo make install
+        cd ..
+    - if: false == ${ contains( matrix.os, 'windows') }
+      run: |
+        wget https://github.com/AbiWord/enchant/releases/download/v2.2.8/enchant-2.2.8.tar.gz
+        tar -xf enchant-2.2.8.tar.gz
+        cd enchant-2.2.8
+        ./configure
+        make
+        sudo make install
+        cd ..
 
       #
       # Install dependencies
       #
       
-    - name: Install dependencies
+    - name: Install MarkdownEdits dependencies
       run: |
-        git clone https://github.com/Waqar144/QSourceHighlite 3rdparty/QSourceHighlite && git clone https://github.com/pbek/qmarkdowntextedit 3rdparty/qmarkdowntextedit && git clone https://github.com/software-made-easy/qtspell 3rdparty/qtspell && cd 3rdparty/qtspell && cmake . && make && sudo make install && cd ../..
-
+        git clone https://github.com/mity/md4c 3rdparty/md4c
+        git clone https://github.com/Waqar144/QSourceHighlite 3rdparty/QSourceHighlite
+        git clone https://github.com/pbek/qmarkdowntextedit 3rdparty/qmarkdowntextedit
+        git clone https://github.com/software-made-easy/qtspell 3rdparty/qtspell
+        mkdir 3rdparty/qtspell/build
+        cd 3rdparty/qtspell/build
+        cmake ..
+        make
+        sudo make install
+        cd ../../..
 
       #
       # Build MarkdownEdit
@@ -116,7 +142,8 @@ jobs:
 
     - name: Build MarkdownEdit
       run: |
-        qmake && make
+        qmake
+        make
     - name: make check
       run: make check
     - name: make distcheck
