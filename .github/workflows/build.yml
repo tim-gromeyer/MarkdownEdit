@@ -51,7 +51,7 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ../Qt
-        modules: qtwebengine
+        modules: qtwebenginewidgets
         key: ${{ runner.os }}-QtCache-${{ matrix.qt-version }}-2
     # https://github.com/marketplace/actions/install-qt
     - if: contains( matrix.os, 'windows') && ( matrix.qt-version == '5.7' )
