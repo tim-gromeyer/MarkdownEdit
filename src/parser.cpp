@@ -5,7 +5,7 @@
 #include <QByteArray>
 
 #include "parser.h"
-#include "md4c-html.h"
+#include "3rdparty/md4c/src/md4c-html.h"
 #ifdef QT_DEBUG
 #include "3rdparty/html2md/html2md.hpp"
 #endif
