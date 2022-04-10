@@ -28,4 +28,6 @@ MarkdownEdit, as the name suggests, is a simple and easy program to create and e
 ![Example](https://github.com/software-made-easy/MarkdownEdit/raw/main/doc/images/Example.png)
 
 # Download
-- Linux installer [here](https://github.com/software-made-easy/MarkdownEdit/releases/latest/download/Installer)
+## Linux:
+- [Installer](https://github.com/software-made-easy/MarkdownEdit/releases/latest/download/Installer)
+- [.deb file](https://github.com/software-made-easy/MarkdownEdit/releases/latest/download/MarkdownEdit.deb)
