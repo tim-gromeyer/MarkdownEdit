@@ -1,37 +1,30 @@
-## Welcome to GitHub Pages
+![Made with C++](https://forthebadge.com/images/badges/made-with-c-plus-plus.svg)
+[![Powered by Qt](https://forthebadge.com/images/badges/powered-by-qt.svg)](https://qt.io)
+[![CodeFactor](https://www.codefactor.io/repository/github/software-made-easy/markdownedit/badge/main)](https://www.codefactor.io/repository/github/software-made-easy/markdownedit/overview/main)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![GitHub release](https://img.shields.io/github/release/software-made-easy/MarkdownEdit.svg)](https://github.com/software-made-easy/MarkdownEdit/releases/)
 
-You can use the [editor on GitHub](https://github.com/software-made-easy/MarkdownEdit/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+# MarkdownEdit
 
-### Markdown
+MarkdownEdit, as the name suggests, is a simple and easy program to create and edit Markdown files.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+-------
 
-```markdown
-Syntax highlighted code block
+# Features:
 
-# Header 1
-## Header 2
-### Header 3
+- Spell checking
+- Save and load Markdown files
+- Undo-Redo
+- Preview markdown files in real time(~1 ms)
+- Syntax highlighting editor
+- Auto complete(Close brackets, list, ...)
+- Find/Replace(Ctrl+F/Ctrl+R)
+- Export to HTML
+- Poor in resources
+- Quickly open recent files
+- Open Source
 
-- Bulleted
-- List
+![Example](https://github.com/software-made-easy/MarkdownEdit/raw/main/doc/images/Example.png)
 
-1. Numbered
-2. List
 
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/software-made-easy/MarkdownEdit/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
