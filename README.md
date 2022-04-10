@@ -16,7 +16,7 @@ MarkdownEdit, as the name suggests, is a simple and easy program to create and e
 - Spell checking
 - Save and load Markdown files
 - Undo-Redo
-- Preview markdown files in real time
+- Preview markdown files in real time(~1 ms)
 - Syntax highlighting editor
 - Auto complete(Close brackets, list, ...)
 - Find/Replace(Ctrl+F/Ctrl+R)
@@ -28,7 +28,7 @@ MarkdownEdit, as the name suggests, is a simple and easy program to create and e
 ![Example](doc/images/Example.png)
 
 # Dependencies:
-There is a [script](scripts/requirements.sh) to find all dependencies. The script dependencies are `libc-bin` and `dlocate`.
+[Qt](https://qt.io/)
 
 # Note: 
 To improve the performance when using images, disable the "Auto add file path to icon path" option in settings (Menu Extras->Options).
@@ -47,5 +47,5 @@ Execute the [build script](scripts/build.sh).
 
 - The conversion from Markdown to HTML is done with the help of the [md4c](https://github.com/mity/md4c) - library by _Martin Mitáš_.
 - The [widget](https://github.com/pbek/qmarkdowntextedit) used for writing was created by _Patrizio Bekerle_.
-- Spell checking is done using the [QtSpell](https://github.com/manisandro/qtspell) library by _Sandro Mani_.
+- Spell checking is done with the [QtSpell](https://github.com/software-made-easy/qtspell) library based on the [QtSpell](https://github.com/manisandro/qtspell) library by _Sandro Mani_.
 - The HTML syntax is highlighted using _Waqar Ahmed_'s [QSourceHighlite](https://github.com/Waqar144/QSourceHighlite) library.

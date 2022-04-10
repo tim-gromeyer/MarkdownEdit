@@ -4,38 +4,38 @@
 <context>
     <name>About</name>
     <message>
-        <location filename="../about.cpp" line="21"/>
-        <location filename="../about.cpp" line="168"/>
+        <location filename="../src/about.cpp" line="21"/>
+        <location filename="../src/about.cpp" line="168"/>
         <source>About</source>
         <translation>Über</translation>
     </message>
     <message>
-        <location filename="../about.cpp" line="149"/>
+        <location filename="../src/about.cpp" line="149"/>
         <source>Description:</source>
         <translation>Beschreibung:</translation>
     </message>
     <message>
-        <location filename="../about.cpp" line="154"/>
+        <location filename="../src/about.cpp" line="154"/>
         <source>Version:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../about.cpp" line="158"/>
+        <location filename="../src/about.cpp" line="158"/>
         <source>Homepage:</source>
         <translation>Startseite:</translation>
     </message>
     <message>
-        <location filename="../about.cpp" line="162"/>
+        <location filename="../src/about.cpp" line="162"/>
         <source>Qt Version:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../about.cpp" line="170"/>
+        <location filename="../src/about.cpp" line="170"/>
         <source>Credits</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../about.cpp" line="809"/>
+        <location filename="../src/about.cpp" line="809"/>
         <source>License</source>
         <translation>Lizenz</translation>
     </message>
@@ -48,233 +48,233 @@
         <translation>Vorschau</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="41"/>
-        <source>about:blank</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="59"/>
+        <location filename="../mainwindow.ui" line="52"/>
         <source>HTML</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="87"/>
+        <location filename="../mainwindow.ui" line="80"/>
         <source>&amp;File</source>
         <translation>&amp;Datei</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="94"/>
+        <location filename="../mainwindow.ui" line="87"/>
         <source>Recently opened</source>
         <translation>Zuletzt geöffnet</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="111"/>
+        <location filename="../mainwindow.ui" line="104"/>
         <source>&amp;Edit</source>
         <translation>&amp;Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="127"/>
+        <location filename="../mainwindow.ui" line="120"/>
         <source>E&amp;xtras</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="140"/>
+        <location filename="../mainwindow.ui" line="133"/>
         <source>&amp;Help</source>
         <translation>&amp;Hilfe</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="147"/>
+        <location filename="../mainwindow.ui" line="140"/>
         <source>&amp;View</source>
         <translation>An&amp;sicht</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="163"/>
-        <source>toolBar</source>
-        <translation></translation>
+        <location filename="../mainwindow.ui" line="156"/>
+        <source>File</source>
+        <translation>Datei</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="178"/>
+        <location filename="../mainwindow.ui" line="167"/>
+        <source>Edit</source>
+        <translation>Bearbeiten</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="182"/>
         <source>New</source>
         <translation>Neu</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="181"/>
+        <location filename="../mainwindow.ui" line="185"/>
         <source>Ctrl+N</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="190"/>
+        <location filename="../mainwindow.ui" line="194"/>
         <source>Open</source>
         <translation>Öffnen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="193"/>
+        <location filename="../mainwindow.ui" line="197"/>
         <source>Ctrl+O</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="202"/>
+        <location filename="../mainwindow.ui" line="206"/>
         <source>Save</source>
         <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="205"/>
+        <location filename="../mainwindow.ui" line="209"/>
         <source>Ctrl+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="214"/>
+        <location filename="../mainwindow.ui" line="218"/>
         <source>Save as</source>
         <translation>Speichern unter</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="217"/>
+        <location filename="../mainwindow.ui" line="221"/>
         <source>Ctrl+Shift+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="229"/>
+        <location filename="../mainwindow.ui" line="233"/>
         <source>Print</source>
         <translation>Drucken</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="232"/>
+        <location filename="../mainwindow.ui" line="236"/>
         <source>Ctrl+P</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="244"/>
+        <location filename="../mainwindow.ui" line="248"/>
         <source>Print preview</source>
         <translation>Druckvorschau</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="247"/>
+        <location filename="../mainwindow.ui" line="251"/>
         <source>Ctrl+Shift+P</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="256"/>
+        <location filename="../mainwindow.ui" line="260"/>
         <source>Exit</source>
         <translation>Beenden</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="259"/>
+        <location filename="../mainwindow.ui" line="263"/>
         <source>Ctrl+Q</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="271"/>
+        <location filename="../mainwindow.ui" line="275"/>
         <source>Undo</source>
         <translation>Rückgängig</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="274"/>
+        <location filename="../mainwindow.ui" line="278"/>
         <source>Ctrl+Z</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="283"/>
+        <location filename="../mainwindow.ui" line="287"/>
         <source>Redo</source>
         <translation>Wiederherstellen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="286"/>
+        <location filename="../mainwindow.ui" line="290"/>
         <source>Ctrl+Shift+Z</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="295"/>
+        <location filename="../mainwindow.ui" line="299"/>
         <source>Cut</source>
         <translation>Ausschneiden</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="298"/>
+        <location filename="../mainwindow.ui" line="302"/>
         <source>Ctrl+X</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="307"/>
+        <location filename="../mainwindow.ui" line="311"/>
         <source>Copy</source>
         <translation>Kopieren</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="310"/>
+        <location filename="../mainwindow.ui" line="314"/>
         <source>Ctrl+C</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="319"/>
+        <location filename="../mainwindow.ui" line="323"/>
         <source>Paste</source>
         <translation>Einfügen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="322"/>
+        <location filename="../mainwindow.ui" line="326"/>
         <source>Ctrl+V</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="331"/>
+        <location filename="../mainwindow.ui" line="335"/>
         <source>Select all</source>
         <translation>Alles markieren</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="334"/>
+        <location filename="../mainwindow.ui" line="338"/>
         <source>Ctrl+A</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="346"/>
+        <location filename="../mainwindow.ui" line="350"/>
         <source>Search</source>
         <translation>Suche</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="349"/>
+        <location filename="../mainwindow.ui" line="353"/>
         <source>Ctrl+F</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="361"/>
-        <location filename="../mainwindow.cpp" line="348"/>
+        <location filename="../mainwindow.ui" line="365"/>
+        <location filename="../src/mainwindow.cpp" line="285"/>
         <source>Export HTML</source>
         <translation>HTML Exportieren</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="407"/>
+        <location filename="../mainwindow.ui" line="411"/>
         <source>Replace</source>
         <translation>Ersetzen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="410"/>
+        <location filename="../mainwindow.ui" line="414"/>
         <source>Ctrl+R</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="418"/>
+        <location filename="../mainwindow.ui" line="422"/>
         <source>Show line numbers</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="429"/>
+        <location filename="../mainwindow.ui" line="433"/>
         <source>Highlighting enabled</source>
         <translation>Hervorhebung aktiviert</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="443"/>
+        <location filename="../mainwindow.ui" line="447"/>
         <source>Open last document on startup</source>
         <translation>Letztes Dokument beim Start öffnen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="451"/>
+        <location filename="../mainwindow.ui" line="455"/>
         <source>Pause preview</source>
         <translation>Vorschau pausieren</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="459"/>
+        <location filename="../mainwindow.ui" line="463"/>
         <source>Disable preview</source>
         <translation>Vorschau deaktivieren</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="467"/>
+        <location filename="../mainwindow.ui" line="471"/>
         <source>Check spelling</source>
         <translation>Rechtschreibprüfung</translation>
     </message>
@@ -287,146 +287,150 @@
         <translation type="vanished">Html exportieren</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="373"/>
+        <location filename="../mainwindow.ui" line="377"/>
         <source>Options</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="385"/>
+        <location filename="../mainwindow.ui" line="389"/>
         <source>About</source>
         <translation>Über</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="390"/>
+        <location filename="../mainwindow.ui" line="394"/>
         <source>About Qt</source>
         <translation>Über Qt</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="395"/>
+        <location filename="../mainwindow.ui" line="399"/>
         <source>Test</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="439"/>
+        <location filename="../src/mainwindow.cpp" line="357"/>
         <source>Could not open file %1: %2</source>
         <translation>Datei %1 konnte nicht geöffnet werden: %2</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="473"/>
+        <location filename="../src/mainwindow.cpp" line="391"/>
         <source>Opened %1</source>
         <translation>%1 geöffnet</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="498"/>
+        <location filename="../src/mainwindow.cpp" line="413"/>
         <source>You have unsaved changes. Do you want to create a new document anyway?</source>
         <translation>Du hast nicht gespeicherte Änderungen. Möchten Sie trotzdem ein neues Dokument erstellen?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="506"/>
+        <location filename="../src/mainwindow.cpp" line="420"/>
         <source>## New document</source>
         <translation>## Neues Dokument</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="519"/>
+        <location filename="../src/mainwindow.cpp" line="434"/>
         <source>You have unsaved changes. Do you want to open a new document anyway?</source>
         <translation>Du hast nicht gespeicherte Änderungen. Möchten Sie trotzdem ein neues Dokument öffnen?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="530"/>
+        <location filename="../src/mainwindow.cpp" line="445"/>
         <source>Open MarkDown File</source>
         <translation>Markdown-Datei öffnen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="364"/>
-        <location filename="../mainwindow.cpp" line="552"/>
+        <location filename="../src/mainwindow.cpp" line="301"/>
+        <location filename="../src/mainwindow.cpp" line="467"/>
         <source>Could not write to file %1: %2</source>
         <translation>In Datei %1 konnte nicht geschrieben werden: %2</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="71"/>
+        <location filename="../src/mainwindow.cpp" line="71"/>
         <source>new.md</source>
         <translation>neu.md</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="315"/>
+        <location filename="../src/mainwindow.cpp" line="256"/>
         <source>Print Document</source>
         <translation>Dokument drucken</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="363"/>
-        <location filename="../mainwindow.cpp" line="621"/>
+        <location filename="../src/mainwindow.cpp" line="300"/>
+        <location filename="../src/mainwindow.cpp" line="532"/>
         <source>Warning</source>
         <translation>Warnung</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="372"/>
+        <location filename="../src/mainwindow.cpp" line="309"/>
         <source>HTML exported to %1</source>
         <translation>HTML nach %1 exportiert</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="430"/>
+        <location filename="../src/mainwindow.cpp" line="348"/>
         <source>Large file</source>
         <translation>Große Datei</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="431"/>
+        <location filename="../src/mainwindow.cpp" line="349"/>
         <source>This is a large file that can potentially cause performance issues.</source>
         <translation>Dies ist eine große Datei, die potenziell Leistungsprobleme verursachen kann.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="438"/>
+        <location filename="../src/mainwindow.cpp" line="356"/>
         <source>Couldn&apos;t open file</source>
         <translation>Datei konnte nicht geöffnet werden</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="563"/>
+        <location filename="../src/mainwindow.cpp" line="474"/>
         <source>Wrote %1</source>
         <translation>%1 geschrieben</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="580"/>
+        <location filename="../src/mainwindow.cpp" line="491"/>
         <source>Save MarkDown File</source>
         <translation>Markdown-Datei speichern</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="603"/>
+        <location filename="../src/mainwindow.cpp" line="514"/>
         <source>About MarkdownEdit</source>
         <translation>Über MarkdownEdit</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="605"/>
+        <location filename="../src/mainwindow.cpp" line="516"/>
         <source>MarkdownEdit, as the name suggests, is a simple and easy program to create and edit Markdown files.</source>
         <translation>MarkdownEdit ist, wie der Name schon sagt, ein einfaches Programm zum Erstellen und Bearbeiten von Markdown-Dateien.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="607"/>
+        <location filename="../src/mainwindow.cpp" line="518"/>
         <source>&lt;p&gt;The conversion from Markdown to HTML is done with the help of the &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt; library by &lt;em&gt;Martin Mitáš&lt;/em&gt;.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Die Konvertierung von Markdown nach HTML erfolgt mit Hilfe der &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt;-Bibliothek von &lt;em&gt;Martin Mitáš&lt;/ em&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="608"/>
+        <location filename="../src/mainwindow.cpp" line="519"/>
         <source>&lt;p&gt;The &lt;a href=&quot;https://github.com/pbek/qmarkdowntextedit&quot;&gt;widget&lt;/a&gt; used for writing was created by &lt;em&gt;Patrizio Bekerle&lt;/em&gt;.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Das zum Schreiben verwendete &lt;a href=&quot;https://github.com/pbek/qmarkdowntextedit&quot;&gt;Widget&lt;/a&gt; wurde von &lt;em&gt;Patrizio Bekerle&lt;/em&gt; erstellt.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="609"/>
-        <source>&lt;p&gt;Spell checking is done using the &lt;a href=&quot;https://github.com/manisandro/qtspell&quot;&gt;QtSpell&lt;/a&gt; library by &lt;em&gt;Sandro Mani&lt;/em&gt;.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Die Rechtschreibprüfung erfolgt mithilfe der &lt;a href=&quot;https://github.com/manisandro/qtspell&quot;&gt;QtSpell&lt;/a&gt;-Bibliothek von &lt;em&gt;Sandro Mani&lt;/em&gt;.&lt;/p&gt;</translation>
+        <location filename="../src/mainwindow.cpp" line="520"/>
+        <source>&lt;p&gt;Spell checking is done with the &lt;a href=&quot;https://github.com/software-made-easy/qtspell&quot;&gt;QtSpell&lt;/a&gt; library based on the &lt;a href=&quot;https://github.com/manisandro/qtspell&quot;&gt;QtSpell&lt;/a&gt; library by &lt;em&gt;Sandro Mani&lt;/em&gt;.&lt;/p&gt;</source>
+        <translation>&lt;p&gt;Die Rechtschreibprüfung erfolgt mit der &lt;a href=&quot;https://github.com/software-made-easy/qtspell&quot;&gt;QtSpell&lt;/a&gt;-Bibliothek basierend auf &lt;a href=&quot;https: //github.com/manisandro/qtspell&quot;&gt;QtSpell&lt;/a&gt;-Bibliothek von &lt;em&gt;Sandro Mani&lt;/em&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="610"/>
+        <source>&lt;p&gt;Spell checking is done using the &lt;a href=&quot;https://github.com/manisandro/qtspell&quot;&gt;QtSpell&lt;/a&gt; library by &lt;em&gt;Sandro Mani&lt;/em&gt;.&lt;/p&gt;</source>
+        <translation type="vanished">&lt;p&gt;Die Rechtschreibprüfung erfolgt mithilfe der &lt;a href=&quot;https://github.com/manisandro/qtspell&quot;&gt;QtSpell&lt;/a&gt;-Bibliothek von &lt;em&gt;Sandro Mani&lt;/em&gt;.&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="521"/>
         <source>&lt;p&gt;The HTML syntax is highlighted using &lt;em&gt;Waqar Ahmed&lt;/em&gt;&apos;s &lt;a href=&quot;https://github.com/Waqar144/QSourceHighlite&quot;&gt;QSourceHighlite&lt;/a&gt; library.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Die HTML-Syntax wird mithilfe der &lt;a href=&quot;https://github.com/Waqar144/QSourceHighlite&quot;&gt;QSourceHighlite&lt;/a&gt;-Bibliothek von &lt;em&gt;Waqar Ahmed&lt;/em&gt; hervorgehoben.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="622"/>
+        <location filename="../src/mainwindow.cpp" line="533"/>
         <source>This file could not be found:
 %1.</source>
         <translation>Diese Datei konnte nicht gefunden werden:
 %1.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="660"/>
+        <location filename="../src/mainwindow.cpp" line="571"/>
         <source>You have unsaved changes. Do you want to exit anyway?</source>
         <translation>Du hast nicht gespeicherte Änderungen. Willst du trotzdem beenden?</translation>
     </message>
@@ -527,6 +531,34 @@
     </message>
 </context>
 <context>
+    <name>QtSpell::Checker</name>
+    <message>
+        <location filename="../3rdparty/qtspell/src/Checker.cpp" line="282"/>
+        <source>More...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../3rdparty/qtspell/src/Checker.cpp" line="289"/>
+        <source>Add &quot;%1&quot; to dictionary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../3rdparty/qtspell/src/Checker.cpp" line="294"/>
+        <source>Ignore &quot;%1&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../3rdparty/qtspell/src/Checker.cpp" line="302"/>
+        <source>Check spelling</source>
+        <translation type="unfinished">Rechtschreibprüfung</translation>
+    </message>
+    <message>
+        <location filename="../3rdparty/qtspell/src/Checker.cpp" line="321"/>
+        <source>Languages</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Settings</name>
     <message>
         <location filename="../settings.ui" line="20"/>
@@ -534,12 +566,11 @@
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="26"/>
         <source>Use Webbrowser to preview Markdown files</source>
-        <translation>Webbrowser benutzen, um Vorschau anzuzeigen</translation>
+        <translation type="vanished">Webbrowser benutzen, um Vorschau anzuzeigen</translation>
     </message>
     <message>
-        <location filename="../settings.ui" line="33"/>
+        <location filename="../settings.ui" line="26"/>
         <source>Auto add file path to icon path</source>
         <translation>Dateipfad automatisch zum Symbolpfad hinzufügen</translation>
     </message>

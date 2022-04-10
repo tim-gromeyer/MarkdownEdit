@@ -56,9 +56,6 @@ private slots:
     void undo();
     void redo();
 
-    void autoSave();
-    void clearAutoSave();
-
 private:
     bool isModified() const;
     void loadSettings();

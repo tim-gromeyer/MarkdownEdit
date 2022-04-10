@@ -11,7 +11,6 @@
 #include <QComboBox>
 #include <QScrollBar>
 #include <QSettings>
-#include <QTimer>
 #include <QActionGroup>
 
 
@@ -40,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    QComboBox *mode = new QComboBox(ui->toolBar);
+    QComboBox *mode = new QComboBox(ui->Edit);
     mode->addItems({"Commonmark", "GitHub"});
     mode->setCurrentIndex(1);
     _mode = 1;
@@ -72,15 +71,6 @@ MainWindow::MainWindow(QWidget *parent)
             setWindowFilePath(QFileInfo(tr("new.md")).fileName());
         }
     }
-
-    /*
-    timer = new QTimer(this);
-    timer->setInterval(60000);
-
-    connect(timer, &QTimer::timeout, this, &MainWindow::autoSave);
-
-    timer->start();
-    */
 
     connect(ui->actionNew, &QAction::triggered, this, &MainWindow::onFileNew);
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::onFileOpen);
@@ -136,21 +126,20 @@ MainWindow::MainWindow(QWidget *parent)
     editActions->addAction(ui->actionPaste);
     editActions->addAction(ui->actionCut);
 
-    ui->toolBar->addAction(ui->actionNew);
-    ui->toolBar->addAction(ui->actionOpen);
-    ui->toolBar->addAction(ui->actionSave);
-    ui->toolBar->addSeparator();
-    ui->toolBar->addAction(ui->actionExportHtml);
-    ui->toolBar->addAction(ui->actionPrint);
-    ui->toolBar->addAction(ui->actionPrintPreview);
-    ui->toolBar->addSeparator();
-    ui->toolBar->addAction(ui->actionUndo);
-    ui->toolBar->addAction(ui->actionRedo);
-    ui->toolBar->addAction(ui->actionCut);
-    ui->toolBar->addAction(ui->actionCopy);
-    ui->toolBar->addAction(ui->actionPaste);
-    ui->toolBar->addSeparator();
-    ui->toolBar->addWidget(mode);
+    ui->File->addAction(ui->actionNew);
+    ui->File->addAction(ui->actionOpen);
+    ui->File->addAction(ui->actionSave);
+    ui->File->addSeparator();
+    ui->File->addAction(ui->actionExportHtml);
+    ui->File->addAction(ui->actionPrint);
+    ui->File->addAction(ui->actionPrintPreview);
+    ui->Edit->addAction(ui->actionUndo);
+    ui->Edit->addAction(ui->actionRedo);
+    ui->Edit->addAction(ui->actionCut);
+    ui->Edit->addAction(ui->actionCopy);
+    ui->Edit->addAction(ui->actionPaste);
+    ui->Edit->addSeparator();
+    ui->Edit->addWidget(mode);
 
     QPalette p = ui->editor->palette();
     QColor back = p.base().color();
@@ -182,25 +171,6 @@ void MainWindow::changeSpelling(bool checked)
 
     ui->actionSpell_checking->setChecked(checked);
     spelling = checked;
-}
-
-void MainWindow::clearAutoSave()
-{
-    if (QFile::exists(path + ".autosave"))
-        QFile::remove(path + ".autosave");
-}
-
-void MainWindow::autoSave()
-{
-    if (!isModified())
-        return;
-
-    QFile f(path + ".autosave");
-    if (!f.open(QIODevice::WriteOnly | QIODevice::Text))
-        return;
-
-    QTextStream out(&f);
-    out << ui->editor->document()->toPlainText();
 }
 
 void MainWindow::disablePreview(bool checked)
@@ -372,21 +342,6 @@ void MainWindow::onTextChanged()
 
 void MainWindow::openFile(const QString &newFile)
 {
-    /*
-    if (QFile::exists(newFile + ".autosave")) {
-        QMessageBox dlg;
-        dlg.setWindowTitle(tr(""));
-        dlg.setText(tr(""));
-        dlg.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-        dlg.setDefaultButton(QMessageBox::Yes);
-
-        // todo: Finish
-        if (dlg.exec() == QMessageBox::Yes) {
-            QFile f(newFile + ".autosave");
-            if (!f.rename(newFile)) {}
-        }
-    }
-    */
     QFile f(newFile);
 
     if (f.size() > 10000) {
@@ -436,7 +391,6 @@ void MainWindow::openFile(const QString &newFile)
     statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 60000);
 
     updateOpened();
-    clearAutoSave();
 
     emit modificationChanged(false);
 
@@ -460,7 +414,6 @@ void MainWindow::onFileNew()
         if (button != QMessageBox::Yes)
             return;
     }
-    clearAutoSave();
     checker->clearUndoRedo();
 
     path = "";
@@ -518,8 +471,6 @@ void MainWindow::onFileSave()
     QTextStream str(&f);
     str << ui->editor->toPlainText();
 
-    clearAutoSave();
-
     statusBar()->showMessage(tr("Wrote %1").arg(QDir::toNativeSeparators(path)), 60000);
 
     updateOpened();
@@ -547,7 +498,7 @@ void MainWindow::onFileSaveAs()
     QStringList selectedFiles = dialog.selectedFiles();
     path = selectedFiles.first();
 
-    if (dialog.selectedMimeTypeFilter() ==  "text/html")
+    if (dialog.selectedMimeTypeFilter().contains("html"))
         html = true;
 
     if (!path.endsWith(".md") && !html)
@@ -566,7 +517,7 @@ void MainWindow::onHelpAbout()
 
     dialog.addCredit(tr("<p>The conversion from Markdown to HTML is done with the help of the <a href=\"https://github.com/mity/md4c\">md4c</a> library by <em>Martin Mitáš</em>.</p>"));
     dialog.addCredit(tr("<p>The <a href=\"https://github.com/pbek/qmarkdowntextedit\">widget</a> used for writing was created by <em>Patrizio Bekerle</em>.</p>"));
-    dialog.addCredit(tr("<p>Spell checking is done using the <a href=\"https://github.com/manisandro/qtspell\">QtSpell</a> library by <em>Sandro Mani</em>.</p>"));
+    dialog.addCredit(tr("<p>Spell checking is done with the <a href=\"https://github.com/software-made-easy/qtspell\">QtSpell</a> library based on the <a href=\"https://github.com/manisandro/qtspell\">QtSpell</a> library by <em>Sandro Mani</em>.</p>"));
     dialog.addCredit(tr("<p>The HTML syntax is highlighted using <em>Waqar Ahmed</em>'s <a href=\"https://github.com/Waqar144/QSourceHighlite\">QSourceHighlite</a> library.</p>"));
 
     dialog.exec();
@@ -670,9 +621,10 @@ void MainWindow::loadSettings() {
     onTextChanged();
     spelling = settings->value("spelling", QString::number(true)).toBool();
     changeSpelling(spelling);
-    const QString spellLang = settings->value("spellLang", QString()).toString();
-    if (!spellLang.isEmpty())
-        checker->setLanguage(spellLang);
+    QString spellLang = settings->value("spellLang", QString()).toString();
+    if (spellLang.isEmpty())
+        spellLang = language;
+    checker->setLanguage(spellLang);
 }
 
 void MainWindow::saveSettings() {
