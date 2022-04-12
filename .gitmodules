@@ -1,0 +1,12 @@
+[submodule "3rdparty/md4c"]
+	path = 3rdparty/md4c
+	url = https://github.com/mity/md4c
+[submodule "3rdparty/qmarkdowntextedit"]
+	path = 3rdparty/qmarkdowntextedit
+	url = https://github.com/pbek/qmarkdowntextedit
+[submodule "3rdparty/QSourceHighlite"]
+	path = 3rdparty/QSourceHighlite
+	url = https://github.com/Waqar144/QSourceHighlite
+[submodule "3rdparty/qtspell"]
+	path = 3rdparty/qtspell
+	url = https://github.com/software-made-easy/qtspell

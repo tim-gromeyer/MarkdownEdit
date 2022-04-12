@@ -21,7 +21,7 @@ public:
     QLabel* addCredit(QString text);
     QList<QLabel*> addCredits(QStringList credits);
     void deleteCreditPage();
-    bool creditPageAvaiable() { return creditPage; }
+    inline bool creditPageAvaiable() { return creditPage; }
     void setAppUrl(QUrl url);
     void setAppUrl(QString url);
     void setAppVersion(QString version);

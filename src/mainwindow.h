@@ -24,7 +24,7 @@ public:
 
     void openFile(const QString &path);
 
-    void setLanguage(const QString lang) { language = lang; };
+    inline void setLanguage(const QString lang) { language = lang; };
 
 protected:
     void closeEvent(QCloseEvent *e) override;
@@ -56,9 +56,6 @@ private slots:
     void undo();
     void redo();
 
-    void autoSave();
-    void clearAutoSave();
-
 private:
     bool isModified() const;
     void loadSettings();
@@ -83,7 +80,6 @@ private:
     int originalMdLength = 0;
 
     bool dontUpdate = false;
-    bool useWebBrowser = false;
     bool setPath = true;
     bool html = false;
     bool spelling = true;

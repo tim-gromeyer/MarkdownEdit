@@ -2,18 +2,11 @@ if [[ $0 == "*build.sh" ]]; then
     cd ..
 fi
 
-mkdir 3rdparty && cd 3rdparty
-git clone https://github.com/mity/md4c
-cd md4c
-mkdir build && cd build
-cmake ..
-make
-sudo make install
-cd ../..
-
-git clone https://github.com/pbek/qmarkdowntextedit
-git clone https://github.com/manisandro/qtspell
-cd qtspell
+mkdir 3rdparty
+git clone https://github.com/mity/md4c 3rdparty/md4c
+git clone https://github.com/Waqar144/QSourceHighlite 3rdparty/QSourceHighlite
+git clone https://github.com/pbek/qmarkdowntextedit 3rdparty/qmarkdowntextedit
+cd 3rdparty/qtspell
 mkdir build && cd build
 cmake ..
 make

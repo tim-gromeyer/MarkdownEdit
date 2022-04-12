@@ -11,8 +11,6 @@
 #include <QComboBox>
 #include <QScrollBar>
 #include <QSettings>
-#include <QTimer>
-#include <QtSpell-qt5/QtSpell.hpp>
 #include <QActionGroup>
 
 
@@ -25,11 +23,14 @@
 #include "settings.h"
 #include "3rdparty/qmarkdowntextedit/qplaintexteditsearchwidget.h"
 #include "3rdparty/QSourceHighlite/qsourcehighliter.h"
+#include "3rdparty/qtspell/src/QtSpell.hpp"
 
 
+/*
 #if (defined(Q_OS_BLACKBERRY) || defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_WP))
 #error This application was developed for desktop only due to web engine module
 #endif
+*/
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -37,9 +38,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->textBrowser->hide();
 
-    QComboBox *mode = new QComboBox(ui->toolBar);
+    QComboBox *mode = new QComboBox(ui->Edit);
     mode->addItems({"Commonmark", "GitHub"});
     mode->setCurrentIndex(1);
     _mode = 1;
@@ -71,16 +71,6 @@ MainWindow::MainWindow(QWidget *parent)
             setWindowFilePath(QFileInfo(tr("new.md")).fileName());
         }
     }
-
-    /*
-    timer = new QTimer(this);
-    timer->setInterval(60000);
-
-
-    connect(timer, &QTimer::timeout, this, &MainWindow::autoSave);
-
-    timer->start();
-    */
 
     connect(ui->actionNew, &QAction::triggered, this, &MainWindow::onFileNew);
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::onFileOpen);
@@ -136,21 +126,20 @@ MainWindow::MainWindow(QWidget *parent)
     editActions->addAction(ui->actionPaste);
     editActions->addAction(ui->actionCut);
 
-    ui->toolBar->addAction(ui->actionNew);
-    ui->toolBar->addAction(ui->actionOpen);
-    ui->toolBar->addAction(ui->actionSave);
-    ui->toolBar->addSeparator();
-    ui->toolBar->addAction(ui->actionExportHtml);
-    ui->toolBar->addAction(ui->actionPrint);
-    ui->toolBar->addAction(ui->actionPrintPreview);
-    ui->toolBar->addSeparator();
-    ui->toolBar->addAction(ui->actionUndo);
-    ui->toolBar->addAction(ui->actionRedo);
-    ui->toolBar->addAction(ui->actionCut);
-    ui->toolBar->addAction(ui->actionCopy);
-    ui->toolBar->addAction(ui->actionPaste);
-    ui->toolBar->addSeparator();
-    ui->toolBar->addWidget(mode);
+    ui->File->addAction(ui->actionNew);
+    ui->File->addAction(ui->actionOpen);
+    ui->File->addAction(ui->actionSave);
+    ui->File->addSeparator();
+    ui->File->addAction(ui->actionExportHtml);
+    ui->File->addAction(ui->actionPrint);
+    ui->File->addAction(ui->actionPrintPreview);
+    ui->Edit->addAction(ui->actionUndo);
+    ui->Edit->addAction(ui->actionRedo);
+    ui->Edit->addAction(ui->actionCut);
+    ui->Edit->addAction(ui->actionCopy);
+    ui->Edit->addAction(ui->actionPaste);
+    ui->Edit->addSeparator();
+    ui->Edit->addWidget(mode);
 
     QPalette p = ui->editor->palette();
     QColor back = p.base().color();
@@ -184,25 +173,6 @@ void MainWindow::changeSpelling(bool checked)
     spelling = checked;
 }
 
-void MainWindow::clearAutoSave()
-{
-    if (QFile::exists(path + ".autosave"))
-        QFile::remove(path + ".autosave");
-}
-
-void MainWindow::autoSave()
-{
-    if (!isModified())
-        return;
-
-    QFile f(path + ".autosave");
-    if (!f.open(QIODevice::WriteOnly | QIODevice::Text))
-        return;
-
-    QTextStream out(&f);
-    out << ui->editor->document()->toPlainText();
-}
-
 void MainWindow::disablePreview(bool checked)
 {
     if (checked)
@@ -223,54 +193,29 @@ void MainWindow::pausePreview(bool checked)
 
 void MainWindow::undo()
 {
-    if (!useWebBrowser) {
-        dontUpdate = true;
-        checker->undo();
-        ui->textBrowser->undo();
-        dontUpdate = false;
-    }
-    else {
-        checker->undo();
-
-    }
+    dontUpdate = true;
+    checker->undo();
+    ui->textBrowser->undo();
+    dontUpdate = false;
+    checker->undo();
     ui->raw->undo();
 }
 
 void MainWindow::redo()
 {
-    if (!useWebBrowser) {
-        dontUpdate = true;
-        checker->redo();
-        ui->textBrowser->redo();
-        dontUpdate = false;
-    }
-    else {
-        checker->redo();
-    }
+    dontUpdate = true;
+    checker->redo();
+    ui->textBrowser->redo();
+    dontUpdate = false;
     ui->raw->redo();
 }
 
 void MainWindow::settingsDialog()
 {
     Settings dialog;
-    dialog.setUseWebBrowser(useWebBrowser);
     dialog.setAddPath(setPath);
     if (dialog.exec() != QDialog::Accepted)
         return;
-
-    if (useWebBrowser != dialog.useWebBrowser()) {
-        useWebBrowser = !useWebBrowser;
-        dialog.useWebBrowser();
-        if (useWebBrowser) {
-            ui->textBrowser->hide();
-            ui->preview->show();
-        }
-        else {
-            ui->preview->hide();
-            ui->textBrowser->show();
-        }
-        onTextChanged();
-    }
 
     if (setPath != dialog.addPath()) {
         setPath = !setPath;
@@ -330,10 +275,6 @@ void MainWindow::printPreview(QPrinter *printer)
 #ifdef QT_NO_PRINTER
     Q_UNUSED(printer);
 #else
-    if (useWebBrowser) {
-        QString html = Parser::Parse(ui->editor->document()->toPlainText(), Parser::MD2HTML, _mode);
-        ui->textBrowser->setHtml(html);
-    }
     ui->textBrowser->print(printer);
 #endif
 }
@@ -386,13 +327,9 @@ void MainWindow::onTextChanged()
 
     QString html = Parser::Parse(ui->editor->document()->toPlainText(), Parser::MD2HTML, _mode);
 
-    if (useWebBrowser)
-        ui->preview->setHtml(html);
-    else {
-        const int value = ui->textBrowser->verticalScrollBar()->value();
-        ui->textBrowser->setHtml(html);
-        ui->textBrowser->verticalScrollBar()->setValue(value);
-    }
+    const int value = ui->textBrowser->verticalScrollBar()->value();
+    ui->textBrowser->setHtml(html);
+    ui->textBrowser->verticalScrollBar()->setValue(value);
 
     const int i = ui->raw->verticalScrollBar()->value();
     ui->raw->setPlainText(html);
@@ -405,21 +342,6 @@ void MainWindow::onTextChanged()
 
 void MainWindow::openFile(const QString &newFile)
 {
-    /*
-    if (QFile::exists(newFile + ".autosave")) {
-        QMessageBox dlg;
-        dlg.setWindowTitle(tr(""));
-        dlg.setText(tr(""));
-        dlg.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-        dlg.setDefaultButton(QMessageBox::Yes);
-
-        // todo: Finish
-        if (dlg.exec() == QMessageBox::Yes) {
-            QFile f(newFile + ".autosave");
-            if (!f.rename(newFile)) {}
-        }
-    }
-    */
     QFile f(newFile);
 
     if (f.size() > 10000) {
@@ -469,7 +391,6 @@ void MainWindow::openFile(const QString &newFile)
     statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 60000);
 
     updateOpened();
-    clearAutoSave();
 
     emit modificationChanged(false);
 
@@ -493,7 +414,6 @@ void MainWindow::onFileNew()
         if (button != QMessageBox::Yes)
             return;
     }
-    clearAutoSave();
     checker->clearUndoRedo();
 
     path = "";
@@ -551,8 +471,6 @@ void MainWindow::onFileSave()
     QTextStream str(&f);
     str << ui->editor->toPlainText();
 
-    clearAutoSave();
-
     statusBar()->showMessage(tr("Wrote %1").arg(QDir::toNativeSeparators(path)), 60000);
 
     updateOpened();
@@ -580,7 +498,7 @@ void MainWindow::onFileSaveAs()
     QStringList selectedFiles = dialog.selectedFiles();
     path = selectedFiles.first();
 
-    if (dialog.selectedMimeTypeFilter() ==  "text/html")
+    if (dialog.selectedMimeTypeFilter().contains("html"))
         html = true;
 
     if (!path.endsWith(".md") && !html)
@@ -599,7 +517,7 @@ void MainWindow::onHelpAbout()
 
     dialog.addCredit(tr("<p>The conversion from Markdown to HTML is done with the help of the <a href=\"https://github.com/mity/md4c\">md4c</a> library by <em>Martin Mitáš</em>.</p>"));
     dialog.addCredit(tr("<p>The <a href=\"https://github.com/pbek/qmarkdowntextedit\">widget</a> used for writing was created by <em>Patrizio Bekerle</em>.</p>"));
-    dialog.addCredit(tr("<p>Spell checking is done using the <a href=\"https://github.com/manisandro/qtspell\">QtSpell</a> library by <em>Sandro Mani</em>.</p>"));
+    dialog.addCredit(tr("<p>Spell checking is done with the <a href=\"https://github.com/software-made-easy/qtspell\">QtSpell</a> library based on the <a href=\"https://github.com/manisandro/qtspell\">QtSpell</a> library by <em>Sandro Mani</em>.</p>"));
     dialog.addCredit(tr("<p>The HTML syntax is highlighted using <em>Waqar Ahmed</em>'s <a href=\"https://github.com/Waqar144/QSourceHighlite\">QSourceHighlite</a> library.</p>"));
 
     dialog.exec();
@@ -667,7 +585,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
 void MainWindow::loadSettings() {
     const QByteArray geo = settings->value("geometry", QByteArray({})).toByteArray();
     if (geo.isEmpty()) {
-        const QRect availableGeometry = qApp->screenAt(pos())->availableGeometry();
+        const QRect availableGeometry = QGuiApplication::screenAt(pos())->availableGeometry();
         resize(availableGeometry.width() / 2, (availableGeometry.height() * 2) / 3);
         move((availableGeometry.width() - width()) / 2,
              (availableGeometry.height() - height()) / 2);
@@ -700,22 +618,13 @@ void MainWindow::loadSettings() {
             openFile(last);
     }
 
-    useWebBrowser = settings->value("useWebBrowser", QString::number(false)).toBool();
-    if (useWebBrowser) {
-        ui->textBrowser->hide();
-        ui->preview->show();
-    }
-    else {
-        ui->preview->hide();
-        ui->textBrowser->show();
-    }
-
     onTextChanged();
     spelling = settings->value("spelling", QString::number(true)).toBool();
     changeSpelling(spelling);
-    const QString spellLang = settings->value("spellLang", QString()).toString();
-    if (!spellLang.isEmpty())
-        checker->setLanguage(spellLang);
+    QString spellLang = settings->value("spellLang", QString()).toString();
+    if (spellLang.isEmpty())
+        spellLang = language;
+    checker->setLanguage(spellLang);
 }
 
 void MainWindow::saveSettings() {
@@ -725,7 +634,6 @@ void MainWindow::saveSettings() {
     settings->setValue("recent", recentOpened);
     settings->setValue("openLast", QString::number(ui->actionOpen_last_document_on_start->isChecked()));
     settings->setValue("last", path);
-    settings->setValue("useWebBrowser", useWebBrowser);
     settings->setValue("setPath", QString::number(setPath));
     settings->setValue("spelling", QString::number(checker->getSpellingEnabled()));
     settings->setValue("spellLang", checker->getLanguage());

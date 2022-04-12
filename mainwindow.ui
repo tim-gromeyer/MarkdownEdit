@@ -35,13 +35,6 @@
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
-           <widget class="QWebEngineView" name="preview" native="true">
-            <property name="url" stdset="0">
-             <url>
-              <string>about:blank</string>
-             </url>
-            </property>
-           </widget>
            <widget class="QTextBrowser" name="textBrowser">
             <property name="openExternalLinks">
              <bool>true</bool>
@@ -158,9 +151,20 @@
    <addaction name="menu_Help"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QToolBar" name="toolBar">
+  <widget class="QToolBar" name="File">
    <property name="windowTitle">
-    <string>toolBar</string>
+    <string>File</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QToolBar" name="Edit">
+   <property name="windowTitle">
+    <string>Edit</string>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -482,11 +486,6 @@
     <slot>setText(QString)</slot>
     <slot>setText(constQStringtext)</slot>
    </slots>
-  </customwidget>
-  <customwidget>
-   <class>QWebEngineView</class>
-   <extends>QWidget</extends>
-   <header location="global">QtWebEngineWidgets/QWebEngineView</header>
   </customwidget>
  </customwidgets>
  <resources/>

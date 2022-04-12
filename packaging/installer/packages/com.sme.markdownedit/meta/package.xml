@@ -7,7 +7,7 @@
     <Licenses>
         <License name="GNU General Public License v3.0" file="LICENSE" />
     </Licenses>
-    <Script>manager.qs</Script>
+    <Script>markdownedit.qs</Script>
     <Default>true</Default>
     <ForcedInstallation>true</ForcedInstallation>
 </Package>

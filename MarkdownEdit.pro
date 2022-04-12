@@ -1,4 +1,4 @@
-QT       += core gui svg printsupport webenginewidgets
+QT       += core gui svg printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -42,15 +42,13 @@ TRANSLATIONS += \
 
 include(3rdparty/qmarkdowntextedit/qmarkdowntextedit.pri)
 include(3rdparty/QSourceHighlite/QSourceHighlite.pri)
+include(3rdparty/qtspell/qtspell.pri)
 
 CONFIG += lrelease
 CONFIG += embed_translations
-CONFIG += link_pkgconfig
 CONFIG -= qtquickcompiler
 
-PKGCONFIG += QtSpell-qt5
-
-VERSION = 0.5.0
+VERSION = 1.0.0
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 # Only show qDebug() messages in debug mode
