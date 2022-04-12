@@ -95,7 +95,6 @@ jobs:
     - name: Clone MarkdownEdit's dependencys
       run: |
         git submodule update --init --recursive -j 4
-      
 
       #
       # Build MarkdownEdit
