@@ -4,15 +4,11 @@ fi
 
 mkdir 3rdparty
 git clone https://github.com/mity/md4c 3rdparty/md4c
-git clone https://github.com/Waqar144/QSourceHighlite 3rdparty/QSourceHighlite
-git clone https://github.com/pbek/qmarkdowntextedit 3rdparty/qmarkdowntextedit
-cd 3rdparty/qtspell
-mkdir build && cd build
-cmake ..
-make
-sudo make install
+git clone https://github.com/Waqar144/QSourceHighlite
+git clone https://github.com/pbek/qmarkdowntextedit
+git clone https://github.com/software-made-easy/QtSpell qtspell
 
-cd ../../..
+cd ..
 mkdir build && cd build
 qmake ..
 make

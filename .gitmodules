@@ -9,4 +9,4 @@
 	url = https://github.com/Waqar144/QSourceHighlite
 [submodule "3rdparty/qtspell"]
 	path = 3rdparty/qtspell
-	url = https://github.com/software-made-easy/qtspell
+	url = https://github.com/software-made-easy/QtSpell
