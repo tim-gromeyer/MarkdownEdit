@@ -20,17 +20,6 @@ static unsigned renderer_flags = MD_HTML_FLAG_DEBUG;
 #endif
 static int want_fullhtml = 1;
 
-
-/*********************************
- ***  Simple grow-able buffer  ***
- *********************************/
-
-/* We render to a memory buffer instead of directly outputting the rendered
- * documents, as this allows using this utility for evaluating performance
- * of MD4C (--stat option). This allows us to measure just time of the parser,
- * without the I/O.
- */
-
 struct membuffer {
     char* data;
     size_t asize;
