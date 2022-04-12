@@ -1,3 +1,5 @@
-3rsparty/*
+3rdparty/*
 android/*
 *.pro.user
+packages/com.sme.markdownedit/data/*
+packaging/*.deb
