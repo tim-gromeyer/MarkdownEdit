@@ -30,8 +30,9 @@ MarkdownEdit, as the name suggests, is a simple and easy program to create and e
 # Dependencies:
 [Qt](https://qt.io/) and [enchant-2](https://github.com/AbiWord/enchant).
 
-# Note: 
-To improve the performance when using images, disable the "Auto add file path to icon path" option in settings (Menu Extras->Options).
+# Note(s): 
+- To improve the performance when using images, disable the "Auto add file path to icon path" option in settings (Menu Extras->Options).
+- When building via CMake, the translations **won't** work!
 
 # To do:
 
