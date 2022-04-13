@@ -22,6 +22,12 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools Pri
 set(TS_FILES translations/MarkdownEdit_de.ts)
 set(RC_FILES ressource.qrc)
 set(3RDPARTY_FILES
+        3rdparty/md4c/src/entity.h
+        3rdparty/md4c/src/entity.c
+        3rdparty/md4c/src/md4c.h
+        3rdparty/md4c/src/md4c.c
+        3rdparty/md4c/src/md4c-html.h
+        3rdparty/md4c/src/md4c-html.c
         3rdparty/qmarkdowntextedit/markdownhighlighter.h
         3rdparty/qmarkdowntextedit/markdownhighlighter.cpp
         3rdparty/qmarkdowntextedit/linenumberarea.h
@@ -51,12 +57,6 @@ set(3RDPARTY_FILES
         3rdparty/qtspell/src/UndoRedoStack.hpp
 )
 set(QTSPELL_TS
-        3rdparty/md4c/src/entity.h
-        3rdparty/md4c/src/entity.c
-        3rdparty/md4c/src/md4c.h
-        3rdparty/md4c/src/md4c.c
-        3rdparty/md4c/src/md4c-html.h
-        3rdparty/md4c/src/md4c-html.c
         3rdparty/qtspell/locale/QtSpell_af.ts
         3rdparty/qtspell/locale/QtSpell_lv.ts
         3rdparty/qtspell/locale/QtSpell_ak.ts
