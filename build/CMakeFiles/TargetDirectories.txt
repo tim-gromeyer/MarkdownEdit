@@ -1,0 +1,4 @@
+/home/tim/qtprojegt/MarkdownEdit/build/CMakeFiles/rebuild_cache.dir
+/home/tim/qtprojegt/MarkdownEdit/build/CMakeFiles/edit_cache.dir
+/home/tim/qtprojegt/MarkdownEdit/build/CMakeFiles/MarkdownEdit.dir
+/home/tim/qtprojegt/MarkdownEdit/build/CMakeFiles/MarkdownEdit_autogen.dir

@@ -34,8 +34,8 @@ HEADERS += \
     3rdparty/md4c/src/md4c-html.h
 
 FORMS += \
-    mainwindow.ui \
-    settings.ui
+    ui/mainwindow.ui \
+    ui/settings.ui
 
 TRANSLATIONS += \
     translations/MarkdownEdit_de.ts
@@ -61,7 +61,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    ressource.qrc
+    ressources/ressources.qrc
 
 DISTFILES += \
     android/AndroidManifest.xml \

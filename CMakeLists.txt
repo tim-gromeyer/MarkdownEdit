@@ -7,9 +7,9 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR})
+set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR}/ui)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(PkgConfig)
@@ -20,7 +20,7 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools PrintSup
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools PrintSupport)
 
 set(TS_FILES translations/MarkdownEdit_de.ts)
-set(RC_FILES ressource.qrc)
+set(RC_FILES ressources/ressources.qrc)
 set(3RDPARTY_FILES
         3rdparty/md4c/src/entity.h
         3rdparty/md4c/src/entity.c
@@ -125,8 +125,8 @@ set(PROJECT_SOURCES
         src/parser.h
         src/settings.cpp
         src/settings.h
-        settings.ui
-        mainwindow.ui
+        ui/settings.ui
+        ui/mainwindow.ui
         ${3RDPARTY_FILES}
         ${TS_FILES}
         ${RC_FILES}

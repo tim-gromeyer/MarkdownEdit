@@ -34,10 +34,6 @@ MarkdownEdit, as the name suggests, is a simple and easy program to create and e
 - To improve the performance when using images, disable the "Auto add file path to icon path" option in settings (Menu Extras->Options).
 - When building via CMake, the translations **won't** work!
 
-# To do:
-
-- Open HTML files and convert them to Markdown(it works, but it's a bit buggy, that's why it's not available, to enable it anyways, define _QT_DEBUG_ when compiling [mainwindow.cpp](mainwindow.cpp) and [parser.cpp](parser.cpp))
-- Synchronize scrolling(would be hard)
 
 -------
 
