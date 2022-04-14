@@ -6,5 +6,5 @@ Installed-Size: 1498
 Homepage: https://github.com/software-made-easy/MarkdownEdit
 Maintainer: Tim Gromeyer <gromeyer1012@gmail.com>
 Description: MarkdownEdit, as the name suggests, is a simple and easy program to create and edit Markdown files.
-Depends: libbsd0, libc6, libdouble-conversion3, libfreetype6, libgcc-s1, libgl1, libglib2.0-0, libglvnd0, libglx0, libgraphite2-3, libharfbuzz0b, libicu66, libpcre2-16-0, libpcre3, libpng16-16, libqt5core5a, libqt5gui5, libqt5printsupport5, libqt5widgets5, libx11-6, libxau6, libxcb1, libxdmcp6, zlib1g
+Depends: libbsd0, libc6, libdouble-conversion3, libfreetype6, libgcc-s1, libgl1, libglib2.0-0, libglvnd0, libglx0, libgraphite2-3, libharfbuzz0b, libicu66, libpcre2-16-0, libpcre3, libpng16-16, libqt5core5a, libqt5gui5, libqt5printsupport5, libqt5widgets5, libx11-6, libxau6, libxcb1, libxdmcp6, zlib1g, enchant-2
 Suggests: qt5ct
