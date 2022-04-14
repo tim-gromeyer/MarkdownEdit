@@ -533,6 +533,7 @@ void MainWindow::openRecent() {
                              tr("This file could not be found:\n%1.").arg(
                                  QDir::toNativeSeparators(filename)));
         recentOpened.removeAll(filename);
+        updateOpened();
         return;
     }
 
@@ -543,19 +544,22 @@ void MainWindow::openRecent() {
 }
 
 void MainWindow::updateOpened() {
+    foreach (QAction *a, ui->menuRecentlyOpened->actions()) {
+        disconnect(a, &QAction::triggered, this, &MainWindow::openRecent);
+        a->deleteLater();
+    }
+
     ui->menuRecentlyOpened->clear();
 
-    if (!path.isEmpty() && recentOpened.indexOf(path) == -1) {
+    if (!path.isEmpty() && recentOpened.indexOf(path) == -1)
         recentOpened.insert(0, path);
-    }
 
-    if (recentOpened.size() > 7) {
+    if (recentOpened.size() > 7)
         recentOpened.takeLast();
-    }
 
     for (int i = 0; i < recentOpened.size(); i++) {
         QString document = recentOpened.at(i);
-        QString title("&" + QString::number(recentOpened.indexOf(document) + 1) + " | " + document);
+        QString title("&" + QString::number(i + 1) + " | " + document);
         QAction *action = new QAction(title, this);
         connect(action, &QAction::triggered, this, &MainWindow::openRecent);
 
@@ -642,6 +646,5 @@ void MainWindow::saveSettings() {
 
 MainWindow::~MainWindow()
 {
-    // timer->stop();
     delete ui;
 }
