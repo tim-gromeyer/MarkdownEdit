@@ -41,8 +41,7 @@ MarkdownEdit, as the name suggests, is a simple and easy program to create and e
 Execute the [build script](scripts/build.sh) or follow the instructions below.
 
 - Clone MarkdownEdit: `git clone https://github.com/software-made-easy/MarkdownEdit && cd MarkdownEdit`
-- Clone all repositories needed by MarkdownEdit by running the command `git submodule update --init --recursive -j 4
-`.
+- Clone all repositories needed by MarkdownEdit by running the command `git submodule update --init --recursive -j4`.
 - Create the build folder: `mkdir build && cd build`
 - Now create a Makefile using CMake: `cmake ..` or qmake(recommended): `qmake ..`
 - Execute make: `make -j4`
@@ -50,7 +49,7 @@ Execute the [build script](scripts/build.sh) or follow the instructions below.
 To sum up:
 ```bash
 git clone https://github.com/software-made-easy/MarkdownEdit && cd MarkdownEdit
-git submodule update --init --recursive -j 4
+git submodule update --init --recursive -j4
 mkdir build && cd build
 qmake ..
 make

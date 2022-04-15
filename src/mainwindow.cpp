@@ -21,6 +21,7 @@
 
 #include "parser.h"
 #include "settings.h"
+#include "highlighter.h"
 #include "3rdparty/qmarkdowntextedit/qplaintexteditsearchwidget.h"
 #include "3rdparty/QSourceHighlite/qsourcehighliter.h"
 #include "3rdparty/qtspell/src/QtSpell.hpp"
@@ -50,9 +51,12 @@ MainWindow::MainWindow(QWidget *parent)
     checker->setShowCheckSpellingCheckbox(true);
     checker->setUndoRedoEnabled(true);
 
+    htmlHighliter = new Highliter(ui->raw->document());
+    /*
     htmlHighliter = new QSourceHighlite::QSourceHighliter(ui->raw->document());
     htmlHighliter->setCurrentLanguage(QSourceHighlite::QSourceHighliter::CodeXML);
     htmlHighliter->setTheme(QSourceHighlite::QSourceHighliter::Monokai);
+    */
 
     // Settings
     settings = new QSettings("SME", "MarkdownEdit", this);

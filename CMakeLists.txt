@@ -39,12 +39,6 @@ set(3RDPARTY_FILES
         3rdparty/qmarkdowntextedit/qplaintexteditsearchwidget.ui
         3rdparty/qmarkdowntextedit/qplaintexteditsearchwidget.cpp
         3rdparty/qmarkdowntextedit/media.qrc
-        3rdparty/QSourceHighlite/qsourcehighliter.h
-        3rdparty/QSourceHighlite/qsourcehighliter.cpp
-        3rdparty/QSourceHighlite/qsourcehighliterthemes.h
-        3rdparty/QSourceHighlite/qsourcehighliterthemes.cpp
-        3rdparty/QSourceHighlite/languagedata.h
-        3rdparty/QSourceHighlite/languagedata.cpp
         3rdparty/qtspell/src/Checker.cpp
         3rdparty/qtspell/src/QtSpell.hpp
         3rdparty/qtspell/src/Checker_p.hpp
@@ -168,7 +162,6 @@ ENDIF(WIN32)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_SOURCE_DIR}/3rdparty/qmarkdowntextedit)
-include_directories(${CMAKE_SOURCE_DIR}/3rdparty/QSourceHighlite)
 include_directories(${CMAKE_SOURCE_DIR}/3rdparty/md4c/src)
 include_directories(${CMAKE_SOURCE_DIR}/3rdparty/qtspell/src)
 target_link_libraries(MarkdownEdit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport ${ENCHANT_LDFLAGS} ${INTL_LDFLAGS})

@@ -12,6 +12,7 @@ class QTimer;
 namespace QtSpell { class TextEditChecker; }
 namespace QSourceHighlite { class QSourceHighliter; }
 class QActionGroup;
+class Highliter;
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -68,8 +69,6 @@ private:
     QString path;
     int _mode;
 
-    QTimer *timer;
-
     QSettings *settings;
 
     QStringList recentOpened;
@@ -89,6 +88,7 @@ private:
     QActionGroup *editActions;
 
     QtSpell::TextEditChecker *checker;
-    QSourceHighlite::QSourceHighliter *htmlHighliter;
+    Highliter *htmlHighliter;
+    // QSourceHighlite::QSourceHighliter *htmlHighliter;
 };
 #endif // MAINWINDOW_H

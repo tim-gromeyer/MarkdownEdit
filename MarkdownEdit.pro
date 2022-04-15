@@ -20,6 +20,7 @@ SOURCES += \
     src/about.cpp \
     src/parser.cpp \
     src/settings.cpp \
+    src/highlighter.cpp \
     3rdparty/md4c/src/entity.c \
     3rdparty/md4c/src/md4c.c \
     3rdparty/md4c/src/md4c-html.c
@@ -29,6 +30,7 @@ HEADERS += \
     src/about.h \
     src/parser.h \
     src/settings.h \
+    src/highlighter.h \
     3rdparty/md4c/src/entity.h \
     3rdparty/md4c/src/md4c.h \
     3rdparty/md4c/src/md4c-html.h
@@ -41,7 +43,6 @@ TRANSLATIONS += \
     translations/MarkdownEdit_de.ts
 
 include(3rdparty/qmarkdowntextedit/qmarkdowntextedit.pri)
-include(3rdparty/QSourceHighlite/QSourceHighlite.pri)
 include(3rdparty/qtspell/qtspell.pri)
 
 CONFIG += lrelease
