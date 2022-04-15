@@ -19,7 +19,6 @@
 #endif
 
 #include "parser.h"
-#include "settings.h"
 #include "highlighter.h"
 #include "3rdparty/qmarkdowntextedit/qplaintexteditsearchwidget.h"
 #include "3rdparty/qtspell/src/QtSpell.hpp"
