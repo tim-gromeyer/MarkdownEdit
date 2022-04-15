@@ -11,7 +11,6 @@
 #include <QComboBox>
 #include <QScrollBar>
 #include <QSettings>
-#include <QActionGroup>
 
 
 #if QT_CONFIG(printdialog)
@@ -23,7 +22,6 @@
 #include "settings.h"
 #include "highlighter.h"
 #include "3rdparty/qmarkdowntextedit/qplaintexteditsearchwidget.h"
-#include "3rdparty/QSourceHighlite/qsourcehighliter.h"
 #include "3rdparty/qtspell/src/QtSpell.hpp"
 
 
@@ -52,11 +50,6 @@ MainWindow::MainWindow(QWidget *parent)
     checker->setUndoRedoEnabled(true);
 
     htmlHighliter = new Highliter(ui->raw->document());
-    /*
-    htmlHighliter = new QSourceHighlite::QSourceHighliter(ui->raw->document());
-    htmlHighliter->setCurrentLanguage(QSourceHighlite::QSourceHighliter::CodeXML);
-    htmlHighliter->setTheme(QSourceHighlite::QSourceHighliter::Monokai);
-    */
 
     // Settings
     settings = new QSettings("SME", "MarkdownEdit", this);
@@ -93,8 +86,8 @@ MainWindow::MainWindow(QWidget *parent)
             this, [this]{ ui->editor->paste(); changeHighlighting(highlighting); });
     connect(ui->actionHighlighting_activated, &QAction::triggered,
             this, &MainWindow::changeHighlighting);
-    connect(ui->actionOptions, &QAction::triggered,
-            this, &MainWindow::settingsDialog);
+    connect(ui->actionAuto_add_file_path_to_icon_path, &QAction::triggered,
+            this, &MainWindow::changeAddtoIconPath);
     connect(this, &MainWindow::modificationChanged,
             ui->actionSave, &QAction::setEnabled);
     connect(this, &MainWindow::modificationChanged,
@@ -118,18 +111,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->actionUndo->setEnabled(ui->editor->document()->isUndoAvailable());
     ui->actionRedo->setEnabled(ui->editor->document()->isRedoAvailable());
 
-    fileActions = new QActionGroup(this);
-    fileActions->addAction(ui->actionNew);
-    fileActions->addAction(ui->actionOpen);
-    fileActions->addAction(ui->actionSave);
-    fileActions->addAction(ui->actionSaveAs);
-    editActions = new QActionGroup(this);
-    editActions->addAction(ui->actionUndo);
-    editActions->addAction(ui->actionRedo);
-    editActions->addAction(ui->actionCopy);
-    editActions->addAction(ui->actionPaste);
-    editActions->addAction(ui->actionCut);
-
     ui->File->addAction(ui->actionNew);
     ui->File->addAction(ui->actionOpen);
     ui->File->addAction(ui->actionSave);
@@ -147,10 +128,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     QPalette p = ui->editor->palette();
     QColor back = p.base().color();
-    int r;
-    int g;
-    int b;
-    int a;
+    int r, g, b, a;
     back.getRgb(&r, &g, &b, &a);
 
     const bool dark = ((r + g + b + a) / 4) < 127;
@@ -159,10 +137,6 @@ MainWindow::MainWindow(QWidget *parent)
         setWindowIcon(QIcon(":/Icon_dark.svg"));
     else
         setWindowIcon(QIcon(":/Icon.svg"));
-
-    // Tests
-#ifdef QT_DEBUG
-#endif
 }
 
 void MainWindow::changeSpelling(bool checked)
@@ -214,29 +188,25 @@ void MainWindow::redo()
     ui->raw->redo();
 }
 
-void MainWindow::settingsDialog()
+void MainWindow::changeAddtoIconPath(bool c)
 {
-    Settings dialog;
-    dialog.setAddPath(setPath);
-    if (dialog.exec() != QDialog::Accepted)
-        return;
+    setPath = c;
 
-    if (setPath != dialog.addPath()) {
-        setPath = !setPath;
+    QStringList searchPaths = ui->textBrowser->searchPaths();
+    const bool contains = searchPaths.contains(QFileInfo(path).path());
 
-        QStringList searchPaths = ui->textBrowser->searchPaths();
-        bool contains = searchPaths.contains(QFileInfo(path).path());
-        if (contains && !setPath) {
-            searchPaths.removeAll(QFileInfo(path).path());
-            ui->textBrowser->setSearchPaths(searchPaths);
-            onTextChanged();
-        }
-        else if (!contains && setPath) {
-            searchPaths.append(QFileInfo(path).path());
-            ui->textBrowser->setSearchPaths(searchPaths);
-            onTextChanged();
-        }
+    if (c && !contains) {
+        searchPaths.append(QFileInfo(path).path());
+        ui->textBrowser->setSearchPaths(searchPaths);
+        onTextChanged();
     }
+    else if (!c && contains) {
+        searchPaths.removeAll(QFileInfo(path).path());
+        ui->textBrowser->setSearchPaths(searchPaths);
+        onTextChanged();
+    }
+
+    ui->actionAuto_add_file_path_to_icon_path->setChecked(c);
 }
 
 void MainWindow::changeHighlighting(bool enabled)
@@ -609,6 +579,7 @@ void MainWindow::loadSettings() {
     changeHighlighting(highlighting);
 
     setPath = settings->value("setPath", QString::number(true)).toBool();
+    changeAddtoIconPath(setPath);
 
     recentOpened = settings->value("recent", QStringList()).toStringList();
     if (!recentOpened.isEmpty()) {
@@ -626,13 +597,14 @@ void MainWindow::loadSettings() {
             openFile(last);
     }
 
-    onTextChanged();
     spelling = settings->value("spelling", QString::number(true)).toBool();
     changeSpelling(spelling);
     QString spellLang = settings->value("spellLang", QString()).toString();
     if (spellLang.isEmpty())
         spellLang = language;
     checker->setLanguage(spellLang);
+
+    onTextChanged();
 }
 
 void MainWindow::saveSettings() {

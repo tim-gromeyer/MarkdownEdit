@@ -125,8 +125,6 @@
     <addaction name="actionExportHtml"/>
     <addaction name="separator"/>
     <addaction name="actionOpen_last_document_on_start"/>
-    <addaction name="separator"/>
-    <addaction name="actionOptions"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="title">
@@ -143,6 +141,8 @@
     <addaction name="actionDisable_preview"/>
     <addaction name="separator"/>
     <addaction name="actionHighlighting_activated"/>
+    <addaction name="separator"/>
+    <addaction name="actionAuto_add_file_path_to_icon_path"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -388,10 +388,16 @@
    <property name="text">
     <string>About</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::AboutRole</enum>
+   </property>
   </action>
   <action name="actionAboutQt">
    <property name="text">
     <string>About Qt</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutQtRole</enum>
    </property>
   </action>
   <action name="actionTest">
@@ -444,7 +450,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset theme="document-open-recent"/>
+    <iconset theme="document-open-recent">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Open last document on startup</string>
@@ -472,6 +479,14 @@
    </property>
    <property name="text">
     <string>Check spelling</string>
+   </property>
+  </action>
+  <action name="actionAuto_add_file_path_to_icon_path">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Auto add file path to icon path</string>
    </property>
   </action>
  </widget>

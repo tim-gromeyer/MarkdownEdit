@@ -354,6 +354,10 @@
         <source>Show line numbers</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Auto add file path to icon path</source>
+        <translation>Dateipfad automatisch zum Bilderpfad hinzufügen</translation>
+    </message>
 </context>
 <context>
     <name>QApplication</name>
@@ -460,11 +464,11 @@
     <name>Settings</name>
     <message>
         <source>Settings</source>
-        <translation>Einstellungen</translation>
+        <translation type="vanished">Einstellungen</translation>
     </message>
     <message>
         <source>Auto add file path to icon path</source>
-        <translation>Dateipfad automatisch zum Bilderpfad hinzufügen</translation>
+        <translation type="vanished">Dateipfad automatisch zum Bilderpfad hinzufügen</translation>
     </message>
 </context>
 </TS>

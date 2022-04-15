@@ -119,6 +119,8 @@ set(PROJECT_SOURCES
         src/parser.h
         src/settings.cpp
         src/settings.h
+        src/highlighter.cpp
+        src/highlighter.h
         ui/settings.ui
         ui/mainwindow.ui
         ${3RDPARTY_FILES}

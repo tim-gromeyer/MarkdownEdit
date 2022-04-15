@@ -11,7 +11,6 @@ class QSettings;
 class QTimer;
 namespace QtSpell { class TextEditChecker; }
 namespace QSourceHighlite { class QSourceHighliter; }
-class QActionGroup;
 class Highliter;
 QT_END_NAMESPACE
 
@@ -51,8 +50,7 @@ private slots:
     void changeSpelling(bool checked);
     void pausePreview(bool checked);
     void disablePreview(bool checked);
-
-    void settingsDialog();
+    void changeAddtoIconPath(bool);
 
     void undo();
     void redo();
@@ -84,11 +82,7 @@ private:
     bool spelling = true;
     bool highlighting = true;
 
-    QActionGroup *fileActions;
-    QActionGroup *editActions;
-
     QtSpell::TextEditChecker *checker;
     Highliter *htmlHighliter;
-    // QSourceHighlite::QSourceHighliter *htmlHighliter;
 };
 #endif // MAINWINDOW_H

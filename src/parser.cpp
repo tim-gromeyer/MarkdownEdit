@@ -18,7 +18,6 @@ static unsigned renderer_flags = MD_HTML_FLAG_DEBUG | MD_HTML_FLAG_SKIP_UTF8_BOM
 #else
 static unsigned renderer_flags = MD_HTML_FLAG_DEBUG;
 #endif
-static int want_fullhtml = 1;
 
 struct membuffer {
     char* data;
@@ -76,8 +75,6 @@ QString Parser::Parse(QString markdown, Mode mode, int dia)
         else
             parser_flags |= MD_DIALECT_COMMONMARK;
 
-        parser_flags |= MD_FLAG_TABLES | MD_FLAG_TASKLISTS;
-        // size_t n;
         struct membuffer buf_in = {0, 0, 0};
         struct membuffer buf_out = {0, 0, 0};
 
@@ -94,31 +91,26 @@ QString Parser::Parse(QString markdown, Mode mode, int dia)
 
         /* Parse the document. This shall call our callbacks provided via the
          * md_renderer_t structure. */
-
         md_html(buf_in.data, (MD_SIZE)buf_in.size, process_output, (void*) &buf_out,
                 parser_flags, renderer_flags);
 
 
         /* Write down the document in the HTML format. */
-        if(want_fullhtml) {
-            out.append("<!DOCTYPE html>\n");
-            out.append("<html>\n");
-            out.append("<head>\n");
-            out.append("<title></title>\n");
-            out.append("<meta name=\"generator\" content=\"md2html\">\n");
-            out.append("</head>\n");
-            out.append("<body>\n");
-        }
+        out.append("<!DOCTYPE html>\n");
+        out.append("<html>\n");
+        out.append("<head>\n");
+        out.append("<title></title>\n");
+        out.append("<meta name=\"generator\" content=\"md2html\">\n");
+        out.append("</head>\n");
+        out.append("<body>\n");
 
         out.append(buf_out.data);
 
         // With the folowing line the problem with the symbols should be fixed.
         out.chop((out.length() - out.lastIndexOf(">") - 1));
 
-        if(want_fullhtml) {
-            out.append("\n</body>\n");
-            out.append("</html>\n");
-        }
+        out.append("\n</body>\n");
+        out.append("</html>\n");
 
         membuf_fini(&buf_out);
 

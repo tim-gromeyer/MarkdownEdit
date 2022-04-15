@@ -13,13 +13,11 @@ INCLUDEPATH += \
     src/ \
     3rdparty/md4c/src
 
-
 SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
     src/about.cpp \
     src/parser.cpp \
-    src/settings.cpp \
     src/highlighter.cpp \
     3rdparty/md4c/src/entity.c \
     3rdparty/md4c/src/md4c.c \
@@ -29,15 +27,13 @@ HEADERS += \
     src/mainwindow.h \
     src/about.h \
     src/parser.h \
-    src/settings.h \
     src/highlighter.h \
     3rdparty/md4c/src/entity.h \
     3rdparty/md4c/src/md4c.h \
     3rdparty/md4c/src/md4c-html.h
 
 FORMS += \
-    ui/mainwindow.ui \
-    ui/settings.ui
+    ui/mainwindow.ui
 
 TRANSLATIONS += \
     translations/MarkdownEdit_de.ts

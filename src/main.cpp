@@ -9,7 +9,7 @@
 
 int main(int argc, char *argv[])
 {
-#if QT_VERSION < QT_VERSION_CHECK(5, 4, 0)
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
 #error You must use Qt 5.10 or newer
 #endif
     QApplication a(argc, argv);
@@ -22,7 +22,6 @@ int main(int argc, char *argv[])
     parser.addVersionOption();
     parser.addPositionalArgument("File(s)", "The file(s) to open.");
     parser.process(a);
-
 
     QTranslator translator;
     QTranslator qtTranslator;
