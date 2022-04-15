@@ -586,7 +586,6 @@ void Highliter::xmlHighlighter(const QString &text) {
 
     for (int i = 0; i < textLen; ++i) {
         if (text[i] == QLatin1Char('<') && text[i+1] != QLatin1Char('!')) {
-
             const int found = text.indexOf(QLatin1Char('>'), i);
             if (found > 0) {
                 ++i;

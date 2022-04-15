@@ -45,7 +45,7 @@ CONFIG += lrelease
 CONFIG += embed_translations
 CONFIG -= qtquickcompiler
 
-VERSION = 1.0.0
+VERSION = 1.0.5
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 # Only show qDebug() messages in debug mode
