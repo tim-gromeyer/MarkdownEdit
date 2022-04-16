@@ -60,4 +60,4 @@ make
 - The conversion from Markdown to HTML is done with the help of the [md4c](https://github.com/mity/md4c) - library by _Martin Mitáš_.
 - The [widget](https://github.com/pbek/qmarkdowntextedit) used for writing was created by _Patrizio Bekerle_.
 - Spell checking is done with the [QtSpell](https://github.com/software-made-easy/qtspell) library based on the [QtSpell](https://github.com/manisandro/qtspell) library by _Sandro Mani_.
-- The HTML syntax is highlighted using _Waqar Ahmed_'s [QSourceHighlite](https://github.com/Waqar144/QSourceHighlite) library.
+

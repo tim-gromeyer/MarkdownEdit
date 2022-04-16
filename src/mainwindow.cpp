@@ -306,8 +306,6 @@ void MainWindow::onTextChanged()
 
     const int i = ui->raw->verticalScrollBar()->value();
     ui->raw->setPlainText(html);
-    if (highlighting)
-        htmlHighliter->rehighlight();
     ui->raw->verticalScrollBar()->setValue(i);
 
     emit modificationChanged(isModified());
@@ -491,7 +489,6 @@ void MainWindow::onHelpAbout()
     dialog.addCredit(tr("<p>The conversion from Markdown to HTML is done with the help of the <a href=\"https://github.com/mity/md4c\">md4c</a> library by <em>Martin Mitáš</em>.</p>"));
     dialog.addCredit(tr("<p>The <a href=\"https://github.com/pbek/qmarkdowntextedit\">widget</a> used for writing was created by <em>Patrizio Bekerle</em>.</p>"));
     dialog.addCredit(tr("<p>Spell checking is done with the <a href=\"https://github.com/software-made-easy/qtspell\">QtSpell</a> library based on the <a href=\"https://github.com/manisandro/qtspell\">QtSpell</a> library by <em>Sandro Mani</em>.</p>"));
-    dialog.addCredit(tr("<p>The HTML syntax is highlighted using <em>Waqar Ahmed</em>'s <a href=\"https://github.com/Waqar144/QSourceHighlite\">QSourceHighlite</a> library.</p>"));
 
     dialog.exec();
 }
@@ -508,6 +505,13 @@ void MainWindow::openRecent() {
         recentOpened.removeAll(filename);
         updateOpened();
         return;
+    }
+
+    if (isModified()) {
+        int button = QMessageBox::question(this, windowTitle(),
+                                           tr("You have unsaved changes. Do you want to open a new document anyway?"));
+        if (button != QMessageBox::Yes)
+            return;
     }
 
     recentOpened.move(recentOpened.indexOf(filename), 0);
