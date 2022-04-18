@@ -15,7 +15,7 @@ public:
         HTML2MD = 1
     };
 
-    static QString Parse(QString in, Mode mode = MD2HTML, int dia = GitHub);
+    Q_REQUIRED_RESULT static QString Parse(QString in, Mode mode = MD2HTML, int dia = GitHub);
 };
 
 #endif // PARSER_H

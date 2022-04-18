@@ -21,8 +21,6 @@ protected:
     void highlightBlock(const QString &text) override;
 
 private:
-    void xmlHighlighter(const QString &text);
-
     QHash<Token, QTextCharFormat> _formats;
 };
 

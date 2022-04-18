@@ -55,6 +55,10 @@ private slots:
     void undo();
     void redo();
 
+    void cut();
+    void copy();
+    void paste();
+
 private:
     bool isModified() const;
     void loadSettings();

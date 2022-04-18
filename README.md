@@ -22,7 +22,7 @@ MarkdownEdit, as the name suggests, is a simple and easy program to create and e
 - Find/Replace(Ctrl+F/Ctrl+R)
 - Export to HTML
 - Poor in resources
-- Quickly open recent files
+- Quickly open recent files(Menu <u>F</u>ile->Menu Recently opened)
 - Open Source
 
 ![Example](doc/images/Example.png)
@@ -31,7 +31,7 @@ MarkdownEdit, as the name suggests, is a simple and easy program to create and e
 [Qt](https://qt.io/) and [enchant-2](https://github.com/AbiWord/enchant).
 
 # Note(s): 
-- To improve the performance when using images, disable the "Auto add file path to icon path" option in settings (Menu Extras->Options).
+- To improve the performance when using images, disable the "Auto add file path to icon path" option (Menu <u>V</u>iew).
 - When building via CMake, the translations **won't** work!
 
 
@@ -60,4 +60,3 @@ make
 - The conversion from Markdown to HTML is done with the help of the [md4c](https://github.com/mity/md4c) - library by _Martin Mitáš_.
 - The [widget](https://github.com/pbek/qmarkdowntextedit) used for writing was created by _Patrizio Bekerle_.
 - Spell checking is done with the [QtSpell](https://github.com/software-made-easy/qtspell) library based on the [QtSpell](https://github.com/manisandro/qtspell) library by _Sandro Mani_.
-

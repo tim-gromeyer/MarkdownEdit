@@ -9,7 +9,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR}/ui)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(PkgConfig)
@@ -121,38 +121,33 @@ set(PROJECT_SOURCES
         src/highlighter.h
         ui/mainwindow.ui
         ${3RDPARTY_FILES}
-        ${TS_FILES}
         ${RC_FILES}
-        ${QTSPELL_TS}
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR}/translations ${TS_FILES})
+    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR}/3rdparty/qtspell/locale ${QTSPELL_TS})
+
     qt_add_executable(MarkdownEdit
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        ${QM_FILES}
     )
-# Define target properties for Android with Qt 6 as:
-#    set_property(TARGET MarkdownEdit APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
-
-    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR}/translations ${TS_FILES})
-    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR}/3rdparty/qtspell/locale ${QTSPELL_TS})
 else()
+    qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR}/translations ${TS_FILES})
+    qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR}/3rdparty/qtspell/locale ${QTSPELL_TS})
+
     if(ANDROID)
         add_library(MarkdownEdit SHARED
             ${PROJECT_SOURCES}
+            ${QM_FILES}
         )
-# Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
         add_executable(MarkdownEdit
             ${PROJECT_SOURCES}
+            ${QM_FILES}
         )
     endif()
-
-    qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR}/translations ${TS_FILES})
-    qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR}/3rdparty/qtspell/locale ${QTSPELL_TS})
 endif()
 
 IF(WIN32)

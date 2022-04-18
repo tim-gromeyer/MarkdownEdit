@@ -21,14 +21,13 @@
 #include "parser.h"
 #include "highlighter.h"
 #include "3rdparty/qmarkdowntextedit/qplaintexteditsearchwidget.h"
+#include "3rdparty/qmarkdowntextedit/markdownhighlighter.h"
 #include "3rdparty/qtspell/src/QtSpell.hpp"
 
 
-/*
 #if (defined(Q_OS_BLACKBERRY) || defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_WP))
-#error This application was developed for desktop only due to web engine module
+#error This application was developed for desktop only due to enchant
 #endif
-*/
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -61,10 +60,12 @@ MainWindow::MainWindow(QWidget *parent)
         if (f.open(QFile::ReadOnly | QFile::Text)) {
             QTextStream in(&f);
             ui->editor->setPlainText(in.readAll());
+            originalMd = ui->editor->toPlainText();
+            originalMdLength = originalMd.length();
             setWindowFilePath(f.fileName());
         }
         else {
-            setWindowFilePath(QFileInfo(tr("new.md")).fileName());
+            onFileNew();
         }
     }
 
@@ -80,9 +81,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionExportHtml, &QAction::triggered, this, [this]{ exportHtml(); });
     connect(ui->actionPrint, &QAction::triggered, this, &MainWindow::filePrint);
     connect(ui->actionPrintPreview, &QAction::triggered, this, &MainWindow::filePrintPreview);
+    connect(ui->actionCut, &QAction::triggered, this, &MainWindow::cut);
+    connect(ui->actionCopy, &QAction::triggered, this, &MainWindow::copy);
+    connect(ui->actionPaste, &QAction::triggered, this, &MainWindow::paste);
 
-    connect(ui->actionPaste, &QAction::triggered,
-            this, [this]{ ui->editor->paste(); changeHighlighting(highlighting); });
     connect(ui->actionHighlighting_activated, &QAction::triggered,
             this, &MainWindow::changeHighlighting);
     connect(ui->actionAuto_add_file_path_to_icon_path, &QAction::triggered,
@@ -185,6 +187,34 @@ void MainWindow::redo()
     ui->textBrowser->redo();
     dontUpdate = false;
     ui->raw->redo();
+}
+
+void MainWindow::cut()
+{
+    if (ui->editor->hasFocus())
+        ui->editor->cut();
+}
+
+void MainWindow::copy()
+{
+    if (ui->editor->hasFocus())
+        ui->editor->copy();
+    else if (ui->textBrowser->hasFocus())
+        ui->textBrowser->copy();
+    else if (ui->raw->hasFocus())
+        ui->raw->copy();
+}
+
+void MainWindow::paste()
+{
+    if (ui->editor->hasFocus()) {
+        ui->editor->paste();
+        ui->editor->highlighter()->rehighlight();
+    }
+    else if (ui->textBrowser->hasFocus())
+        ui->textBrowser->paste();
+    else if (ui->raw->hasFocus())
+        ui->raw->paste();
 }
 
 void MainWindow::changeAddtoIconPath(bool c)
@@ -315,7 +345,7 @@ void MainWindow::openFile(const QString &newFile)
 {
     QFile f(newFile);
 
-    if (f.size() > 10000) {
+    if (f.size() > 50000) {
         int out = QMessageBox::warning(this, tr("Large file"),
                                        tr("This is a large file that can potentially cause performance issues."),
                                        QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok);

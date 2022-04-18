@@ -365,21 +365,6 @@
     <string>Export HTML</string>
    </property>
   </action>
-  <action name="actionOptions">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset theme="preferences-desktop">
-     <normaloff>.</normaloff>.</iconset>
-   </property>
-   <property name="text">
-    <string>Options</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::PreferencesRole</enum>
-   </property>
-  </action>
   <action name="actionAbout">
    <property name="icon">
     <iconset theme="help-about">
@@ -480,6 +465,9 @@
    <property name="text">
     <string>Check spelling</string>
    </property>
+   <property name="shortcut">
+    <string>Shift+F7</string>
+   </property>
   </action>
   <action name="actionAuto_add_file_path_to_icon_path">
    <property name="checkable">
@@ -508,38 +496,6 @@
  </customwidgets>
  <resources/>
  <connections>
-  <connection>
-   <sender>actionCopy</sender>
-   <signal>triggered()</signal>
-   <receiver>editor</receiver>
-   <slot>copy()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>203</x>
-     <y>307</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionCut</sender>
-   <signal>triggered()</signal>
-   <receiver>editor</receiver>
-   <slot>cut()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>203</x>
-     <y>307</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>actionSelectAll</sender>
    <signal>triggered()</signal>

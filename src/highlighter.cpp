@@ -34,10 +34,6 @@ void Highliter::highlightBlock(const QString &text)
             setCurrentBlockState(229);
     }
 
-    xmlHighlighter(text);
-}
-
-void Highliter::xmlHighlighter(const QString &text) {
     if (text.isEmpty()) return;
     const int textLen = text.length();
 
