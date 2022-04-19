@@ -84,7 +84,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionAboutQt, &QAction::triggered, qApp, &QApplication::aboutQt);
     connect(ui->editor, &QPlainTextEdit::textChanged, this, &MainWindow::onTextChanged);
     connect(mode, &QComboBox::currentTextChanged, this, &MainWindow::changeMode);
-    connect(ui->actionExportHtml, &QAction::triggered, this, [this]{ exportHtml(); });
+    connect(ui->actionExportHtml, &QAction::triggered, this, &MainWindow::exportHtml);
     connect(ui->actionPrint, &QAction::triggered, this, &MainWindow::filePrint);
     connect(ui->actionPrintPreview, &QAction::triggered, this, &MainWindow::filePrintPreview);
     connect(ui->actionCut, &QAction::triggered, this, &MainWindow::cut);
@@ -150,7 +150,7 @@ MainWindow::MainWindow(QWidget *parent)
         setWindowIcon(QIcon(":/Icon.svg"));
 }
 
-void MainWindow::setText(int index)
+void MainWindow::setText(const int &index)
 {
     if (index == 0) {
         const int v = ui->textBrowser->verticalScrollBar()->value();
@@ -164,7 +164,7 @@ void MainWindow::setText(int index)
     }
 }
 
-void MainWindow::changeSpelling(bool checked)
+void MainWindow::changeSpelling(const bool &checked)
 {
     if (checked)
         checker->setTextEdit(ui->editor);
@@ -176,7 +176,7 @@ void MainWindow::changeSpelling(bool checked)
     spelling = checked;
 }
 
-void MainWindow::disablePreview(bool checked)
+void MainWindow::disablePreview(const bool &checked)
 {
     if (checked)
         ui->tabWidget->hide();
@@ -189,7 +189,7 @@ void MainWindow::disablePreview(bool checked)
     ui->actionPause_preview->setEnabled(!checked);
 }
 
-void MainWindow::pausePreview(bool checked)
+void MainWindow::pausePreview(const bool &checked)
 {
     dontUpdate = checked;
 }
@@ -250,7 +250,7 @@ void MainWindow::paste()
         ui->raw->paste();
 }
 
-void MainWindow::changeAddtoIconPath(bool c)
+void MainWindow::changeAddtoIconPath(const bool &c)
 {
     setPath = c;
 
@@ -271,7 +271,7 @@ void MainWindow::changeAddtoIconPath(bool c)
     ui->actionAuto_add_file_path_to_icon_path->setChecked(c);
 }
 
-void MainWindow::changeHighlighting(bool enabled)
+void MainWindow::changeHighlighting(const bool &enabled)
 {
     dontUpdate = true;
     ui->editor->setHighlightingEnabled(enabled);
@@ -315,21 +315,17 @@ void MainWindow::printPreview(QPrinter *printer)
 #endif
 }
 
-void MainWindow::exportHtml(QString file)
+void MainWindow::exportHtml()
 {
-    if (file.isEmpty()) {
-        QFileDialog dialog(this, tr("Export HTML"));
-        dialog.setMimeTypeFilters({"text/html"});
-        dialog.setAcceptMode(QFileDialog::AcceptSave);
-        dialog.setDefaultSuffix("html");
-        if (dialog.exec() != QDialog::Accepted)
-            return;
+    QFileDialog dialog(this, tr("Export HTML"));
+    dialog.setMimeTypeFilters({"text/html"});
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setDefaultSuffix("html");
+    if (dialog.exec() != QDialog::Accepted)
+        return;
 
-        QStringList selectedFiles = dialog.selectedFiles();
-        file = selectedFiles.first();
-        if (!file.endsWith(".html"))
-            file.append(".html");
-    }
+    const QStringList &selectedFiles = dialog.selectedFiles();
+    const QString &file = selectedFiles.first();
 
     QFile f(file, this);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Text))  {
@@ -338,15 +334,11 @@ void MainWindow::exportHtml(QString file)
                                  QDir::toNativeSeparators(path), f.errorString()));
         return;
     }
-    QTextStream str(&f);
 
-    str << Parser::Parse(ui->editor->toPlainText(), _mode);
+    QTextStream str(&f);
+    str << html;
 
     statusBar()->showMessage(tr("HTML exported to %1").arg(QDir::toNativeSeparators(file)), 60000);
-
-    if (!file.isEmpty()) {
-        setWindowModified(false);
-    }
 }
 
 void MainWindow::changeMode(const QString &text)
@@ -487,6 +479,9 @@ void MainWindow::onFileSave()
                                  QDir::toNativeSeparators(path), f.errorString()));
         return;
     }
+
+    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
+
     QTextStream str(&f);
     str << ui->editor->toPlainText();
 
@@ -500,6 +495,8 @@ void MainWindow::onFileSave()
     maybeModified = false;
 
     emit modificationChanged(false);
+
+    QGuiApplication::restoreOverrideCursor();
 }
 
 void MainWindow::onFileSaveAs()

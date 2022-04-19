@@ -41,17 +41,17 @@ private slots:
     void onHelpAbout();
     void onTextChanged();
     void changeMode(const QString &);
-    void exportHtml(QString file = "");
+    void exportHtml();
 
     void filePrint();
     void filePrintPreview();
     void printPreview(QPrinter *);
 
-    void changeHighlighting(bool enabled);
-    void changeSpelling(bool checked);
-    void pausePreview(bool checked);
-    void disablePreview(bool checked);
-    void changeAddtoIconPath(bool);
+    void changeHighlighting(const bool &enabled);
+    void changeSpelling(const bool &checked);
+    void pausePreview(const bool &checked);
+    void disablePreview(const bool &checked);
+    void changeAddtoIconPath(const bool &);
 
     void undo();
     void redo();
@@ -66,7 +66,7 @@ private:
     void saveSettings();
     void updateOpened();
     void openRecent();
-    void setText(const int index);
+    void setText(const int &index);
 
     Ui::MainWindow *ui;
 

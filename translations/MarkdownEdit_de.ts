@@ -160,7 +160,7 @@
     </message>
     <message>
         <source>Options</source>
-        <translation>Einstellungen</translation>
+        <translation type="vanished">Einstellungen</translation>
     </message>
     <message>
         <source>About</source>
@@ -200,7 +200,7 @@
     </message>
     <message>
         <source>new.md</source>
-        <translation>neu.md</translation>
+        <translation type="vanished">neu.md</translation>
     </message>
     <message>
         <source>Print Document</source>
@@ -266,7 +266,7 @@
     </message>
     <message>
         <source>&lt;p&gt;The HTML syntax is highlighted using &lt;em&gt;Waqar Ahmed&lt;/em&gt;&apos;s &lt;a href=&quot;https://github.com/Waqar144/QSourceHighlite&quot;&gt;QSourceHighlite&lt;/a&gt; library.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Die HTML-Syntax wird mithilfe der &lt;a href=&quot;https://github.com/Waqar144/QSourceHighlite&quot;&gt;QSourceHighlite&lt;/a&gt;-Bibliothek von &lt;em&gt;Waqar Ahmed&lt;/em&gt; hervorgehoben.&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;Die HTML-Syntax wird mithilfe der &lt;a href=&quot;https://github.com/Waqar144/QSourceHighlite&quot;&gt;QSourceHighlite&lt;/a&gt;-Bibliothek von &lt;em&gt;Waqar Ahmed&lt;/em&gt; hervorgehoben.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>This file could not be found:
@@ -357,6 +357,10 @@
     <message>
         <source>Auto add file path to icon path</source>
         <translation>Dateipfad automatisch zum Bilderpfad hinzufügen</translation>
+    </message>
+    <message>
+        <source>Shift+F7</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -3,7 +3,7 @@ if [[ $0 == "*build.sh" ]]; then
 fi
 
 
-git submodule update --init --recursive -j 4
+git submodule update --init --recursive -j3
 
 mkdir build && cd build
 qmake ..
