@@ -15,17 +15,17 @@ class About : public QDialog
     Q_OBJECT
 
 public:
-    About(QWidget *parent = nullptr);
-    About(const QString titel, QWidget *parent = nullptr);
+    explicit About(QWidget *parent = nullptr);
+    explicit About(const QString &titel, QWidget *parent = nullptr);
 
     QLabel* addCredit(QString text);
     QList<QLabel*> addCredits(QStringList credits);
     void deleteCreditPage();
     inline bool creditPageAvaiable() { return creditPage; }
     void setAppUrl(QUrl url);
-    void setAppUrl(QString url);
-    void setAppVersion(QString version);
-    void setDescription(const QString description);
+    void setAppUrl(const QString &url);
+    void setAppVersion(const QString &version);
+    void setDescription(const QString &description);
 
 private:
     void setupUi();

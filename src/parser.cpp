@@ -1,14 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include <QByteArray>
 
 #include "parser.h"
 #include "3rdparty/md4c/src/md4c-html.h"
-#ifdef QT_DEBUG
-#include "3rdparty/html2md/html2md.hpp"
-#endif
 
 
 /* Global options. */
@@ -67,60 +60,50 @@ process_output(const MD_CHAR* text, MD_SIZE size, void* userdata)
     membuf_append((struct membuffer*) userdata, text, size);
 }
 
-QString Parser::Parse(QString markdown, Mode mode, int dia)
+QString Parser::Parse(QString markdown, int dia)
 {
-    if (mode == MD2HTML) {
-        if (dia == GitHub)
-            parser_flags |= MD_DIALECT_GITHUB;
-        else
-            parser_flags |= MD_DIALECT_COMMONMARK;
+    if (dia == GitHub)
+        parser_flags |= MD_DIALECT_GITHUB;
+    else
+        parser_flags |= MD_DIALECT_COMMONMARK;
 
-        struct membuffer buf_in = {0, 0, 0};
-        struct membuffer buf_out = {0, 0, 0};
+    struct membuffer buf_in = {0, 0, 0};
+    struct membuffer buf_out = {0, 0, 0};
 
-        QString out;
+    QString out;
 
-        QByteArray array = markdown.toLocal8Bit();
-        buf_in.data = array.data();
-        buf_in.size = strlen(buf_in.data);
-        buf_in.asize = 32 * 1024;
+    QByteArray array = markdown.toLocal8Bit();
+    buf_in.data = array.data();
+    buf_in.size = strlen(buf_in.data);
 
-        /* Input size is good estimation of output size. Add some more reserve to
+    /* Input size is good estimation of output size. Add some more reserve to
          * deal with the HTML header/footer and tags. */
-        membuf_init(&buf_out, (MD_SIZE)(buf_in.size + buf_in.size/8 + 64));
+    membuf_init(&buf_out, (MD_SIZE)(buf_in.size + buf_in.size/8 + 64));
 
-        /* Parse the document. This shall call our callbacks provided via the
+    /* Parse the document. This shall call our callbacks provided via the
          * md_renderer_t structure. */
-        md_html(buf_in.data, (MD_SIZE)buf_in.size, process_output, (void*) &buf_out,
-                parser_flags, renderer_flags);
+    md_html(buf_in.data, (MD_SIZE)buf_in.size, process_output, (void*) &buf_out,
+            parser_flags, renderer_flags);
 
 
-        /* Write down the document in the HTML format. */
-        out.append("<!DOCTYPE html>\n");
-        out.append("<html>\n");
-        out.append("<head>\n");
-        out.append("<title></title>\n");
-        out.append("<meta name=\"generator\" content=\"md2html\">\n");
-        out.append("</head>\n");
-        out.append("<body>\n");
+    /* Write down the document in the HTML format. */
+    out.append("<!DOCTYPE html>\n");
+    out.append("<html>\n");
+    out.append("<head>\n");
+    out.append("<title></title>\n");
+    out.append("<meta name=\"generator\" content=\"md2html\">\n");
+    out.append("</head>\n");
+    out.append("<body>\n");
 
-        out.append(buf_out.data);
+    out.append(buf_out.data);
 
-        // With the folowing line the problem with the symbols should be fixed.
-        out.chop((out.length() - out.lastIndexOf(">") - 1));
+    // With the folowing line the problem with the symbols should be fixed.
+    out.chop((out.length() - out.lastIndexOf(">") - 1));
 
-        out.append("\n</body>\n");
-        out.append("</html>\n");
+    out.append("\n</body>\n");
+    out.append("</html>\n");
 
-        membuf_fini(&buf_out);
+    membuf_fini(&buf_out);
 
-        return out;
-    }
-    else {
-#ifdef QT_DEBUG
-        return QString::fromStdString(html2md::Convert(markdown.toStdString()));
-#else
-        return QString();
-#endif
-    }
+    return out;
 }

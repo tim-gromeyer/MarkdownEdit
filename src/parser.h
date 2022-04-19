@@ -10,12 +10,8 @@ public:
         Commonmark = 0,
         GitHub = 1
     };
-    enum Mode {
-        MD2HTML = 0,
-        HTML2MD = 1
-    };
 
-    Q_REQUIRED_RESULT static QString Parse(QString in, Mode mode = MD2HTML, int dia = GitHub);
+    Q_REQUIRED_RESULT static QString Parse(QString in, int dia = GitHub);
 };
 
 #endif // PARSER_H

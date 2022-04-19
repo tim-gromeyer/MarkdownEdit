@@ -1,8 +1,8 @@
 Package: markdownedit
-Version: 1.0.5
+Version: 1.1.0
 Architecture: amd64
 Priority: optional
-Installed-Size: 1498
+Installed-Size: 1064
 Homepage: https://github.com/software-made-easy/MarkdownEdit
 Maintainer: Tim Gromeyer <gromeyer1012@gmail.com>
 Description: MarkdownEdit, as the name suggests, is a simple and easy program to create and edit Markdown files.

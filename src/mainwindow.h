@@ -9,6 +9,7 @@ namespace Ui { class MainWindow; }
 class QPrinter;
 class QSettings;
 class QTimer;
+class QToolButton;
 namespace QtSpell { class TextEditChecker; }
 namespace QSourceHighlite { class QSourceHighliter; }
 class Highliter;
@@ -24,7 +25,7 @@ public:
 
     void openFile(const QString &path);
 
-    inline void setLanguage(const QString lang) { language = lang; };
+    inline void setLanguage(const QString &lang) { language = lang; };
 
 protected:
     void closeEvent(QCloseEvent *e) override;
@@ -65,6 +66,7 @@ private:
     void saveSettings();
     void updateOpened();
     void openRecent();
+    void setText(const int index);
 
     Ui::MainWindow *ui;
 
@@ -79,14 +81,17 @@ private:
 
     QString originalMd = "";
     int originalMdLength = 0;
+    QString html = "";
 
     bool dontUpdate = false;
     bool setPath = true;
-    bool html = false;
     bool spelling = true;
     bool highlighting = true;
+    bool maybeModified = false;
 
     QtSpell::TextEditChecker *checker;
     Highliter *htmlHighliter;
+
+    QToolButton *toolbutton;
 };
 #endif // MAINWINDOW_H

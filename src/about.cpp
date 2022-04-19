@@ -22,7 +22,7 @@ About::About(QWidget *parent) :
     setupUi();
 }
 
-About::About(const QString title, QWidget *parent) :
+About::About(const QString &title, QWidget *parent) :
     QDialog(parent)
 {
     setWindowTitle(title);
@@ -846,7 +846,7 @@ void About::deleteCreditPage() {
     }
 }
 
-void About::setAppUrl(QString url) {
+void About::setAppUrl(const QString &url) {
     homepage = url;
     label_4->setText(QString("<a href=\"%1\">%1</a>").arg(homepage));
 }
@@ -856,12 +856,12 @@ void About::setAppUrl(QUrl url) {
     label_4->setText(QString("<a href=\"%1\">%1</a>").arg(homepage));
 }
 
-void About::setAppVersion(QString version) {
+void About::setAppVersion(const QString &version) {
     _version = version;
     label_2->setText(_version);
 }
 
-void About::setDescription(const QString description) {
+void About::setDescription(const QString &description) {
     _description = description;
     label_10->setText(_description);
 }
