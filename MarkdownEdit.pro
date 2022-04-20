@@ -38,7 +38,7 @@ FORMS += \
 TRANSLATIONS += \
     translations/MarkdownEdit_de.ts
 
-include(3rdparty/qmarkdowntexteditor/qmarkdowntextedit.pri)
+include(3rdparty/qmarkdowntextedit/qmarkdowntextedit.pri)
 include(3rdparty/qtspell/qtspell.pri)
 
 CONFIG += lrelease
