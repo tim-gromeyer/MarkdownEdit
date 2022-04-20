@@ -25,9 +25,9 @@ int main(int argc, char *argv[])
     QTranslator translator;
     QTranslator qtTranslator;
 #if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
-    const QString path = QLibraryInfo::path(QLibraryInfo::TranslationsPath);
+    const QString &path = QLibraryInfo::path(QLibraryInfo::TranslationsPath);
 #else
-    const QString path = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+    const QString &path = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
 #endif
 
     QString lang;
@@ -35,8 +35,8 @@ int main(int argc, char *argv[])
     const QStringList uiLanguages = QLocale::system().uiLanguages();
     for (const QString &locale : uiLanguages) {
         lang = QLocale(locale).name().split("_")[0];
-        const QString baseName = "MarkdownEdit_" + lang;
-        const QString qtBaseName = "/qtbase_" + lang;
+        const QString &baseName = "MarkdownEdit_" + lang;
+        const QString &qtBaseName = "/qtbase_" + lang;
         if (translator.load(":/i18n/" + baseName)) {
             a.installTranslator(&translator);
             if (qtTranslator.load(path + qtBaseName))
@@ -45,9 +45,9 @@ int main(int argc, char *argv[])
     }
 
     MainWindow w;
-    w.setLanguage(lang);
+    w.setLanguage(qAsConst(lang));
 
-    QString file = parser.positionalArguments().value(0, QString(""));
+    const QString &file = parser.positionalArguments().value(0, QString(""));
     if (!file.isEmpty())
         w.openFile(file);
 

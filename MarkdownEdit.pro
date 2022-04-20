@@ -38,14 +38,14 @@ FORMS += \
 TRANSLATIONS += \
     translations/MarkdownEdit_de.ts
 
-include(3rdparty/qmarkdowntextedit/qmarkdowntextedit.pri)
+include(3rdparty/qmarkdowntexteditor/qmarkdowntextedit.pri)
 include(3rdparty/qtspell/qtspell.pri)
 
 CONFIG += lrelease
 CONFIG += embed_translations
 CONFIG -= qtquickcompiler
 
-VERSION = 1.1.0
+VERSION = 1.1.5
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 # Only show qDebug() messages in debug mode

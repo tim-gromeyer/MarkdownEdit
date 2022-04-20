@@ -137,8 +137,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->Edit->addSeparator();
     ui->Edit->addWidget(mode);
 
-    QPalette p = ui->editor->palette();
-    QColor back = p.base().color();
+    const QPalette &p = ui->editor->palette();
+    const QColor &back = p.base().color();
     int r, g, b, a;
     back.getRgb(&r, &g, &b, &a);
 
@@ -153,12 +153,12 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::setText(const int &index)
 {
     if (index == 0) {
-        const int v = ui->textBrowser->verticalScrollBar()->value();
+        const int &v = ui->textBrowser->verticalScrollBar()->value();
         ui->textBrowser->setHtml(html);
         ui->textBrowser->verticalScrollBar()->setValue(v);
     }
     else if (index == 1) {
-        const int v = ui->raw->verticalScrollBar()->value();
+        const int &v = ui->raw->verticalScrollBar()->value();
         ui->raw->setPlainText(html);
         ui->raw->verticalScrollBar()->setValue(v);
     }
@@ -166,10 +166,6 @@ void MainWindow::setText(const int &index)
 
 void MainWindow::changeSpelling(const bool &checked)
 {
-    if (checked)
-        checker->setTextEdit(ui->editor);
-    else
-        checker->setTextEdit(static_cast<QPlainTextEdit*>(nullptr));
     checker->setSpellingEnabled(checked);
 
     ui->actionSpell_checking->setChecked(checked);
@@ -197,10 +193,7 @@ void MainWindow::pausePreview(const bool &checked)
 void MainWindow::undo()
 {
     dontUpdate = true;
-    if (spelling)
-        checker->undo();
-    else
-        ui->editor->undo();
+    checker->undo();
     ui->textBrowser->undo();
     dontUpdate = false;
     ui->raw->undo();
@@ -209,10 +202,7 @@ void MainWindow::undo()
 void MainWindow::redo()
 {
     dontUpdate = true;
-    if (spelling)
-        checker->redo();
-    else
-        ui->editor->redo();
+    checker->redo();
     ui->textBrowser->redo();
     dontUpdate = false;
     ui->raw->redo();
@@ -255,7 +245,7 @@ void MainWindow::changeAddtoIconPath(const bool &c)
     setPath = c;
 
     QStringList searchPaths = ui->textBrowser->searchPaths();
-    const bool contains = searchPaths.contains(QFileInfo(path).path());
+    const bool &contains = searchPaths.contains(QFileInfo(path).path());
 
     if (c && !contains) {
         searchPaths.append(QFileInfo(path).path());
@@ -324,8 +314,7 @@ void MainWindow::exportHtml()
     if (dialog.exec() != QDialog::Accepted)
         return;
 
-    const QStringList &selectedFiles = dialog.selectedFiles();
-    const QString &file = selectedFiles.first();
+    const QString &file = dialog.selectedFiles().at(0);
 
     QFile f(file, this);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Text))  {
@@ -437,7 +426,7 @@ void MainWindow::onFileNew()
 
     path = "";
     ui->editor->setPlainText(tr("## New document"));
-    setWindowFilePath(QFileInfo("new.md").fileName());
+    setWindowFilePath(QFileInfo(tr("untitled.md")).fileName());
     originalMd = ui->editor->toPlainText();
     originalMdLength = originalMd.length();
 
@@ -459,7 +448,7 @@ void MainWindow::onFileOpen()
     dialog.setMimeTypeFilters({"text/markdown"});
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
     if (dialog.exec() == QDialog::Accepted)
-        openFile(dialog.selectedFiles().constFirst());
+        openFile(dialog.selectedFiles().at(0));
 }
 
 void MainWindow::onFileSave()
@@ -508,8 +497,7 @@ void MainWindow::onFileSaveAs()
     if (dialog.exec() != QDialog::Accepted)
         return;
 
-    QStringList selectedFiles = dialog.selectedFiles();
-    path = selectedFiles.first();
+    path = dialog.selectedFiles().at(0);
 
     if (!path.endsWith(".md"))
         path.append(".md");
@@ -534,7 +522,7 @@ void MainWindow::onHelpAbout()
 void MainWindow::openRecent() {
     // A QAction represents the action of the user clicking
     QAction *action = qobject_cast<QAction *>(sender());
-    QString filename = action->data().toString();
+    const QString &filename = action->data().toString();
 
     // Don't open the save file again
     if (filename == path)
@@ -550,7 +538,7 @@ void MainWindow::openRecent() {
     }
 
     if (isModified()) {
-        int button = QMessageBox::question(this, windowTitle(),
+        const int button = QMessageBox::question(this, tr("Save changes?"),
                                            tr("You have unsaved changes. Do you want to open a new document anyway?"));
         if (button != QMessageBox::Yes)
             return;
@@ -577,8 +565,8 @@ void MainWindow::updateOpened() {
         recentOpened.takeLast();
 
     for (int i = 0; i < recentOpened.size(); i++) {
-        QString document = recentOpened.at(i);
-        QString title("&" + QString::number(i + 1) + " | " + document);
+        const QString &document = recentOpened.at(i);
+        const QString &title("&" + QString::number(i + 1) + " | " + document);
         QAction *action = new QAction(title, this);
         connect(action, &QAction::triggered, this, &MainWindow::openRecent);
 
@@ -590,7 +578,7 @@ void MainWindow::updateOpened() {
 void MainWindow::closeEvent(QCloseEvent *e)
 {
     if (isModified()) {
-        int button = QMessageBox::question(this, windowTitle(),
+        const int button = QMessageBox::question(this, tr("Save changes?"),
                                            tr("You have unsaved changes. Do you want to exit anyway?"));
         if (button == QMessageBox::No)
             e->ignore();
@@ -606,9 +594,9 @@ void MainWindow::closeEvent(QCloseEvent *e)
 }
 
 void MainWindow::loadSettings() {
-    const QByteArray geo = settings->value("geometry", QByteArray({})).toByteArray();
+    const QByteArray &geo = settings->value("geometry", QByteArray({})).toByteArray();
     if (geo.isEmpty()) {
-        const QRect availableGeometry = QGuiApplication::screenAt(pos())->availableGeometry();
+        const QRect &availableGeometry = QGuiApplication::screenAt(pos())->availableGeometry();
         resize(availableGeometry.width() / 2, (availableGeometry.height() * 2) / 3);
         move((availableGeometry.width() - width()) / 2,
              (availableGeometry.height() - height()) / 2);
@@ -633,11 +621,11 @@ void MainWindow::loadSettings() {
         }
     }
 
-    const bool openLast = settings->value("openLast", QString::number(true)).toBool();
+    const bool &openLast = settings->value("openLast", QString::number(true)).toBool();
     if (openLast) {
         ui->actionOpen_last_document_on_start->setChecked(openLast);
 
-        QString last = settings->value("last", QString()).toString();
+        const QString &last = settings->value("last", QString()).toString();
         if (!last.isEmpty())
             openFile(last);
     }
