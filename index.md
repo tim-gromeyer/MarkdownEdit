@@ -24,6 +24,7 @@ MarkdownEdit, as the name suggests, is a simple and easy program to create and e
 - Poor in resources
 - Quickly open recent files
 - Open Source
+- Native look and feel
 
 ![Example](https://github.com/software-made-easy/MarkdownEdit/raw/main/doc/images/Example.png)
 
