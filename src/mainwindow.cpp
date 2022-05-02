@@ -12,6 +12,7 @@
 #include <QScrollBar>
 #include <QSettings>
 #include <QToolButton>
+#include <QSaveFile>
 
 
 #if QT_CONFIG(printdialog)
@@ -55,25 +56,15 @@ MainWindow::MainWindow(QWidget *parent)
     toolbutton->setIcon(QIcon::fromTheme("document-open-recent"));
     toolbutton->setPopupMode(QToolButton::InstantPopup);
 
+    // t = new SetText(ui->textBrowser, ui->raw, this);
+    // t->start();
+    // connect(this, &MainWindow::setText, t, &SetText::setText);
+
     // Settings
     settings = new QSettings("SME", "MarkdownEdit", this);
 
     loadSettings();
     updateOpened();
-
-    if (ui->editor->toPlainText().isEmpty()) {
-        QFile f(":/default.md", this);
-        if (f.open(QFile::ReadOnly | QFile::Text)) {
-            QTextStream in(&f);
-            ui->editor->setPlainText(in.readAll());
-            originalMd = ui->editor->toPlainText();
-            originalMdLength = originalMd.length();
-            setWindowFilePath(f.fileName());
-        }
-        else {
-            onFileNew();
-        }
-    }
 
     connect(ui->actionNew, &QAction::triggered, this, &MainWindow::onFileNew);
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::onFileOpen);
@@ -114,7 +105,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionSpell_checking, &QAction::triggered,
             this, &MainWindow::changeSpelling);
     connect(ui->tabWidget, &QTabWidget::currentChanged,
-            this, &MainWindow::setText);
+            this, &MainWindow::onSetText);
 
     ui->actionSave->setEnabled(isModified());
     ui->actionUndo->setEnabled(ui->editor->document()->isUndoAvailable());
@@ -137,6 +128,20 @@ MainWindow::MainWindow(QWidget *parent)
     ui->Edit->addSeparator();
     ui->Edit->addWidget(mode);
 
+    if (ui->editor->toPlainText().isEmpty()) {
+        QFile f(":/default.md", this);
+        if (f.open(QFile::ReadOnly | QFile::Text)) {
+            QTextStream in(&f);
+            ui->editor->setPlainText(in.readAll());
+            originalMd = ui->editor->toPlainText();
+            originalMdLength = originalMd.length();
+            setWindowFilePath(f.fileName());
+        }
+        else {
+            onFileNew();
+        }
+    }
+
     const QPalette &p = ui->editor->palette();
     const QColor &back = p.base().color();
     int r, g, b, a;
@@ -150,8 +155,11 @@ MainWindow::MainWindow(QWidget *parent)
         setWindowIcon(QIcon(":/Icon.svg"));
 }
 
-void MainWindow::setText(const int &index)
+void MainWindow::onSetText(const int &index)
 {
+    // emit setText(html, index);
+    // return;
+
     if (index == 0) {
         const int &v = ui->textBrowser->verticalScrollBar()->value();
         ui->textBrowser->setHtml(html);
@@ -245,7 +253,7 @@ void MainWindow::changeAddtoIconPath(const bool &c)
     setPath = c;
 
     QStringList searchPaths = ui->textBrowser->searchPaths();
-    const bool &contains = searchPaths.contains(QFileInfo(path).path());
+    const bool contains = searchPaths.contains(QFileInfo(path).path());
 
     if (c && !contains) {
         searchPaths.append(QFileInfo(path).path());
@@ -314,7 +322,7 @@ void MainWindow::exportHtml()
     if (dialog.exec() != QDialog::Accepted)
         return;
 
-    const QString &file = dialog.selectedFiles().at(0);
+    const QString file = dialog.selectedFiles().at(0);
 
     QFile f(file, this);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Text))  {
@@ -344,7 +352,7 @@ void MainWindow::onTextChanged()
 
     html = Parser::Parse(ui->editor->document()->toPlainText(), _mode);
 
-    setText(ui->tabWidget->currentIndex());
+    onSetText(ui->tabWidget->currentIndex());
 
     maybeModified = true;
 
@@ -417,7 +425,7 @@ bool MainWindow::isModified() const
 void MainWindow::onFileNew()
 {
     if (isModified()) {
-        int button = QMessageBox::question(this, windowTitle(),
+        const int button = QMessageBox::question(this, windowTitle(),
                                            tr("You have unsaved changes. Do you want to create a new document anyway?"));
         if (button != QMessageBox::Yes)
             return;
@@ -461,18 +469,28 @@ void MainWindow::onFileSave()
         return;
     }
 
-    QFile f(path, this);
+    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
+
+    QSaveFile f(path, this);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Text))  {
+        QGuiApplication::restoreOverrideCursor();
         QMessageBox::warning(this, windowTitle(),
                              tr("Could not write to file %1: %2").arg(
                                  QDir::toNativeSeparators(path), f.errorString()));
         return;
     }
 
-    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
     QTextStream str(&f);
     str << ui->editor->toPlainText();
+
+    if (!f.commit()) {
+        QGuiApplication::restoreOverrideCursor();
+        QMessageBox::warning(this, windowTitle(),
+                             tr("Could not write to file %1: %2").arg(
+                                 QDir::toNativeSeparators(path), f.errorString()));
+        return;
+    }
 
     statusBar()->showMessage(tr("Wrote %1").arg(QDir::toNativeSeparators(path)), 60000);
 

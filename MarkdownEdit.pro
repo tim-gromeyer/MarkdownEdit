@@ -10,27 +10,20 @@ DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x051208    # disables all the APIs depr
 
 
 INCLUDEPATH += \
-    src/ \
-    3rdparty/md4c/src
+    src/
 
 SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
     src/about.cpp \
     src/parser.cpp \
-    src/highlighter.cpp \
-    3rdparty/md4c/src/entity.c \
-    3rdparty/md4c/src/md4c.c \
-    3rdparty/md4c/src/md4c-html.c
+    src/highlighter.cpp
 
 HEADERS += \
     src/mainwindow.h \
     src/about.h \
     src/parser.h \
-    src/highlighter.h \
-    3rdparty/md4c/src/entity.h \
-    3rdparty/md4c/src/md4c.h \
-    3rdparty/md4c/src/md4c-html.h
+    src/highlighter.h
 
 FORMS += \
     ui/mainwindow.ui
@@ -40,6 +33,7 @@ TRANSLATIONS += \
 
 include(3rdparty/qmarkdowntextedit/qmarkdowntextedit.pri)
 include(3rdparty/qtspell/qtspell.pri)
+include(3rdparty/md4c.pri)
 
 CONFIG += lrelease
 CONFIG += embed_translations

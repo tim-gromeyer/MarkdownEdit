@@ -13,6 +13,7 @@ class QToolButton;
 namespace QtSpell { class TextEditChecker; }
 namespace QSourceHighlite { class QSourceHighliter; }
 class Highliter;
+class SetText;
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -32,6 +33,7 @@ protected:
 
 signals:
     void modificationChanged(bool);
+    void setText(const QString &text, const int i);;
 
 private slots:
     void onFileNew();
@@ -66,7 +68,7 @@ private:
     void saveSettings();
     void updateOpened();
     void openRecent();
-    void setText(const int &index);
+    void onSetText(const int &index);
 
     Ui::MainWindow *ui;
 
@@ -91,6 +93,8 @@ private:
 
     QtSpell::TextEditChecker *checker;
     Highliter *htmlHighliter;
+
+    SetText *t;
 
     QToolButton *toolbutton;
 };

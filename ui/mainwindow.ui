@@ -13,58 +13,52 @@
   <property name="windowTitle">
    <string/>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QSplitter" name="splitter_2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <widget class="QMarkdownTextEdit" name="editor"/>
-      <widget class="QTabWidget" name="tabWidget">
-       <property name="currentIndex">
-        <number>0</number>
-       </property>
-       <widget class="QWidget" name="tab">
-        <attribute name="title">
-         <string>Preview</string>
-        </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
-         <item>
-          <widget class="QSplitter" name="splitter">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <widget class="QTextBrowser" name="textBrowser">
-            <property name="openExternalLinks">
-             <bool>true</bool>
-            </property>
-            <property name="openLinks">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </widget>
-         </item>
-        </layout>
+  <widget class="QSplitter" name="splitter_2">
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <widget class="QMarkdownTextEdit" name="editor"/>
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>Preview</string>
+     </attribute>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QSplitter" name="splitter">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <widget class="QTextBrowser" name="textBrowser">
+         <property name="openExternalLinks">
+          <bool>true</bool>
+         </property>
+         <property name="openLinks">
+          <bool>false</bool>
+         </property>
+        </widget>
        </widget>
-       <widget class="QWidget" name="tab_2">
-        <attribute name="title">
-         <string>HTML</string>
-        </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout_3">
-         <item>
-          <widget class="QPlainTextEdit" name="raw">
-           <property name="undoRedoEnabled">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>HTML</string>
+     </attribute>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <widget class="QPlainTextEdit" name="raw">
+        <property name="undoRedoEnabled">
+         <bool>true</bool>
+        </property>
        </widget>
-      </widget>
-     </widget>
-    </item>
-   </layout>
+      </item>
+     </layout>
+    </widget>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -85,6 +79,9 @@
      </property>
      <property name="title">
       <string>Recently opened</string>
+     </property>
+     <property name="icon">
+      <iconset theme="document-open-recent"/>
      </property>
     </widget>
     <addaction name="actionNew"/>
