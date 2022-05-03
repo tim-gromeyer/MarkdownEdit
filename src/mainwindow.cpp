@@ -115,9 +115,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->tabWidget, &QTabWidget::currentChanged,
             this, &MainWindow::onSetText);
 
-    ui->actionSave->setEnabled(isModified());
-    ui->actionUndo->setEnabled(ui->editor->document()->isUndoAvailable());
-    ui->actionRedo->setEnabled(ui->editor->document()->isRedoAvailable());
+    ui->actionSave->setEnabled(false);
+    ui->actionUndo->setEnabled(false);
+    ui->actionRedo->setEnabled(false);
 
     ui->File->addAction(ui->actionNew);
     ui->File->addAction(ui->actionOpen);
@@ -139,11 +139,12 @@ MainWindow::MainWindow(QWidget *parent)
     if (ui->editor->toPlainText().isEmpty()) {
         QFile f(":/default.md", this);
         if (f.open(QFile::ReadOnly | QFile::Text)) {
-            QTextStream in(&f);
-            ui->editor->setPlainText(in.readAll());
+            ui->editor->setPlainText(f.readAll());
             originalMd = ui->editor->toPlainText();
             originalMdLength = originalMd.length();
+            checker->checkSpelling();
             setWindowFilePath(f.fileName());
+            setWindowModified(false);
         }
         else {
             onFileNew();
@@ -554,7 +555,12 @@ void MainWindow::openRecent() {
             return;
     }
 
-    recentOpened.move(recentOpened.indexOf(filename), 0);
+    const int index = recentOpened.indexOf(filename);
+    if (index == -1)
+        recentOpened.removeAll(filename);
+
+    else
+        recentOpened.move(index, 0);
 
     openFile(filename);
     updateOpened();
@@ -575,7 +581,7 @@ void MainWindow::updateOpened() {
         recentOpened.takeLast();
 
     for (int i = 0; i < recentOpened.size(); i++) {
-        const QLatin1String document(recentOpened.at(i).toLatin1());
+        const QString document(recentOpened.at(i).toLatin1());
         const QString title("&" + QString::number(i + 1) + " | " + document);
         QAction *action = new QAction(title, this);
         connect(action, &QAction::triggered, this, &MainWindow::openRecent);

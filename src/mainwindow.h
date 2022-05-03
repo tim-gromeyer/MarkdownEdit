@@ -48,10 +48,10 @@ private slots:
     void filePrintPreview();
     void printPreview(QPrinter *);
 
-    void changeHighlighting(const bool &enabled);
-    void changeSpelling(const bool &checked);
-    void pausePreview(const bool &checked);
-    void disablePreview(const bool &checked);
+    void changeHighlighting(const bool &);
+    void changeSpelling(const bool &);
+    void pausePreview(const bool &);
+    void disablePreview(const bool &);
     void changeAddtoIconPath(const bool &);
 
     void undo();
@@ -72,7 +72,7 @@ private:
     Ui::MainWindow *ui;
 
     QString path;
-    int _mode;
+    qint32 _mode;
 
     QSettings *settings;
 
