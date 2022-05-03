@@ -22,8 +22,7 @@ int main(int argc, char *argv[])
     parser.addPositionalArgument("File(s)", "The file(s) to open.");
     parser.process(a);
 
-    QTranslator translator;
-    QTranslator qtTranslator;
+    QTranslator translator, qtTranslator;
 #if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
     const QString path = QLibraryInfo::path(QLibraryInfo::TranslationsPath);
 #else

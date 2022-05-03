@@ -13,7 +13,6 @@ class QToolButton;
 namespace QtSpell { class TextEditChecker; }
 namespace QSourceHighlite { class QSourceHighliter; }
 class Highliter;
-class SetText;
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -93,8 +92,6 @@ private:
 
     QtSpell::TextEditChecker *checker;
     Highliter *htmlHighliter;
-
-    SetText *t;
 
     QToolButton *toolbutton;
 };

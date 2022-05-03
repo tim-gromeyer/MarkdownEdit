@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "about.h"
+#include "parser.h"
+#include "highlighter.h"
 
 #include <QMessageBox>
 #include <QFileDialog>
@@ -20,8 +22,6 @@
 #include <QtPrintSupport/QPrintPreviewDialog>
 #endif
 
-#include "parser.h"
-#include "highlighter.h"
 #include "3rdparty/qmarkdowntextedit/qplaintexteditsearchwidget.h"
 #include "3rdparty/qmarkdowntextedit/markdownhighlighter.h"
 #include "3rdparty/qtspell/src/QtSpell.hpp"
@@ -36,7 +36,19 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    const QPalette &p = palette();
+    const QColor &back = p.base().color();
+    int r, g, b, a;
+    back.getRgb(&r, &g, &b, &a);
+
+    const bool dark = ((r + g + b + a) / 4) < 127;
+    if (dark)
+        setWindowIcon(QIcon(":/Icon_dark.svg"));
+    else
+        setWindowIcon(QIcon(":/Icon.svg"));
+
     ui->setupUi(this);
+    ui->editor->searchWidget()->setDarkMode(dark);
 
     QComboBox *mode = new QComboBox(ui->Edit);
     mode->addItems({"Commonmark", "GitHub"});
@@ -55,10 +67,6 @@ MainWindow::MainWindow(QWidget *parent)
     toolbutton->setMenu(ui->menuRecentlyOpened);
     toolbutton->setIcon(QIcon::fromTheme("document-open-recent"));
     toolbutton->setPopupMode(QToolButton::InstantPopup);
-
-    // t = new SetText(ui->textBrowser, ui->raw, this);
-    // t->start();
-    // connect(this, &MainWindow::setText, t, &SetText::setText);
 
     // Settings
     settings = new QSettings("SME", "MarkdownEdit", this);
@@ -141,32 +149,17 @@ MainWindow::MainWindow(QWidget *parent)
             onFileNew();
         }
     }
-
-    const QPalette &p = ui->editor->palette();
-    const QColor &back = p.base().color();
-    int r, g, b, a;
-    back.getRgb(&r, &g, &b, &a);
-
-    const bool dark = ((r + g + b + a) / 4) < 127;
-    ui->editor->searchWidget()->setDarkMode(dark);
-    if (dark)
-        setWindowIcon(QIcon(":/Icon_dark.svg"));
-    else
-        setWindowIcon(QIcon(":/Icon.svg"));
 }
 
 void MainWindow::onSetText(const int &index)
 {
-    // emit setText(html, index);
-    // return;
-
     if (index == 0) {
-        const int &v = ui->textBrowser->verticalScrollBar()->value();
+        const int v = ui->textBrowser->verticalScrollBar()->value();
         ui->textBrowser->setHtml(html);
         ui->textBrowser->verticalScrollBar()->setValue(v);
     }
     else if (index == 1) {
-        const int &v = ui->raw->verticalScrollBar()->value();
+        const int v = ui->raw->verticalScrollBar()->value();
         ui->raw->setPlainText(html);
         ui->raw->verticalScrollBar()->setValue(v);
     }
@@ -256,8 +249,7 @@ void MainWindow::changeAddtoIconPath(const bool &c)
     const bool contains = searchPaths.contains(QFileInfo(path).path());
 
     if (c && !contains) {
-        searchPaths.append(QFileInfo(path).path());
-        ui->textBrowser->setSearchPaths(searchPaths);
+        ui->textBrowser->setSearchPaths(searchPaths << QFileInfo(path).path());
         onTextChanged();
     }
     else if (!c && contains) {
@@ -446,7 +438,7 @@ void MainWindow::onFileNew()
 void MainWindow::onFileOpen()
 {
     if (isModified()) {
-        int button = QMessageBox::question(this, windowTitle(),
+        int button = QMessageBox::question(this, "",
                                            tr("You have unsaved changes. Do you want to open a new document anyway?"));
         if (button != QMessageBox::Yes)
             return;
@@ -540,7 +532,7 @@ void MainWindow::onHelpAbout()
 void MainWindow::openRecent() {
     // A QAction represents the action of the user clicking
     QAction *action = qobject_cast<QAction *>(sender());
-    const QString &filename = action->data().toString();
+    const QString filename = action->data().toString();
 
     // Don't open the save file again
     if (filename == path)
@@ -583,8 +575,8 @@ void MainWindow::updateOpened() {
         recentOpened.takeLast();
 
     for (int i = 0; i < recentOpened.size(); i++) {
-        const QString &document = recentOpened.at(i);
-        const QString &title("&" + QString::number(i + 1) + " | " + document);
+        const QLatin1String document(recentOpened.at(i).toLatin1());
+        const QString title("&" + QString::number(i + 1) + " | " + document);
         QAction *action = new QAction(title, this);
         connect(action, &QAction::triggered, this, &MainWindow::openRecent);
 
@@ -612,9 +604,9 @@ void MainWindow::closeEvent(QCloseEvent *e)
 }
 
 void MainWindow::loadSettings() {
-    const QByteArray &geo = settings->value("geometry", QByteArray({})).toByteArray();
+    const QByteArray geo = settings->value("geometry", QByteArray({})).toByteArray();
     if (geo.isEmpty()) {
-        const QRect &availableGeometry = QGuiApplication::screenAt(pos())->availableGeometry();
+        const QRect availableGeometry = QGuiApplication::screenAt(pos())->availableGeometry();
         resize(availableGeometry.width() / 2, (availableGeometry.height() * 2) / 3);
         move((availableGeometry.width() - width()) / 2,
              (availableGeometry.height() - height()) / 2);
@@ -625,11 +617,11 @@ void MainWindow::loadSettings() {
 
     restoreState(settings->value("state", QByteArray({})).toByteArray());
 
-    highlighting = settings->value("highlighting", QString::number(true)).toBool();
+    highlighting = settings->value("highlighting", true).toBool();
     ui->actionHighlighting_activated->setChecked(highlighting);
     changeHighlighting(highlighting);
 
-    setPath = settings->value("setPath", QString::number(true)).toBool();
+    setPath = settings->value("setPath", true).toBool();
     changeAddtoIconPath(setPath);
 
     recentOpened = settings->value("recent", QStringList()).toStringList();
@@ -639,18 +631,18 @@ void MainWindow::loadSettings() {
         }
     }
 
-    const bool &openLast = settings->value("openLast", QString::number(true)).toBool();
+    const bool openLast = settings->value("openLast", true).toBool();
     if (openLast) {
         ui->actionOpen_last_document_on_start->setChecked(openLast);
 
-        const QString &last = settings->value("last", QString()).toString();
+        const QLatin1String last(settings->value("last", QLatin1String()).toByteArray());
         if (!last.isEmpty())
             openFile(last);
     }
 
-    spelling = settings->value("spelling", QString::number(true)).toBool();
+    spelling = settings->value("spelling", true).toBool();
     changeSpelling(spelling);
-    QString spellLang = settings->value("spellLang", QString()).toString();
+    QString spellLang(settings->value("spellLang", QString()).toString());
     if (spellLang.isEmpty())
         spellLang = language;
     checker->setLanguage(spellLang);
@@ -661,12 +653,12 @@ void MainWindow::loadSettings() {
 void MainWindow::saveSettings() {
     settings->setValue("geometry", saveGeometry());
     settings->setValue("state", saveState());
-    settings->setValue("highlighting", QString::number(ui->actionHighlighting_activated->isChecked()));
+    settings->setValue("highlighting", ui->actionHighlighting_activated->isChecked());
     settings->setValue("recent", recentOpened);
-    settings->setValue("openLast", QString::number(ui->actionOpen_last_document_on_start->isChecked()));
+    settings->setValue("openLast", ui->actionOpen_last_document_on_start->isChecked());
     settings->setValue("last", path);
-    settings->setValue("setPath", QString::number(setPath));
-    settings->setValue("spelling", QString::number(checker->getSpellingEnabled()));
+    settings->setValue("setPath", setPath);
+    settings->setValue("spelling", checker->getSpellingEnabled());
     settings->setValue("spellLang", checker->getLanguage());
     settings->sync();
 }
