@@ -6,58 +6,14 @@
 
 /* Global options. */
 static unsigned parser_flags = 0;
-#ifndef MD4C_USE_ASCII
-static unsigned renderer_flags = MD_HTML_FLAG_DEBUG | MD_HTML_FLAG_SKIP_UTF8_BOM;
-#else
-static unsigned renderer_flags = MD_HTML_FLAG_DEBUG;
-#endif
-
-struct membuffer {
-    char* data;
-    size_t asize;
-    size_t size;
-};
-
-static void
-membuf_init(struct membuffer* buf, MD_SIZE new_asize)
-{
-    buf->size = 0;
-    buf->asize = new_asize;
-    buf->data = (char*)malloc(buf->asize);
-}
-
-static void
-membuf_fini(struct membuffer* buf)
-{
-    if(buf->data)
-        free(buf->data);
-}
-
-static void
-membuf_grow(struct membuffer* buf, size_t new_asize)
-{
-    buf->data = (char*)realloc(buf->data, new_asize);
-    buf->asize = new_asize;
-}
-
-static void
-membuf_append(struct membuffer* buf, const char* data, MD_SIZE size)
-{
-    if(buf->asize < buf->size + size)
-        membuf_grow(buf, buf->size + buf->size / 2 + size);
-    memcpy(buf->data + buf->size, data, size);
-    buf->size += size;
-}
 
 
-/**********************
- ***  Main program  ***
- **********************/
+void captureHtmlFragment (const MD_CHAR* data, MD_SIZE data_size, void* userData) {
+    QByteArray* array = static_cast<QByteArray*>(userData);
 
-static void
-process_output(const MD_CHAR* text, MD_SIZE size, void* userdata)
-{
-    membuf_append((struct membuffer*) userdata, text, size);
+    if (data_size > 0) {
+        array->append(data, data_size);
+    }
 }
 
 QString Parser::Parse(const QString &markdown, const int &dia)
@@ -67,22 +23,8 @@ QString Parser::Parse(const QString &markdown, const int &dia)
     else
         parser_flags |= MD_DIALECT_COMMONMARK;
 
-    struct membuffer buf_in = {0, 0, 0};
-    struct membuffer buf_out = {0, 0, 0};
-
-    QString out;
-
-    QByteArray array = markdown.toLocal8Bit();
-
-    /* Input size is good estimation of output size. Add some more reserve to
-         * deal with the HTML header/footer and tags. */
-    membuf_init(&buf_out, (MD_SIZE)(buf_in.size + buf_in.size / 8 + 64));
-
-    /* Parse the document. This shall call our callbacks provided via the
-         * md_renderer_t structure. */
-    md_html(array.data(), (MD_SIZE)array.size(), &process_output, (void*) &buf_out,
-            parser_flags, renderer_flags);
-
+    const QByteArray array = markdown.toLocal8Bit();
+    QByteArray out;
 
     /* Write down the document in the HTML format. */
     out.append("<!DOCTYPE html>\n");
@@ -93,15 +35,11 @@ QString Parser::Parse(const QString &markdown, const int &dia)
     out.append("</head>\n");
     out.append("<body>\n");
 
-    out.append(buf_out.data);
+    md_html(array.data(), (MD_SIZE)array.size(), &captureHtmlFragment, &out,
+            parser_flags, MD_HTML_FLAG_DEBUG | MD_HTML_FLAG_SKIP_UTF8_BOM);
 
-    // With the folowing line the problem with the symbols should be fixed.
-    out.chop((out.length() - out.lastIndexOf(">") - 1));
-
-    out.append("\n</body>\n");
+    out.append("</body>\n");
     out.append("</html>\n");
-
-    membuf_fini(&buf_out);
 
     return out;
 }

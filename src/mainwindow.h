@@ -67,7 +67,7 @@ private:
     void saveSettings();
     void updateOpened();
     void openRecent();
-    void onSetText(const int &index);
+    void onSetText(const int &);
 
     Ui::MainWindow *ui;
 

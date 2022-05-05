@@ -16,7 +16,6 @@
 #include <QToolButton>
 #include <QSaveFile>
 
-
 #if QT_CONFIG(printdialog)
 #include <QtPrintSupport/QPrintDialog>
 #include <QtPrintSupport/QPrintPreviewDialog>
@@ -43,15 +42,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     const bool dark = ((r + g + b + a) / 4) < 127;
     if (dark)
-        setWindowIcon(QIcon(":/Icon_dark.svg"));
+        setWindowIcon(QIcon(QStringLiteral(":/Icon_dark.svg")));
     else
-        setWindowIcon(QIcon(":/Icon.svg"));
+        setWindowIcon(QIcon(QStringLiteral(":/Icon.svg")));
 
     ui->setupUi(this);
     ui->editor->searchWidget()->setDarkMode(dark);
 
     QComboBox *mode = new QComboBox(ui->Edit);
-    mode->addItems({"Commonmark", "GitHub"});
+    mode->addItems({QStringLiteral("Commonmark"), QStringLiteral("GitHub")});
     mode->setCurrentIndex(1);
     _mode = 1;
 
@@ -65,7 +64,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     toolbutton = new QToolButton(this);
     toolbutton->setMenu(ui->menuRecentlyOpened);
-    toolbutton->setIcon(QIcon::fromTheme("document-open-recent"));
+    toolbutton->setIcon(QIcon::fromTheme(QStringLiteral("document-open-recent")));
     toolbutton->setPopupMode(QToolButton::InstantPopup);
 
     // Settings

@@ -11,7 +11,7 @@ MarkdownEdit, as the name suggests, is a simple and easy program to create and e
 
 -------
 
-# Features:
+## Features:
 
 - Spell checking
 - Save and load Markdown files
@@ -28,17 +28,17 @@ MarkdownEdit, as the name suggests, is a simple and easy program to create and e
 
 ![Example](doc/images/Example.png)
 
-# Dependencies:
+## Dependencies:
 [Qt](https://qt.io/) and [enchant-2](https://github.com/AbiWord/enchant).
 
-# Note(s): 
+## Note(s): 
 - To improve the performance when using images, disable the "Auto add file path to icon path" option (Menu <u>V</u>iew).
 - When building via CMake, the translations **won't** work!
 
 
 -------
 
-# Build instructions
+## Build instructions
 Execute the [build script](scripts/build.sh) or follow the instructions below.
 
 - Clone MarkdownEdit: `git clone https://github.com/software-made-easy/MarkdownEdit && cd MarkdownEdit`
@@ -56,8 +56,8 @@ qmake ..
 make
 ```
 
-# Credits
+## Credits
 
-- The conversion from Markdown to HTML is done with the help of the [md4c](https://github.com/mity/md4c) - library by _Martin Mitáš_.
-- The [widget](https://github.com/pbek/qmarkdowntextedit) used for writing was created by _Patrizio Bekerle_.
-- Spell checking is done with the [QtSpell](https://github.com/software-made-easy/qtspell) library based on the [QtSpell](https://github.com/manisandro/qtspell) library by _Sandro Mani_.
+- The conversion from Markdown to HTML is done with the help of the [md4c](https://github.com/mity/md4c) - library by *Martin Mitáš*.
+- The [widget](https://github.com/pbek/qmarkdowntextedit) used for writing was created by *Patrizio Bekerle*.
+- Spell checking is done with the [QtSpell](https://github.com/software-made-easy/qtspell) library based on the [QtSpell](https://github.com/manisandro/qtspell) library by *Sandro Mani*.
