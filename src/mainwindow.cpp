@@ -80,7 +80,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionExit, &QAction::triggered, this, &QWidget::close);
     connect(ui->actionAbout, &QAction::triggered, this, &MainWindow::onHelpAbout);
     connect(ui->actionAboutQt, &QAction::triggered, qApp, &QApplication::aboutQt);
-    connect(ui->editor, &QPlainTextEdit::textChanged, this, &MainWindow::onTextChanged);
+    connect(ui->editor, &QPlainTextEdit::textChanged, this, &MainWindow::onTextChanged, Qt::QueuedConnection);
     connect(mode, &QComboBox::currentTextChanged, this, &MainWindow::changeMode);
     connect(ui->actionExportHtml, &QAction::triggered, this, &MainWindow::exportHtml);
     connect(ui->actionPrint, &QAction::triggered, this, &MainWindow::filePrint);
@@ -348,7 +348,9 @@ void MainWindow::onTextChanged()
 
     maybeModified = true;
 
-    emit modificationChanged(isModified());
+    const bool state = isModified();
+    if (state != lastState)
+        emit modificationChanged(state);
 }
 
 void MainWindow::openFile(const QString &newFile)
@@ -573,7 +575,7 @@ void MainWindow::updateOpened() {
 
     ui->menuRecentlyOpened->clear();
 
-    if (!path.isEmpty() && recentOpened.indexOf(path) == -1)
+    if (!path.isEmpty() && recentOpened.contains(path))
         recentOpened.insert(0, path);
 
     if (recentOpened.size() > 7)

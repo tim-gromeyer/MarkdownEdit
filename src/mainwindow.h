@@ -89,6 +89,7 @@ private:
     bool spelling = true;
     bool highlighting = true;
     bool maybeModified = false;
+    bool lastState = false;
 
     QtSpell::TextEditChecker *checker;
     Highliter *htmlHighliter;
