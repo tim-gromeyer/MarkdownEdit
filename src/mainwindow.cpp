@@ -23,7 +23,7 @@
 
 #include "3rdparty/qmarkdowntextedit/qplaintexteditsearchwidget.h"
 #include "3rdparty/qmarkdowntextedit/markdownhighlighter.h"
-#include "3rdparty/qtspell/src/QtSpell.hpp"
+#include "3rdparty/QtSpell/src/QtSpell.hpp"
 
 #if (defined(Q_OS_BLACKBERRY) || defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_WP))
 #error This application was developed for desktop only due to enchant
