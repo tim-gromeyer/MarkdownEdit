@@ -3,7 +3,6 @@ $( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/..
 
 # clone dependencies
 git submodule update --init --recursive -j 3
-git submodule update --remote --merge
 
 mkdir build && cd build # create build directory
 qmake ../MarkdownEdit.pro # create Makefile

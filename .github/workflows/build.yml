@@ -59,18 +59,19 @@ jobs:
       #
     - name: Install enchant-2
       run: |
-        git clone https://github.com/AbiWord/enchant
-        cd enchant
-        ./bootstrap && ./configure --enable-relocatable
+        wget https://github.com/AbiWord/enchant/releases/download/v2.3.3/enchant-2.3.3.tar.gz
+        tar -xf enchant-2.3.3.tar.gz
+        cd enchant-2.3.3/
+        ./configure
         make
         sudo make install
+        cd ..
 
       #
       # Clone dependencys
       #
     - name: Clone MarkdownEdit's dependencys
       run: |
-        git submodule update --remote --merge
         git submodule update --init --recursive -j 4
 
       #
