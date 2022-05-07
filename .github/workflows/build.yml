@@ -16,11 +16,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, macos-latest]
         # Linux:   https://download.qt.io/online/qtsdkrepository/linux_x64/desktop/
+        # macOS:   https://download.qt.io/online/qtsdkrepository/mac_x64/desktop/
         qt-version: ['5.13.2', '5.14.2', '5.15.2']
         experimental: [false]
         include:
+          - os: macos-latest
+            qt-version: '6.1.0'
+            experimental: true
           - os: ubuntu-latest
             qt-version: '6.1.0'
             experimental: true
