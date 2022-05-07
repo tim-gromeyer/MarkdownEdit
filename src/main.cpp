@@ -43,12 +43,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    MainWindow w;
-    w.setLanguage(qAsConst(lang));
-
-    const QString file(parser.positionalArguments().value(0, QLatin1String()));
-    if (!file.isEmpty())
-        w.openFile(file);
+    MainWindow w(parser.positionalArguments().value(0, QLatin1String()));
 
     w.show();
     return a.exec();

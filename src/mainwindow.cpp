@@ -25,13 +25,12 @@
 #include "3rdparty/qmarkdowntextedit/markdownhighlighter.h"
 #include "3rdparty/qtspell/src/QtSpell.hpp"
 
-
 #if (defined(Q_OS_BLACKBERRY) || defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_WP))
 #error This application was developed for desktop only due to enchant
 #endif
 
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(const QString &file, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
@@ -70,7 +69,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Settings
     settings = new QSettings("SME", "MarkdownEdit", this);
 
-    loadSettings();
+    loadSettings(file);
     updateOpened();
 
     connect(ui->actionNew, &QAction::triggered, this, &MainWindow::onFileNew);
@@ -80,7 +79,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionExit, &QAction::triggered, this, &QWidget::close);
     connect(ui->actionAbout, &QAction::triggered, this, &MainWindow::onHelpAbout);
     connect(ui->actionAboutQt, &QAction::triggered, qApp, &QApplication::aboutQt);
-    connect(ui->editor, &QPlainTextEdit::textChanged, this, &MainWindow::onTextChanged, Qt::QueuedConnection);
     connect(mode, &QComboBox::currentTextChanged, this, &MainWindow::changeMode);
     connect(ui->actionExportHtml, &QAction::triggered, this, &MainWindow::exportHtml);
     connect(ui->actionPrint, &QAction::triggered, this, &MainWindow::filePrint);
@@ -89,6 +87,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionCopy, &QAction::triggered, this, &MainWindow::copy);
     connect(ui->actionPaste, &QAction::triggered, this, &MainWindow::paste);
 
+    connect(ui->editor, &QPlainTextEdit::textChanged,
+            this, &MainWindow::onTextChanged, Qt::QueuedConnection);
     connect(ui->actionHighlighting_activated, &QAction::triggered,
             this, &MainWindow::changeHighlighting);
     connect(ui->actionAuto_add_file_path_to_icon_path, &QAction::triggered,
@@ -610,7 +610,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
     }
 }
 
-void MainWindow::loadSettings() {
+void MainWindow::loadSettings(const QString &f) {
     const QByteArray geo = settings->value("geometry", QByteArray({})).toByteArray();
     if (geo.isEmpty()) {
         const QRect availableGeometry = QGuiApplication::screenAt(pos())->availableGeometry();
@@ -638,20 +638,24 @@ void MainWindow::loadSettings() {
         }
     }
 
-    const bool openLast = settings->value("openLast", true).toBool();
-    if (openLast) {
-        ui->actionOpen_last_document_on_start->setChecked(openLast);
+    if (f.isEmpty()) {
+        const bool openLast = settings->value("openLast", true).toBool();
+        if (openLast) {
+            ui->actionOpen_last_document_on_start->setChecked(openLast);
 
-        const QLatin1String last(settings->value("last", QLatin1String()).toByteArray());
-        if (!last.isEmpty())
-            openFile(last);
+            const QLatin1String last(settings->value("last", QLatin1String()).toByteArray());
+            if (!last.isEmpty())
+                openFile(last);
+        }
     }
+    else
+        openFile(f);
 
     spelling = settings->value("spelling", true).toBool();
     changeSpelling(spelling);
     QString spellLang(settings->value("spellLang", QString()).toString());
     if (spellLang.isEmpty())
-        spellLang = language;
+        spellLang = QLocale::system().name();
     checker->setLanguage(spellLang);
 
     onTextChanged();

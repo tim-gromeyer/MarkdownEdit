@@ -3,7 +3,5 @@
         <file>default.md</file>
         <file>Icon.svg</file>
         <file>Icon_dark.svg</file>
-        <file>xml/iso-codes/iso_639.xml</file>
-        <file>xml/iso-codes/iso_3166.xml</file>
     </qresource>
 </RCC>

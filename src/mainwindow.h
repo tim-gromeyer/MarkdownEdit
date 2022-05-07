@@ -20,12 +20,10 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(const QString &file, QWidget *parent = nullptr);
     ~MainWindow();
 
     void openFile(const QString &path);
-
-    inline void setLanguage(const QString &lang) { language = lang; };
 
 protected:
     void closeEvent(QCloseEvent *e) override;
@@ -63,7 +61,7 @@ private slots:
 
 private:
     bool isModified() const;
-    void loadSettings();
+    void loadSettings(const QString &);
     void saveSettings();
     void updateOpened();
     void openRecent();
@@ -77,8 +75,6 @@ private:
     QSettings *settings;
 
     QStringList recentOpened;
-
-    QString language;
 
     QString originalMd = "";
     int originalMdLength = 0;
