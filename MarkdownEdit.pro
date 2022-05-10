@@ -19,15 +19,13 @@ SOURCES += \
     src/mainwindow.cpp \
     src/about.cpp \
     src/parser.cpp \
-    src/highlighter.cpp \
-    src/switchlabel.cpp
+    src/highlighter.cpp
 
 HEADERS += \
     src/mainwindow.h \
     src/about.h \
     src/parser.h \
-    src/highlighter.h \
-    src/switchlabel.h
+    src/highlighter.h
 
 FORMS += \
     ui/mainwindow.ui
