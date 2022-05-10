@@ -24,24 +24,22 @@ int main(int argc, char *argv[])
 
     QTranslator translator, qtTranslator;
 #if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
-    const QString path = QLibraryInfo::path(QLibraryInfo::TranslationsPath);
+    const QString path(QLibraryInfo::path(QLibraryInfo::TranslationsPath));
 #else
-    const QString path = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+    const QString path(QLibraryInfo::location(QLibraryInfo::TranslationsPath));
 #endif
 
-    QString lang;
+    const QString lang(QLocale::system().name());
 
-    const QStringList uiLanguages = QLocale::system().uiLanguages();
-    for (const QString &locale : uiLanguages) {
-        lang = QLocale(locale).name().split("_")[0];
-        const QString baseName("MarkdownEdit_" + lang);
-        const QString qtBaseName("/qtbase_" + lang);
-        if (translator.load(":/i18n/" + baseName)) {
-            a.installTranslator(&translator);
-            if (qtTranslator.load(path + qtBaseName))
-                a.installTranslator(&qtTranslator);
-        }
-    }
+    // load translation for Qt
+    if (qtTranslator.load(QStringLiteral("qt_") + lang, path))
+        a.installTranslator(&qtTranslator);
+    else if (qtTranslator.load(QStringLiteral("qt_") + lang, QStringLiteral("translations")))
+        a.installTranslator(&qtTranslator);
+
+    // try to load translation for current locale from resource file
+    if (translator.load(QStringLiteral("MarkdownEdit_") + lang, QStringLiteral(":/i18n")))
+        a.installTranslator(&translator);
 
     MainWindow w(parser.positionalArguments().value(0, QLatin1String()));
 

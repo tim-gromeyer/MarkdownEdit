@@ -13,6 +13,8 @@ class QToolButton;
 namespace QtSpell { class TextEditChecker; }
 namespace QSourceHighlite { class QSourceHighliter; }
 class Highliter;
+class QPushButton;
+class QComboBox;
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -20,7 +22,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(const QString &file, QWidget *parent = nullptr);
+    explicit MainWindow(const QString &file, QWidget *parent = nullptr);
     ~MainWindow();
 
     void openFile(const QString &path);
@@ -51,6 +53,8 @@ private slots:
     void pausePreview(const bool &);
     void disablePreview(const bool &);
     void changeAddtoIconPath(const bool &);
+    void changeWordWrap(const bool &);
+    void changeWidget(const QString &);
 
     void undo();
     void redo();
@@ -76,9 +80,9 @@ private:
 
     QStringList recentOpened;
 
-    QString originalMd = "";
-    int originalMdLength = 0;
-    QString html = "";
+    QString originalMd;
+    int originalMdLength;
+    QString html;
 
     bool dontUpdate = false;
     bool setPath = true;
@@ -91,5 +95,6 @@ private:
     Highliter *htmlHighliter;
 
     QToolButton *toolbutton;
+    QComboBox *widgetBox;
 };
 #endif // MAINWINDOW_H

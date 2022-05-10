@@ -41,14 +41,7 @@ jobs:
         path: ../Qt
         key: ${{ runner.os }}-QtCache-${{ matrix.qt-version }}-2
     # https://github.com/marketplace/actions/install-qt
-    - if: false == contains( matrix.os, 'windows') && !startsWith( matrix.qt-version, '6.' )
-      name: Install Qt
-      uses: jurplel/install-qt-action@v2
-      with:
-        version: ${{ matrix.qt-version }}
-        cached: ${{ steps.cache-qt.outputs.cache-hit }}
-    - if: false == contains( matrix.os, 'windows') && startsWith( matrix.qt-version, '6.' )
-      name: Install Qt
+    - name: Install Qt
       uses: jurplel/install-qt-action@v2
       with:
         version: ${{ matrix.qt-version }}

@@ -6,3 +6,4 @@ packaging/*.deb
 packaging/installer/Installer*
 packaging/MarkdownEdit/usr/bin/*
 .qtc_clangd/*
+src/spellchecker*

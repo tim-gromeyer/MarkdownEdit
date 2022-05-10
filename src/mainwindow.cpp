@@ -15,6 +15,8 @@
 #include <QSettings>
 #include <QToolButton>
 #include <QSaveFile>
+#include <QPushButton>
+#include <QDebug>
 
 #if QT_CONFIG(printdialog)
 #include <QtPrintSupport/QPrintDialog>
@@ -23,7 +25,7 @@
 
 #include "3rdparty/qmarkdowntextedit/qplaintexteditsearchwidget.h"
 #include "3rdparty/qmarkdowntextedit/markdownhighlighter.h"
-#include "3rdparty/QtSpell/src/QtSpell.hpp"
+#include "QtSpell.hpp"
 
 #if (defined(Q_OS_BLACKBERRY) || defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_WP))
 #error This application was developed for desktop only due to enchant
@@ -53,21 +55,26 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     mode->setCurrentIndex(1);
     _mode = 1;
 
+    widgetBox = new QComboBox(this);
+    widgetBox->addItems({tr("Preview"), tr("HTML")});
+    widgetBox->setCurrentIndex(0);
+
     checker = new QtSpell::TextEditChecker(this);
     checker->setTextEdit(ui->editor);
     checker->setDecodeLanguageCodes(true);
-    checker->setShowCheckSpellingCheckbox(true);
+    checker->setShowCheckSpellingCheckbox(false);
     checker->setUndoRedoEnabled(true);
 
     htmlHighliter = new Highliter(ui->raw->document());
 
     toolbutton = new QToolButton(this);
     toolbutton->setMenu(ui->menuRecentlyOpened);
-    toolbutton->setIcon(QIcon::fromTheme(QStringLiteral("document-open-recent")));
+    toolbutton->setIcon(ui->menuRecentlyOpened->icon());
     toolbutton->setPopupMode(QToolButton::InstantPopup);
 
     // Settings
-    settings = new QSettings("SME", "MarkdownEdit", this);
+    settings = new QSettings(QStringLiteral("SME"),
+                             QStringLiteral("MarkdownEdit"), this);
 
     loadSettings(file);
     updateOpened();
@@ -87,6 +94,8 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     connect(ui->actionCopy, &QAction::triggered, this, &MainWindow::copy);
     connect(ui->actionPaste, &QAction::triggered, this, &MainWindow::paste);
 
+    connect(widgetBox, &QComboBox::currentTextChanged,
+            this, &MainWindow::changeWidget);
     connect(ui->editor, &QPlainTextEdit::textChanged,
             this, &MainWindow::onTextChanged, Qt::QueuedConnection);
     connect(ui->actionHighlighting_activated, &QAction::triggered,
@@ -111,8 +120,10 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
             this, &MainWindow::pausePreview);
     connect(ui->actionSpell_checking, &QAction::triggered,
             this, &MainWindow::changeSpelling);
-    connect(ui->tabWidget, &QTabWidget::currentChanged,
+    connect(ui->tabWidget, &QStackedWidget::currentChanged,
             this, &MainWindow::onSetText);
+    connect(ui->actionWord_wrap, &QAction::triggered,
+            this, &MainWindow::changeWordWrap);
 
     ui->actionSave->setEnabled(false);
     ui->actionUndo->setEnabled(false);
@@ -134,6 +145,8 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     ui->Edit->addAction(ui->actionPaste);
     ui->Edit->addSeparator();
     ui->Edit->addWidget(mode);
+    ui->Edit->addSeparator();
+    ui->Edit->addWidget(widgetBox);
 
     if (ui->editor->toPlainText().isEmpty()) {
         QFile f(":/default.md", this);
@@ -151,6 +164,13 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     }
 }
 
+void MainWindow::changeWidget(const QString &text)
+{
+    Q_UNUSED(text);
+
+    ui->tabWidget->setCurrentIndex(widgetBox->currentIndex());
+}
+
 void MainWindow::onSetText(const int &index)
 {
     if (index == 0) {
@@ -163,6 +183,16 @@ void MainWindow::onSetText(const int &index)
         ui->raw->setPlainText(html);
         ui->raw->verticalScrollBar()->setValue(v);
     }
+}
+
+void MainWindow::changeWordWrap(const bool &c)
+{
+    if (c)
+        ui->editor->setLineWrapMode(QPlainTextEdit::WidgetWidth);
+    else
+        ui->editor->setLineWrapMode(QPlainTextEdit::NoWrap);
+
+    ui->actionWord_wrap->setChecked(c);
 }
 
 void MainWindow::changeSpelling(const bool &checked)
@@ -526,7 +556,7 @@ void MainWindow::onHelpAbout()
 
     dialog.addCredit(tr("<p>The conversion from Markdown to HTML is done with the help of the <a href=\"https://github.com/mity/md4c\">md4c</a> library by <em>Martin Mitáš</em>.</p>"));
     dialog.addCredit(tr("<p>The <a href=\"https://github.com/pbek/qmarkdowntextedit\">widget</a> used for writing was created by <em>Patrizio Bekerle</em>.</p>"));
-    dialog.addCredit(tr("<p>Spell checking is done with the <a href=\"https://github.com/software-made-easy/qtspell\">QtSpell</a> library based on the <a href=\"https://github.com/manisandro/qtspell\">QtSpell</a> library by <em>Sandro Mani</em>.</p>"));
+    dialog.addCredit(tr("<p>Spell checking is done with the <a href=\"https://github.com/software-made-easy/QtSpell\">QtSpell</a> library based on the <a href=\"https://github.com/manisandro/qtspell\">QtSpell</a> library by <em>Sandro Mani</em>.</p>"));
 
     dialog.exec();
 }
@@ -571,18 +601,19 @@ void MainWindow::updateOpened() {
     foreach (QAction *a, ui->menuRecentlyOpened->actions()) {
         disconnect(a, &QAction::triggered, this, &MainWindow::openRecent);
         a->deleteLater();
+        delete a;
     }
 
     ui->menuRecentlyOpened->clear();
 
-    if (!path.isEmpty() && recentOpened.contains(path))
+    if (!path.isEmpty() && !recentOpened.contains(path))
         recentOpened.insert(0, path);
 
     if (recentOpened.size() > 7)
         recentOpened.takeLast();
 
     for (int i = 0; i < recentOpened.size(); i++) {
-        const QString document(recentOpened.at(i).toLatin1());
+        const QString document(recentOpened.at(i));
         const QString title("&" + QString::number(i + 1) + " | " + document);
         QAction *action = new QAction(title, this);
         connect(action, &QAction::triggered, this, &MainWindow::openRecent);
@@ -611,7 +642,8 @@ void MainWindow::closeEvent(QCloseEvent *e)
 }
 
 void MainWindow::loadSettings(const QString &f) {
-    const QByteArray geo = settings->value("geometry", QByteArray({})).toByteArray();
+    const QByteArray geo = settings->value(QStringLiteral("geometry"),
+                                           QByteArray({})).toByteArray();
     if (geo.isEmpty()) {
         const QRect availableGeometry = QGuiApplication::screenAt(pos())->availableGeometry();
         resize(availableGeometry.width() / 2, (availableGeometry.height() * 2) / 3);
@@ -622,28 +654,32 @@ void MainWindow::loadSettings(const QString &f) {
         restoreGeometry(geo);
     }
 
-    restoreState(settings->value("state", QByteArray({})).toByteArray());
+    restoreState(settings->value(QStringLiteral("state"), QByteArray({})).toByteArray());
 
-    highlighting = settings->value("highlighting", true).toBool();
+    highlighting = settings->value(QStringLiteral("highlighting"), true).toBool();
     ui->actionHighlighting_activated->setChecked(highlighting);
     changeHighlighting(highlighting);
 
-    setPath = settings->value("setPath", true).toBool();
+    setPath = settings->value(QStringLiteral("setPath"), true).toBool();
     changeAddtoIconPath(setPath);
 
-    recentOpened = settings->value("recent", QStringList()).toStringList();
+    recentOpened = settings->value(QStringLiteral("recent"), QStringList()).toStringList();
     if (!recentOpened.isEmpty()) {
         if (recentOpened.first().isEmpty()) {
             recentOpened.takeFirst();
         }
     }
 
+    const bool lineWrap = settings->value(QStringLiteral("lineWrap"), false).toBool();
+    changeWordWrap(lineWrap);
+
     if (f.isEmpty()) {
-        const bool openLast = settings->value("openLast", true).toBool();
+        const bool openLast = settings->value(QStringLiteral("openLast"), true).toBool();
         if (openLast) {
             ui->actionOpen_last_document_on_start->setChecked(openLast);
 
-            const QLatin1String last(settings->value("last", QLatin1String()).toByteArray());
+            const QString last(settings->value(QStringLiteral("last"),
+                                               QLatin1String()).toString());
             if (!last.isEmpty())
                 openFile(last);
         }
@@ -651,12 +687,13 @@ void MainWindow::loadSettings(const QString &f) {
     else
         openFile(f);
 
-    spelling = settings->value("spelling", true).toBool();
+    spelling = settings->value(QStringLiteral("spelling"), true).toBool();
     changeSpelling(spelling);
-    QString spellLang(settings->value("spellLang", QString()).toString());
+    const QString spellLang(settings->value(QStringLiteral("spellLang"), QLatin1String()).toString());
     if (spellLang.isEmpty())
-        spellLang = QLocale::system().name();
-    checker->setLanguage(spellLang);
+        checker->setLanguage(QLocale::system().name());
+    else
+        checker->setLanguage(spellLang);
 
     onTextChanged();
 }
@@ -664,13 +701,14 @@ void MainWindow::loadSettings(const QString &f) {
 void MainWindow::saveSettings() {
     settings->setValue("geometry", saveGeometry());
     settings->setValue("state", saveState());
-    settings->setValue("highlighting", ui->actionHighlighting_activated->isChecked());
+    settings->setValue("highlighting", highlighting);
     settings->setValue("recent", recentOpened);
     settings->setValue("openLast", ui->actionOpen_last_document_on_start->isChecked());
     settings->setValue("last", path);
     settings->setValue("setPath", setPath);
     settings->setValue("spelling", checker->getSpellingEnabled());
     settings->setValue("spellLang", checker->getLanguage());
+    settings->setValue("lineWrap", ui->actionWord_wrap->isChecked());
     settings->sync();
 }
 

@@ -360,7 +360,23 @@
     </message>
     <message>
         <source>Shift+F7</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Export</source>
+        <translation>Exportieren</translation>
+    </message>
+    <message>
+        <source>Line wrap</source>
+        <translation>Zeilenumbruch</translation>
+    </message>
+    <message>
+        <source>untitled.md</source>
+        <translation>Unbenannt.md</translation>
+    </message>
+    <message>
+        <source>Save changes?</source>
+        <translation>Änderungen speichern?</translation>
     </message>
 </context>
 <context>

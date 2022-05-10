@@ -8,6 +8,8 @@ CONFIG += c++17
 # In order to do so, uncomment the following line.
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x051208    # disables all the APIs deprecated before Qt 5.12.8
 
+CONFIG += link_pkgconfig
+PKGCONFIG += enchant-2
 
 INCLUDEPATH += \
     src/
@@ -17,13 +19,15 @@ SOURCES += \
     src/mainwindow.cpp \
     src/about.cpp \
     src/parser.cpp \
-    src/highlighter.cpp
+    src/highlighter.cpp \
+    src/switchlabel.cpp
 
 HEADERS += \
     src/mainwindow.h \
     src/about.h \
     src/parser.h \
-    src/highlighter.h
+    src/highlighter.h \
+    src/switchlabel.h
 
 FORMS += \
     ui/mainwindow.ui
@@ -44,7 +48,6 @@ DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 # Only show qDebug() messages in debug mode
 CONFIG(release, debug | release): DEFINES += QT_NO_DEBUG_OUTPUT
-
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

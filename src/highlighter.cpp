@@ -9,7 +9,6 @@ Highliter::Highliter(QTextDocument *doc)
     QTextCharFormat format = QTextCharFormat();
 
     _formats[Token::CodeBlock] = format;
-    format = QTextCharFormat();
 
     format.setForeground(QColor(249, 38, 114));
     _formats[Token::CodeKeyWord] = format;
