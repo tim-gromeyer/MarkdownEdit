@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.12)
 
 project(MarkdownEdit VERSION 1.2.0 LANGUAGES CXX C)
 
@@ -11,6 +11,8 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR}/ui)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+add_compile_definitions(APP_VERSION="${PROJECT_VERSION}")
 
 find_package(PkgConfig)
 PKG_CHECK_MODULES(ENCHANT REQUIRED enchant-2)
@@ -157,8 +159,6 @@ include_directories(${CMAKE_SOURCE_DIR}/3rdparty/qmarkdowntextedit)
 include_directories(${CMAKE_SOURCE_DIR}/3rdparty/md4c/src)
 include_directories(${CMAKE_SOURCE_DIR}/3rdparty/QtSpell/src)
 target_link_libraries(MarkdownEdit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport ${ENCHANT_LDFLAGS} ${INTL_LDFLAGS})
-
-set_target_properties(MarkdownEdit PROPERTIES COMPILE_DEFINITIONS ${PROJECT_VERSION})
 
 set_target_properties(MarkdownEdit PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
