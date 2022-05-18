@@ -31,7 +31,7 @@ MarkdownEdit, as the name suggests, is a simple and easy program to create and e
 ## Dependencies:
 [Qt](https://qt.io/) and [enchant-2](https://github.com/AbiWord/enchant).
 
-## Note(s): 
+## Note(s):
 - To improve the performance when using images, disable the "Auto add file path to icon path" option (Menu <u>V</u>iew).
 - When building via CMake, the translations **won't** work!
 
@@ -58,6 +58,6 @@ make
 
 ## Credits
 
-- The conversion from Markdown to HTML is done with the help of the [md4c](https://github.com/mity/md4c) - library by *Martin Mitáš*.
+- The conversion from Markdown to HTML is done with the help of the [md4c](https://github.com/mity/md4c) - library by *Martin Mit�*.
 - The [widget](https://github.com/pbek/qmarkdowntextedit) used for writing was created by *Patrizio Bekerle*.
 - Spell checking is done with the [QtSpell](https://github.com/software-made-easy/QtSpell) library based on the [QtSpell](https://github.com/manisandro/qtspell) library by *Sandro Mani*.

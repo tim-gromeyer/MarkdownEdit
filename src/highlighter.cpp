@@ -32,8 +32,8 @@ void Highliter::highlightBlock(const QString &text)
             setCurrentBlockState(229);
     }
 
-    if (text.isEmpty()) return;
     const int textLen = text.length();
+    if (textLen == 0) return;
 
     setFormat(0, textLen, _formats[CodeBlock]);
 

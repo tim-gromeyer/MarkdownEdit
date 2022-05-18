@@ -8,9 +8,6 @@ CONFIG += c++17
 # In order to do so, uncomment the following line.
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x051208    # disables all the APIs deprecated before Qt 5.12.8
 
-CONFIG += link_pkgconfig
-PKGCONFIG += enchant-2
-
 INCLUDEPATH += \
     src/
 
@@ -34,7 +31,7 @@ TRANSLATIONS += \
     translations/MarkdownEdit_de.ts
 
 include(3rdparty/qmarkdowntextedit/qmarkdowntextedit.pri)
-include(3rdparty/QtSpell/qtspell.pri)
+include(../QtSpell/qtspell.pri)
 include(3rdparty/md4c.pri)
 
 CONFIG += lrelease

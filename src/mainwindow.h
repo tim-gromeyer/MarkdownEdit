@@ -74,7 +74,7 @@ private:
     Ui::MainWindow *ui;
 
     QString path;
-    qint32 _mode;
+    int _mode;
 
     QSettings *settings;
 
@@ -84,12 +84,12 @@ private:
     int originalMdLength;
     QString html;
 
-    bool dontUpdate = false;
-    bool setPath = true;
-    bool spelling = true;
-    bool highlighting = true;
-    bool maybeModified = false;
-    bool lastState = false;
+    bool dontUpdate;
+    bool setPath;
+    bool spelling;
+    bool highlighting;
+    bool maybeModified;
+    bool lastState;
 
     QtSpell::TextEditChecker *checker;
     Highliter *htmlHighliter;

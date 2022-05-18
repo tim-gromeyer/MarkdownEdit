@@ -27,6 +27,7 @@
 #include "3rdparty/qmarkdowntextedit/markdownhighlighter.h"
 #include "QtSpell.hpp"
 
+
 #if (defined(Q_OS_BLACKBERRY) || defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_WP))
 #error This application was developed for desktop only due to enchant
 #endif
@@ -148,7 +149,7 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     ui->Edit->addSeparator();
     ui->Edit->addWidget(widgetBox);
 
-    if (ui->editor->toPlainText().isEmpty()) {
+    if (ui->editor->toPlainText().isEmpty()  && file.isEmpty()) {
         QFile f(":/default.md", this);
         if (f.open(QFile::ReadOnly | QFile::Text)) {
             ui->editor->setPlainText(f.readAll());
@@ -379,8 +380,11 @@ void MainWindow::onTextChanged()
     maybeModified = true;
 
     const bool state = isModified();
+
     if (state != lastState)
         emit modificationChanged(state);
+
+    lastState = state;
 }
 
 void MainWindow::openFile(const QString &newFile)
@@ -486,7 +490,8 @@ void MainWindow::onFileOpen()
 void MainWindow::onFileSave()
 {
     if (!isModified())
-        return;
+        if (QFile::exists(path))
+            return;
 
     if (path.isEmpty()) {
         onFileSaveAs();
@@ -614,8 +619,8 @@ void MainWindow::updateOpened() {
 
     for (int i = 0; i < recentOpened.size(); i++) {
         const QString document(recentOpened.at(i));
-        const QString title("&" + QString::number(i + 1) + " | " + document);
-        QAction *action = new QAction(title, this);
+        QAction *action = new QAction(QStringLiteral("&%1 | %2").arg(QString::number(i + 1),
+                                                                     document), this);
         connect(action, &QAction::triggered, this, &MainWindow::openRecent);
 
         action->setData(document);
@@ -689,9 +694,10 @@ void MainWindow::loadSettings(const QString &f) {
 
     spelling = settings->value(QStringLiteral("spelling"), true).toBool();
     changeSpelling(spelling);
-    const QString spellLang(settings->value(QStringLiteral("spellLang"), QLatin1String()).toString());
+    const QString spellLang(settings->value(QStringLiteral("spellLang"),
+                                            QLatin1String()).toString());
     if (spellLang.isEmpty())
-        checker->setLanguage(QLocale::system().name());
+        checker->setLanguage(QLatin1String());
     else
         checker->setLanguage(spellLang);
 

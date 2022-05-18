@@ -13,13 +13,13 @@ int main(int argc, char *argv[])
 #error You must use Qt 5.10 or newer
 #endif
     QApplication a(argc, argv);
-    a.setApplicationDisplayName("MarkdownEdit");
+    a.setApplicationDisplayName(QStringLiteral("MarkdownEdit"));
     a.setApplicationVersion(APP_VERSION);
 
     QCommandLineParser parser;
     parser.addHelpOption();
     parser.addVersionOption();
-    parser.addPositionalArgument("File(s)", "The file(s) to open.");
+    parser.addPositionalArgument(QStringLiteral("File(s)"), QStringLiteral("The file(s) to open."));
     parser.process(a);
 
     QTranslator translator, qtTranslator;

@@ -68,10 +68,20 @@ jobs:
         git submodule update --init --recursive -j 4
 
       #
-      # Build MarkdownEdit
+      # Build MarkdownEdit using qmake
       #
-    - name: Build MarkdownEdit
+    - name: Build MarkdownEdit using qmake
       run: |
         mkdir build && cd build
         qmake ..
+        make
+        cd ..
+
+      #
+      # Build MarkdownEdit using qmake
+      #
+    - name: Build MarkdownEdit using CMake
+      run: |
+        mkdir build-cmake && cd build-cmake
+        cmake ..
         make
