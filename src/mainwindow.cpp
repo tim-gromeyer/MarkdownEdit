@@ -150,7 +150,7 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     ui->Edit->addWidget(widgetBox);
 
     if (ui->editor->toPlainText().isEmpty()  && file.isEmpty()) {
-        QFile f(":/default.md", this);
+        QFile f(QStringLiteral(":/default.md"), this);
         if (f.open(QFile::ReadOnly | QFile::Text)) {
             ui->editor->setPlainText(f.readAll());
             originalMd = ui->editor->toPlainText();
@@ -358,7 +358,7 @@ void MainWindow::exportHtml()
     QTextStream str(&f);
     str << html;
 
-    statusBar()->showMessage(tr("HTML exported to %1").arg(QDir::toNativeSeparators(file)), 60000);
+    statusBar()->showMessage(tr("HTML exported to %1").arg(QDir::toNativeSeparators(file)), 30000);
 }
 
 void MainWindow::changeMode(const QString &text)
@@ -389,10 +389,6 @@ void MainWindow::onTextChanged()
 
 void MainWindow::openFile(const QString &newFile)
 {
-    // Don't open the save file again
-    if (newFile == path)
-        return;
-
     QFile f(newFile);
 
     if (f.size() > 50000) {
@@ -416,11 +412,9 @@ void MainWindow::openFile(const QString &newFile)
 
     path = newFile;
 
-    // moved here, because the pictures used to be above the text
-    if (setPath) {
+    if (setPath)
         if (!ui->textBrowser->searchPaths().contains(QFileInfo(newFile).path()))
             ui->textBrowser->setSearchPaths(ui->textBrowser->searchPaths() << QFileInfo(newFile).path());
-    }
 
     checker->clearUndoRedo();
 
@@ -431,7 +425,7 @@ void MainWindow::openFile(const QString &newFile)
     maybeModified = false;
 
     setWindowFilePath(QFileInfo(path).fileName());
-    statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 60000);
+    statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 30000);
 
     checker->checkSpelling();
 
@@ -453,14 +447,14 @@ bool MainWindow::isModified() const
 void MainWindow::onFileNew()
 {
     if (isModified()) {
-        const int button = QMessageBox::question(this, windowTitle(),
+        const int button = QMessageBox::question(this, tr("Save changes?"),
                                            tr("You have unsaved changes. Do you want to create a new document anyway?"));
         if (button != QMessageBox::Yes)
             return;
     }
     checker->clearUndoRedo();
 
-    path = "";
+    path = QLatin1String();
     ui->editor->setPlainText(tr("## New document"));
     setWindowFilePath(QFileInfo(tr("untitled.md")).fileName());
     originalMd = ui->editor->toPlainText();
@@ -474,7 +468,7 @@ void MainWindow::onFileNew()
 void MainWindow::onFileOpen()
 {
     if (isModified()) {
-        int button = QMessageBox::question(this, "",
+        int button = QMessageBox::question(this, tr("Save changes?"),
                                            tr("You have unsaved changes. Do you want to open a new document anyway?"));
         if (button != QMessageBox::Yes)
             return;
@@ -483,8 +477,11 @@ void MainWindow::onFileOpen()
     QFileDialog dialog(this, tr("Open MarkDown File"));
     dialog.setMimeTypeFilters({"text/markdown"});
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
-    if (dialog.exec() == QDialog::Accepted)
-        openFile(dialog.selectedFiles().at(0));
+    if (dialog.exec() == QDialog::Accepted) {
+        const QString &file = dialog.selectedFiles().at(0);
+        if (file == path) return;
+        openFile(file);
+    }
 }
 
 void MainWindow::onFileSave()
@@ -501,27 +498,26 @@ void MainWindow::onFileSave()
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
     QSaveFile f(path, this);
-    if (!f.open(QIODevice::WriteOnly | QIODevice::Text))  {
+    if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QGuiApplication::restoreOverrideCursor();
-        QMessageBox::warning(this, windowTitle(),
+        QMessageBox::warning(this, tr("Warning"),
                              tr("Could not write to file %1: %2").arg(
                                  QDir::toNativeSeparators(path), f.errorString()));
         return;
     }
-
 
     QTextStream str(&f);
     str << ui->editor->toPlainText();
 
     if (!f.commit()) {
         QGuiApplication::restoreOverrideCursor();
-        QMessageBox::warning(this, windowTitle(),
+        QMessageBox::warning(this, tr("Warning"),
                              tr("Could not write to file %1: %2").arg(
                                  QDir::toNativeSeparators(path), f.errorString()));
         return;
     }
 
-    statusBar()->showMessage(tr("Wrote %1").arg(QDir::toNativeSeparators(path)), 60000);
+    statusBar()->showMessage(tr("Wrote %1").arg(QDir::toNativeSeparators(path)), 30000);
 
     updateOpened();
 
@@ -546,7 +542,7 @@ void MainWindow::onFileSaveAs()
 
     path = dialog.selectedFiles().at(0);
 
-    if (!path.endsWith(".md"))
+    if (!(path.endsWith(".md") || path.endsWith(".markdown")))
         path.append(".md");
 
     setWindowFilePath(QFileInfo(path).fileName());
@@ -572,8 +568,7 @@ void MainWindow::openRecent() {
     const QString filename = action->data().toString();
 
     // Don't open the save file again
-    if (filename == path)
-        return;
+    if (filename == path) return;
 
     if (!QFile::exists(filename)) {
         QMessageBox::warning(this, tr("Warning"),

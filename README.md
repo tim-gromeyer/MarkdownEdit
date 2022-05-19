@@ -7,23 +7,23 @@
 
 # MarkdownEdit
 
-MarkdownEdit, as the name suggests, is a simple and easy program to create and edit Markdown files.
+MarkdownEdit, as the name suggests, is a simple and easy program for creating and editing Markdown files.
 
 -------
 
 ## Features:
 
-- Spell checking
+- Spell checker
 - Save and load Markdown files
 - Undo-Redo
-- Preview markdown files in real time(~1 ms)
+- Preview Markdown files in real time (~1 ms)
 - Syntax highlighting editor
-- Auto complete(Close brackets, list, ...)
+- Auto-complete (close brackets, list, ...)
 - Find/Replace(Ctrl+F/Ctrl+R)
 - Export to HTML
-- Poor in resources
-- Quickly open recent files(Menu <u>F</u>ile->Menu Recently opened)
-- Open Source
+- Bad in resources
+- Quick opening of recent files (menu <u>F</u>ile->Recently opened menu)
+- Open source
 - Native look and feel
 
 ![Example](doc/images/Example.png)
@@ -32,22 +32,22 @@ MarkdownEdit, as the name suggests, is a simple and easy program to create and e
 [Qt](https://qt.io/) and [enchant-2](https://github.com/AbiWord/enchant).
 
 ## Note(s):
-- To improve the performance when using images, disable the "Auto add file path to icon path" option (Menu <u>V</u>iew).
-- When building via CMake, the translations **won't** work!
+- To improve performance when using images, disable the "Auto add file path to icon path" option (menu <u>V</u>iew).
+- When building with CMake, the translations will **not** work!
 
 
 -------
 
 ## Build instructions
-Execute the [build script](scripts/build.sh) or follow the instructions below.
+Run the [build script](scripts/build.sh) or follow the instructions below.
 
 - Clone MarkdownEdit: `git clone https://github.com/software-made-easy/MarkdownEdit && cd MarkdownEdit`
-- Clone all repositories needed by MarkdownEdit by running the command `git submodule update --init --recursive -j 3`.
-- Create the build folder: `mkdir build && cd build`
-- Now create a Makefile using CMake: `cmake ..` or qmake(recommended): `qmake ..`
-- Execute make: `make -j4`
+- Clone all repositories required by MarkdownEdit by running the command `git submodule update --init --recursive -j 3`.
+- Create the build folder: `mkdir build && cd build`.
+- Now create a Makefile with CMake: `cmake ..` or qmake (recommended): `qmake ..`
+- Run make: `make -j4`
 
-To sum up:
+In summary:
 ```bash
 git clone https://github.com/software-made-easy/MarkdownEdit && cd MarkdownEdit
 git submodule update --init --recursive -j 3
@@ -58,6 +58,6 @@ make
 
 ## Credits
 
-- The conversion from Markdown to HTML is done with the help of the [md4c](https://github.com/mity/md4c) - library by *Martin Mit�*.
+- The conversion from Markdown to HTML is done with the help of the [md4c](https://github.com/mity/md4c) - library by *Martin Mitáš*.
 - The [widget](https://github.com/pbek/qmarkdowntextedit) used for writing was created by *Patrizio Bekerle*.
 - Spell checking is done with the [QtSpell](https://github.com/software-made-easy/QtSpell) library based on the [QtSpell](https://github.com/manisandro/qtspell) library by *Sandro Mani*.
