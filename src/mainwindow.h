@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QMap>
 
 
 QT_BEGIN_NAMESPACE
@@ -98,5 +99,7 @@ private:
 
     QToolButton *toolbutton;
     QComboBox *widgetBox;
+
+    QMap<QString, QString> languagesMap;
 };
 #endif // MAINWINDOW_H

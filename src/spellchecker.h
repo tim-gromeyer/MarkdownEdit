@@ -4,9 +4,12 @@
 #include <QSyntaxHighlighter>
 #include <QPlainTextEdit>
 
-#include <enchant++.h>
-
 #include "markdownhighlighter.h"
+
+
+QT_BEGIN_NAMESPACE
+namespace enchant { class Dict; };
+QT_END_NAMESPACE
 
 
 class SpellChecker : public MarkdownHighlighter
@@ -14,6 +17,7 @@ class SpellChecker : public MarkdownHighlighter
     Q_OBJECT
 public:
     explicit SpellChecker(QPlainTextEdit *parent = nullptr, const QString &lang = "");
+    ~SpellChecker();
 
     void highlightBlock(const QString &text) Q_DECL_OVERRIDE;
 
@@ -26,10 +30,12 @@ public:
     void addWort(const QString &);
     void ignoreWord(const QString &);
 
+    inline bool isMarkdownHighlightingEnabled() { return markdownhig; };
+    inline bool isSpellCheckingEnabled() { return spellingEnabled; };
 
 public slots:
-    inline void setMarkdownHighlightingEnabled(const bool &enabled) {markdownhig = enabled; };
-    inline void setSpellCheckingEnabled(const bool &enabled) {spellingEnabled = enabled; };
+    inline void setMarkdownHighlightingEnabled(const bool &enabled) {markdownhig = enabled;  rehighlight(); };
+    inline void setSpellCheckingEnabled(const bool &enabled) {spellingEnabled = enabled; rehighlight(); };
     bool setLanguage(const QString &);
 
     void checkSpelling(const QString &);
@@ -57,6 +63,8 @@ private:
     QString encodeLanguageString(const QString &langString);
 
     enchant::Dict *speller = nullptr;
+
+    QStringList markdownCharachters = {QStringLiteral("#"), QStringLiteral("##"), QStringLiteral("###"), QStringLiteral("####"), QStringLiteral("#####"), QStringLiteral("######"), QStringLiteral("*"), QStringLiteral("-")};
 };
 
 #endif // SPELLCHECKER_H

@@ -7,6 +7,10 @@
 #include <QRegularExpression>
 #include <QActionGroup>
 
+#include <enchant++.h>
+
+
+static const QRegularExpression expr("\\s+");
 
 static void dict_describe_cb(const char* const lang_tag,
                              const char* const /*provider_name*/,
@@ -27,6 +31,7 @@ SpellChecker::SpellChecker(QPlainTextEdit *parent, const QString &lang)
     : MarkdownHighlighter{parent->document()},
     textEdit(parent)
 {
+    spellFormat.setFontUnderline(true);
     spellFormat.setUnderlineStyle(QTextCharFormat::SpellCheckUnderline);
     spellFormat.setUnderlineColor(Qt::red);
 
@@ -48,15 +53,23 @@ void SpellChecker::highlightBlock(const QString &text)
 
 void SpellChecker::checkSpelling(const QString &text)
 {
-    const QStringList wordList = text.split(QRegularExpression("\\W+"), Qt::SkipEmptyParts);
+#if QT_VERSION > QT_VERSION_CHECK(5, 14, 0)
+    const QStringList wordList = text.split(expr, Qt::SkipEmptyParts);
+#else
+    const QStringList wordList = text.split(expr, QString::SkipEmptyParts);
+#endif
+    qDebug() << wordList;
     int index = 0;
+
     for (const QString &word : wordList) {
         index = text.indexOf(word, index);
 
         if (!isCorrect(word)) {
+            qDebug() << "Wasnt correct:" << word;
             QTextCharFormat fmt = QSyntaxHighlighter::format(index + 1);
             fmt.merge(spellFormat);
             setFormat(index, word.length(), fmt);
+            qDebug() << index << word.length();
         }
         index += word.length();
     }
@@ -65,10 +78,13 @@ void SpellChecker::checkSpelling(const QString &text)
 bool SpellChecker::isCorrect(const QString &word) {
     if (!speller || !spellingEnabled) return true;
 
+    if (markdownCharachters.contains(word) || word.length() < 2) return true;
+
     try {
         return speller->check(word.toUtf8().data());
     }
-    catch (const enchant::Exception&){
+    catch (const enchant::Exception &e){
+        qDebug() << e.what();
         return true;
     }
 }
@@ -82,8 +98,8 @@ bool SpellChecker::setLanguage(const QString &lang)
     // Determine language from system locale
     if(lang.isEmpty()) {
         language = QLocale::system().name();
-        if(lang.toLower() == "c" || lang.isEmpty()) {
-            qWarning() << "Cannot use system locale " << lang;
+        if(language.toLower() == "c" || language.isEmpty()) {
+            qWarning() << "Cannot use system locale " << language;
             language = QLatin1String();
             return false;
         }
@@ -91,7 +107,7 @@ bool SpellChecker::setLanguage(const QString &lang)
 
     // Request dictionary
     try {
-        speller = get_enchant_broker()->request_dict(lang.toStdString());
+        speller = get_enchant_broker()->request_dict(language.toStdString());
     } catch(enchant::Exception& e) {
         qWarning() << "Failed to load dictionary: " << e.what();
         language = QLatin1String();
@@ -99,6 +115,8 @@ bool SpellChecker::setLanguage(const QString &lang)
     }
 
     return true;
+
+    rehighlight();
 }
 
 void SpellChecker::addWort(const QString &word)
@@ -135,10 +153,13 @@ void SpellChecker::showContextMenu(QMenu* menu, const QPoint& pos, int wordPos)
 {
     QAction* insertPos = menu->actions().at(0);
     if(speller && spellingEnabled){
-        textEdit->textCursor().select(QTextCursor::WordUnderCursor);
-        const QString word = textEdit->textCursor().selectedText();
+        QTextCursor c = textEdit->textCursor();
+        c.select(QTextCursor::WordUnderCursor);
+        const QString word = c.selectedText();
+        qDebug() << "Word: " << word.toStdString().c_str();
 
         if(!isCorrect(word)) {
+            qDebug() << "Wasnt correct:" << word;
             QStringList suggestions = getSuggestion(word);
             if(!suggestions.isEmpty()){
                 for(int i = 0, n = qMin(10, suggestions.length()); i < n; ++i) {
@@ -267,4 +288,9 @@ void SpellChecker::slotShowContextMenu(const QPoint &pos)
     QMenu* menu = textEdit->createStandardContextMenu();
     int wordPos = textEdit->cursorForPosition(pos).position();
     showContextMenu(menu, globalPos, wordPos);
+}
+
+SpellChecker::~SpellChecker()
+{
+    delete speller;
 }

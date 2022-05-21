@@ -233,7 +233,7 @@ void MainWindow::pausePreview(const bool &checked)
 void MainWindow::undo()
 {
     dontUpdate = true;
-    // checker->undo();
+    ui->editor->undo();
     ui->textBrowser->undo();
     dontUpdate = false;
     ui->raw->undo();
@@ -242,7 +242,7 @@ void MainWindow::undo()
 void MainWindow::redo()
 {
     dontUpdate = true;
-    // checker->redo();
+    ui->editor->redo();
     ui->textBrowser->redo();
     dontUpdate = false;
     ui->raw->redo();
@@ -424,8 +424,6 @@ void MainWindow::openFile(const QString &newFile)
         if (!ui->textBrowser->searchPaths().contains(QFileInfo(newFile).path()))
             ui->textBrowser->setSearchPaths(ui->textBrowser->searchPaths() << QFileInfo(newFile).path());
 
-    // checker->clearUndoRedo();
-
     ui->editor->setPlainText(f.readAll());
     originalMd = ui->editor->toPlainText();
     originalMdLength = originalMd.length();
@@ -436,7 +434,6 @@ void MainWindow::openFile(const QString &newFile)
     statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 30000);
 
     checker->rehighlight();
-    // checker->checkSpelling();
 
     updateOpened();
 
@@ -461,7 +458,6 @@ void MainWindow::onFileNew()
         if (button != QMessageBox::Yes)
             return;
     }
-    // checker->clearUndoRedo();
 
     path = QLatin1String();
     ui->editor->setPlainText(tr("## New document"));
@@ -711,7 +707,7 @@ void MainWindow::saveSettings() {
     settings->setValue("openLast", ui->actionOpen_last_document_on_start->isChecked());
     settings->setValue("last", path);
     settings->setValue("setPath", setPath);
-    // settings->setValue("spelling", checker->getSpellingEnabled());
+    settings->setValue("spelling", checker->isSpellCheckingEnabled());
     settings->setValue("spellLang", checker->getLanguage());
     settings->setValue("lineWrap", ui->actionWord_wrap->isChecked());
     settings->sync();
