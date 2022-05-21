@@ -3,6 +3,7 @@
 #include "about.h"
 #include "parser.h"
 #include "highlighter.h"
+#include "spellchecker.h"
 
 #include <QMessageBox>
 #include <QFileDialog>
@@ -24,8 +25,8 @@
 #endif
 
 #include "3rdparty/qmarkdowntextedit/qplaintexteditsearchwidget.h"
-#include "3rdparty/qmarkdowntextedit/markdownhighlighter.h"
-#include "QtSpell.hpp"
+// #include "3rdparty/qmarkdowntextedit/markdownhighlighter.h"
+// #include "QtSpell.hpp"
 
 
 #if (defined(Q_OS_BLACKBERRY) || defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_WP))
@@ -60,11 +61,16 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     widgetBox->addItems({tr("Preview"), tr("HTML")});
     widgetBox->setCurrentIndex(0);
 
+    ui->editor->setHighlightingEnabled(false);
+
+    /*
     checker = new QtSpell::TextEditChecker(this);
     checker->setTextEdit(ui->editor);
     checker->setDecodeLanguageCodes(true);
     checker->setShowCheckSpellingCheckbox(false);
     checker->setUndoRedoEnabled(true);
+    */
+    checker = new SpellChecker(ui->editor, spellLang);
 
     htmlHighliter = new Highliter(ui->raw->document());
 
@@ -107,10 +113,12 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
             ui->actionSave, &QAction::setEnabled);
     connect(this, &MainWindow::modificationChanged,
             this, &QMainWindow::setWindowModified);
+    /*
     connect(checker, &QtSpell::TextEditChecker::undoAvailable,
             ui->actionUndo, &QAction::setEnabled);
     connect(checker, &QtSpell::TextEditChecker::redoAvailable,
             ui->actionRedo, &QAction::setEnabled);
+    */
     connect(ui->actionUndo, &QAction::triggered,
             this, &MainWindow::undo);
     connect(ui->actionRedo, &QAction::triggered,
@@ -155,7 +163,7 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
             ui->editor->setPlainText(f.readAll());
             originalMd = ui->editor->toPlainText();
             originalMdLength = originalMd.length();
-            checker->checkSpelling();
+            checker->rehighlight();
             setWindowFilePath(f.fileName());
             setWindowModified(false);
         }
@@ -198,7 +206,7 @@ void MainWindow::changeWordWrap(const bool &c)
 
 void MainWindow::changeSpelling(const bool &checked)
 {
-    checker->setSpellingEnabled(checked);
+    checker->setSpellCheckingEnabled(checked);
 
     ui->actionSpell_checking->setChecked(checked);
     spelling = checked;
@@ -225,7 +233,7 @@ void MainWindow::pausePreview(const bool &checked)
 void MainWindow::undo()
 {
     dontUpdate = true;
-    checker->undo();
+    // checker->undo();
     ui->textBrowser->undo();
     dontUpdate = false;
     ui->raw->undo();
@@ -234,7 +242,7 @@ void MainWindow::undo()
 void MainWindow::redo()
 {
     dontUpdate = true;
-    checker->redo();
+    // checker->redo();
     ui->textBrowser->redo();
     dontUpdate = false;
     ui->raw->redo();
@@ -416,7 +424,7 @@ void MainWindow::openFile(const QString &newFile)
         if (!ui->textBrowser->searchPaths().contains(QFileInfo(newFile).path()))
             ui->textBrowser->setSearchPaths(ui->textBrowser->searchPaths() << QFileInfo(newFile).path());
 
-    checker->clearUndoRedo();
+    // checker->clearUndoRedo();
 
     ui->editor->setPlainText(f.readAll());
     originalMd = ui->editor->toPlainText();
@@ -427,7 +435,8 @@ void MainWindow::openFile(const QString &newFile)
     setWindowFilePath(QFileInfo(path).fileName());
     statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 30000);
 
-    checker->checkSpelling();
+    checker->rehighlight();
+    // checker->checkSpelling();
 
     updateOpened();
 
@@ -452,7 +461,7 @@ void MainWindow::onFileNew()
         if (button != QMessageBox::Yes)
             return;
     }
-    checker->clearUndoRedo();
+    // checker->clearUndoRedo();
 
     path = QLatin1String();
     ui->editor->setPlainText(tr("## New document"));
@@ -586,12 +595,7 @@ void MainWindow::openRecent() {
             return;
     }
 
-    const int index = recentOpened.indexOf(filename);
-    if (index == -1)
-        recentOpened.removeAll(filename);
-
-    else
-        recentOpened.move(index, 0);
+    recentOpened.move(recentOpened.indexOf(filename), 0);
 
     openFile(filename);
     updateOpened();
@@ -689,8 +693,8 @@ void MainWindow::loadSettings(const QString &f) {
 
     spelling = settings->value(QStringLiteral("spelling"), true).toBool();
     changeSpelling(spelling);
-    const QString spellLang(settings->value(QStringLiteral("spellLang"),
-                                            QLatin1String()).toString());
+    spellLang = settings->value(QStringLiteral("spellLang"),
+                                               QLatin1String()).toString();
     if (spellLang.isEmpty())
         checker->setLanguage(QLatin1String());
     else
@@ -707,7 +711,7 @@ void MainWindow::saveSettings() {
     settings->setValue("openLast", ui->actionOpen_last_document_on_start->isChecked());
     settings->setValue("last", path);
     settings->setValue("setPath", setPath);
-    settings->setValue("spelling", checker->getSpellingEnabled());
+    // settings->setValue("spelling", checker->getSpellingEnabled());
     settings->setValue("spellLang", checker->getLanguage());
     settings->setValue("lineWrap", ui->actionWord_wrap->isChecked());
     settings->sync();

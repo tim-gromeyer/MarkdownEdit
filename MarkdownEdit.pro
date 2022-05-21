@@ -16,13 +16,15 @@ SOURCES += \
     src/mainwindow.cpp \
     src/about.cpp \
     src/parser.cpp \
-    src/highlighter.cpp
+    src/highlighter.cpp \
+    src/spellchecker.cpp
 
 HEADERS += \
     src/mainwindow.h \
     src/about.h \
     src/parser.h \
-    src/highlighter.h
+    src/highlighter.h \
+    src/spellchecker.h
 
 FORMS += \
     ui/mainwindow.ui
@@ -31,12 +33,15 @@ TRANSLATIONS += \
     translations/MarkdownEdit_de.ts
 
 include(3rdparty/qmarkdowntextedit/qmarkdowntextedit.pri)
-include(3rdparty//QtSpell/qtspell.pri)
+# include(../QtSpell/qtspell.pri)
 include(3rdparty/md4c.pri)
 
 CONFIG += lrelease
 CONFIG += embed_translations
 CONFIG -= qtquickcompiler
+
+CONFIG += link_pkgconfig
+PKGCONFIG += enchant-2
 
 VERSION = 1.2.0
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"

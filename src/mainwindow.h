@@ -11,6 +11,7 @@ class QSettings;
 class QTimer;
 class QToolButton;
 namespace QtSpell { class TextEditChecker; }
+class SpellChecker;
 namespace QSourceHighlite { class QSourceHighliter; }
 class Highliter;
 class QPushButton;
@@ -83,6 +84,7 @@ private:
     QString originalMd;
     int originalMdLength;
     QString html;
+    QString spellLang;
 
     bool dontUpdate;
     bool setPath;
@@ -91,7 +93,7 @@ private:
     bool maybeModified;
     bool lastState;
 
-    QtSpell::TextEditChecker *checker;
+    SpellChecker *checker;
     Highliter *htmlHighliter;
 
     QToolButton *toolbutton;
