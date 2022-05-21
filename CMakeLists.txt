@@ -41,72 +41,6 @@ set(3RDPARTY_FILES
         3rdparty/qmarkdowntextedit/qplaintexteditsearchwidget.ui
         3rdparty/qmarkdowntextedit/qplaintexteditsearchwidget.cpp
         3rdparty/qmarkdowntextedit/media.qrc
-        3rdparty/QtSpell/src/Checker.cpp
-        3rdparty/QtSpell/src/QtSpell.hpp
-        3rdparty/QtSpell/src/Checker_p.hpp
-        3rdparty/QtSpell/src/TextEditChecker.cpp
-        3rdparty/QtSpell/src/TextEditChecker_p.hpp
-        3rdparty/QtSpell/src/UndoRedoStack.cpp
-        3rdparty/QtSpell/src/QtSpellExport.hpp
-        3rdparty/QtSpell/src/UndoRedoStack.hpp
-)
-set(QTSPELL_TS
-        3rdparty/QtSpell/locale/QtSpell_af.ts
-        3rdparty/QtSpell/locale/QtSpell_lv.ts
-        3rdparty/QtSpell/locale/QtSpell_ak.ts
-        3rdparty/QtSpell/locale/QtSpell_mn.ts
-        3rdparty/QtSpell/locale/QtSpell_be.ts
-        3rdparty/QtSpell/locale/QtSpell_ms.ts
-        3rdparty/QtSpell/locale/QtSpell_ca.ts
-        3rdparty/QtSpell/locale/QtSpell_nb.ts
-        3rdparty/QtSpell/locale/QtSpell_cs.ts
-        3rdparty/QtSpell/locale/QtSpell_nl.ts
-        3rdparty/QtSpell/locale/QtSpell_da.ts
-        3rdparty/QtSpell/locale/QtSpell_nso.ts
-        3rdparty/QtSpell/locale/QtSpell_de.ts
-        3rdparty/QtSpell/locale/QtSpell_pl.ts
-        3rdparty/QtSpell/locale/QtSpell_el.ts
-        3rdparty/QtSpell/locale/QtSpell_pt_BR.ts
-        3rdparty/QtSpell/locale/QtSpell_eo.ts
-        3rdparty/QtSpell/locale/QtSpell_pt.ts
-        3rdparty/QtSpell/locale/QtSpell_es_ES.ts
-        3rdparty/QtSpell/locale/QtSpell_rm.ts
-        3rdparty/QtSpell/locale/QtSpell_es.ts
-        3rdparty/QtSpell/locale/QtSpell_ro.ts
-        3rdparty/QtSpell/locale/QtSpell_eu.ts
-        3rdparty/QtSpell/locale/QtSpell_ru.ts
-        3rdparty/QtSpell/locale/QtSpell_ff.ts
-        3rdparty/QtSpell/locale/QtSpell_rw.ts
-        3rdparty/QtSpell/locale/QtSpell_fi.ts
-        3rdparty/QtSpell/locale/QtSpell_sk.ts
-        3rdparty/QtSpell/locale/QtSpell_fo.ts
-        3rdparty/QtSpell/locale/QtSpell_sl.ts
-        3rdparty/QtSpell/locale/QtSpell_fr.ts
-        3rdparty/QtSpell/locale/QtSpell_sq.ts
-        3rdparty/QtSpell/locale/QtSpell_ga.ts
-        3rdparty/QtSpell/locale/QtSpell_sr.ts
-        3rdparty/QtSpell/locale/QtSpell_gl.ts
-        3rdparty/QtSpell/locale/QtSpell_st.ts
-        3rdparty/QtSpell/locale/QtSpell_he.ts
-        3rdparty/QtSpell/locale/QtSpell_sv.ts
-        3rdparty/QtSpell/locale/QtSpell_hr.ts
-        3rdparty/QtSpell/locale/QtSpell_th.ts
-        3rdparty/QtSpell/locale/QtSpell_hu.ts
-        3rdparty/QtSpell/locale/QtSpell_tr.ts
-        3rdparty/QtSpell/locale/QtSpell_hy.ts
-        3rdparty/QtSpell/locale/QtSpell_uk.ts
-        3rdparty/QtSpell/locale/QtSpell_id.ts
-        3rdparty/QtSpell/locale/QtSpell_vi.ts
-        3rdparty/QtSpell/locale/QtSpell_is.ts
-        3rdparty/QtSpell/locale/QtSpell_zh_CN.ts
-        3rdparty/QtSpell/locale/QtSpell_it.ts
-        3rdparty/QtSpell/locale/QtSpell_zh_HK.ts
-        3rdparty/QtSpell/locale/QtSpell_ja.ts
-        3rdparty/QtSpell/locale/QtSpell_zh_TW.ts
-        3rdparty/QtSpell/locale/QtSpell_ky.ts
-        3rdparty/QtSpell/locale/QtSpell_zu.ts
-        3rdparty/QtSpell/locale/QtSpell_lg.ts
-        3rdparty/QtSpell/locale/QtSpell_lt.ts
 )
 
 set(PROJECT_SOURCES
@@ -119,6 +53,8 @@ set(PROJECT_SOURCES
         src/parser.h
         src/highlighter.cpp
         src/highlighter.h
+        src/spellchecker.cpp
+        src/spellchecker.h
         ui/mainwindow.ui
         ${3RDPARTY_FILES}
         ${RC_FILES}
@@ -126,7 +62,6 @@ set(PROJECT_SOURCES
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR}/translations ${TS_FILES})
-    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR}/3rdparty/QtSpell/locale ${QTSPELL_TS})
 
     qt_add_executable(MarkdownEdit
         MANUAL_FINALIZATION
@@ -135,7 +70,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     )
 else()
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR}/translations ${TS_FILES})
-    qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR}/3rdparty/QtSpell/locale ${QTSPELL_TS})
 
     if(ANDROID)
         add_library(MarkdownEdit SHARED
