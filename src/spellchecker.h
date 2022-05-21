@@ -34,8 +34,8 @@ public:
     inline bool isSpellCheckingEnabled() { return spellingEnabled; };
 
 public slots:
-    inline void setMarkdownHighlightingEnabled(const bool &enabled) {markdownhig = enabled;  rehighlight(); };
-    inline void setSpellCheckingEnabled(const bool &enabled) {spellingEnabled = enabled; rehighlight(); };
+    void setMarkdownHighlightingEnabled(const bool &enabled);
+    void setSpellCheckingEnabled(const bool &enabled);
     bool setLanguage(const QString &);
 
     void checkSpelling(const QString &);
@@ -56,7 +56,7 @@ private:
     QTextCharFormat spellFormat;
 
     QString language;
-    void replaceWord(const int &wordPos, const QString &newWord);
+    void replaceWord(const int &wordPos, const QString &word, const QString &newWord);
 
     QPlainTextEdit *textEdit;
 
@@ -64,7 +64,7 @@ private:
 
     enchant::Dict *speller = nullptr;
 
-    QStringList markdownCharachters = {QStringLiteral("#"), QStringLiteral("##"), QStringLiteral("###"), QStringLiteral("####"), QStringLiteral("#####"), QStringLiteral("######"), QStringLiteral("*"), QStringLiteral("-")};
+    QStringList markdownCharachters = {QStringLiteral("##"), QStringLiteral("###"), QStringLiteral("####"), QStringLiteral("#####"), QStringLiteral("######")};
 };
 
 #endif // SPELLCHECKER_H

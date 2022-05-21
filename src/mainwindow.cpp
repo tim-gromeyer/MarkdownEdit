@@ -303,7 +303,7 @@ void MainWindow::changeAddtoIconPath(const bool &c)
 void MainWindow::changeHighlighting(const bool &enabled)
 {
     dontUpdate = true;
-    ui->editor->setHighlightingEnabled(enabled);
+    checker->setMarkdownHighlightingEnabled(enabled);
     if (enabled)
         htmlHighliter->setDocument(ui->raw->document());
     else
@@ -562,7 +562,6 @@ void MainWindow::onHelpAbout()
 
     dialog.addCredit(tr("<p>The conversion from Markdown to HTML is done with the help of the <a href=\"https://github.com/mity/md4c\">md4c</a> library by <em>Martin Mitáš</em>.</p>"));
     dialog.addCredit(tr("<p>The <a href=\"https://github.com/pbek/qmarkdowntextedit\">widget</a> used for writing was created by <em>Patrizio Bekerle</em>.</p>"));
-    dialog.addCredit(tr("<p>Spell checking is done with the <a href=\"https://github.com/software-made-easy/QtSpell\">QtSpell</a> library based on the <a href=\"https://github.com/manisandro/qtspell\">QtSpell</a> library by <em>Sandro Mani</em>.</p>"));
 
     dialog.exec();
 }

@@ -252,7 +252,7 @@
     </message>
     <message>
         <source>&lt;p&gt;Spell checking is done with the &lt;a href=&quot;https://github.com/software-made-easy/qtspell&quot;&gt;QtSpell&lt;/a&gt; library based on the &lt;a href=&quot;https://github.com/manisandro/qtspell&quot;&gt;QtSpell&lt;/a&gt; library by &lt;em&gt;Sandro Mani&lt;/em&gt;.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Die Rechtschreibprüfung erfolgt mit der &lt;a href=&quot;https://github.com/software-made-easy/qtspell&quot;&gt;QtSpell&lt;/a&gt;-Bibliothek basierend auf &lt;a href=&quot;https: //github.com/manisandro/qtspell&quot;&gt;QtSpell&lt;/a&gt;-Bibliothek von &lt;em&gt;Sandro Mani&lt;/em&gt;.&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;Die Rechtschreibprüfung erfolgt mit der &lt;a href=&quot;https://github.com/software-made-easy/qtspell&quot;&gt;QtSpell&lt;/a&gt;-Bibliothek basierend auf &lt;a href=&quot;https: //github.com/manisandro/qtspell&quot;&gt;QtSpell&lt;/a&gt;-Bibliothek von &lt;em&gt;Sandro Mani&lt;/em&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>This file could not be found:
@@ -378,6 +378,10 @@
         <source>Save changes?</source>
         <translation>Änderungen speichern?</translation>
     </message>
+    <message>
+        <source>&lt;p&gt;Spell checking is done with the &lt;a href=&quot;https://github.com/software-made-easy/QtSpell&quot;&gt;QtSpell&lt;/a&gt; library based on the &lt;a href=&quot;https://github.com/manisandro/qtspell&quot;&gt;QtSpell&lt;/a&gt; library by &lt;em&gt;Sandro Mani&lt;/em&gt;.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QApplication</name>
@@ -461,23 +465,7 @@
     <name>QtSpell::Checker</name>
     <message>
         <source>Check spelling</source>
-        <translation type="unfinished">Rechtschreibprüfung</translation>
-    </message>
-    <message>
-        <source>More...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add &quot;%1&quot; to dictionary</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ignore &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Languages</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Rechtschreibprüfung</translation>
     </message>
 </context>
 <context>
@@ -489,6 +477,25 @@
     <message>
         <source>Auto add file path to icon path</source>
         <translation type="vanished">Dateipfad automatisch zum Bilderpfad hinzufügen</translation>
+    </message>
+</context>
+<context>
+    <name>SpellChecker</name>
+    <message>
+        <source>More...</source>
+        <translation>Mehr...</translation>
+    </message>
+    <message>
+        <source>Add &quot;%1&quot; to dictionary</source>
+        <translation>„%1“ zum Wörterbuch hinzufügen</translation>
+    </message>
+    <message>
+        <source>Ignore &quot;%1&quot;</source>
+        <translation>„%1“ ignorieren</translation>
+    </message>
+    <message>
+        <source>Languages</source>
+        <translation type="unfinished">Sprachen</translation>
     </message>
 </context>
 </TS>
