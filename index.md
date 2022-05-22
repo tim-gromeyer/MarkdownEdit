@@ -7,26 +7,27 @@
 
 # MarkdownEdit
 
-MarkdownEdit, as the name suggests, is a simple and easy program to create and edit Markdown files.
+MarkdownEdit, as the name suggests, is a simple and easy program for creating and editing Markdown files.
 
 -------
 
-# Features:
+## Features:
 
-- Spell checking
+- Spell checker
 - Save and load Markdown files
 - Undo-Redo
-- Preview markdown files in real time(~1 ms)
+- Preview Markdown files in real time (~1 ms)
 - Syntax highlighting editor
-- Auto complete(Close brackets, list, ...)
+- Auto-complete (close brackets, list, ...)
 - Find/Replace(Ctrl+F/Ctrl+R)
 - Export to HTML
-- Poor in resources
-- Quickly open recent files
-- Open Source
+- Bad in resources
+- Quick opening of recent files (Button in toolbar or in the file menu)
+- Open source
 - Native look and feel
+- Remember spelling language for every document
 
-![Example](https://github.com/software-made-easy/MarkdownEdit/raw/main/doc/images/Example.png)
+![Example](doc/images/Example.png)
 
 # Download
 ## Linux:
