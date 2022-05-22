@@ -60,11 +60,9 @@ void SpellChecker::checkSpelling(const QString &text)
 #else
     const QStringList wordList = text.split(expr, QString::SkipEmptyParts);
 #endif
-    qDebug() << wordList;
     int index = 0;
 
     for (const QString &word : wordList) {
-        qDebug() << word << isCorrect(word);
         index = text.indexOf(word, index);
 
         if (!isCorrect(word)) {
@@ -154,7 +152,7 @@ QStringList SpellChecker::getSuggestion(const QString& word)
 
 void SpellChecker::showContextMenu(QMenu* menu, const QPoint& pos, int wordPos)
 {
-    QAction* insertPos = menu->actions().at(0);
+    QAction *insertPos = menu->actions().at(0);
     if(speller && spellingEnabled){
         QTextCursor c = textEdit->textCursor();
         c.setPosition(wordPos);
@@ -163,47 +161,41 @@ void SpellChecker::showContextMenu(QMenu* menu, const QPoint& pos, int wordPos)
 
         if(!isCorrect(word)) {
             QStringList suggestions = getSuggestion(word);
-            if(!suggestions.isEmpty()){
+            if(!suggestions.isEmpty()) {
                 for(int i = 0, n = qMin(10, suggestions.length()); i < n; ++i) {
                     QAction* action = new QAction(suggestions[i], menu);
                     action->setProperty("wordPos", wordPos);
-                    action->setProperty("word", word);
                     action->setProperty("suggestion", suggestions[i]);
                     connect(action, &QAction::triggered, this, &SpellChecker::slotReplaceWord);
                     menu->insertAction(insertPos, action);
                 }
                 if(suggestions.length() > 10) {
-                    QMenu* moreMenu = new QMenu(menu);
+                    QMenu* moreMenu = new QMenu(tr("More..."), menu);
                     for(int i = 10, n = suggestions.length(); i < n; ++i){
                         QAction* action = new QAction(suggestions[i], moreMenu);
                         action->setProperty("wordPos", wordPos);
-                        action->setProperty("word", word);
                         action->setProperty("suggestion", suggestions[i]);
                         connect(action, &QAction::triggered, this, &SpellChecker::slotReplaceWord);
                         moreMenu->addAction(action);
                     }
-                    QAction* action = new QAction(tr("More..."), menu);
-                    menu->insertAction(insertPos, action);
-                    action->setMenu(moreMenu);
+                    menu->insertMenu(insertPos, moreMenu);
                 }
                 menu->insertSeparator(insertPos);
             }
 
             QAction* addAction = new QAction(tr("Add \"%1\" to dictionary").arg(word), menu);
             addAction->setData(word);
-            addAction->setProperty("wordPos", wordPos);
             connect(addAction, &QAction::triggered, this, &SpellChecker::slotAddWord);
             menu->insertAction(insertPos, addAction);
 
             QAction* ignoreAction = new QAction(tr("Ignore \"%1\"").arg(word), menu);
             ignoreAction->setData(word);
-            ignoreAction->setProperty("wordPos", wordPos);
             connect(ignoreAction, &QAction::triggered, this, &SpellChecker::slotIgnoreWord);
             menu->insertAction(insertPos, ignoreAction);
             menu->insertSeparator(insertPos);
         }
 
-        QMenu* languagesMenu = new QMenu(tr("Languages"), menu);
+        QMenu *languagesMenu = new QMenu(tr("Languages"), menu);
         QActionGroup *actionGroup = new QActionGroup(languagesMenu);
         for (const QString &lang : getLanguageList()) {
             QAction* action = new QAction(encodeLanguageString(lang), languagesMenu);
@@ -220,6 +212,7 @@ void SpellChecker::showContextMenu(QMenu* menu, const QPoint& pos, int wordPos)
     }
 
     menu->exec(pos);
+    menu->deleteLater();
     delete menu;
 }
 
@@ -237,32 +230,30 @@ QString SpellChecker::encodeLanguageString(const QString &lang)
 void SpellChecker::slotAddWord()
 {
     QAction *a = qobject_cast<QAction*>(sender());
-    const QString word = a->data().toString();
-    addWort(word);
+    addWort(a->data().toString());
 }
 
 void SpellChecker::slotIgnoreWord()
 {
-    const QString word = qobject_cast<QAction*>(sender())->data().toString();
-    ignoreWord(word);
+    QAction *a = qobject_cast<QAction*>(sender());
+    ignoreWord(a->data().toString());
 }
 
 void SpellChecker::slotReplaceWord()
 {
     QAction* action = qobject_cast<QAction*>(sender());
     replaceWord(action->property("wordPos").toInt(),
-                action->property("word").toString(),
                 action->property("suggestion").toString());
 }
 
 void SpellChecker::slotSetLanguage(const bool &checked)
 {
     if(checked) {
-        QAction* action = qobject_cast<QAction*>(QObject::sender());
-        QString lang = action->data().toString();
-        if(!setLanguage(lang)){
+        QAction* action = qobject_cast<QAction*>(sender());
+        language = action->data().toString();
+        if(!setLanguage(language)){
             action->setChecked(false);
-            lang = QLatin1String();
+            language = QLatin1String();
         }
     }
 }
@@ -275,21 +266,20 @@ void SpellChecker::ignoreWord(const QString &word)
     checkSpelling(word);
 }
 
-void SpellChecker::replaceWord(const int &wordPos, const QString &word, const QString &newWord)
+void SpellChecker::replaceWord(const int &wordPos, const QString &newWord)
 {
     QTextCursor c = textEdit->textCursor();
+    c.clearSelection();
     c.setPosition(wordPos);
-    c.selectionStart();
-    c.setPosition(wordPos + word.length());
-    c.selectionEnd();
+    c.select(QTextCursor::WordUnderCursor);
     c.insertText(newWord);
 }
 
 void SpellChecker::slotShowContextMenu(const QPoint &pos)
 {
-    QPoint globalPos = textEdit->mapToGlobal(pos);
-    QMenu* menu = textEdit->createStandardContextMenu();
-    int wordPos = textEdit->cursorForPosition(pos).position();
+    const QPoint globalPos = textEdit->mapToGlobal(pos);
+    QMenu *menu = textEdit->createStandardContextMenu();
+    const int wordPos = textEdit->cursorForPosition(pos).position();
     showContextMenu(menu, globalPos, wordPos);
 }
 
@@ -298,7 +288,6 @@ void SpellChecker::setMarkdownHighlightingEnabled(const bool &enabled)
     markdownhig = enabled;
 
     rehighlight();
-    //highlightBlock(textEdit->toPlainText());
 }
 
 void SpellChecker::setSpellCheckingEnabled(const bool &enabled)

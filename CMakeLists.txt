@@ -91,7 +91,6 @@ ENDIF(WIN32)
 include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_SOURCE_DIR}/3rdparty/qmarkdowntextedit)
 include_directories(${CMAKE_SOURCE_DIR}/3rdparty/md4c/src)
-include_directories(${CMAKE_SOURCE_DIR}/3rdparty/QtSpell/src)
 target_link_libraries(MarkdownEdit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport ${ENCHANT_LDFLAGS} ${INTL_LDFLAGS})
 
 set_target_properties(MarkdownEdit PROPERTIES

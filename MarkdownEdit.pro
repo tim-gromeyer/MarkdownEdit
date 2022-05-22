@@ -45,13 +45,22 @@ PKGCONFIG += enchant-2
 VERSION = 1.2.0
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
+
+TARGET = markdownedit
+
 # Only show qDebug() messages in debug mode
 CONFIG(release, debug | release): DEFINES += QT_NO_DEBUG_OUTPUT
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
+else: unix:!android: target.path = /usr/bin
 !isEmpty(target.path): INSTALLS += target
+
+unix:!android {
+desktop.path = /usr/share/applications
+desktop.files = packaging/MarkdownEdit/usr/share/applications/MarkdownEdit.desktop
+INSTALLS += desktop
+}
 
 RESOURCES += \
     ressources/ressources.qrc
@@ -67,7 +76,8 @@ DISTFILES += \
     android/res/values/libs.xml \
     CMakeLists.txt \
     scripts/build.sh \
-    README.md
+    README.md \
+    packaging/build.sh
 
 contains(ANDROID_TARGET_ARCH,arm64-v8a) {
     ANDROID_PACKAGE_SOURCE_DIR = \

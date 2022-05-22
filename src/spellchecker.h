@@ -56,7 +56,7 @@ private:
     QTextCharFormat spellFormat;
 
     QString language;
-    void replaceWord(const int &wordPos, const QString &word, const QString &newWord);
+    void replaceWord(const int &wordPos, const QString &newWord);
 
     QPlainTextEdit *textEdit;
 
