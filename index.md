@@ -27,7 +27,7 @@ MarkdownEdit, as the name suggests, is a simple and easy program for creating an
 - Native look and feel
 - Remember spelling language for every document
 
-![Example](doc/images/Example.png)
+![Example](https://github.com/software-made-easy/MarkdownEdit/raw/main/doc/images/Example.png)
 
 # Download
 ## Linux:
