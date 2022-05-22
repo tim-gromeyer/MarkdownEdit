@@ -22,7 +22,7 @@ MarkdownEdit, as the name suggests, is a simple and easy program for creating an
 - Find/Replace(Ctrl+F/Ctrl+R)
 - Export to HTML
 - Bad in resources
-- Quick opening of recent files (menu <u>F</u>ile->Recently opened menu)
+- Quick opening of recent files (Button in toolbar or in the file menu)
 - Open source
 - Native look and feel
 

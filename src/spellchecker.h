@@ -16,7 +16,7 @@ class SpellChecker : public MarkdownHighlighter
 {
     Q_OBJECT
 public:
-    explicit SpellChecker(QPlainTextEdit *parent = nullptr, const QString &lang = "");
+    explicit SpellChecker(QPlainTextEdit *parent, const QString &lang = QLatin1String());
     ~SpellChecker();
 
     void highlightBlock(const QString &text) Q_DECL_OVERRIDE;
@@ -39,6 +39,9 @@ public slots:
     bool setLanguage(const QString &);
 
     void checkSpelling(const QString &);
+
+signals:
+    void languageChanged(const QString &lang = QLatin1String());
 
 private slots:
     void slotAddWord();
@@ -65,6 +68,7 @@ private:
     enchant::Dict *speller = nullptr;
 
     QStringList markdownCharachters = {QStringLiteral("##"), QStringLiteral("###"), QStringLiteral("####"), QStringLiteral("#####"), QStringLiteral("######")};
+
 };
 
 #endif // SPELLCHECKER_H

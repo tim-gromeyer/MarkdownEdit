@@ -18,7 +18,7 @@ static void dict_describe_cb(const char* const lang_tag,
                              const char* const /*provider_file*/,
                              void* user_data)
 {
-    QStringList* languages = static_cast<QStringList*>(user_data);
+    QStringList *languages = static_cast<QStringList*>(user_data);
     languages->append(lang_tag);
 }
 
@@ -83,7 +83,7 @@ bool SpellChecker::isCorrect(const QString &word) {
         return speller->check(word.toUtf8().data());
     }
     catch (const enchant::Exception &e){
-        qDebug() << e.what();
+        qWarning() << e.what();
         return true;
     }
 }
@@ -107,6 +107,7 @@ bool SpellChecker::setLanguage(const QString &lang)
     // Request dictionary
     try {
         speller = get_enchant_broker()->request_dict(language.toStdString());
+        emit languageChanged(lang);
     } catch(enchant::Exception& e) {
         qWarning() << "Failed to load dictionary: " << e.what();
         language = QLatin1String();
@@ -130,7 +131,7 @@ void SpellChecker::addWort(const QString &word)
 
 const QStringList SpellChecker::getLanguageList()
 {
-    enchant::Broker * broker = get_enchant_broker();
+    enchant::Broker *broker = get_enchant_broker();
     QStringList languages;
     broker->list_dicts(dict_describe_cb, &languages);
     std::sort(languages.begin(), languages.end());
@@ -143,8 +144,8 @@ QStringList SpellChecker::getSuggestion(const QString& word)
     if(speller){
         std::vector<std::string> suggestions;
         speller->suggest(word.toUtf8().data(), suggestions);
-        for(std::size_t i = 0, n = suggestions.size(); i < n; ++i){
-            list.append(QString::fromUtf8(suggestions[i].c_str()));
+        for(std::string &suggestion : suggestions){
+            list.append(QString::fromStdString(suggestion));
         }
     }
     return list;
@@ -294,8 +295,15 @@ void SpellChecker::setSpellCheckingEnabled(const bool &enabled)
 {
     spellingEnabled = enabled;
 
-    checkSpelling(textEdit->toPlainText());
+    rehighlight();
+
+    if (enabled)
+        return;
+
+    setDocument(Q_NULLPTR);
+    setDocument(textEdit->document());
 }
+
 
 SpellChecker::~SpellChecker()
 {

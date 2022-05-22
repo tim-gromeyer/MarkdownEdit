@@ -32,10 +32,6 @@ public:
 protected:
     void closeEvent(QCloseEvent *e) override;
 
-signals:
-    void modificationChanged(bool);
-    void setText(const QString &text, const int i);;
-
 private slots:
     void onFileNew();
     void onFileOpen();
@@ -66,12 +62,12 @@ private slots:
     void paste();
 
 private:
-    bool isModified() const;
     void loadSettings(const QString &);
     void saveSettings();
     void updateOpened();
     void openRecent();
     void onSetText(const int &);
+    void onLanguageChanged(const QString &);
 
     Ui::MainWindow *ui;
 
@@ -82,8 +78,6 @@ private:
 
     QStringList recentOpened;
 
-    QString originalMd;
-    int originalMdLength;
     QString html;
     QString spellLang;
 
@@ -91,8 +85,6 @@ private:
     bool setPath;
     bool spelling;
     bool highlighting;
-    bool maybeModified;
-    bool lastState;
 
     SpellChecker *checker;
     Highliter *htmlHighliter;
@@ -100,6 +92,6 @@ private:
     QToolButton *toolbutton;
     QComboBox *widgetBox;
 
-    QMap<QString, QString> languagesMap;
+    QMap<QString, QVariant> languagesMap;
 };
 #endif // MAINWINDOW_H

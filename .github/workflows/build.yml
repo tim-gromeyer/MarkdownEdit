@@ -56,7 +56,7 @@ jobs:
         tar -xf enchant-2.3.3.tar.gz
         cd enchant-2.3.3/
         ./configure
-        make
+        make -j4
         sudo make install
         cd ..
 
@@ -74,7 +74,7 @@ jobs:
       run: |
         mkdir build && cd build
         qmake ..
-        make
+        make -j4
         cd ..
 
       #
@@ -84,4 +84,5 @@ jobs:
       run: |
         mkdir build-cmake && cd build-cmake
         cmake ..
-        make
+        make -j4
+        cd ..

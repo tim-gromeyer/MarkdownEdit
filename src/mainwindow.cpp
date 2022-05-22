@@ -25,8 +25,6 @@
 #endif
 
 #include "3rdparty/qmarkdowntextedit/qplaintexteditsearchwidget.h"
-// #include "3rdparty/qmarkdowntextedit/markdownhighlighter.h"
-// #include "QtSpell.hpp"
 
 
 #if (defined(Q_OS_BLACKBERRY) || defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_WP))
@@ -63,13 +61,6 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
 
     ui->editor->setHighlightingEnabled(false);
 
-    /*
-    checker = new QtSpell::TextEditChecker(this);
-    checker->setTextEdit(ui->editor);
-    checker->setDecodeLanguageCodes(true);
-    checker->setShowCheckSpellingCheckbox(false);
-    checker->setUndoRedoEnabled(true);
-    */
     checker = new SpellChecker(ui->editor, spellLang);
 
     htmlHighliter = new Highliter(ui->raw->document());
@@ -109,16 +100,14 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
             this, &MainWindow::changeHighlighting);
     connect(ui->actionAuto_add_file_path_to_icon_path, &QAction::triggered,
             this, &MainWindow::changeAddtoIconPath);
-    connect(this, &MainWindow::modificationChanged,
+    connect(ui->editor->document(), &QTextDocument::modificationChanged,
             ui->actionSave, &QAction::setEnabled);
-    connect(this, &MainWindow::modificationChanged,
+    connect(ui->editor->document(), &QTextDocument::modificationChanged,
             this, &QMainWindow::setWindowModified);
-    /*
-    connect(checker, &QtSpell::TextEditChecker::undoAvailable,
+    connect(ui->editor->document(), &QTextDocument::undoAvailable,
             ui->actionUndo, &QAction::setEnabled);
-    connect(checker, &QtSpell::TextEditChecker::redoAvailable,
+    connect(ui->editor->document(), &QTextDocument::redoAvailable,
             ui->actionRedo, &QAction::setEnabled);
-    */
     connect(ui->actionUndo, &QAction::triggered,
             this, &MainWindow::undo);
     connect(ui->actionRedo, &QAction::triggered,
@@ -133,6 +122,8 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
             this, &MainWindow::onSetText);
     connect(ui->actionWord_wrap, &QAction::triggered,
             this, &MainWindow::changeWordWrap);
+    connect(checker, &SpellChecker::languageChanged,
+            this, &MainWindow::onLanguageChanged);
 
     ui->actionSave->setEnabled(false);
     ui->actionUndo->setEnabled(false);
@@ -161,16 +152,20 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
         QFile f(QStringLiteral(":/default.md"), this);
         if (f.open(QFile::ReadOnly | QFile::Text)) {
             ui->editor->setPlainText(f.readAll());
-            originalMd = ui->editor->toPlainText();
-            originalMdLength = originalMd.length();
             checker->rehighlight();
             setWindowFilePath(f.fileName());
-            setWindowModified(false);
+            ui->editor->document()->setModified(false);
         }
         else {
             onFileNew();
         }
     }
+}
+
+void MainWindow::onLanguageChanged(const QString &lang)
+{
+    if (!path.isEmpty())
+        languagesMap[path] = lang;
 }
 
 void MainWindow::changeWidget(const QString &text)
@@ -384,15 +379,6 @@ void MainWindow::onTextChanged()
     html = Parser::Parse(ui->editor->document()->toPlainText(), _mode);
 
     onSetText(ui->tabWidget->currentIndex());
-
-    maybeModified = true;
-
-    const bool state = isModified();
-
-    if (state != lastState)
-        emit modificationChanged(state);
-
-    lastState = state;
 }
 
 void MainWindow::openFile(const QString &newFile)
@@ -425,10 +411,6 @@ void MainWindow::openFile(const QString &newFile)
             ui->textBrowser->setSearchPaths(ui->textBrowser->searchPaths() << QFileInfo(newFile).path());
 
     ui->editor->setPlainText(f.readAll());
-    originalMd = ui->editor->toPlainText();
-    originalMdLength = originalMd.length();
-
-    maybeModified = false;
 
     setWindowFilePath(QFileInfo(path).fileName());
     statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 30000);
@@ -437,22 +419,19 @@ void MainWindow::openFile(const QString &newFile)
 
     updateOpened();
 
-    emit modificationChanged(false);
+    ui->editor->document()->setModified(false);
+
+    if (languagesMap.contains(path))
+        checker->setLanguage(languagesMap[path].toString());
+    else
+        languagesMap[path] = checker->getLanguage();
 
     QGuiApplication::restoreOverrideCursor();
 }
 
-bool MainWindow::isModified() const
-{
-    if (!maybeModified)
-        return false;
-
-    return ui->editor->toPlainText() != originalMd;
-}
-
 void MainWindow::onFileNew()
 {
-    if (isModified()) {
+    if (ui->editor->document()->isModified()) {
         const int button = QMessageBox::question(this, tr("Save changes?"),
                                            tr("You have unsaved changes. Do you want to create a new document anyway?"));
         if (button != QMessageBox::Yes)
@@ -462,17 +441,13 @@ void MainWindow::onFileNew()
     path = QLatin1String();
     ui->editor->setPlainText(tr("## New document"));
     setWindowFilePath(QFileInfo(tr("untitled.md")).fileName());
-    originalMd = ui->editor->toPlainText();
-    originalMdLength = originalMd.length();
 
-    maybeModified = false;
-
-    emit modificationChanged(false);
+    ui->editor->document()->setModified(false);
 }
 
 void MainWindow::onFileOpen()
 {
-    if (isModified()) {
+    if (ui->editor->document()->isModified()) {
         int button = QMessageBox::question(this, tr("Save changes?"),
                                            tr("You have unsaved changes. Do you want to open a new document anyway?"));
         if (button != QMessageBox::Yes)
@@ -491,7 +466,7 @@ void MainWindow::onFileOpen()
 
 void MainWindow::onFileSave()
 {
-    if (!isModified())
+    if (!ui->editor->document()->isModified())
         if (QFile::exists(path))
             return;
 
@@ -526,12 +501,7 @@ void MainWindow::onFileSave()
 
     updateOpened();
 
-    originalMd = ui->editor->toPlainText();
-    originalMdLength = originalMd.length();
-
-    maybeModified = false;
-
-    emit modificationChanged(false);
+    ui->editor->document()->setModified(false);
 
     QGuiApplication::restoreOverrideCursor();
 }
@@ -551,6 +521,8 @@ void MainWindow::onFileSaveAs()
         path.append(".md");
 
     setWindowFilePath(QFileInfo(path).fileName());
+    languagesMap[path] = checker->getLanguage();
+
     onFileSave();
 }
 
@@ -583,7 +555,7 @@ void MainWindow::openRecent() {
         return;
     }
 
-    if (isModified()) {
+    if (ui->editor->document()->isModified()) {
         const int button = QMessageBox::question(this, tr("Save changes?"),
                                            tr("You have unsaved changes. Do you want to open a new document anyway?"));
         if (button != QMessageBox::Yes)
@@ -624,7 +596,7 @@ void MainWindow::updateOpened() {
 
 void MainWindow::closeEvent(QCloseEvent *e)
 {
-    if (isModified()) {
+    if (ui->editor->document()->isModified()) {
         const int button = QMessageBox::question(this, tr("Save changes?"),
                                            tr("You have unsaved changes. Do you want to exit anyway?"));
         if (button == QMessageBox::No)
@@ -672,6 +644,8 @@ void MainWindow::loadSettings(const QString &f) {
     const bool lineWrap = settings->value(QStringLiteral("lineWrap"), false).toBool();
     changeWordWrap(lineWrap);
 
+    languagesMap = settings->value(QStringLiteral("languagesMap"), qVariantFromValue(QMap<QString, QString>())).toMap();
+
     if (f.isEmpty()) {
         const bool openLast = settings->value(QStringLiteral("openLast"), true).toBool();
         if (openLast) {
@@ -709,6 +683,7 @@ void MainWindow::saveSettings() {
     settings->setValue("spelling", checker->isSpellCheckingEnabled());
     settings->setValue("spellLang", checker->getLanguage());
     settings->setValue("lineWrap", ui->actionWord_wrap->isChecked());
+    settings->setValue("languagesMap", qVariantFromValue(languagesMap));
     settings->sync();
 }
 
