@@ -644,7 +644,7 @@ void MainWindow::loadSettings(const QString &f) {
     const bool lineWrap = settings->value(QStringLiteral("lineWrap"), false).toBool();
     changeWordWrap(lineWrap);
 
-    languagesMap = settings->value(QStringLiteral("languagesMap"), qVariantFromValue(QMap<QString, QString>())).toMap();
+    languagesMap = settings->value(QStringLiteral("languagesMap"), QVariant::fromValue(QMap<QString, QVariant>())).toMap();
 
     if (f.isEmpty()) {
         const bool openLast = settings->value(QStringLiteral("openLast"), true).toBool();
@@ -683,7 +683,7 @@ void MainWindow::saveSettings() {
     settings->setValue("spelling", checker->isSpellCheckingEnabled());
     settings->setValue("spellLang", checker->getLanguage());
     settings->setValue("lineWrap", ui->actionWord_wrap->isChecked());
-    settings->setValue("languagesMap", qVariantFromValue(languagesMap));
+    settings->setValue("languagesMap", languagesMap);
     settings->sync();
 }
 
