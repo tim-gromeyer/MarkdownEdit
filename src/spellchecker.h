@@ -68,7 +68,6 @@ private:
     enchant::Dict *speller = nullptr;
 
     QStringList markdownCharachters = {QStringLiteral("##"), QStringLiteral("###"), QStringLiteral("####"), QStringLiteral("#####"), QStringLiteral("######")};
-
 };
 
 #endif // SPELLCHECKER_H

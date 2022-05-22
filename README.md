@@ -25,6 +25,7 @@ MarkdownEdit, as the name suggests, is a simple and easy program for creating an
 - Quick opening of recent files (Button in toolbar or in the file menu)
 - Open source
 - Native look and feel
+- Remember spelling language for every document
 
 ![Example](doc/images/Example.png)
 
