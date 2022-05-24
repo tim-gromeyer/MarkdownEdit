@@ -38,7 +38,7 @@ public slots:
     void setSpellCheckingEnabled(const bool &enabled);
     bool setLanguage(const QString &);
 
-    void checkSpelling(const QString &);
+    void checkSpelling(QString);
 
 signals:
     void languageChanged(const QString &lang = QLatin1String());

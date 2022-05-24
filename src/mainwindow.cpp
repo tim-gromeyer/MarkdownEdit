@@ -59,8 +59,6 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     widgetBox->addItems({tr("Preview"), tr("HTML")});
     widgetBox->setCurrentIndex(0);
 
-    ui->editor->setHighlightingEnabled(false);
-
     checker = new SpellChecker(ui->editor, spellLang);
 
     htmlHighliter = new Highliter(ui->raw->document());
@@ -95,7 +93,7 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     connect(widgetBox, &QComboBox::currentTextChanged,
             this, &MainWindow::changeWidget);
     connect(ui->editor, &QPlainTextEdit::textChanged,
-            this, &MainWindow::onTextChanged, Qt::QueuedConnection);
+            this, &MainWindow::onTextChanged);
     connect(ui->actionHighlighting_activated, &QAction::triggered,
             this, &MainWindow::changeHighlighting);
     connect(ui->actionAuto_add_file_path_to_icon_path, &QAction::triggered,
@@ -644,7 +642,8 @@ void MainWindow::loadSettings(const QString &f) {
     const bool lineWrap = settings->value(QStringLiteral("lineWrap"), false).toBool();
     changeWordWrap(lineWrap);
 
-    languagesMap = settings->value(QStringLiteral("languagesMap"), QVariant::fromValue(QMap<QString, QVariant>())).toMap();
+    languagesMap = settings->value(QStringLiteral("languagesMap"),
+                                   QMap<QString, QVariant>()).toMap();
 
     if (f.isEmpty()) {
         const bool openLast = settings->value(QStringLiteral("openLast"), true).toBool();
@@ -662,12 +661,6 @@ void MainWindow::loadSettings(const QString &f) {
 
     spelling = settings->value(QStringLiteral("spelling"), true).toBool();
     changeSpelling(spelling);
-    spellLang = settings->value(QStringLiteral("spellLang"),
-                                               QLatin1String()).toString();
-    if (spellLang.isEmpty())
-        checker->setLanguage(QLatin1String());
-    else
-        checker->setLanguage(spellLang);
 
     onTextChanged();
 }
@@ -681,7 +674,6 @@ void MainWindow::saveSettings() {
     settings->setValue("last", path);
     settings->setValue("setPath", setPath);
     settings->setValue("spelling", checker->isSpellCheckingEnabled());
-    settings->setValue("spellLang", checker->getLanguage());
     settings->setValue("lineWrap", ui->actionWord_wrap->isChecked());
     settings->setValue("languagesMap", languagesMap);
     settings->sync();

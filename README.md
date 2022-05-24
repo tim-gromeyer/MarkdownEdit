@@ -54,7 +54,7 @@ git clone https://github.com/software-made-easy/MarkdownEdit && cd MarkdownEdit
 git submodule update --init --recursive -j 3
 mkdir build && cd build
 qmake ..
-make
+make -j4
 ```
 
 ## Credits

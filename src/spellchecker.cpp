@@ -10,7 +10,9 @@
 #include <enchant++.h>
 
 
-static const QRegularExpression expr("\\W+");
+static const QRegularExpression expr(QStringLiteral("[\\s\\d#.,*\\-\\[\\]`:()!_\\/\\+\"]+"));
+static const QRegularExpression removeLinks(QStringLiteral("(\\(http[s]?:\\/\\/[\\w\\-\\_\\.\\/]*)(\n)?([\\w\\-\\_\\.\\/]*\\))"));
+static const QRegularExpression removeCode(QStringLiteral("\\`{1,3}([^\\`]+)\\`{1,3}"));
 
 static void dict_describe_cb(const char* const lang_tag,
                              const char* const /*provider_name*/,
@@ -51,9 +53,14 @@ void SpellChecker::highlightBlock(const QString &text)
         checkSpelling(text);
 }
 
-void SpellChecker::checkSpelling(const QString &text)
+void SpellChecker::checkSpelling(QString text)
 {
     if (!spellingEnabled) return;
+
+    qDebug() << text;
+
+    text.remove(removeLinks);
+    text.remove(removeCode);
 
 #if QT_VERSION > QT_VERSION_CHECK(5, 14, 0)
     const QStringList wordList = text.split(expr, Qt::SkipEmptyParts);
