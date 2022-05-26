@@ -1,7 +1,5 @@
 #include "spellchecker.h"
-#ifdef CHECK_MARKDOWN
 #include "markdownhighlighter.h"
-#endif
 
 #include <QLocale>
 #include <QtDebug>
@@ -35,11 +33,11 @@ static enchant::Broker* get_enchant_broker() {
 }
 
 #ifdef CHECK_MARKDOWN
-SpellChecker::SpellChecker(TextEditProxy *parent, const QString &lang)
+SpellChecker::SpellChecker(QPlainTextEdit *parent, const QString &lang)
     : MarkdownHighlighter{parent->document()},
     textEdit(parent)
 #else
-SpellChecker::SpellChecker(TextEditProxy *parent, const QString &lang)
+SpellChecker::SpellChecker(QPlainTextEdit *parent, const QString &lang)
     : QSyntaxHighlighter{parent->document()},
     textEdit(parent)
 #endif
@@ -51,7 +49,7 @@ SpellChecker::SpellChecker(TextEditProxy *parent, const QString &lang)
     setLanguage(lang);
 
     textEdit->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(textEdit, &TextEditProxy::customContextMenuRequested,
+    connect(textEdit, &QWidget::customContextMenuRequested,
             this, &SpellChecker::slotShowContextMenu);
 }
 
@@ -288,7 +286,7 @@ void SpellChecker::ignoreWord(const QString &word)
     if (!speller) return;
 
     speller->add_to_session(word.toUtf8().data());
-    rehighlight();
+    checkSpelling(word);
 }
 
 void SpellChecker::replaceWord(const int &wordPos, const QString &newWord)

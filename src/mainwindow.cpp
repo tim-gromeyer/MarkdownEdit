@@ -48,6 +48,7 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
         setWindowIcon(QIcon(QStringLiteral(":/Icon.svg")));
 
     ui->setupUi(this);
+    ui->editor->setHighlightingEnabled(false);
     ui->editor->searchWidget()->setDarkMode(dark);
 
     QComboBox *mode = new QComboBox(ui->Edit);
@@ -59,7 +60,7 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     widgetBox->addItems({tr("Preview"), tr("HTML")});
     widgetBox->setCurrentIndex(0);
 
-    checker = new SpellChecker(ui->editor, spellLang);
+    checker = new SpellChecker(new TextEditProxyT(ui->editor), spellLang);
 
     htmlHighliter = new Highliter(ui->raw->document());
 

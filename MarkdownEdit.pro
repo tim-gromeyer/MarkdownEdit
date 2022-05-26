@@ -43,7 +43,7 @@ CONFIG += link_pkgconfig
 PKGCONFIG += enchant-2
 
 VERSION = 1.2.0
-DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+DEFINES += APP_VERSION=\\\"$$VERSION\\\" CHECK_MARKDOWN
 
 
 TARGET = markdownedit
