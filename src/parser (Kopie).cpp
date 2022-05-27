@@ -1,11 +1,11 @@
 #include <QByteArray>
 
 #include "parser.h"
-#include "3rdparty/md4c/src/md4c-html.h"
+#include "md4c-html.h"
 
 
 /* Global options. */
-static unsigned parser_flags = MD_FLAG_UNDERLINE;
+static unsigned parser_flags = 0;
 static QByteArray templateArray = QByteArrayLiteral("<!DOCTYPE html>\n"
                                           "<html>\n"
                                           "<head>\n"

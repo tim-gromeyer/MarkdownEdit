@@ -12,7 +12,7 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR}/ui)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_compile_definitions(APP_VERSION="${PROJECT_VERSION}" QT_DISABLE_DEPRECATED_BEFORE=0x051208 CHECK_MARKDOWN)
+add_compile_definitions(APP_VERSION="${PROJECT_VERSION}" QT_DISABLE_DEPRECATED_BEFORE=0x051208 CHECK_MARKDOWN CMAKE)
 
 find_package(PkgConfig)
 PKG_CHECK_MODULES(ENCHANT REQUIRED enchant-2)
@@ -23,25 +23,8 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools Pri
 
 set(TS_FILES translations/MarkdownEdit_de.ts)
 set(RC_FILES ressources/ressources.qrc)
-set(3RDPARTY_FILES
-        3rdparty/md4c/src/entity.h
-        3rdparty/md4c/src/entity.c
-        3rdparty/md4c/src/md4c.h
-        3rdparty/md4c/src/md4c.c
-        3rdparty/md4c/src/md4c-html.h
-        3rdparty/md4c/src/md4c-html.c
-        3rdparty/qmarkdowntextedit/markdownhighlighter.h
-        3rdparty/qmarkdowntextedit/markdownhighlighter.cpp
-        3rdparty/qmarkdowntextedit/linenumberarea.h
-        3rdparty/qmarkdowntextedit/qmarkdowntextedit.h
-        3rdparty/qmarkdowntextedit/qmarkdowntextedit.cpp
-        3rdparty/qmarkdowntextedit/qownlanguagedata.h
-        3rdparty/qmarkdowntextedit/qownlanguagedata.cpp
-        3rdparty/qmarkdowntextedit/qplaintexteditsearchwidget.h
-        3rdparty/qmarkdowntextedit/qplaintexteditsearchwidget.ui
-        3rdparty/qmarkdowntextedit/qplaintexteditsearchwidget.cpp
-        3rdparty/qmarkdowntextedit/media.qrc
-)
+
+include(3rdparty/CMakeLists.txt)
 
 set(PROJECT_SOURCES
         src/main.cpp
@@ -57,30 +40,28 @@ set(PROJECT_SOURCES
         src/spellchecker.h
         common.h
         ui/mainwindow.ui
-        ${3RDPARTY_FILES}
         ${RC_FILES}
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR}/translations ${TS_FILES})
+    qt_add_translation(markdownedit QM_FILES ${TS_FILES})
 
     qt_add_executable(markdownedit
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         ${QM_FILES}
     )
+
 else()
-    qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR}/translations ${TS_FILES})
+    qt5_add_translation(markdownedit QM_FILES ${TS_FILES})
 
     if(ANDROID)
         add_library(markdownedit SHARED
             ${PROJECT_SOURCES}
-            ${QM_FILES}
         )
     else()
         add_executable(markdownedit
             ${PROJECT_SOURCES}
-            ${QM_FILES}
         )
     endif()
 endif()
@@ -90,9 +71,7 @@ IF(WIN32)
 ENDIF(WIN32)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
-include_directories(${CMAKE_SOURCE_DIR}/3rdparty/qmarkdowntextedit)
-include_directories(${CMAKE_SOURCE_DIR}/3rdparty/md4c/src)
-target_link_libraries(markdownedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport ${ENCHANT_LDFLAGS} ${INTL_LDFLAGS})
+target_link_libraries(markdownedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport ${ENCHANT_LDFLAGS} ${INTL_LDFLAGS} md4c qmarkdowntextedit)
 
 set_target_properties(markdownedit PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

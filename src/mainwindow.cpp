@@ -25,7 +25,7 @@
 #include <QtPrintSupport/QPrintPreviewDialog>
 #endif
 
-#include "3rdparty/qmarkdowntextedit/qplaintexteditsearchwidget.h"
+#include "qplaintexteditsearchwidget.h"
 
 
 #if (defined(Q_OS_BLACKBERRY) || defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_WP))
@@ -304,7 +304,7 @@ void MainWindow::changeHighlighting(const bool &enabled)
     if (enabled)
         htmlHighliter->setDocument(ui->raw->document());
     else
-        htmlHighliter->setDocument(static_cast<QTextDocument*>(nullptr));
+        htmlHighliter->setDocument(nullptr);
     dontUpdate = false;
     highlighting = enabled;
 }

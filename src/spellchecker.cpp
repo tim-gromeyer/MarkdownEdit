@@ -100,18 +100,22 @@ void SpellChecker::checkSpelling(const QString &text)
                 isLink = false;
             }
         }
-        else if (i == textLength -1 && c.isLetter() && !code && !isLink) {
+        else if (i == textLength -1 && c.isLetterOrNumber() && !code && !isLink) {
             word.append(c);
             wordList.append(word);
             word.clear();
         }
-        else {
-            if (!code && c.isLetter())
+        else if (!code && c.isLetterOrNumber())
                 word.append(c);
-            if (!c.isLetter() && !code && !isLink) {
+        else if (!c.isLetterOrNumber() && !code && !isLink) {
                 wordList.append(word);
                 word.clear();
             }
+        else if (c == QLatin1Char('_') || c == QLatin1Char('-')) {
+            if (i < textLength) {
+                if (text.at(i +1).isLetter())
+                    word.append(c);
+                }
         }
     }
 #else
