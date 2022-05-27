@@ -20,6 +20,7 @@ SOURCES += \
     src/spellchecker.cpp
 
 HEADERS += \
+    common.h \
     src/mainwindow.h \
     src/about.h \
     src/parser.h \

@@ -4,6 +4,7 @@
 #include "parser.h"
 #include "highlighter.h"
 #include "spellchecker.h"
+#include "common.h"
 
 #include <QMessageBox>
 #include <QFileDialog>
@@ -150,8 +151,10 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     if (ui->editor->toPlainText().isEmpty()  && file.isEmpty()) {
         QFile f(QStringLiteral(":/default.md"), this);
         if (f.open(QFile::ReadOnly | QFile::Text)) {
+            checker->clearDirtyBlocks();
+            checker->setDocument(nullptr);
             ui->editor->setPlainText(f.readAll());
-            checker->rehighlight();
+            checker->setDocument(ui->editor->document());
             setWindowFilePath(f.fileName());
             ui->editor->document()->setModified(false);
         }
@@ -385,7 +388,7 @@ void MainWindow::openFile(const QString &newFile)
     QFile f(newFile);
 
     if (f.size() > 50000) {
-        int out = QMessageBox::warning(this, tr("Large file"),
+        const int out = QMessageBox::warning(this, tr("Large file"),
                                        tr("This is a large file that can potentially cause performance issues."),
                                        QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok);
 
@@ -409,7 +412,10 @@ void MainWindow::openFile(const QString &newFile)
         if (!ui->textBrowser->searchPaths().contains(QFileInfo(newFile).path()))
             ui->textBrowser->setSearchPaths(ui->textBrowser->searchPaths() << QFileInfo(newFile).path());
 
+    checker->clearDirtyBlocks();
+    checker->setDocument(nullptr);
     ui->editor->setPlainText(f.readAll());
+    checker->setDocument(ui->editor->document());
 
     setWindowFilePath(QFileInfo(path).fileName());
     statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 30000);
@@ -438,7 +444,10 @@ void MainWindow::onFileNew()
     }
 
     path = QLatin1String();
+    checker->clearDirtyBlocks();
+    checker->setDocument(nullptr);
     ui->editor->setPlainText(tr("## New document"));
+    checker->setDocument(ui->editor->document());
     setWindowFilePath(QFileInfo(tr("untitled.md")).fileName());
 
     ui->editor->document()->setModified(false);
@@ -447,7 +456,7 @@ void MainWindow::onFileNew()
 void MainWindow::onFileOpen()
 {
     if (ui->editor->document()->isModified()) {
-        int button = QMessageBox::question(this, tr("Save changes?"),
+        const int button = QMessageBox::question(this, tr("Save changes?"),
                                            tr("You have unsaved changes. Do you want to open a new document anyway?"));
         if (button != QMessageBox::Yes)
             return;
@@ -579,7 +588,7 @@ void MainWindow::updateOpened() {
     if (!path.isEmpty() && !recentOpened.contains(path))
         recentOpened.insert(0, path);
 
-    if (recentOpened.size() > 7)
+    if (recentOpened.size() > RECENT_OPENED_LIST_LENGTH)
         recentOpened.takeLast();
 
     for (int i = 0; i < recentOpened.size(); i++) {

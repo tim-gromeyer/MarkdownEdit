@@ -55,6 +55,7 @@ set(PROJECT_SOURCES
         src/highlighter.h
         src/spellchecker.cpp
         src/spellchecker.h
+        common.h
         ui/mainwindow.ui
         ${3RDPARTY_FILES}
         ${RC_FILES}
