@@ -568,7 +568,7 @@ void MainWindow::openRecent() {
 }
 
 void MainWindow::updateOpened() {
-    foreach (QAction *a, ui->menuRecentlyOpened->actions()) {
+    for (QAction* &a : ui->menuRecentlyOpened->actions()) {
         disconnect(a, &QAction::triggered, this, &MainWindow::openRecent);
         a->deleteLater();
         delete a;
@@ -613,7 +613,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
 
 void MainWindow::loadSettings(const QString &f) {
     const QByteArray geo = settings->value(QStringLiteral("geometry"),
-                                           QByteArray({})).toByteArray();
+                                           QByteArrayLiteral("")).toByteArray();
     if (geo.isEmpty()) {
         const QRect availableGeometry = QGuiApplication::screenAt(pos())->availableGeometry();
         resize(availableGeometry.width() / 2, (availableGeometry.height() * 2) / 3);
@@ -624,7 +624,7 @@ void MainWindow::loadSettings(const QString &f) {
         restoreGeometry(geo);
     }
 
-    restoreState(settings->value(QStringLiteral("state"), QByteArray({})).toByteArray());
+    restoreState(settings->value(QStringLiteral("state"), QByteArrayLiteral("")).toByteArray());
 
     highlighting = settings->value(QStringLiteral("highlighting"), true).toBool();
     ui->actionHighlighting_activated->setChecked(highlighting);

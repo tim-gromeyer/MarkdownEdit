@@ -84,5 +84,5 @@ jobs:
       run: |
         mkdir build-cmake && cd build-cmake
         cmake ..
-        make -j4
+        cmake --build . -j4
         cd ..

@@ -12,12 +12,10 @@
 #include <enchant++.h>
 
 
+#ifndef CHECK_MARKDOWN
 static const QRegularExpression expr(QStringLiteral("\\W+"));
-
-#ifdef CHECK_MARKDOWN
-static const QRegularExpression removeLinks(QStringLiteral("(\\(http[s]?:\\/\\/[\\w\\-\\_\\.\\/]*)(\n)?([\\w\\-\\_\\.\\/]*\\))"));
-static const QRegularExpression removeCode(QStringLiteral("\\`{1,3}([^\\`]+)\\`{1,3}"));
 #endif
+
 
 static void dict_describe_cb(const char* const lang_tag,
                              const char* const /*provider_name*/,
@@ -70,22 +68,72 @@ void SpellChecker::checkSpelling(const QString &text)
 {
     if (!spellingEnabled) return;
 
+
+#ifdef CHECK_MARKDOWN
+    QStringList wordList;
+    QString word;
+
+    bool isLink = false;
+    bool code = false;
+
+    int codeLength;
+
+    const int textLength = text.length();
+
+    for (int i = 0; i < textLength; i++) {
+        const QChar &c = text.at(i);
+
+        if (c == QLatin1Char('('))
+            if (text.midRef(i +1, 4) == QLatin1String("http")) {
+                isLink = true;
+            }
+
+        if (c == QLatin1Char('`')) {
+            codeLength = text.indexOf(QLatin1String("`"), i + 1);
+            if (codeLength > i)
+                code = true;
+            else if (codeLength == i || codeLength == -1)
+                code = false;
+        }
+
+        if (isLink) {
+            if (c.isSpace() || c == QLatin1Char(')')) {
+                isLink = false;
+            }
+        }
+        else if (i == textLength -1 && c.isLetter() && !code && !isLink) {
+            word.append(c);
+            wordList.append(word);
+            word.clear();
+        }
+        else {
+            if (!code && c.isLetter())
+                word.append(c);
+            if (!c.isLetter() && !code && !isLink) {
+                wordList.append(word);
+                word.clear();
+            }
+        }
+    }
+#else
 #if QT_VERSION > QT_VERSION_CHECK(5, 14, 0)
     const QStringList wordList = text.split(expr, Qt::SkipEmptyParts);
 #else
     const QStringList wordList = text.split(expr, QString::SkipEmptyParts);
 #endif
+#endif
+
     int index = 0;
 
-    for (const QString &word : wordList) {
-        index = text.indexOf(word, index);
+    for (const QString &word_ : wordList) {
+        index = text.indexOf(word_, index);
 
-        if (!isCorrect(word)) {
+        if (!isCorrect(word_)) {
             QTextCharFormat fmt = format(index);
             fmt.merge(spellFormat);
-            setFormat(index, word.length(), fmt);
+            setFormat(index, word_.length(), fmt);
         }
-        index += word.length();
+        index += word_.length();
     }
 }
 
@@ -178,7 +226,6 @@ void SpellChecker::showContextMenu(QMenu* menu, const QPoint& pos, int wordPos)
 {
     QAction *insertPos = menu->actions().at(0);
     if(speller && spellingEnabled){
-        // QTextCharFormat fmt = format(wordPos + 1);
         QTextCursor c = textEdit->textCursor();
         c.setPosition(wordPos);
         c.select(QTextCursor::WordUnderCursor);

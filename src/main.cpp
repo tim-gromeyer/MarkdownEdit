@@ -24,12 +24,12 @@ int main(int argc, char *argv[])
 
     QTranslator translator, qtTranslator;
 #if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
-    const QString path(QLibraryInfo::path(QLibraryInfo::TranslationsPath));
+    const QString path = QLibraryInfo::path(QLibraryInfo::TranslationsPath);
 #else
-    const QString path(QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    const QString path = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
 #endif
 
-    const QString lang(QLocale::system().name());
+    const QString lang = QLocale::system().name();
 
     // load translation for Qt
     if (qtTranslator.load(QStringLiteral("qt_") + lang, path))

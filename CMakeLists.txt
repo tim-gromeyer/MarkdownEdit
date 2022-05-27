@@ -63,7 +63,7 @@ set(PROJECT_SOURCES
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR}/translations ${TS_FILES})
 
-    qt_add_executable(MarkdownEdit
+    qt_add_executable(markdownedit
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         ${QM_FILES}
@@ -72,12 +72,12 @@ else()
     qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR}/translations ${TS_FILES})
 
     if(ANDROID)
-        add_library(MarkdownEdit SHARED
+        add_library(markdownedit SHARED
             ${PROJECT_SOURCES}
             ${QM_FILES}
         )
     else()
-        add_executable(MarkdownEdit
+        add_executable(markdownedit
             ${PROJECT_SOURCES}
             ${QM_FILES}
         )
@@ -91,9 +91,9 @@ ENDIF(WIN32)
 include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_SOURCE_DIR}/3rdparty/qmarkdowntextedit)
 include_directories(${CMAKE_SOURCE_DIR}/3rdparty/md4c/src)
-target_link_libraries(MarkdownEdit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport ${ENCHANT_LDFLAGS} ${INTL_LDFLAGS})
+target_link_libraries(markdownedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport ${ENCHANT_LDFLAGS} ${INTL_LDFLAGS})
 
-set_target_properties(MarkdownEdit PROPERTIES
+set_target_properties(markdownedit PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -102,5 +102,5 @@ set_target_properties(MarkdownEdit PROPERTIES
 )
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(MarkdownEdit)
+    qt_finalize_executable(markdownedit)
 endif()
