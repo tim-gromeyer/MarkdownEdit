@@ -84,9 +84,8 @@ void SpellChecker::checkSpelling(const QString &text)
         const QChar &c = text.at(i);
 
         if (c == QLatin1Char('('))
-            if (text.midRef(i +1, 4) == QLatin1String("http")) {
+            if (text.mid(i +1, 4) == QStringLiteral("http"))
                 isLink = true;
-            }
 
         if (c == QLatin1Char('`')) {
             codeLength = text.indexOf(QLatin1String("`"), i + 1);
