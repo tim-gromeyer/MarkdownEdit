@@ -44,5 +44,6 @@ int main(int argc, char *argv[])
     MainWindow w(parser.positionalArguments().value(0, QLatin1String()));
 
     w.show();
+
     return a.exec();
 }

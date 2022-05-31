@@ -32,8 +32,8 @@ set(PROJECT_SOURCES
         src/mainwindow.h
         src/about.cpp
         src/about.h
-        src/parser.cpp
-        src/parser.h
+        src/markdownparser.cpp
+        src/markdownparser.h
         src/highlighter.cpp
         src/highlighter.h
         src/spellchecker.cpp
@@ -71,7 +71,7 @@ IF(WIN32)
 ENDIF(WIN32)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
-target_link_libraries(markdownedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport ${ENCHANT_LDFLAGS} ${INTL_LDFLAGS} md4c qmarkdowntextedit)
+target_link_libraries(markdownedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport ${ENCHANT_LDFLAGS} ${INTL_LDFLAGS} 3rdparty)
 
 set_target_properties(markdownedit PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

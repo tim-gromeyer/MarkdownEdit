@@ -9,7 +9,6 @@
 #include "markdownhighlighter.h"
 #endif
 
-
 QT_BEGIN_NAMESPACE
 namespace enchant { class Dict; };
 QT_END_NAMESPACE
@@ -61,49 +60,125 @@ private:
 };
 
 #ifdef CHECK_MARKDOWN
+/**
+ * @brief SpellChecker for QPlainTextEdit, QTextEdit, QTextBrowser
+ */
 class SpellChecker : public MarkdownHighlighter
 #else
+/**
+ * @brief SpellChecker for QPlainTextEdit, QTextEdit, QTextBrowser
+ */
 class SpellChecker : public QSyntaxHighlighter
 #endif
 {
     Q_OBJECT
 public:
+    /**
+     * @brief SpellChecker initializer.
+     * @param parent parent: new new TextEditProxyT(textEdit)
+     * @param lang Spell language, if empty or not set QLocale::system().name() is used.
+     */
     explicit SpellChecker(TextEditProxy *parent, const QString &lang = QLatin1String());
     ~SpellChecker();
 
+    /**
+     * @brief highlightBlock function thats call checkSpelling()
+     * @param text text passed to checkSpelling()
+     */
     void highlightBlock(const QString &text) Q_DECL_OVERRIDE;
 
+
+    /**
+     * @brief getLanguageList returns a list with all avaiable languages
+     * @return list with all avaiable languages
+     */
     Q_REQUIRED_RESULT const QStringList getLanguageList();
 
+    /**
+     * @brief getLanguage returns the current language
+     * @return current language
+     */
     inline QString getLanguage() { return language; };
 
-    Q_REQUIRED_RESULT bool isCorrect(const QString &);
+    /**
+     * @brief isCorrect returns true if @word is correct otherwise false
+     * @param word returns if the word is spelled correct
+     * @return returns true if @word is correct otherwise false
+     */
+    Q_REQUIRED_RESULT bool isCorrect(const QString &word);
+
+    /**
+     * @brief getSuggestion
+     * @return
+     */
     Q_REQUIRED_RESULT QStringList getSuggestion(const QString &);
+
+    /**
+     * @brief addWort
+     */
     void addWort(const QString &);
+
+    /**
+     * @brief ignoreWord
+     */
     void ignoreWord(const QString &);
 
 #ifdef CHECK_MARKDOWN
+    /**
+     * @brief isMarkdownHighlightingEnabled
+     * @return
+     */
     inline bool isMarkdownHighlightingEnabled() { return markdownhig; };
 #endif
+
+    /**
+     * @brief isSpellCheckingEnabled
+     * @return
+     */
     inline bool isSpellCheckingEnabled() { return spellingEnabled; };
 
 public slots:
 #ifdef CHECK_MARKDOWN
+    /**
+     * @brief setMarkdownHighlightingEnabled
+     * @param enabled
+     */
     void setMarkdownHighlightingEnabled(const bool &enabled);
 #endif
+
+    /**
+     * @brief setSpellCheckingEnabled
+     * @param enabled
+     */
     void setSpellCheckingEnabled(const bool &enabled);
+
+    /**
+     * @brief setLanguage
+     * @return
+     */
     bool setLanguage(const QString &);
 
+    /**
+     * @brief checkSpelling
+     */
     void checkSpelling(const QString &);
 
 signals:
+    /**
+     * @brief languageChanged
+     * @param lang
+     */
     void languageChanged(const QString &lang = QLatin1String());
 
 private slots:
     void slotAddWord();
+
     void slotIgnoreWord();
+
     void slotSetLanguage(const bool &);
+
     void slotReplaceWord();
+
     void slotShowContextMenu(const QPoint &pos);
 
 private:
@@ -113,8 +188,6 @@ private:
 #endif
 
     void showContextMenu(QMenu *menu, const QPoint &pos, int wordpos);
-
-    QTextCharFormat spellFormat;
 
     QString language;
     void replaceWord(const int &wordPos, const QString &newWord);

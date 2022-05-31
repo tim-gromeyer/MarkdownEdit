@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "about.h"
-#include "parser.h"
+#include "markdownparser.h"
 #include "highlighter.h"
 #include "spellchecker.h"
 #include "common.h"
@@ -28,17 +28,11 @@
 #include "qplaintexteditsearchwidget.h"
 
 
-#if (defined(Q_OS_BLACKBERRY) || defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_WP))
-#error This application was developed for desktop only due to enchant
-#endif
-
-
 MainWindow::MainWindow(const QString &file, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-    const QPalette &p = palette();
-    const QColor &back = p.base().color();
+    const QColor back = palette().base().color();
     int r, g, b, a;
     back.getRgb(&r, &g, &b, &a);
 
@@ -108,10 +102,6 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
             ui->actionUndo, &QAction::setEnabled);
     connect(ui->editor->document(), &QTextDocument::redoAvailable,
             ui->actionRedo, &QAction::setEnabled);
-    connect(ui->actionUndo, &QAction::triggered,
-            this, &MainWindow::undo);
-    connect(ui->actionRedo, &QAction::triggered,
-            this, &MainWindow::redo);
     connect(ui->actionDisable_preview, &QAction::triggered,
             this, &MainWindow::disablePreview);
     connect(ui->actionPause_preview, &QAction::triggered,
@@ -227,32 +217,14 @@ void MainWindow::pausePreview(const bool &checked)
     dontUpdate = checked;
 }
 
-void MainWindow::undo()
-{
-    dontUpdate = true;
-    ui->editor->undo();
-    ui->textBrowser->undo();
-    dontUpdate = false;
-    ui->raw->undo();
-}
-
-void MainWindow::redo()
-{
-    dontUpdate = true;
-    ui->editor->redo();
-    ui->textBrowser->redo();
-    dontUpdate = false;
-    ui->raw->redo();
-}
-
 void MainWindow::cut()
 {
     if (ui->editor->hasFocus())
         ui->editor->cut();
     else if (ui->textBrowser->hasFocus())
-        ui->textBrowser->copy();
+        ui->textBrowser->cut();
     else if (ui->raw->hasFocus())
-        ui->raw->copy();
+        ui->raw->cut();
 }
 
 void MainWindow::copy()
@@ -269,7 +241,7 @@ void MainWindow::paste()
 {
     if (ui->editor->hasFocus()) {
         ui->editor->paste();
-        ui->editor->highlighter()->rehighlight();
+        checker->rehighlight();
     }
     else if (ui->textBrowser->hasFocus())
         ui->textBrowser->paste();
@@ -313,12 +285,12 @@ void MainWindow::filePrint()
 {
 #if QT_CONFIG(printdialog)
     QPrinter printer(QPrinter::HighResolution);
-    QPrintDialog *dlg = new QPrintDialog(&printer, this);
 
-    dlg->setWindowTitle(tr("Print Document"));
-    if (dlg->exec() == QDialog::Accepted)
+    QPrintDialog dlg(&printer, this);
+    dlg.setWindowTitle(tr("Print Document"));
+
+    if (dlg.exec() == QDialog::Accepted)
         printPreview(&printer);
-    delete dlg;
 #endif
 }
 
@@ -326,8 +298,10 @@ void MainWindow::filePrintPreview()
 {
 #if QT_CONFIG(printpreviewdialog)
     QPrinter printer(QPrinter::HighResolution);
+
     QPrintPreviewDialog preview(&printer, this);
     connect(&preview, &QPrintPreviewDialog::paintRequested, this, &MainWindow::printPreview);
+
     preview.exec();
 #endif
 }

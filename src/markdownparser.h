@@ -1,5 +1,5 @@
-#ifndef PARSER_H
-#define PARSER_H
+#ifndef MARKDOWNPARSER_H
+#define MARKDOWNPARSER_H
 
 #include <QString>
 
@@ -14,4 +14,4 @@ public:
     Q_REQUIRED_RESULT static QString Parse(const QString &in, const int &dia = GitHub);
 };
 
-#endif // PARSER_H
+#endif // MARKDOWNPARSER_H

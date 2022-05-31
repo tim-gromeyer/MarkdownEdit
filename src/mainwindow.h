@@ -54,9 +54,6 @@ private slots:
     void changeWordWrap(const bool &);
     void changeWidget(const QString &);
 
-    void undo();
-    void redo();
-
     void cut();
     void copy();
     void paste();

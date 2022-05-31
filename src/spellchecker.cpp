@@ -42,10 +42,6 @@ SpellChecker::SpellChecker(TextEditProxy *parent, const QString &lang)
     textEdit(parent)
 #endif
 {
-    spellFormat.setFontUnderline(true);
-    spellFormat.setUnderlineStyle(QTextCharFormat::SpellCheckUnderline);
-    spellFormat.setUnderlineColor(Qt::red);
-
     setLanguage(lang);
 
     textEdit->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -77,6 +73,9 @@ void SpellChecker::checkSpelling(const QString &text)
     bool code = false;
 
     int codeLength;
+
+    if (isCodeBlock(currentBlockState()))
+        return;
 
     const int textLength = text.length();
 
@@ -133,7 +132,9 @@ void SpellChecker::checkSpelling(const QString &text)
 
         if (!isCorrect(word_)) {
             QTextCharFormat fmt = format(index);
-            fmt.merge(spellFormat);
+            fmt.setFontUnderline(true);
+            fmt.setUnderlineStyle(QTextCharFormat::SpellCheckUnderline);
+            fmt.setUnderlineColor(Qt::red);
             setFormat(index, word_.length(), fmt);
         }
         index += word_.length();
@@ -235,7 +236,7 @@ void SpellChecker::showContextMenu(QMenu* menu, const QPoint& pos, int wordPos)
         const QString word = c.selectedText();
 
         if(!isCorrect(word)) {
-            QStringList suggestions = getSuggestion(word);
+            const QStringList suggestions = getSuggestion(word);
             if(!suggestions.isEmpty()) {
                 for(int i = 0, n = qMin(10, suggestions.length()); i < n; ++i) {
                     QAction* action = new QAction(suggestions[i], menu);

@@ -15,16 +15,16 @@ SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
     src/about.cpp \
-    src/parser.cpp \
     src/highlighter.cpp \
+    src/markdownparser.cpp \
     src/spellchecker.cpp
 
 HEADERS += \
     common.h \
     src/mainwindow.h \
     src/about.h \
-    src/parser.h \
     src/highlighter.h \
+    src/markdownparser.h \
     src/spellchecker.h
 
 FORMS += \

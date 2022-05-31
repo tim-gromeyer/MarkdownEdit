@@ -25,5 +25,9 @@ set(QMARKDOWNTEXTEDIT_FILES
 
 add_library(qmarkdowntextedit STATIC ${QMARKDOWNTEXTEDIT_FILES})
 target_link_libraries(qmarkdowntextedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+
 include_directories(3rdparty/qmarkdowntextedit)
 include_directories(3rdparty/md4c/src)
+
+add_library(3rdparty STATIC "")
+target_link_libraries(3rdparty PRIVATE md4c qmarkdowntextedit)
