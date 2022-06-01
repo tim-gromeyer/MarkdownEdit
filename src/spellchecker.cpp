@@ -9,14 +9,18 @@
 #include <QRegularExpression>
 #include <QActionGroup>
 
+#ifndef NO_SPELLCHECK
 #include <enchant++.h>
-
+#else
+namespace enchant { class Broker;};
+#endif
 
 #ifndef CHECK_MARKDOWN
 static const QRegularExpression expr(QStringLiteral("\\W+"));
 #endif
 
 
+#ifndef NO_SPELLCHECK
 static void dict_describe_cb(const char* const lang_tag,
                              const char* const /*provider_name*/,
                              const char* const /*provider_desc*/,
@@ -31,6 +35,7 @@ static enchant::Broker* get_enchant_broker() {
     static enchant::Broker broker;
     return &broker;
 }
+#endif
 
 #ifdef CHECK_MARKDOWN
 SpellChecker::SpellChecker(TextEditProxy *parent, const QString &lang)
@@ -64,15 +69,12 @@ void SpellChecker::checkSpelling(const QString &text)
 {
     if (!spellingEnabled) return;
 
-
 #ifdef CHECK_MARKDOWN
     QStringList wordList;
     QString word;
 
     bool isLink = false;
-    bool code = false;
-
-    int codeLength;
+    const int currentBlockNumber = currentBlock().blockNumber();
 
     if (isCodeBlock(currentBlockState()))
         return;
@@ -81,40 +83,36 @@ void SpellChecker::checkSpelling(const QString &text)
 
     for (int i = 0; i < textLength; i++) {
         const QChar &c = text.at(i);
+        const bool isLetterOrNumber = c.isLetterOrNumber();
+
+        if (isPosInACodeSpan(currentBlockNumber, i))
+            continue;
 
         if (c == QLatin1Char('('))
             if (text.mid(i +1, 4) == QStringLiteral("http"))
                 isLink = true;
-
-        if (c == QLatin1Char('`')) {
-            codeLength = text.indexOf(QLatin1String("`"), i + 1);
-            if (codeLength > i)
-                code = true;
-            else if (codeLength == i || codeLength == -1)
-                code = false;
-        }
 
         if (isLink) {
             if (c.isSpace() || c == QLatin1Char(')')) {
                 isLink = false;
             }
         }
-        else if (i == textLength -1 && c.isLetterOrNumber() && !code && !isLink) {
+        else if (i == textLength -1 && isLetterOrNumber) {
             word.append(c);
             wordList.append(word);
             word.clear();
         }
-        else if (!code && c.isLetterOrNumber())
+        else if (isLetterOrNumber)
                 word.append(c);
-        else if (!c.isLetterOrNumber() && !code && !isLink) {
-                wordList.append(word);
-                word.clear();
-            }
         else if (c == QLatin1Char('_') || c == QLatin1Char('-')) {
-            if (i < textLength) {
+            if (i +1 < textLength) {
                 if (text.at(i +1).isLetter())
                     word.append(c);
                 }
+        }
+        else {
+            wordList.append(word);
+            word.clear();
         }
     }
 #else
@@ -142,6 +140,11 @@ void SpellChecker::checkSpelling(const QString &text)
 }
 
 bool SpellChecker::isCorrect(const QString &word) {
+
+#ifdef NO_SPELLCHECK
+    Q_UNUSED(word);
+    return true;
+#else
     if (!speller || !spellingEnabled) return true;
 
     if (word.length() < 2) return true;
@@ -157,10 +160,15 @@ bool SpellChecker::isCorrect(const QString &word) {
         qWarning() << e.what();
         return true;
     }
+#endif
 }
 
 bool SpellChecker::setLanguage(const QString &lang)
 {
+#ifdef NO_SPELLCHECK
+    Q_UNUSED(lang);
+    return false;
+#else
     delete speller;
     speller = nullptr;
     language = lang;
@@ -194,28 +202,41 @@ bool SpellChecker::setLanguage(const QString &lang)
 #endif
 
     return true;
+#endif
 }
 
 void SpellChecker::addWort(const QString &word)
 {
+#ifdef NO_SPELLCHECK
+    Q_UNUSED(word);
+    return;
+#else
     if (!speller) return;
 
     speller->add(word.toStdString());
     checkSpelling(word);
+#endif
 }
 
 const QStringList SpellChecker::getLanguageList()
 {
+#ifdef NO_SPELLCHECK
+    return QStringList();
+#else
     enchant::Broker *broker = get_enchant_broker();
     QStringList languages;
     broker->list_dicts(dict_describe_cb, &languages);
     std::sort(languages.begin(), languages.end());
-    return qAsConst(languages);
+    return languages;
+#endif
 }
 
 QStringList SpellChecker::getSuggestion(const QString& word)
 {
     QStringList list;
+#ifdef NO_SPELLCHECK
+    Q_UNUSED(word);
+#else
     if(speller){
         std::vector<std::string> suggestions;
         speller->suggest(word.toUtf8().data(), suggestions);
@@ -223,7 +244,19 @@ QStringList SpellChecker::getSuggestion(const QString& word)
             list.append(QString::fromStdString(suggestion));
         }
     }
+#endif
     return list;
+}
+
+bool SpellChecker::isWordValid(const QString &line, const int &wordPos) const
+{
+    Q_UNUSED(line);
+    Q_UNUSED(wordPos);
+#ifdef CHECK_MARKDOWN
+
+#endif
+
+    return true;
 }
 
 void SpellChecker::showContextMenu(QMenu* menu, const QPoint& pos, int wordPos)
@@ -234,8 +267,9 @@ void SpellChecker::showContextMenu(QMenu* menu, const QPoint& pos, int wordPos)
         c.setPosition(wordPos);
         c.select(QTextCursor::WordUnderCursor);
         const QString word = c.selectedText();
+        c.select(QTextCursor::LineUnderCursor);
 
-        if(!isCorrect(word)) {
+        if(isWordValid(c.selectedText(), wordPos) && !isCorrect(word)) {
             const QStringList suggestions = getSuggestion(word);
             if(!suggestions.isEmpty()) {
                 for(int i = 0, n = qMin(10, suggestions.length()); i < n; ++i) {
@@ -336,10 +370,14 @@ void SpellChecker::slotSetLanguage(const bool &checked)
 
 void SpellChecker::ignoreWord(const QString &word)
 {
+#ifdef NO_SPELLCHECK
+    Q_UNUSED(word);
+#else
     if (!speller) return;
 
     speller->add_to_session(word.toUtf8().data());
     rehighlight();
+#endif
 }
 
 void SpellChecker::replaceWord(const int &wordPos, const QString &newWord)

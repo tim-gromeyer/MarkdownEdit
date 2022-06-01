@@ -14,9 +14,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_compile_definitions(APP_VERSION="${PROJECT_VERSION}" QT_DISABLE_DEPRECATED_BEFORE=0x051208 CHECK_MARKDOWN CMAKE)
 
-find_package(PkgConfig)
-PKG_CHECK_MODULES(ENCHANT REQUIRED enchant-2)
-include_directories(${ENCHANT_INCLUDE_DIRS})
+if(ANDROID)
+    add_compile_definitions(NO_SPELLCHECK)
+else()
+    find_package(PkgConfig)
+    PKG_CHECK_MODULES(ENCHANT REQUIRED enchant-2)
+    include_directories(${ENCHANT_INCLUDE_DIRS})
+endif()
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools PrintSupport)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools PrintSupport)
