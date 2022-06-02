@@ -32,7 +32,7 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QMarkdownTextEdit" name="editor">
+      <widget class="MarkdownEditor" name="editor">
        <property name="lineWidth">
         <number>0</number>
        </property>
@@ -549,18 +549,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QMarkdownTextEdit</class>
+   <class>MarkdownEditor</class>
    <extends>QPlainTextEdit</extends>
-   <header>3rdparty/qmarkdowntextedit/qmarkdowntextedit.h</header>
-   <slots>
-    <signal>urlClicked(QString)</signal>
-    <signal>urlClicked(QStringurl)</signal>
-    <slot>duplicateText()</slot>
-    <slot>setLineNumberEnabled(bool)</slot>
-    <slot>openLinkAtCursorPosition()</slot>
-    <slot>setText(QString)</slot>
-    <slot>setText(constQStringtext)</slot>
-   </slots>
+   <header>src/markdowneditor.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

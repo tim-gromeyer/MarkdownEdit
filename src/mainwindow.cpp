@@ -19,6 +19,7 @@
 #include <QSaveFile>
 #include <QPushButton>
 #include <QDebug>
+#include <QCompleter>
 
 #if QT_CONFIG(printdialog)
 #include <QtPrintSupport/QPrintDialog>
@@ -54,6 +55,11 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     widgetBox = new QComboBox(this);
     widgetBox->addItems({tr("Preview"), tr("HTML")});
     widgetBox->setCurrentIndex(0);
+
+    QFile list(QStringLiteral("/usr/share/dict/ngerman"));
+    list.open(QIODevice::ReadOnly);
+    QCompleter *c = new QCompleter(QString(list.readAll()).split("\n"), this);
+    ui->editor->setCompleter(c);
 
     checker = new SpellChecker(new TextEditProxyT(ui->editor), spellLang);
 
@@ -340,6 +346,7 @@ void MainWindow::exportHtml()
     statusBar()->showMessage(tr("HTML exported to %1").arg(QDir::toNativeSeparators(file)), 30000);
 }
 
+// Indexchanged doesnt work in qt 5.12.8
 void MainWindow::changeMode(const QString &text)
 {
     _mode = text == "GitHub" ? 1
@@ -499,7 +506,7 @@ void MainWindow::onFileSaveAs()
 
     path = dialog.selectedFiles().at(0);
 
-    if (!(path.endsWith(".md") || path.endsWith(".markdown")))
+    if (!(path.endsWith(QLatin1String(".md")) || path.endsWith(QLatin1String(".markdown")) || path.endsWith(QLatin1String(".mkd"))))
         path.append(".md");
 
     setWindowFilePath(QFileInfo(path).fileName());
@@ -560,7 +567,7 @@ void MainWindow::updateOpened() {
     ui->menuRecentlyOpened->clear();
 
     if (!path.isEmpty() && !recentOpened.contains(path))
-        recentOpened.insert(0, path);
+        recentOpened.prepend(path);
 
     if (recentOpened.size() > RECENT_OPENED_LIST_LENGTH)
         recentOpened.takeLast();

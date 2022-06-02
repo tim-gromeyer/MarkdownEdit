@@ -4,6 +4,8 @@
 #include <QSyntaxHighlighter>
 #include <QPlainTextEdit>
 #include <QTextBrowser>
+#include <QMap>
+#include <QVariant>
 
 #include "common.h"
 
@@ -11,11 +13,10 @@
 #include "markdownhighlighter.h"
 #endif
 
-#ifndef NO_SPELLCHECK
 QT_BEGIN_NAMESPACE
 namespace enchant { class Dict; };
 QT_END_NAMESPACE
-#endif
+
 
 class TextEditProxy : public QObject {
     Q_OBJECT
@@ -84,6 +85,8 @@ public:
      */
     explicit SpellChecker(TextEditProxy *parent, const QString &lang = QLatin1String());
     ~SpellChecker();
+
+    QMap<QString, QVariant> langMap;
 
     /**
      * @brief highlightBlock function thats call checkSpelling()
@@ -202,9 +205,7 @@ private:
 
     QString encodeLanguageString(const QString &langString);
 
-#ifndef NO_SPELLCHECK
-    enchant::Dict *speller = nullptr;
-#endif
+    enchant::Dict *speller = nullptr; 
 
 #ifdef CHECK_MARKDOWN
     QStringList markdownCharachters = {QStringLiteral("##"), QStringLiteral("###"), QStringLiteral("####"), QStringLiteral("#####"), QStringLiteral("######")};

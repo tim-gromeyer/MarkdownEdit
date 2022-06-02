@@ -2,10 +2,16 @@
 
 #include "markdownparser.h"
 #include "3rdparty/md4c/src/md4c-html.h"
+#include "common.h"
 
 
 /* Global options. */
+#if MD_UNDERLINE
 static unsigned parser_flags = MD_FLAG_UNDERLINE;
+#else
+static unsigned parser_flags = 0;
+#endif
+
 static QByteArray templateArray = QByteArrayLiteral("<!DOCTYPE html>\n"
                                           "<html>\n"
                                           "<head>\n"

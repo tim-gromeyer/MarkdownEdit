@@ -16,6 +16,7 @@ SOURCES += \
     src/mainwindow.cpp \
     src/about.cpp \
     src/highlighter.cpp \
+    src/markdowneditor.cpp \
     src/markdownparser.cpp \
     src/spellchecker.cpp
 
@@ -24,6 +25,7 @@ HEADERS += \
     src/mainwindow.h \
     src/about.h \
     src/highlighter.h \
+    src/markdowneditor.h \
     src/markdownparser.h \
     src/spellchecker.h
 
@@ -44,7 +46,8 @@ VERSION = 1.2.0
 DEFINES += APP_VERSION=\\\"$$VERSION\\\" CHECK_MARKDOWN
 
 android: DEFINES += OS_ANDROID
-!android {
+else: wasm: DEFINES += OS_WASM
+else {
 CONFIG += link_pkgconfig
 PKGCONFIG += enchant-2
 }

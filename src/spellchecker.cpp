@@ -248,43 +248,33 @@ QStringList SpellChecker::getSuggestion(const QString& word)
     return list;
 }
 
-bool SpellChecker::isWordValid(const QString &line, const int &wordPos) const
-{
-    Q_UNUSED(line);
-    Q_UNUSED(wordPos);
-#ifdef CHECK_MARKDOWN
-
-#endif
-
-    return true;
-}
-
 void SpellChecker::showContextMenu(QMenu* menu, const QPoint& pos, int wordPos)
 {
     QAction *insertPos = menu->actions().at(0);
+
     if(speller && spellingEnabled){
         QTextCursor c = textEdit->textCursor();
         c.setPosition(wordPos);
         c.select(QTextCursor::WordUnderCursor);
         const QString word = c.selectedText();
-        c.select(QTextCursor::LineUnderCursor);
 
-        if(isWordValid(c.selectedText(), wordPos) && !isCorrect(word)) {
+        if(!isPosInACodeSpan(c.blockNumber(), c.positionInBlock() -1)
+            && !isCorrect(word)) {
             const QStringList suggestions = getSuggestion(word);
             if(!suggestions.isEmpty()) {
                 for(int i = 0, n = qMin(10, suggestions.length()); i < n; ++i) {
-                    QAction* action = new QAction(suggestions[i], menu);
+                    QAction* action = new QAction(suggestions.at(i), menu);
                     action->setProperty("wordPos", wordPos);
-                    action->setProperty("suggestion", suggestions[i]);
+                    action->setProperty("suggestion", suggestions.at(i));
                     connect(action, &QAction::triggered, this, &SpellChecker::slotReplaceWord);
                     menu->insertAction(insertPos, action);
                 }
                 if(suggestions.length() > 10) {
                     QMenu* moreMenu = new QMenu(tr("More..."), menu);
                     for(int i = 10, n = suggestions.length(); i < n; ++i){
-                        QAction* action = new QAction(suggestions[i], moreMenu);
+                        QAction* action = new QAction(suggestions.at(i), moreMenu);
                         action->setProperty("wordPos", wordPos);
-                        action->setProperty("suggestion", suggestions[i]);
+                        action->setProperty("suggestion", suggestions.at(i));
                         connect(action, &QAction::triggered, this, &SpellChecker::slotReplaceWord);
                         moreMenu->addAction(action);
                     }
@@ -328,6 +318,9 @@ void SpellChecker::showContextMenu(QMenu* menu, const QPoint& pos, int wordPos)
 
 QString SpellChecker::encodeLanguageString(const QString &lang)
 {
+    if (langMap.contains(lang))
+        return langMap[lang].toString();
+
 #if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
     const QLocale l(lang);
     return QStringLiteral("%1 (%2)").arg(l.nativeLanguageName(), l.nativeTerritoryName());

@@ -3,7 +3,9 @@
 
 #define RECENT_OPENED_LIST_LENGTH 7
 
-#ifdef OS_ANDROID
+#define MD_UNDERLINE true
+
+#if defined(OS_ANDROID) || defined(OS_WASM)
 #define SPELLCHECK false
 #else
 #define SPELLCHECK true
