@@ -5,13 +5,17 @@
 #include <QPlainTextEdit>
 #include <QTextBrowser>
 
+#include "common.h"
+
 #ifdef CHECK_MARKDOWN
 #include "markdownhighlighter.h"
 #endif
 
+#ifndef NO_SPELLCHECK
 QT_BEGIN_NAMESPACE
 namespace enchant { class Dict; };
 QT_END_NAMESPACE
+#endif
 
 class TextEditProxy : public QObject {
     Q_OBJECT
@@ -198,7 +202,9 @@ private:
 
     QString encodeLanguageString(const QString &langString);
 
+#ifndef NO_SPELLCHECK
     enchant::Dict *speller = nullptr;
+#endif
 
 #ifdef CHECK_MARKDOWN
     QStringList markdownCharachters = {QStringLiteral("##"), QStringLiteral("###"), QStringLiteral("####"), QStringLiteral("#####"), QStringLiteral("######")};

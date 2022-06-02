@@ -666,4 +666,5 @@ void MainWindow::saveSettings() {
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete checker;
 }

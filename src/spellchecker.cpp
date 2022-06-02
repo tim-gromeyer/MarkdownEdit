@@ -1,4 +1,6 @@
 #include "spellchecker.h"
+#include "common.h"
+
 #ifdef CHECK_MARKDOWN
 #include "markdownhighlighter.h"
 #endif
@@ -11,8 +13,6 @@
 
 #ifndef NO_SPELLCHECK
 #include <enchant++.h>
-#else
-namespace enchant { class Broker;};
 #endif
 
 #ifndef CHECK_MARKDOWN
@@ -422,5 +422,7 @@ void SpellChecker::setSpellCheckingEnabled(const bool &enabled)
 
 SpellChecker::~SpellChecker()
 {
+#ifndef NO_SPELLCHECK
     delete speller;
+#endif
 }

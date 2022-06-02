@@ -15,7 +15,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_definitions(APP_VERSION="${PROJECT_VERSION}" QT_DISABLE_DEPRECATED_BEFORE=0x051208 CHECK_MARKDOWN CMAKE)
 
 if(ANDROID)
-    add_compile_definitions(NO_SPELLCHECK)
+    add_compile_definitions(OS_ANDROID)
 else()
     find_package(PkgConfig)
     PKG_CHECK_MODULES(ENCHANT REQUIRED enchant-2)

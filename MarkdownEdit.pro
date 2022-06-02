@@ -43,7 +43,7 @@ CONFIG -= qtquickcompiler
 VERSION = 1.2.0
 DEFINES += APP_VERSION=\\\"$$VERSION\\\" CHECK_MARKDOWN
 
-android: DEFINES += NO_SPELLCHECK
+android: DEFINES += OS_ANDROID
 !android {
 CONFIG += link_pkgconfig
 PKGCONFIG += enchant-2
