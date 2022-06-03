@@ -5,150 +5,138 @@
     <name>About</name>
     <message>
         <source>About</source>
-        <translation>Über</translation>
+        <translation type="vanished">Über</translation>
     </message>
     <message>
         <source>Description:</source>
-        <translation>Beschreibung:</translation>
+        <translation type="vanished">Beschreibung:</translation>
     </message>
     <message>
         <source>Homepage:</source>
-        <translation>Startseite:</translation>
+        <translation type="vanished">Startseite:</translation>
     </message>
     <message>
         <source>License</source>
-        <translation>Lizenz</translation>
-    </message>
-    <message>
-        <source>Version:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Qt Version:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Credits</source>
-        <translation></translation>
+        <translation type="vanished">Lizenz</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>Preview</source>
-        <translation>Vorschau</translation>
+        <translation type="vanished">Vorschau</translation>
     </message>
     <message>
         <source>&amp;File</source>
-        <translation>&amp;Datei</translation>
+        <translation type="vanished">&amp;Datei</translation>
     </message>
     <message>
         <source>Recently opened</source>
-        <translation>Zuletzt geöffnet</translation>
+        <translation type="vanished">Zuletzt geöffnet</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
-        <translation>&amp;Bearbeiten</translation>
+        <translation type="vanished">&amp;Bearbeiten</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation>&amp;Hilfe</translation>
+        <translation type="vanished">&amp;Hilfe</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation>An&amp;sicht</translation>
+        <translation type="vanished">An&amp;sicht</translation>
     </message>
     <message>
         <source>File</source>
-        <translation>Datei</translation>
+        <translation type="vanished">Datei</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation>Bearbeiten</translation>
+        <translation type="vanished">Bearbeiten</translation>
     </message>
     <message>
         <source>New</source>
-        <translation>Neu</translation>
+        <translation type="vanished">Neu</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation>Öffnen</translation>
+        <translation type="vanished">Öffnen</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Speichern</translation>
+        <translation type="vanished">Speichern</translation>
     </message>
     <message>
         <source>Save as</source>
-        <translation>Speichern unter</translation>
+        <translation type="vanished">Speichern unter</translation>
     </message>
     <message>
         <source>Print</source>
-        <translation>Drucken</translation>
+        <translation type="vanished">Drucken</translation>
     </message>
     <message>
         <source>Print preview</source>
-        <translation>Druckvorschau</translation>
+        <translation type="vanished">Druckvorschau</translation>
     </message>
     <message>
         <source>Exit</source>
-        <translation>Beenden</translation>
+        <translation type="vanished">Beenden</translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation>Rückgängig</translation>
+        <translation type="vanished">Rückgängig</translation>
     </message>
     <message>
         <source>Redo</source>
-        <translation>Wiederherstellen</translation>
+        <translation type="vanished">Wiederherstellen</translation>
     </message>
     <message>
         <source>Cut</source>
-        <translation>Ausschneiden</translation>
+        <translation type="vanished">Ausschneiden</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation>Kopieren</translation>
+        <translation type="vanished">Kopieren</translation>
     </message>
     <message>
         <source>Paste</source>
-        <translation>Einfügen</translation>
+        <translation type="vanished">Einfügen</translation>
     </message>
     <message>
         <source>Select all</source>
-        <translation>Alles markieren</translation>
+        <translation type="vanished">Alles markieren</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation>Suche</translation>
+        <translation type="vanished">Suche</translation>
     </message>
     <message>
         <source>Export HTML</source>
-        <translation>HTML Exportieren</translation>
+        <translation type="vanished">HTML Exportieren</translation>
     </message>
     <message>
         <source>Replace</source>
-        <translation>Ersetzen</translation>
+        <translation type="vanished">Ersetzen</translation>
     </message>
     <message>
         <source>Highlighting enabled</source>
-        <translation>Hervorhebung aktiviert</translation>
+        <translation type="vanished">Hervorhebung aktiviert</translation>
     </message>
     <message>
         <source>Open last document on startup</source>
-        <translation>Letztes Dokument beim Start öffnen</translation>
+        <translation type="vanished">Letztes Dokument beim Start öffnen</translation>
     </message>
     <message>
         <source>Pause preview</source>
-        <translation>Vorschau pausieren</translation>
+        <translation type="vanished">Vorschau pausieren</translation>
     </message>
     <message>
         <source>Disable preview</source>
-        <translation>Vorschau deaktivieren</translation>
+        <translation type="vanished">Vorschau deaktivieren</translation>
     </message>
     <message>
         <source>Check spelling</source>
-        <translation>Rechtschreibprüfung</translation>
+        <translation type="vanished">Rechtschreibprüfung</translation>
     </message>
     <message>
         <source>Search/Replace</source>
@@ -164,39 +152,39 @@
     </message>
     <message>
         <source>About</source>
-        <translation>Über</translation>
+        <translation type="vanished">Über</translation>
     </message>
     <message>
         <source>About Qt</source>
-        <translation>Über Qt</translation>
+        <translation type="vanished">Über Qt</translation>
     </message>
     <message>
         <source>Could not open file %1: %2</source>
-        <translation>Datei %1 konnte nicht geöffnet werden: %2</translation>
+        <translation type="vanished">Datei %1 konnte nicht geöffnet werden: %2</translation>
     </message>
     <message>
         <source>Opened %1</source>
-        <translation>%1 geöffnet</translation>
+        <translation type="vanished">%1 geöffnet</translation>
     </message>
     <message>
         <source>You have unsaved changes. Do you want to create a new document anyway?</source>
-        <translation>Du hast nicht gespeicherte Änderungen. Möchten Sie trotzdem ein neues Dokument erstellen?</translation>
+        <translation type="vanished">Du hast nicht gespeicherte Änderungen. Möchten Sie trotzdem ein neues Dokument erstellen?</translation>
     </message>
     <message>
         <source>## New document</source>
-        <translation>## Neues Dokument</translation>
+        <translation type="vanished">## Neues Dokument</translation>
     </message>
     <message>
         <source>You have unsaved changes. Do you want to open a new document anyway?</source>
-        <translation>Du hast nicht gespeicherte Änderungen. Möchten Sie trotzdem ein neues Dokument öffnen?</translation>
+        <translation type="vanished">Du hast nicht gespeicherte Änderungen. Möchten Sie trotzdem ein neues Dokument öffnen?</translation>
     </message>
     <message>
         <source>Open MarkDown File</source>
-        <translation>Markdown-Datei öffnen</translation>
+        <translation type="vanished">Markdown-Datei öffnen</translation>
     </message>
     <message>
         <source>Could not write to file %1: %2</source>
-        <translation>In Datei %1 konnte nicht geschrieben werden: %2</translation>
+        <translation type="vanished">In Datei %1 konnte nicht geschrieben werden: %2</translation>
     </message>
     <message>
         <source>new.md</source>
@@ -204,51 +192,51 @@
     </message>
     <message>
         <source>Print Document</source>
-        <translation>Dokument drucken</translation>
+        <translation type="vanished">Dokument drucken</translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation>Warnung</translation>
+        <translation type="vanished">Warnung</translation>
     </message>
     <message>
         <source>HTML exported to %1</source>
-        <translation>HTML nach %1 exportiert</translation>
+        <translation type="vanished">HTML nach %1 exportiert</translation>
     </message>
     <message>
         <source>Large file</source>
-        <translation>Große Datei</translation>
+        <translation type="vanished">Große Datei</translation>
     </message>
     <message>
         <source>This is a large file that can potentially cause performance issues.</source>
-        <translation>Dies ist eine große Datei, die potenziell Leistungsprobleme verursachen kann.</translation>
+        <translation type="vanished">Dies ist eine große Datei, die potenziell Leistungsprobleme verursachen kann.</translation>
     </message>
     <message>
         <source>Couldn&apos;t open file</source>
-        <translation>Datei konnte nicht geöffnet werden</translation>
+        <translation type="vanished">Datei konnte nicht geöffnet werden</translation>
     </message>
     <message>
         <source>Wrote %1</source>
-        <translation>%1 geschrieben</translation>
+        <translation type="vanished">%1 geschrieben</translation>
     </message>
     <message>
         <source>Save MarkDown File</source>
-        <translation>Markdown-Datei speichern</translation>
+        <translation type="vanished">Markdown-Datei speichern</translation>
     </message>
     <message>
         <source>About MarkdownEdit</source>
-        <translation>Über MarkdownEdit</translation>
+        <translation type="vanished">Über MarkdownEdit</translation>
     </message>
     <message>
         <source>MarkdownEdit, as the name suggests, is a simple and easy program to create and edit Markdown files.</source>
-        <translation>MarkdownEdit ist, wie der Name schon sagt, ein einfaches Programm zum Erstellen und Bearbeiten von Markdown-Dateien.</translation>
+        <translation type="vanished">MarkdownEdit ist, wie der Name schon sagt, ein einfaches Programm zum Erstellen und Bearbeiten von Markdown-Dateien.</translation>
     </message>
     <message>
         <source>&lt;p&gt;The conversion from Markdown to HTML is done with the help of the &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt; library by &lt;em&gt;Martin Mitáš&lt;/em&gt;.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Die Konvertierung von Markdown nach HTML erfolgt mit Hilfe der &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt;-Bibliothek von &lt;em&gt;Martin Mitáš&lt;/ em&gt;.&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;Die Konvertierung von Markdown nach HTML erfolgt mit Hilfe der &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt;-Bibliothek von &lt;em&gt;Martin Mitáš&lt;/ em&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;The &lt;a href=&quot;https://github.com/pbek/qmarkdowntextedit&quot;&gt;widget&lt;/a&gt; used for writing was created by &lt;em&gt;Patrizio Bekerle&lt;/em&gt;.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Das zum Schreiben verwendete &lt;a href=&quot;https://github.com/pbek/qmarkdowntextedit&quot;&gt;Widget&lt;/a&gt; wurde von &lt;em&gt;Patrizio Bekerle&lt;/em&gt; erstellt.&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;Das zum Schreiben verwendete &lt;a href=&quot;https://github.com/pbek/qmarkdowntextedit&quot;&gt;Widget&lt;/a&gt; wurde von &lt;em&gt;Patrizio Bekerle&lt;/em&gt; erstellt.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Spell checking is done with the &lt;a href=&quot;https://github.com/software-made-easy/qtspell&quot;&gt;QtSpell&lt;/a&gt; library based on the &lt;a href=&quot;https://github.com/manisandro/qtspell&quot;&gt;QtSpell&lt;/a&gt; library by &lt;em&gt;Sandro Mani&lt;/em&gt;.&lt;/p&gt;</source>
@@ -257,7 +245,7 @@
     <message>
         <source>This file could not be found:
 %1.</source>
-        <translation>Diese Datei wurde nicht gefunden:
+        <translation type="vanished">Diese Datei wurde nicht gefunden:
 %1.</translation>
     </message>
     <message>
@@ -276,111 +264,27 @@
     </message>
     <message>
         <source>You have unsaved changes. Do you want to exit anyway?</source>
-        <translation>Du hast nicht gespeicherte Änderungen. Willst du trotzdem beenden?</translation>
-    </message>
-    <message>
-        <source>HTML</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>E&amp;xtras</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+N</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+O</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+S</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+Shift+S</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+P</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+Shift+P</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+Q</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+Z</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+Shift+Z</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+X</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+C</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+V</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+A</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+F</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Test</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+R</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Show line numbers</source>
-        <translation></translation>
+        <translation type="vanished">Du hast nicht gespeicherte Änderungen. Willst du trotzdem beenden?</translation>
     </message>
     <message>
         <source>Auto add file path to icon path</source>
-        <translation>Dateipfad automatisch zum Bilderpfad hinzufügen</translation>
-    </message>
-    <message>
-        <source>Shift+F7</source>
-        <translation></translation>
+        <translation type="vanished">Dateipfad automatisch zum Bilderpfad hinzufügen</translation>
     </message>
     <message>
         <source>Export</source>
-        <translation>Exportieren</translation>
+        <translation type="vanished">Exportieren</translation>
     </message>
     <message>
         <source>Line wrap</source>
-        <translation>Zeilenumbruch</translation>
+        <translation type="vanished">Zeilenumbruch</translation>
     </message>
     <message>
         <source>untitled.md</source>
-        <translation>Unbenannt.md</translation>
+        <translation type="vanished">Unbenannt.md</translation>
     </message>
     <message>
         <source>Save changes?</source>
-        <translation>Änderungen speichern?</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Spell checking is done with the &lt;a href=&quot;https://github.com/software-made-easy/QtSpell&quot;&gt;QtSpell&lt;/a&gt; library based on the &lt;a href=&quot;https://github.com/manisandro/qtspell&quot;&gt;QtSpell&lt;/a&gt; library by &lt;em&gt;Sandro Mani&lt;/em&gt;.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Änderungen speichern?</translation>
     </message>
 </context>
 <context>
@@ -394,71 +298,71 @@
     <name>QPlainTextEditSearchWidget</name>
     <message>
         <source>Find in text</source>
-        <translation>Im Text finden</translation>
+        <translation type="vanished">Im Text finden</translation>
     </message>
     <message>
         <source>Replace with</source>
-        <translation>Replace with</translation>
+        <translation type="vanished">Replace with</translation>
     </message>
     <message>
         <source>Find:</source>
-        <translation>Finden:</translation>
+        <translation type="vanished">Finden:</translation>
     </message>
     <message>
         <source>Search backward</source>
-        <translation>Rückwärts suchen</translation>
+        <translation type="vanished">Rückwärts suchen</translation>
     </message>
     <message>
         <source>Replace:</source>
-        <translation>Ersetzen:</translation>
+        <translation type="vanished">Ersetzen:</translation>
     </message>
     <message>
         <source>Close search</source>
-        <translation>Suche schließen</translation>
+        <translation type="vanished">Suche schließen</translation>
     </message>
     <message>
         <source>Advanced search / replace text</source>
-        <translation>Erweiterte Suche / Text ersetzen</translation>
+        <translation type="vanished">Erweiterte Suche / Text ersetzen</translation>
     </message>
     <message>
         <source>Search forward</source>
-        <translation>Vorwärts suchen</translation>
+        <translation type="vanished">Vorwärts suchen</translation>
     </message>
     <message>
         <source>Match case sensitive</source>
-        <translation>Groß-/Kleinschreibung beachten</translation>
+        <translation type="vanished">Groß-/Kleinschreibung beachten</translation>
     </message>
     <message>
         <source>Mode:</source>
-        <translation>Modus:</translation>
+        <translation type="vanished">Modus:</translation>
     </message>
     <message>
         <source>Plain text</source>
-        <translation>Klartext</translation>
+        <translation type="vanished">Klartext</translation>
     </message>
     <message>
         <source>Whole words</source>
-        <translation>Ganze Wörter</translation>
+        <translation type="vanished">Ganze Wörter</translation>
     </message>
     <message>
         <source>Regular expression</source>
-        <translation>Regulären Ausdruck</translation>
+        <translation type="vanished">Regulären Ausdruck</translation>
     </message>
     <message>
         <source>Replace one text occurrence</source>
-        <translation>Ersetzen Sie ein Textvorkommen</translation>
+        <translation type="vanished">Ersetzen Sie ein Textvorkommen</translation>
     </message>
     <message>
         <source>Replace</source>
-        <translation>Ersetzen</translation>
+        <translation type="vanished">Ersetzen</translation>
     </message>
     <message>
         <source>Replace all text occurrences</source>
-        <translation>Ersetzen Sie alle Textvorkommen</translation>
+        <translation type="vanished">Ersetzen Sie alle Textvorkommen</translation>
     </message>
     <message>
         <source>Replace all</source>
-        <translation>Alles ersetzen</translation>
+        <translation type="vanished">Alles ersetzen</translation>
     </message>
 </context>
 <context>
@@ -483,19 +387,19 @@
     <name>SpellChecker</name>
     <message>
         <source>More...</source>
-        <translation>Mehr...</translation>
+        <translation type="vanished">Mehr...</translation>
     </message>
     <message>
         <source>Add &quot;%1&quot; to dictionary</source>
-        <translation>„%1“ zum Wörterbuch hinzufügen</translation>
+        <translation type="vanished">„%1“ zum Wörterbuch hinzufügen</translation>
     </message>
     <message>
         <source>Ignore &quot;%1&quot;</source>
-        <translation>„%1“ ignorieren</translation>
+        <translation type="vanished">„%1“ ignorieren</translation>
     </message>
     <message>
         <source>Languages</source>
-        <translation type="unfinished">Sprachen</translation>
+        <translation type="obsolete">Sprachen</translation>
     </message>
 </context>
 </TS>

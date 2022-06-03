@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
         a.installTranslator(&qtTranslator);
 
     // try to load translation for current locale from resource file
-    if (translator.load(QStringLiteral("MarkdownEdit_") + lang, a.applicationDirPath()))
+    if (translator.load(QStringLiteral("MarkdownEdit_") + lang, QStringLiteral(":/i18n")))
         a.installTranslator(&translator);
 
     MainWindow w(parser.positionalArguments().value(0, QLatin1String()));

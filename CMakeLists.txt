@@ -19,11 +19,8 @@ if(ANDROID)
 elseif(EMSCRIPTEN)
     add_compile_definitions(OS_WASM)
 else()
-    find_package(PkgConfig)
-    PKG_CHECK_MODULES(ENCHANT enchant-2)
-    if(!ENCHANT_FOUND)
-        add_compile_definitions(NO_SPELLCHECK)
-    endif()
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(ENCHANT enchant-2)
 endif()
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools PrintSupport)
@@ -40,6 +37,8 @@ set(PROJECT_SOURCES
         src/mainwindow.h
         src/about.cpp
         src/about.h
+        src/markdowneditor.cpp
+        src/markdowneditor.h
         src/markdownparser.cpp
         src/markdownparser.h
         src/highlighter.cpp
@@ -49,10 +48,11 @@ set(PROJECT_SOURCES
         common.h
         ui/mainwindow.ui
         ${RC_FILES}
+        ${TS_FILES}
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_translation(markdownedit QM_FILES ${TS_FILES})
+    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR}/translations ${TS_FILES})
 
     qt_add_executable(markdownedit
         MANUAL_FINALIZATION
@@ -61,7 +61,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     )
 
 else()
-    qt5_add_translation(markdownedit QM_FILES ${TS_FILES})
+    qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR}/translations ${TS_FILES})
+
+    message(STATUS ${QM_FILES})
 
     if(ANDROID)
         add_library(markdownedit SHARED
@@ -78,8 +80,14 @@ IF(WIN32)
     SET(INTL_LDFLAGS -lintl)
 ENDIF(WIN32)
 
-include_directories(${CMAKE_SOURCE_DIR}/src)
+target_include_directories(markdownedit PRIVATE ${CMAKE_SOURCE_DIR}/src)
 target_link_libraries(markdownedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport ${ENCHANT_LDFLAGS} ${INTL_LDFLAGS} 3rdparty)
+
+if(ENCHANT_FOUND)
+    target_include_directories(markdownedit PRIVATE ${ENCHANT_INCLUDE_DIRS})
+else()
+    add_compile_definitions(NO_SPELLCHECK)
+endif()
 
 set_target_properties(markdownedit PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

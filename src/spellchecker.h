@@ -199,8 +199,6 @@ private:
     QString language;
     void replaceWord(const int &wordPos, const QString &newWord);
 
-    bool isWordValid(const QString &line, const int &wordPos) const;
-
     TextEditProxy *textEdit;
 
     QString encodeLanguageString(const QString &langString);
