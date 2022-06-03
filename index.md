@@ -29,7 +29,15 @@ MarkdownEdit, as the name suggests, is a simple and easy program for creating an
 
 ![Example](https://github.com/software-made-easy/MarkdownEdit/raw/main/doc/images/Example.png)
 
-# Download
-## Linux:
-- [Installer](https://github.com/software-made-easy/MarkdownEdit/releases/latest/download/Installer)
+## Preview
+A preview is avaiable [here](https://software-made-easy.github.io/MarkdownEdit/markdownedit.html).
+
+
+Notes:
+- Performance might be bad
+- Some functions such as spellchecking are not avaiable
+
+
+## Download
+### Linux:
 - [.deb file](https://github.com/software-made-easy/MarkdownEdit/releases/latest/download/MarkdownEdit.deb)
