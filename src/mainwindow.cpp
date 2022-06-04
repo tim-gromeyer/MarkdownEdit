@@ -443,6 +443,34 @@ void MainWindow::onFileNew()
 
 void MainWindow::onFileOpen()
 {
+#if defined(Q_OS_WASM)
+    auto fileContentReady = [this](const QString &newFile, const QByteArray &fileContent) {
+        if (!newFile.isEmpty()) {
+            QGuiApplication::setOverrideCursor(Qt::WaitCursor);
+
+            path = newFile;
+
+            if (setPath)
+                if (!ui->textBrowser->searchPaths().contains(QFileInfo(newFile).path()))
+                    ui->textBrowser->setSearchPaths(ui->textBrowser->searchPaths() << QFileInfo(newFile).path());
+
+            ui->editor->setPlainText(fileContent);
+
+            setWindowFilePath(QFileInfo(path).fileName());
+            statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 30000);
+
+            updateOpened();
+
+            if (languagesMap.contains(path))
+                checker->setLanguage(languagesMap[path].toString());
+            else
+                languagesMap[path] = checker->getLanguage();
+
+            QGuiApplication::restoreOverrideCursor();
+        }
+    };
+    QFileDialog::getOpenFileContent("Markdown (*.md *.markdown *.mkd)", fileContentReady);
+#else
     if (ui->editor->document()->isModified()) {
         const int button = QMessageBox::question(this, tr("Save changes?"),
                                            tr("You have unsaved changes. Do you want to open a new document anyway?"));
@@ -458,6 +486,7 @@ void MainWindow::onFileOpen()
         if (file == path) return;
         openFile(file);
     }
+#endif
 }
 
 void MainWindow::onFileSave()
@@ -473,6 +502,9 @@ void MainWindow::onFileSave()
 
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
+#if defined(Q_OS_WASM)
+    QFileDialog::saveFileContent(ui->editor->toPlainText().toLocal8Bit(), path);
+#else
     QSaveFile f(path, this);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QGuiApplication::restoreOverrideCursor();
@@ -492,6 +524,7 @@ void MainWindow::onFileSave()
                                  QDir::toNativeSeparators(path), f.errorString()));
         return;
     }
+#endif
 
     statusBar()->showMessage(tr("Wrote %1").arg(QDir::toNativeSeparators(path)), 30000);
 

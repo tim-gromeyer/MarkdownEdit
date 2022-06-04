@@ -9,8 +9,14 @@
 
 int main(int argc, char *argv[])
 {
+#ifdef Q_OS_WASM
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+#error You must use Qt 5.14 or newer
+#endif
+#else
 #if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
 #error You must use Qt 5.10 or newer
+#endif
 #endif
     QApplication a(argc, argv);
     a.setApplicationDisplayName(QStringLiteral("MarkdownEdit"));
