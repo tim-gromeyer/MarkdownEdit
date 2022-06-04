@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/i18n">
+        <file>MarkdownEdit_de.ts</file>
+    </qresource>
+</RCC>

@@ -33,6 +33,11 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    QScreen *screen = qApp->screenAt(pos());
+    screen->isPortrait(Qt::PortraitOrientation);
+    connect(screen, &QScreen::orientationChanged,
+            this, &MainWindow::onOrientationChanged);
+
     const QColor back = palette().base().color();
     int r, g, b, a;
     back.getRgb(&r, &g, &b, &a);
@@ -44,8 +49,11 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
         setWindowIcon(QIcon(QStringLiteral(":/Icon.svg")));
 
     ui->setupUi(this);
-    ui->editor->setHighlightingEnabled(false);
     ui->editor->searchWidget()->setDarkMode(dark);
+
+    checker = new SpellChecker(new TextEditProxyT(ui->editor), spellLang);
+
+    ui->editor->setChecker(checker);
 
     QComboBox *mode = new QComboBox(ui->Edit);
     mode->addItems({QStringLiteral("Commonmark"), QStringLiteral("GitHub")});
@@ -56,12 +64,12 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     widgetBox->addItems({tr("Preview"), tr("HTML")});
     widgetBox->setCurrentIndex(0);
 
+    /*
     QFile list(QStringLiteral("/usr/share/dict/ngerman"));
     list.open(QIODevice::ReadOnly);
     QCompleter *c = new QCompleter(QString(list.readAll()).split("\n"), this);
     ui->editor->setCompleter(c);
-
-    checker = new SpellChecker(new TextEditProxyT(ui->editor), spellLang);
+    */
 
     htmlHighliter = new Highliter(ui->raw->document());
 
@@ -147,10 +155,7 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     if (ui->editor->toPlainText().isEmpty()  && file.isEmpty()) {
         QFile f(QStringLiteral(":/default.md"), this);
         if (f.open(QFile::ReadOnly | QFile::Text)) {
-            checker->clearDirtyBlocks();
-            checker->setDocument(nullptr);
             ui->editor->setPlainText(f.readAll());
-            checker->setDocument(ui->editor->document());
             setWindowFilePath(f.fileName());
             ui->editor->document()->setModified(false);
         }
@@ -158,6 +163,18 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
             onFileNew();
         }
     }
+
+#ifdef NO_SPELLCHECK
+    ui->menuExtras->removeAction(ui->actionSpell_checking);
+#endif
+}
+
+void MainWindow::onOrientationChanged(const Qt::ScreenOrientation &t)
+{
+    if (t == Qt::PortraitOrientation)
+        disablePreview(true);
+    else if (t == Qt::LandscapeOrientation)
+        disablePreview(false);
 }
 
 void MainWindow::onLanguageChanged(const QString &lang)
@@ -199,6 +216,9 @@ void MainWindow::changeWordWrap(const bool &c)
 
 void MainWindow::changeSpelling(const bool &checked)
 {
+#ifdef NO_SPELLCHECK
+    return;
+#endif
     checker->setSpellCheckingEnabled(checked);
 
     ui->actionSpell_checking->setChecked(checked);
@@ -368,14 +388,6 @@ void MainWindow::openFile(const QString &newFile)
 {
     QFile f(newFile);
 
-    if (f.size() > 50000) {
-        const int out = QMessageBox::warning(this, tr("Large file"),
-                                       tr("This is a large file that can potentially cause performance issues."),
-                                       QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok);
-
-        if (out == QMessageBox::Cancel)
-            return;
-    }
     if (!f.open(QIODevice::ReadWrite)) {
         QMessageBox::warning(this, tr("Couldn't open file"),
                              tr("Could not open file %1: %2").arg(
@@ -383,6 +395,14 @@ void MainWindow::openFile(const QString &newFile)
         recentOpened.removeAll(newFile);
         updateOpened();
         return;
+    }
+    if (f.size() > 50000) {
+        const int out = QMessageBox::warning(this, tr("Large file"),
+                                             tr("This is a large file that can potentially cause performance issues."),
+                                             QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok);
+
+        if (out == QMessageBox::Cancel)
+            return;
     }
 
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
@@ -393,15 +413,10 @@ void MainWindow::openFile(const QString &newFile)
         if (!ui->textBrowser->searchPaths().contains(QFileInfo(newFile).path()))
             ui->textBrowser->setSearchPaths(ui->textBrowser->searchPaths() << QFileInfo(newFile).path());
 
-    checker->clearDirtyBlocks();
-    checker->setDocument(nullptr);
     ui->editor->setPlainText(f.readAll());
-    checker->setDocument(ui->editor->document());
 
     setWindowFilePath(QFileInfo(path).fileName());
     statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 30000);
-
-    checker->rehighlight();
 
     updateOpened();
 
@@ -425,10 +440,7 @@ void MainWindow::onFileNew()
     }
 
     path = QLatin1String();
-    checker->clearDirtyBlocks();
-    checker->setDocument(nullptr);
     ui->editor->setPlainText(tr("## New document"));
-    checker->setDocument(ui->editor->document());
     setWindowFilePath(QFileInfo(tr("untitled.md")).fileName());
 
     ui->editor->document()->setModified(false);
@@ -447,7 +459,7 @@ void MainWindow::onFileOpen()
     dialog.setMimeTypeFilters({"text/markdown"});
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
     if (dialog.exec() == QDialog::Accepted) {
-        const QString &file = dialog.selectedFiles().at(0);
+        const QString file = dialog.selectedFiles().at(0);
         if (file == path) return;
         openFile(file);
     }
@@ -566,8 +578,10 @@ void MainWindow::updateOpened() {
 
     ui->menuRecentlyOpened->clear();
 
-    if (!path.isEmpty() && !recentOpened.contains(path))
-        recentOpened.prepend(path);
+    if (recentOpened.contains(path) && recentOpened.at(0) != path)
+        recentOpened.move(recentOpened.indexOf(path), 0);
+    else if (!path.isEmpty() && !recentOpened.contains(path))
+        recentOpened.insert(0, path);
 
     if (recentOpened.size() > RECENT_OPENED_LIST_LENGTH)
         recentOpened.takeLast();

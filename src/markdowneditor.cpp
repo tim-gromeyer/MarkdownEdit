@@ -2,12 +2,50 @@
 
 #include <QAbstractItemView>
 #include <QScrollBar>
+#include <QDialog>
+#include <QHBoxLayout>
+#include <QFile>
 
 
 MarkdownEditor::MarkdownEditor(QWidget *parent)
     : QMarkdownTextEdit(parent, false)
 {
 
+}
+
+void MarkdownEditor::showMarkdownSyntax()
+{
+    QDialog d(this);
+    QHBoxLayout l(&d);
+    d.setLayout(&l);
+    l.setContentsMargins(0, 0, 0, 0);
+    d.resize(size());
+
+    QMarkdownTextEdit e(&d, true);
+
+
+    QFile f(QStringLiteral(":/syntax_%1.md").arg(checker->getLanguage().split("_").at(0)), &d);
+    if (!f.open(QIODevice::ReadOnly)) {
+        f.setFileName(QStringLiteral(":/syntax_en.md"));
+        f.open(QIODevice::ReadOnly);
+    }
+    e.setPlainText(f.readAll());
+    l.addWidget(&e);
+
+    d.exec();
+}
+
+void MarkdownEditor::setText(const QString &t)
+{
+    if (checker)
+        checker->clearDirtyBlocks();
+
+    QMarkdownTextEdit::setPlainText(t);
+}
+
+void MarkdownEditor::setChecker(SpellChecker* &c)
+{
+    checker = c;
 }
 
 void MarkdownEditor::setCompleter(QCompleter *completer)
@@ -23,30 +61,21 @@ void MarkdownEditor::setCompleter(QCompleter *completer)
     c->setWidget(this);
     c->setCompletionMode(QCompleter::PopupCompletion);
     c->setCaseSensitivity(Qt::CaseInsensitive);
-    QObject::connect(c, QOverload<const QString &>::of(&QCompleter::activated),
-                     this, &MarkdownEditor::insertCompletion);
-}
-
-
-QCompleter *MarkdownEditor::completer() const
-{
-    return c;
+    connect(c, QOverload<const QString &>::of(&QCompleter::activated),
+            this, &MarkdownEditor::insertCompletion);
 }
 
 void MarkdownEditor::insertCompletion(const QString &completion)
 {
-    if (c->widget() != this)
-        return;
-
     QTextCursor tc = textCursor();
-    int extra = completion.length() - c->completionPrefix().length();
+    const int extra = completion.length() - c->completionPrefix().length();
     tc.movePosition(QTextCursor::Left);
     tc.movePosition(QTextCursor::EndOfWord);
     tc.insertText(completion.right(extra));
     setTextCursor(tc);
 }
 
-QString MarkdownEditor::textUnderCursor() const
+const QString MarkdownEditor::textUnderCursor() const
 {
     QTextCursor tc = textCursor();
     tc.select(QTextCursor::WordUnderCursor);

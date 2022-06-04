@@ -54,6 +54,8 @@ private slots:
     void changeWordWrap(const bool &);
     void changeWidget(const QString &);
 
+    void onOrientationChanged(const Qt::ScreenOrientation &);
+
     void cut();
     void copy();
     void paste();

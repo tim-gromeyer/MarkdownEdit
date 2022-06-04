@@ -16,7 +16,7 @@ MarkdownEdit, as the name suggests, is a simple and easy program for creating an
 - Spell checker
 - Save and load Markdown files
 - Undo-Redo
-- Preview Markdown files in real time (~1 ms)
+- Preview Markdown files in real time (<1 ms)
 - Syntax highlighting editor
 - Auto-complete (close brackets, list, ...)
 - Find/Replace(Ctrl+F/Ctrl+R)

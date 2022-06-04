@@ -182,6 +182,8 @@
     <property name="title">
      <string>&amp;Help</string>
     </property>
+    <addaction name="actionMarkdown_Syntax"/>
+    <addaction name="separator"/>
     <addaction name="actionAbout"/>
     <addaction name="actionAboutQt"/>
    </widget>
@@ -546,12 +548,27 @@
     <string>Line wrap</string>
    </property>
   </action>
+  <action name="actionMarkdown_Syntax">
+   <property name="icon">
+    <iconset theme="help">
+     <normaloff>.</normaloff>.</iconset>
+   </property>
+   <property name="text">
+    <string>Markdown Syntax</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
    <class>MarkdownEditor</class>
    <extends>QPlainTextEdit</extends>
    <header>src/markdowneditor.h</header>
+   <slots>
+    <slot>showMarkdownSyntax()</slot>
+   </slots>
   </customwidget>
  </customwidgets>
  <resources/>
@@ -593,6 +610,22 @@
    <signal>triggered()</signal>
    <receiver>editor</receiver>
    <slot>redo()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>198</x>
+     <y>307</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionMarkdown_Syntax</sender>
+   <signal>triggered()</signal>
+   <receiver>editor</receiver>
+   <slot>showMarkdownSyntax()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>

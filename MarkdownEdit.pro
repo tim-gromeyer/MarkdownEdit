@@ -1,3 +1,5 @@
+TARGET = markdownedit
+
 QT       += core gui svg printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -45,14 +47,12 @@ CONFIG -= qtquickcompiler
 VERSION = 1.2.0
 DEFINES += APP_VERSION=\\\"$$VERSION\\\" CHECK_MARKDOWN
 
-android: DEFINES += OS_ANDROID
-else: wasm: DEFINES += OS_WASM
+android: DEFINES += NO_SPELLCHECK
+else: wasm: DEFINES += NO_SPELLCHECK
 else {
 CONFIG += link_pkgconfig
 PKGCONFIG += enchant-2
 }
-
-TARGET = markdownedit
 
 # Only show qDebug() messages in debug mode
 CONFIG(release, debug | release): DEFINES += QT_NO_DEBUG_OUTPUT

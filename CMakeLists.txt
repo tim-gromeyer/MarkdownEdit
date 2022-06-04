@@ -14,10 +14,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_compile_definitions(APP_VERSION="${PROJECT_VERSION}" QT_DISABLE_DEPRECATED_BEFORE=0x051208 CHECK_MARKDOWN)
 
-if(ANDROID)
-    add_compile_definitions(OS_ANDROID)
-elseif(EMSCRIPTEN)
-    add_compile_definitions(OS_WASM)
+if(ANDROID OR EMSCRIPTEN)
+    add_compile_definitions(NO_SPELLCHECK)
 else()
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(ENCHANT enchant-2)
@@ -48,11 +46,10 @@ set(PROJECT_SOURCES
         common.h
         ui/mainwindow.ui
         ${RC_FILES}
-        ${TS_FILES}
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR}/translations ${TS_FILES})
+    qt_add_translation(QM_FILES ${TS_FILES})
 
     qt_add_executable(markdownedit
         MANUAL_FINALIZATION
@@ -61,9 +58,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     )
 
 else()
-    qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR}/translations ${TS_FILES})
-
-    message(STATUS ${QM_FILES})
+    qt5_add_translation(QM_FILES ${TS_FILES})
 
     if(ANDROID)
         add_library(markdownedit SHARED
@@ -90,7 +85,7 @@ else()
 endif()
 
 set_target_properties(markdownedit PROPERTIES
-    MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
+    MACOSX_BUNDLE_GUI_IDENTIFIER org.qtproject.markdownedit
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
@@ -100,3 +95,5 @@ set_target_properties(markdownedit PROPERTIES
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(markdownedit)
 endif()
+
+install(TARGETS markdownedit DESTINATION bin)

@@ -5,11 +5,7 @@
 
 #define MD_UNDERLINE true
 
-#if defined(OS_ANDROID) || defined(OS_WASM)
-#define SPELLCHECK false
-#else
-#define SPELLCHECK true
-#endif
+#define SPELLCHECK true  // Not avaiable on android and web assembly
 
 #if !SPELLCHECK
 #define NO_SPELLCHECK
