@@ -157,7 +157,6 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
         if (f.open(QFile::ReadOnly | QFile::Text)) {
             ui->editor->setPlainText(f.readAll());
             setWindowFilePath(f.fileName());
-            ui->editor->document()->setModified(false);
         }
         else {
             onFileNew();
@@ -420,8 +419,6 @@ void MainWindow::openFile(const QString &newFile)
 
     updateOpened();
 
-    ui->editor->document()->setModified(false);
-
     if (languagesMap.contains(path))
         checker->setLanguage(languagesMap[path].toString());
     else
@@ -442,8 +439,6 @@ void MainWindow::onFileNew()
     path = QLatin1String();
     ui->editor->setPlainText(tr("## New document"));
     setWindowFilePath(QFileInfo(tr("untitled.md")).fileName());
-
-    ui->editor->document()->setModified(false);
 }
 
 void MainWindow::onFileOpen()

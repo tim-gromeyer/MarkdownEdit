@@ -10,7 +10,6 @@
 MarkdownEditor::MarkdownEditor(QWidget *parent)
     : QMarkdownTextEdit(parent, false)
 {
-
 }
 
 void MarkdownEditor::showMarkdownSyntax()
@@ -41,6 +40,7 @@ void MarkdownEditor::setText(const QString &t)
         checker->clearDirtyBlocks();
 
     QMarkdownTextEdit::setPlainText(t);
+    document()->setModified(false);
 }
 
 void MarkdownEditor::setChecker(SpellChecker* &c)

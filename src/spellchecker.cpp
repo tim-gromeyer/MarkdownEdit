@@ -140,7 +140,6 @@ void SpellChecker::checkSpelling(const QString &text)
 }
 
 bool SpellChecker::isCorrect(const QString &word) {
-
 #ifdef NO_SPELLCHECK
     Q_UNUSED(word);
     return true;
