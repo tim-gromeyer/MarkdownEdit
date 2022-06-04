@@ -5,7 +5,7 @@
 [![GitHub release](https://img.shields.io/github/release/software-made-easy/MarkdownEdit.svg)](https://github.com/software-made-easy/MarkdownEdit/releases/)
 
 
-# MarkdownEdit
+# [MarkdownEdit](https://software-made-easy.github.io/MarkdownEdit/)
 
 MarkdownEdit, as the name suggests, is a simple and easy program for creating and editing Markdown files.
 
@@ -28,6 +28,15 @@ MarkdownEdit, as the name suggests, is a simple and easy program for creating an
 - Remember spelling language for every document
 
 ![Example](doc/images/Example.png)
+
+## Preview
+
+A preview is available [here](https://software-made-easy.github.io/MarkdownEdit/markdownedit.html).
+
+Important:
+- Spell Check NOT WORKING!
+- might be bad
+- Editing of local files does not work (yet)!
 
 ## Dependencies:
 [Qt](https://qt.io/) and [enchant-2](https://github.com/AbiWord/enchant).
