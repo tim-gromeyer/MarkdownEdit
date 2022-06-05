@@ -37,7 +37,7 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     int r, g, b, a;
     back.getRgb(&r, &g, &b, &a);
 
-    const int dark = ((r + g + b + a) / 4) < 127;
+    const bool dark = ((r + g + b + a) / 4) < 127;
     if (dark)
         setWindowIcon(QIcon(QStringLiteral(":/Icon_dark.svg")));
     else
@@ -208,10 +208,7 @@ void MainWindow::changeSpelling(const bool &checked)
     return;
 #endif
 
-    for (int i = 0; i > ui->tabWidget_2->count(); i++)
-    {
-        dynamic_cast<MarkdownEditor*>(ui->tabWidget_2->widget(i))->changeSpelling(checked);
-    }
+    ui->editor->getChecker()->setSpellCheckingEnabled(checked);
 
     ui->actionSpell_checking->setChecked(checked);
     spelling = checked;
