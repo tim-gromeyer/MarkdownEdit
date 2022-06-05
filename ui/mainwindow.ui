@@ -48,17 +48,10 @@
        <property name="tabBarAutoHide">
         <bool>true</bool>
        </property>
-       <widget class="MarkdownEditor" name="editor">
+       <widget class="QWidget" name="tab">
         <attribute name="title">
          <string>Tab 1</string>
         </attribute>
-       </widget>
-      </widget>
-      <widget class="QStackedWidget" name="tabWidget">
-       <property name="currentIndex">
-        <number>0</number>
-       </property>
-       <widget class="QWidget" name="stackedWidgetPage1">
         <layout class="QVBoxLayout" name="verticalLayout">
          <property name="spacing">
           <number>0</number>
@@ -76,7 +69,34 @@
           <number>0</number>
          </property>
          <item>
+          <widget class="MarkdownEditor" name="editor"/>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QStackedWidget" name="tabWidget">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="stackedWidgetPage1">
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
           <widget class="QTextBrowser" name="textBrowser">
+           <property name="acceptDrops">
+            <bool>false</bool>
+           </property>
            <property name="openExternalLinks">
             <bool>true</bool>
            </property>
@@ -124,7 +144,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -204,20 +224,8 @@
     <addaction name="actionAbout"/>
     <addaction name="actionAboutQt"/>
    </widget>
-   <widget class="QMenu" name="menu_View">
-    <property name="title">
-     <string>&amp;View</string>
-    </property>
-    <addaction name="actionPause_preview"/>
-    <addaction name="actionDisable_preview"/>
-    <addaction name="separator"/>
-    <addaction name="actionHighlighting_activated"/>
-    <addaction name="separator"/>
-    <addaction name="actionAuto_add_file_path_to_icon_path"/>
-   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
-   <addaction name="menu_View"/>
    <addaction name="menuExtras"/>
    <addaction name="menu_Help"/>
   </widget>
@@ -581,13 +589,30 @@
  <customwidgets>
   <customwidget>
    <class>MarkdownEditor</class>
-   <extends>QWidget</extends>
-   <header>src/markdowneditor.h</header>
-   <container>1</container>
+   <extends>QPlainTextEdit</extends>
+   <header>markdowneditor.h</header>
+   <slots>
+    <slot>showMarkdownSyntax()</slot>
+   </slots>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../ressources/ressources.qrc"/>
- </resources>
- <connections/>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>actionMarkdown_Syntax</sender>
+   <signal>triggered()</signal>
+   <receiver>editor</receiver>
+   <slot>showMarkdownSyntax()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>238</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

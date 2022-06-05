@@ -446,10 +446,12 @@ void MainWindow::onFileOpen()
 
             updateOpened();
 
-            if (LANGUAGE_MAP.contains(path))
-                checker->setLanguage(LANGUAGE_MAP[path].toString());
+            QMap<QString, QVariant> map = LANGUAGE_MAP();
+
+            if (map.contains(path))
+                ui->editor->getChecker()->setLanguage(map[path].toString());
             else
-                LANGUAGE_MAP[path] = checker->getLanguage();
+                map[path] = ui->editor->getChecker()->getLanguage();
 
             QGuiApplication::restoreOverrideCursor();
         }
