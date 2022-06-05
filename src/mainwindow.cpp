@@ -33,16 +33,11 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-    QScreen *screen = qApp->screenAt(pos());
-    screen->isPortrait(Qt::PortraitOrientation);
-    connect(screen, &QScreen::orientationChanged,
-            this, &MainWindow::onOrientationChanged);
-
     const QColor back = palette().base().color();
     int r, g, b, a;
     back.getRgb(&r, &g, &b, &a);
 
-    const bool dark = ((r + g + b + a) / 4) < 127;
+    const int dark = ((r + g + b + a) / 4) < 127;
     if (dark)
         setWindowIcon(QIcon(QStringLiteral(":/Icon_dark.svg")));
     else
@@ -51,12 +46,14 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     ui->setupUi(this);
     ui->editor->searchWidget()->setDarkMode(dark);
 
-    checker = new SpellChecker(new TextEditProxyT(ui->editor), spellLang);
+    QScreen *screen = qApp->screenAt(pos());
+    if (screen->isPortrait(Qt::LandscapeOrientation))
+        disablePreview(true);
+    connect(screen, &QScreen::orientationChanged,
+            this, &MainWindow::onOrientationChanged);
 
-    ui->editor->setChecker(checker);
-
-    QComboBox *mode = new QComboBox(ui->Edit);
-    mode->addItems({QStringLiteral("Commonmark"), QStringLiteral("GitHub")});
+    mode = new QComboBox(ui->Edit);
+    mode->addItems({QString::fromLatin1("Commonmark"), QString::fromLatin1("GitHub")});
     mode->setCurrentIndex(1);
     _mode = 1;
 
@@ -126,8 +123,6 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
             this, &MainWindow::onSetText);
     connect(ui->actionWord_wrap, &QAction::triggered,
             this, &MainWindow::changeWordWrap);
-    connect(checker, &SpellChecker::languageChanged,
-            this, &MainWindow::onLanguageChanged);
 
     ui->actionSave->setEnabled(false);
     ui->actionUndo->setEnabled(false);
@@ -155,7 +150,7 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     if (ui->editor->toPlainText().isEmpty()  && file.isEmpty()) {
         QFile f(QStringLiteral(":/default.md"), this);
         if (f.open(QFile::ReadOnly | QFile::Text)) {
-            ui->editor->setPlainText(f.readAll());
+            ui->editor->setText(f.readAll(), QLatin1String(":/defauld.md"));
             setWindowFilePath(f.fileName());
         }
         else {
@@ -174,12 +169,6 @@ void MainWindow::onOrientationChanged(const Qt::ScreenOrientation &t)
         disablePreview(true);
     else if (t == Qt::LandscapeOrientation)
         disablePreview(false);
-}
-
-void MainWindow::onLanguageChanged(const QString &lang)
-{
-    if (!path.isEmpty())
-        languagesMap[path] = lang;
 }
 
 void MainWindow::changeWidget(const QString &text)
@@ -218,7 +207,11 @@ void MainWindow::changeSpelling(const bool &checked)
 #ifdef NO_SPELLCHECK
     return;
 #endif
-    checker->setSpellCheckingEnabled(checked);
+
+    for (int i = 0; i > ui->tabWidget_2->count(); i++)
+    {
+        dynamic_cast<MarkdownEditor*>(ui->tabWidget_2->widget(i))->changeSpelling(checked);
+    }
 
     ui->actionSpell_checking->setChecked(checked);
     spelling = checked;
@@ -226,15 +219,14 @@ void MainWindow::changeSpelling(const bool &checked)
 
 void MainWindow::disablePreview(const bool &checked)
 {
-    if (checked)
-        ui->tabWidget->hide();
-    else
-        ui->tabWidget->show();
+    ui->tabWidget->setVisible(!checked);
 
     dontUpdate = checked;
 
     ui->actionPause_preview->setChecked(checked);
     ui->actionPause_preview->setEnabled(!checked);
+
+    ui->actionDisable_preview->setChecked(checked);
 }
 
 void MainWindow::pausePreview(const bool &checked)
@@ -266,7 +258,6 @@ void MainWindow::paste()
 {
     if (ui->editor->hasFocus()) {
         ui->editor->paste();
-        checker->rehighlight();
     }
     else if (ui->textBrowser->hasFocus())
         ui->textBrowser->paste();
@@ -297,7 +288,9 @@ void MainWindow::changeAddtoIconPath(const bool &c)
 void MainWindow::changeHighlighting(const bool &enabled)
 {
     dontUpdate = true;
-    checker->setMarkdownHighlightingEnabled(enabled);
+
+    ui->editor->getChecker()->setMarkdownHighlightingEnabled(enabled);
+
     if (enabled)
         htmlHighliter->setDocument(ui->raw->document());
     else
@@ -412,17 +405,12 @@ void MainWindow::openFile(const QString &newFile)
         if (!ui->textBrowser->searchPaths().contains(QFileInfo(newFile).path()))
             ui->textBrowser->setSearchPaths(ui->textBrowser->searchPaths() << QFileInfo(newFile).path());
 
-    ui->editor->setPlainText(f.readAll());
+    ui->editor->setText(f.readAll(), newFile);
 
     setWindowFilePath(QFileInfo(path).fileName());
     statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 30000);
 
     updateOpened();
-
-    if (languagesMap.contains(path))
-        checker->setLanguage(languagesMap[path].toString());
-    else
-        languagesMap[path] = checker->getLanguage();
 
     QGuiApplication::restoreOverrideCursor();
 }
@@ -437,7 +425,7 @@ void MainWindow::onFileNew()
     }
 
     path = QLatin1String();
-    ui->editor->setPlainText(tr("## New document"));
+    ui->editor->setText(tr("## New document"));
     setWindowFilePath(QFileInfo(tr("untitled.md")).fileName());
 }
 
@@ -454,17 +442,17 @@ void MainWindow::onFileOpen()
                 if (!ui->textBrowser->searchPaths().contains(QFileInfo(newFile).path()))
                     ui->textBrowser->setSearchPaths(ui->textBrowser->searchPaths() << QFileInfo(newFile).path());
 
-            ui->editor->setPlainText(fileContent);
+            ui->editor->setText(fileContent, newFile);
 
             setWindowFilePath(QFileInfo(path).fileName());
             statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 30000);
 
             updateOpened();
 
-            if (languagesMap.contains(path))
-                checker->setLanguage(languagesMap[path].toString());
+            if (LANGUAGE_MAP.contains(path))
+                checker->setLanguage(LANGUAGE_MAP[path].toString());
             else
-                languagesMap[path] = checker->getLanguage();
+                LANGUAGE_MAP[path] = checker->getLanguage();
 
             QGuiApplication::restoreOverrideCursor();
         }
@@ -550,7 +538,10 @@ void MainWindow::onFileSaveAs()
         path.append(".md");
 
     setWindowFilePath(QFileInfo(path).fileName());
-    languagesMap[path] = checker->getLanguage();
+
+    QMap<QString, QVariant> map = LANGUAGE_MAP();
+    map[path] = ui->editor->getChecker()->getLanguage();
+    setLanguageMap(map);
 
     onFileSave();
 }
@@ -675,8 +666,8 @@ void MainWindow::loadSettings(const QString &f) {
     const bool lineWrap = settings->value(QStringLiteral("lineWrap"), false).toBool();
     changeWordWrap(lineWrap);
 
-    languagesMap = settings->value(QStringLiteral("languagesMap"),
-                                   QMap<QString, QVariant>()).toMap();
+    setLanguageMap(settings->value(QStringLiteral("languagesMap"),
+                                   QMap<QString, QVariant>()).toMap());
 
     if (f.isEmpty()) {
         const bool openLast = settings->value(QStringLiteral("openLast"), true).toBool();
@@ -706,14 +697,13 @@ void MainWindow::saveSettings() {
     settings->setValue("openLast", ui->actionOpen_last_document_on_start->isChecked());
     settings->setValue("last", path);
     settings->setValue("setPath", setPath);
-    settings->setValue("spelling", checker->isSpellCheckingEnabled());
+    settings->setValue("spelling", spelling);
     settings->setValue("lineWrap", ui->actionWord_wrap->isChecked());
-    settings->setValue("languagesMap", languagesMap);
+    settings->setValue("languagesMap", LANGUAGE_MAP());
     settings->sync();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete checker;
 }

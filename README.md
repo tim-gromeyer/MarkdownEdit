@@ -34,9 +34,8 @@ MarkdownEdit, as the name suggests, is a simple and easy program for creating an
 A preview is available [here](https://software-made-easy.github.io/MarkdownEdit/markdownedit.html).
 
 Important:
-- Spell Check NOT WORKING!
-- might be bad
-- Editing of local files does not work (yet)!
+- Performance might be bad
+- Some functions such as spellchecking are not available
 
 ## Dependencies:
 [Qt](https://qt.io/) and [enchant-2](https://github.com/AbiWord/enchant).

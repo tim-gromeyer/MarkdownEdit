@@ -399,7 +399,7 @@
     </message>
     <message>
         <source>Languages</source>
-        <translation type="obsolete">Sprachen</translation>
+        <translation>Sprachen</translation>
     </message>
 </context>
 </TS>

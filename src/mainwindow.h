@@ -66,7 +66,6 @@ private:
     void updateOpened();
     void openRecent();
     void onSetText(const int &);
-    void onLanguageChanged(const QString &);
 
     Ui::MainWindow *ui;
 
@@ -85,11 +84,12 @@ private:
     bool spelling;
     bool highlighting;
 
-    SpellChecker *checker;
     Highliter *htmlHighliter;
 
     QToolButton *toolbutton;
     QComboBox *widgetBox;
+
+    QComboBox *mode;
 
     QMap<QString, QVariant> languagesMap;
 };

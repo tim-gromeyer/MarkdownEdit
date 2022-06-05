@@ -12,13 +12,19 @@ class MarkdownEditor : public QMarkdownTextEdit
 {
     Q_OBJECT
 public:
-    explicit MarkdownEditor(QWidget *parent);
+    explicit MarkdownEditor(QWidget *parent = nullptr);
     ~MarkdownEditor();
 
-    void setCompleter(QCompleter *c);
-    void setChecker(SpellChecker* &);
+    void setText(const QString &, const QString &fileName = QLatin1String());
 
-    void setText(const QString &);
+    bool setLanguage(const QString &);
+
+    inline SpellChecker* getChecker() { return checker; };
+
+    void changeSpelling(const bool &);
+
+signals:
+    void languageChanged(const QString &lang = QLatin1String());
 
 public slots:
     void showMarkdownSyntax();
@@ -30,12 +36,16 @@ protected:
 private slots:
     void insertCompletion(const QString &completion);
 
+    void onLanguageChanged(const QString &);
+
 private:
     const QString textUnderCursor() const;
 
 private:
     QCompleter *c = nullptr;
     SpellChecker *checker = nullptr;
+
+    QString fileName = QString::fromLatin1("");
 };
 
 #endif // MARKDOWNEDITOR_H

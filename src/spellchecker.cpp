@@ -402,13 +402,12 @@ void SpellChecker::setSpellCheckingEnabled(const bool &enabled)
 {
     spellingEnabled = enabled;
 
-    rehighlight();
-
     if (enabled)
-        return;
-
-    setDocument(Q_NULLPTR);
-    setDocument(textEdit->document());
+        rehighlight();
+    else {
+        setDocument(Q_NULLPTR);
+        setDocument(textEdit->document());
+    }
 }
 
 

@@ -35,6 +35,7 @@ set(PROJECT_SOURCES
         src/mainwindow.h
         src/about.cpp
         src/about.h
+        src/common.cpp
         src/markdowneditor.cpp
         src/markdowneditor.h
         src/markdownparser.cpp

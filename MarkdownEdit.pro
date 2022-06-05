@@ -14,6 +14,7 @@ INCLUDEPATH += \
     src/
 
 SOURCES += \
+    src/common.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
     src/about.cpp \

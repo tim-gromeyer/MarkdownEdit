@@ -1,7 +1,7 @@
 #include <QByteArray>
 
 #include "markdownparser.h"
-#include "3rdparty/md4c/src/md4c-html.h"
+#include "md4c-html.h"
 #include "common.h"
 
 

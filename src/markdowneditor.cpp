@@ -1,15 +1,42 @@
 #include "markdowneditor.h"
+#include "spellchecker.h"
 
 #include <QAbstractItemView>
 #include <QScrollBar>
 #include <QDialog>
 #include <QHBoxLayout>
 #include <QFile>
+#include <QDebug>
 
 
 MarkdownEditor::MarkdownEditor(QWidget *parent)
     : QMarkdownTextEdit(parent, false)
 {
+    checker = new SpellChecker(new TextEditProxyT(this));
+    connect(checker, &SpellChecker::languageChanged,
+            this, &MarkdownEditor::onLanguageChanged);
+
+    /*
+    c->setWidget(this);
+    c->setCompletionMode(QCompleter::PopupCompletion);
+    c->setCaseSensitivity(Qt::CaseInsensitive);
+    connect(c, QOverload<const QString &>::of(&QCompleter::activated),
+            this, &MarkdownEditor::insertCompletion);
+    */
+}
+
+void MarkdownEditor::changeSpelling(const bool &c)
+{
+    checker->setSpellCheckingEnabled(c);
+}
+
+void MarkdownEditor::onLanguageChanged(const QString &l)
+{
+    if (!fileName.isEmpty()) {
+        QMap<QString, QVariant> map = LANGUAGE_MAP();
+        map[fileName] = l;
+        setLanguageMap(map);
+    }
 }
 
 void MarkdownEditor::showMarkdownSyntax()
@@ -22,7 +49,6 @@ void MarkdownEditor::showMarkdownSyntax()
 
     QMarkdownTextEdit e(&d, true);
 
-
     QFile f(QStringLiteral(":/syntax_%1.md").arg(checker->getLanguage().split("_").at(0)), &d);
     if (!f.open(QIODevice::ReadOnly)) {
         f.setFileName(QStringLiteral(":/syntax_en.md"));
@@ -34,35 +60,32 @@ void MarkdownEditor::showMarkdownSyntax()
     d.exec();
 }
 
-void MarkdownEditor::setText(const QString &t)
+void MarkdownEditor::setText(const QString &t, const QString &newFile)
 {
-    if (checker)
+    fileName = newFile;
+
+    QMap<QString, QVariant> map = LANGUAGE_MAP();
+
+    if (fileName == QLatin1String(":/default.md") && !map.contains(fileName))
+        map[fileName] = QLatin1String("en_us");
+
+    if (checker) {
         checker->clearDirtyBlocks();
+        checker->setDocument(nullptr);
+        if (map.contains(fileName))
+            checker->setLanguage(map[fileName].toString());
+        else
+            map[fileName] = checker->getLanguage();
+    }
+
+    setLanguageMap(map);
 
     QMarkdownTextEdit::setPlainText(t);
+
+    if (checker)
+        checker->setDocument(document());
+
     document()->setModified(false);
-}
-
-void MarkdownEditor::setChecker(SpellChecker* &c)
-{
-    checker = c;
-}
-
-void MarkdownEditor::setCompleter(QCompleter *completer)
-{
-    if (c)
-        c->disconnect(this);
-
-    c = completer;
-
-    if (!c)
-        return;
-
-    c->setWidget(this);
-    c->setCompletionMode(QCompleter::PopupCompletion);
-    c->setCaseSensitivity(Qt::CaseInsensitive);
-    connect(c, QOverload<const QString &>::of(&QCompleter::activated),
-            this, &MarkdownEditor::insertCompletion);
 }
 
 void MarkdownEditor::insertCompletion(const QString &completion)
@@ -137,5 +160,6 @@ void MarkdownEditor::keyPressEvent(QKeyEvent *e)
 
 MarkdownEditor::~MarkdownEditor()
 {
-    delete c;
+     delete c;
+    // delete checker;
 }
