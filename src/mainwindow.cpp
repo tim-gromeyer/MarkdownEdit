@@ -605,7 +605,7 @@ void MainWindow::updateOpened() {
         recentOpened.takeLast();
 
     for (int i = 0; i < recentOpened.size(); i++) {
-        const QString document(recentOpened.at(i));
+        const QString document = recentOpened.at(i);
         QAction *action = new QAction(QStringLiteral("&%1 | %2").arg(QString::number(i + 1),
                                                                      document), this);
         connect(action, &QAction::triggered, this, &MainWindow::openRecent);

@@ -1,0 +1,29 @@
+<RCC>
+    <qresource prefix="/">
+        <file>media/window-close.svg</file>
+        <file>media/go-top.svg</file>
+        <file>media/go-bottom.svg</file>
+        <file>media/format-text-superscript.svg</file>
+        <file>media/edit-find-replace.svg</file>
+        <file>icons/tools-check-spelling.svg</file>
+        <file>icons/text-wrap.svg</file>
+        <file>icons/text-html.png</file>
+        <file>icons/help-contents.svg</file>
+        <file>icons/help-about.svg</file>
+        <file>icons/edit-undo.svg</file>
+        <file>icons/edit-select-all.svg</file>
+        <file>icons/edit-redo.svg</file>
+        <file>icons/edit-paste.svg</file>
+        <file>icons/edit-cut.svg</file>
+        <file>icons/edit-copy.svg</file>
+        <file>icons/document-save-as.svg</file>
+        <file>icons/document-save.svg</file>
+        <file>icons/document-print-preview.svg</file>
+        <file>icons/document-print.svg</file>
+        <file>icons/document-open-recent.svg</file>
+        <file>icons/document-open.svg</file>
+        <file>icons/document-new.svg</file>
+        <file>icons/document-export.svg</file>
+        <file>icons/application-exit.svg</file>
+    </qresource>
+</RCC>

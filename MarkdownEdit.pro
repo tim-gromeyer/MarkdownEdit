@@ -36,7 +36,7 @@ FORMS += \
     ui/mainwindow.ui
 
 TRANSLATIONS += \
-    translations/MarkdownEdit_de.ts
+    translations/MarkdownEdit_de_de.ts
 
 include(3rdparty/qmarkdowntextedit/qmarkdowntextedit.pri)
 include(3rdparty/md4c.pri)
@@ -45,7 +45,7 @@ CONFIG += lrelease
 CONFIG += embed_translations
 CONFIG -= qtquickcompiler
 
-VERSION = 1.2.0
+VERSION = 1.2.5
 DEFINES += APP_VERSION=\\\"$$VERSION\\\" CHECK_MARKDOWN
 
 android: DEFINES += NO_SPELLCHECK
@@ -70,6 +70,7 @@ INSTALLS += desktop
 }
 
 RESOURCES += \
+    ressources/icons.qrc \
     ressources/ressources.qrc
 
 DISTFILES += \

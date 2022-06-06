@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(MarkdownEdit VERSION 1.2.0 LANGUAGES CXX C)
+project(MarkdownEdit VERSION 1.2.5 LANGUAGES CXX C)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -21,11 +21,14 @@ else()
     pkg_check_modules(ENCHANT enchant-2)
 endif()
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools PrintSupport)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools PrintSupport)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
 
-set(TS_FILES translations/MarkdownEdit_de.ts)
-set(RC_FILES ressources/ressources.qrc)
+set(TS_FILES translations/MarkdownEdit_de_de.ts)
+set(RC_FILES
+    ressources/icons.qrc
+    ressources/ressources.qrc
+)
 
 include(3rdparty/CMakeLists.txt)
 
@@ -77,12 +80,13 @@ IF(WIN32)
 ENDIF(WIN32)
 
 target_include_directories(markdownedit PRIVATE ${CMAKE_SOURCE_DIR}/src)
-target_link_libraries(markdownedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport ${ENCHANT_LDFLAGS} ${INTL_LDFLAGS} 3rdparty)
+target_link_libraries(markdownedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport Qt${QT_VERSION_MAJOR}::Svg ${ENCHANT_LDFLAGS} ${INTL_LDFLAGS} 3rdparty)
 
 if(ENCHANT_FOUND)
     target_include_directories(markdownedit PRIVATE ${ENCHANT_INCLUDE_DIRS})
 else()
     add_compile_definitions(NO_SPELLCHECK)
+    message(STATUS "enchant-2 not found. Disable spell check.")
 endif()
 
 set_target_properties(markdownedit PROPERTIES

@@ -224,8 +224,20 @@
     <addaction name="actionAbout"/>
     <addaction name="actionAboutQt"/>
    </widget>
+   <widget class="QMenu" name="menu_View">
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+    <addaction name="actionPause_preview"/>
+    <addaction name="actionDisable_preview"/>
+    <addaction name="separator"/>
+    <addaction name="actionHighlighting_activated"/>
+    <addaction name="separator"/>
+    <addaction name="actionAuto_add_file_path_to_icon_path"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
+   <addaction name="menu_View"/>
    <addaction name="menuExtras"/>
    <addaction name="menu_Help"/>
   </widget>
@@ -541,6 +553,9 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset theme="tools-check-spelling"/>
+   </property>
    <property name="text">
     <string>Check spelling</string>
    </property>
@@ -569,13 +584,16 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset theme="text-wrap"/>
+   </property>
    <property name="text">
     <string>Line wrap</string>
    </property>
   </action>
   <action name="actionMarkdown_Syntax">
    <property name="icon">
-    <iconset theme="help">
+    <iconset theme="help-contents">
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">

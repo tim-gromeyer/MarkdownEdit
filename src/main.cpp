@@ -35,17 +35,21 @@ int main(int argc, char *argv[])
     const QString path = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
 #endif
 
-    const QString lang = QLocale::system().name();
+    const QLocale &lang = QLocale::system();
 
     // load translation for Qt
-    if (qtTranslator.load(QStringLiteral("qt_") + lang, path))
-        a.installTranslator(&qtTranslator);
-    else if (qtTranslator.load(QStringLiteral("qt_") + lang, QStringLiteral("translations")))
+    if (qtTranslator.load(lang, QStringLiteral("qt"),
+                          QStringLiteral("_"), path))
         a.installTranslator(&qtTranslator);
 
     // try to load translation for current locale from resource file
-    if (translator.load(QStringLiteral("MarkdownEdit_") + lang, QStringLiteral(":/i18n")))
+    if (translator.load(lang, QStringLiteral("MarkdownEdit"),
+                        QStringLiteral("_"), QStringLiteral(":/i18n")))
         a.installTranslator(&translator);
+
+#ifndef Q_OS_LINUX
+    QIcon::setFallbackSearchPaths(QIcon::fallbackSearchPaths() << QLatin1String(":/icons"));
+#endif
 
     MainWindow w(parser.positionalArguments().value(0, QLatin1String()));
 
