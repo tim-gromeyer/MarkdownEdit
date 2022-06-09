@@ -30,12 +30,12 @@ MarkdownEdit, as the name suggests, is a simple and easy program for creating an
 ![Example](https://github.com/software-made-easy/MarkdownEdit/raw/main/doc/images/Example.png)
 
 ## Preview
-A preview is avaiable [here](https://software-made-easy.github.io/MarkdownEdit/markdownedit.html).
+A preview is available [here](https://software-made-easy.github.io/MarkdownEdit/markdownedit.html).
 
 
 Notes:
 - Performance might be bad
-- Some functions such as spellchecking are not avaiable
+- Some functions such as spellchecking are not available
 
 
 ## Download
