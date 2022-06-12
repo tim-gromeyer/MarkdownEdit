@@ -158,18 +158,10 @@
      <property name="title">
       <string>Recently opened</string>
      </property>
-     <property name="icon">
-      <iconset theme="document-open-recent">
-       <normaloff>.</normaloff>.</iconset>
-     </property>
     </widget>
     <widget class="QMenu" name="menuExport">
      <property name="title">
       <string>Export</string>
-     </property>
-     <property name="icon">
-      <iconset theme="document-export">
-       <normaloff>.</normaloff>.</iconset>
      </property>
      <addaction name="actionExportHtml"/>
     </widget>
@@ -265,10 +257,6 @@
    </attribute>
   </widget>
   <action name="actionNew">
-   <property name="icon">
-    <iconset>
-     <normaloff>.</normaloff>.</iconset>
-   </property>
    <property name="text">
     <string>New</string>
    </property>
@@ -277,10 +265,6 @@
    </property>
   </action>
   <action name="actionOpen">
-   <property name="icon">
-    <iconset>
-     <normaloff>.</normaloff>.</iconset>
-   </property>
    <property name="text">
     <string>Open</string>
    </property>
@@ -289,10 +273,6 @@
    </property>
   </action>
   <action name="actionSave">
-   <property name="icon">
-    <iconset>
-     <normaloff>.</normaloff>.</iconset>
-   </property>
    <property name="text">
     <string>Save</string>
    </property>
@@ -301,10 +281,6 @@
    </property>
   </action>
   <action name="actionSaveAs">
-   <property name="icon">
-    <iconset>
-     <normaloff>.</normaloff>.</iconset>
-   </property>
    <property name="text">
     <string>Save as</string>
    </property>
@@ -315,10 +291,6 @@
   <action name="actionPrint">
    <property name="enabled">
     <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Print</string>
@@ -331,10 +303,6 @@
    <property name="enabled">
     <bool>true</bool>
    </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>.</normaloff>.</iconset>
-   </property>
    <property name="text">
     <string>Print preview</string>
    </property>
@@ -343,10 +311,6 @@
    </property>
   </action>
   <action name="actionExit">
-   <property name="icon">
-    <iconset>
-     <normaloff>.</normaloff>.</iconset>
-   </property>
    <property name="text">
     <string>Exit</string>
    </property>
@@ -358,10 +322,6 @@
    </property>
   </action>
   <action name="actionUndo">
-   <property name="icon">
-    <iconset>
-     <normaloff>.</normaloff>.</iconset>
-   </property>
    <property name="text">
     <string>Undo</string>
    </property>
@@ -370,10 +330,6 @@
    </property>
   </action>
   <action name="actionRedo">
-   <property name="icon">
-    <iconset>
-     <normaloff>.</normaloff>.</iconset>
-   </property>
    <property name="text">
     <string>Redo</string>
    </property>
@@ -382,10 +338,6 @@
    </property>
   </action>
   <action name="actionCut">
-   <property name="icon">
-    <iconset>
-     <normaloff>.</normaloff>.</iconset>
-   </property>
    <property name="text">
     <string>Cut</string>
    </property>
@@ -394,10 +346,6 @@
    </property>
   </action>
   <action name="actionCopy">
-   <property name="icon">
-    <iconset>
-     <normaloff>.</normaloff>.</iconset>
-   </property>
    <property name="text">
     <string>Copy</string>
    </property>
@@ -406,10 +354,6 @@
    </property>
   </action>
   <action name="actionPaste">
-   <property name="icon">
-    <iconset>
-     <normaloff>.</normaloff>.</iconset>
-   </property>
    <property name="text">
     <string>Paste</string>
    </property>
@@ -418,10 +362,6 @@
    </property>
   </action>
   <action name="actionSelectAll">
-   <property name="icon">
-    <iconset>
-     <normaloff>.</normaloff>.</iconset>
-   </property>
    <property name="text">
     <string>Select all</string>
    </property>
@@ -457,10 +397,6 @@
    </property>
   </action>
   <action name="actionAbout">
-   <property name="icon">
-    <iconset>
-     <normaloff>.</normaloff>.</iconset>
-   </property>
    <property name="text">
     <string>About</string>
    </property>
@@ -520,10 +456,6 @@
    <property name="enabled">
     <bool>true</bool>
    </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>.</normaloff>.</iconset>
-   </property>
    <property name="text">
     <string>Open last document on startup</string>
    </property>
@@ -547,10 +479,6 @@
   <action name="actionSpell_checking">
    <property name="checkable">
     <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Check spelling</string>
@@ -589,10 +517,6 @@
    </property>
   </action>
   <action name="actionMarkdown_Syntax">
-   <property name="icon">
-    <iconset>
-     <normaloff>.</normaloff>.</iconset>
-   </property>
    <property name="text">
     <string>Markdown Syntax</string>
    </property>
