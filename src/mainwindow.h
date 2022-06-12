@@ -67,6 +67,9 @@ private:
     void openRecent();
     void onSetText(const int &);
 
+    void loadIcon(const QLatin1String &name, QAction* &action);
+    void loadIcons();
+
     Ui::MainWindow *ui;
 
     QString path;

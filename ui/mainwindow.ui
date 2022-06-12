@@ -266,7 +266,7 @@
   </widget>
   <action name="actionNew">
    <property name="icon">
-    <iconset theme="document-new">
+    <iconset>
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
@@ -278,7 +278,7 @@
   </action>
   <action name="actionOpen">
    <property name="icon">
-    <iconset theme="document-open">
+    <iconset>
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
@@ -290,7 +290,7 @@
   </action>
   <action name="actionSave">
    <property name="icon">
-    <iconset theme="document-save">
+    <iconset>
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
@@ -302,7 +302,7 @@
   </action>
   <action name="actionSaveAs">
    <property name="icon">
-    <iconset theme="document-save-as">
+    <iconset>
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
@@ -317,7 +317,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset theme="document-print">
+    <iconset>
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
@@ -332,7 +332,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset theme="document-print-preview">
+    <iconset>
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
@@ -344,7 +344,7 @@
   </action>
   <action name="actionExit">
    <property name="icon">
-    <iconset theme="application-exit">
+    <iconset>
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
@@ -359,7 +359,7 @@
   </action>
   <action name="actionUndo">
    <property name="icon">
-    <iconset theme="edit-undo">
+    <iconset>
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
@@ -371,7 +371,7 @@
   </action>
   <action name="actionRedo">
    <property name="icon">
-    <iconset theme="edit-redo">
+    <iconset>
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
@@ -383,7 +383,7 @@
   </action>
   <action name="actionCut">
    <property name="icon">
-    <iconset theme="edit-cut">
+    <iconset>
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
@@ -395,7 +395,7 @@
   </action>
   <action name="actionCopy">
    <property name="icon">
-    <iconset theme="edit-copy">
+    <iconset>
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
@@ -407,7 +407,7 @@
   </action>
   <action name="actionPaste">
    <property name="icon">
-    <iconset theme="edit-paste">
+    <iconset>
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
@@ -419,7 +419,7 @@
   </action>
   <action name="actionSelectAll">
    <property name="icon">
-    <iconset theme="edit-select-all">
+    <iconset>
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
@@ -434,7 +434,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset theme="edit-find">
+    <iconset>
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
@@ -449,7 +449,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset theme="text-html">
+    <iconset>
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
@@ -458,7 +458,7 @@
   </action>
   <action name="actionAbout">
    <property name="icon">
-    <iconset theme="help-about">
+    <iconset>
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
@@ -476,17 +476,12 @@
     <enum>QAction::AboutQtRole</enum>
    </property>
   </action>
-  <action name="actionTest">
-   <property name="text">
-    <string>Test</string>
-   </property>
-  </action>
   <action name="actionReplace">
    <property name="enabled">
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset theme="edit-find-replace">
+    <iconset>
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
@@ -526,7 +521,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset theme="document-open-recent">
+    <iconset>
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
@@ -554,7 +549,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset theme="tools-check-spelling"/>
+    <iconset>
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Check spelling</string>
@@ -573,8 +569,8 @@
   </action>
   <action name="actionExportHtml">
    <property name="icon">
-    <iconset theme="text-html">
-     <normaloff>.</normaloff>.</iconset>
+    <iconset resource="../ressources/icons.qrc">
+     <normaloff>:/icons/text-html_32.png</normaloff>:/icons/text-html_32.png</iconset>
    </property>
    <property name="text">
     <string>HTML</string>
@@ -585,7 +581,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset theme="text-wrap"/>
+    <iconset theme="text-wrap">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Line wrap</string>
@@ -593,7 +590,7 @@
   </action>
   <action name="actionMarkdown_Syntax">
    <property name="icon">
-    <iconset theme="help-contents">
+    <iconset>
      <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
@@ -614,7 +611,9 @@
    </slots>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../ressources/icons.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>actionMarkdown_Syntax</sender>

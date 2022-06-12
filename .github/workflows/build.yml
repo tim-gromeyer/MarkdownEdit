@@ -48,19 +48,6 @@ jobs:
         cached: ${{ steps.cache-qt.outputs.cache-hit }}
 
       #
-      # Install enchant-2
-      #
-    - name: Install enchant-2
-      run: |
-        wget https://github.com/AbiWord/enchant/releases/download/v2.3.3/enchant-2.3.3.tar.gz
-        tar -xf enchant-2.3.3.tar.gz
-        cd enchant-2.3.3/
-        ./configure
-        make -j8
-        sudo make install
-        cd ..
-
-      #
       # Clone dependencys
       #
     - name: Clone MarkdownEdit's dependencys
@@ -68,17 +55,7 @@ jobs:
         git submodule update --init --recursive -j 4
 
       #
-      # Build MarkdownEdit using qmake
-      #
-    - name: Build MarkdownEdit using qmake
-      run: |
-        mkdir build && cd build
-        qmake ..
-        make -j8
-        cd ..
-
-      #
-      # Build MarkdownEdit using qmake
+      # Build MarkdownEdit using CMake
       #
     - name: Build MarkdownEdit using CMake
       run: |

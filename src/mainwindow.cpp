@@ -46,6 +46,8 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     ui->setupUi(this);
     ui->editor->searchWidget()->setDarkMode(dark);
 
+    loadIcons();
+
     QScreen *screen = qApp->screenAt(pos());
     if (screen->isPortrait(Qt::LandscapeOrientation))
         disablePreview(true);
@@ -60,13 +62,6 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     widgetBox = new QComboBox(this);
     widgetBox->addItems({tr("Preview"), tr("HTML")});
     widgetBox->setCurrentIndex(0);
-
-    /*
-    QFile list(QStringLiteral("/usr/share/dict/ngerman"));
-    list.open(QIODevice::ReadOnly);
-    QCompleter *c = new QCompleter(QString(list.readAll()).split("\n"), this);
-    ui->editor->setCompleter(c);
-    */
 
     htmlHighliter = new Highliter(ui->raw->document());
 
@@ -161,6 +156,37 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
 #ifdef NO_SPELLCHECK
     ui->menuExtras->removeAction(ui->actionSpell_checking);
 #endif
+}
+
+void MainWindow::loadIcons()
+{
+    loadIcon(QLatin1String("application-exit"), ui->actionExit);
+    loadIcon(QLatin1String("document-new"), ui->actionNew);
+    loadIcon(QLatin1String("document-open-recent"), ui->actionOpen_last_document_on_start);
+    loadIcon(QLatin1String("document-open"), ui->actionOpen);
+    loadIcon(QLatin1String("document-print-preview"), ui->actionPrintPreview);
+    loadIcon(QLatin1String("document-print"), ui->actionPrint);
+    loadIcon(QLatin1String("document-save-as"), ui->actionSaveAs);
+    loadIcon(QLatin1String("document-save"), ui->actionSave);
+    loadIcon(QLatin1String("edit-copy"), ui->actionCopy);
+    loadIcon(QLatin1String("edit-cut"), ui->actionCut);
+    loadIcon(QLatin1String("edit-paste"), ui->actionPaste);
+    loadIcon(QLatin1String("edit-redo"), ui->actionRedo);
+    loadIcon(QLatin1String("edit-select-all"), ui->actionSelectAll);
+    loadIcon(QLatin1String("edit-undo"), ui->actionUndo);
+    loadIcon(QLatin1String("edit-copy"), ui->actionCopy);
+    loadIcon(QLatin1String("help-about"), ui->actionAbout);
+    loadIcon(QLatin1String("help-contents"), ui->actionMarkdown_Syntax);
+    loadIcon(QLatin1String("text-wrap"), ui->actionWord_wrap);
+    loadIcon(QLatin1String("tools-check-spelling"), ui->actionSpell_checking);
+
+    ui->menuExport->setIcon(QIcon::fromTheme(QLatin1String("document-export"), QIcon(QStringLiteral(":/icons/document-export.svg"))));
+    ui->menuRecentlyOpened->setIcon(QIcon::fromTheme(QLatin1String("document-open-recent"), QIcon(QStringLiteral(":/icons/document-open-recent.svg"))));
+}
+
+void MainWindow::loadIcon(const QLatin1String &name, QAction* &a)
+{
+    a->setIcon(QIcon::fromTheme(name, QIcon(QStringLiteral(":/icons/%1.svg").arg(name))));
 }
 
 void MainWindow::onOrientationChanged(const Qt::ScreenOrientation &t)

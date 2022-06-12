@@ -9,15 +9,12 @@
 
 int main(int argc, char *argv[])
 {
-#ifdef Q_OS_WASM
-#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+#if defined(Q_OS_WASM) && QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
 #error You must use Qt 5.14 or newer
-#endif
-#else
-#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+#elif QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
 #error You must use Qt 5.10 or newer
 #endif
-#endif
+
     QApplication a(argc, argv);
     a.setApplicationDisplayName(QStringLiteral("MarkdownEdit"));
     a.setApplicationVersion(APP_VERSION);
@@ -46,10 +43,6 @@ int main(int argc, char *argv[])
     if (translator.load(lang, QStringLiteral("MarkdownEdit"),
                         QStringLiteral("_"), QStringLiteral(":/i18n")))
         a.installTranslator(&translator);
-
-#ifndef Q_OS_LINUX
-    QIcon::setFallbackSearchPaths(QIcon::fallbackSearchPaths() << QLatin1String(":/icons"));
-#endif
 
     MainWindow w(parser.positionalArguments().value(0, QLatin1String()));
 
