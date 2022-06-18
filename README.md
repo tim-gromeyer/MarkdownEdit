@@ -42,7 +42,6 @@ Important:
 
 ## Note(s):
 - To improve performance when using images, disable the "Auto add file path to icon path" option (menu <u>V</u>iew).
-- When building with CMake, the translations will **not** work!
 
 
 -------
@@ -53,7 +52,7 @@ Run the [build script](scripts/build.sh) or follow the instructions below.
 - Clone MarkdownEdit: `git clone https://github.com/software-made-easy/MarkdownEdit && cd MarkdownEdit`
 - Clone all repositories required by MarkdownEdit by running the command `git submodule update --init --recursive -j 3`.
 - Create the build folder: `mkdir build && cd build`.
-- Now create a Makefile with CMake: `cmake ..` or qmake (recommended): `qmake ..`
+- Now create a Makefile with CMake: `cmake ..` or qmake (not recommended): `qmake ..`
 - Run make: `make -j4`
 
 In summary:
@@ -61,7 +60,7 @@ In summary:
 git clone https://github.com/software-made-easy/MarkdownEdit && cd MarkdownEdit
 git submodule update --init --recursive -j 3
 mkdir build && cd build
-qmake ..
+cmake ..
 make -j4
 ```
 

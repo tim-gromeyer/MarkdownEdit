@@ -49,9 +49,9 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     loadIcons();
 
     QScreen *screen = qApp->screenAt(pos());
-    if (screen->isPortrait(Qt::LandscapeOrientation))
+    if (screen->primaryOrientation() == Qt::PortraitOrientation)
         disablePreview(true);
-    connect(screen, &QScreen::orientationChanged,
+    connect(screen, &QScreen::primaryOrientationChanged,
             this, &MainWindow::onOrientationChanged);
 
     mode = new QComboBox(ui->Edit);

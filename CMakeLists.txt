@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.12)
 
 project(MarkdownEdit VERSION 1.2.5 LANGUAGES CXX C)
 
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_AUTOUIC ON)
@@ -12,19 +14,10 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR}/ui)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_compile_definitions(APP_VERSION="${PROJECT_VERSION}" QT_DISABLE_DEPRECATED_BEFORE=0x051208 CHECK_MARKDOWN)
-
-if(ANDROID OR EMSCRIPTEN)
-    add_compile_definitions(NO_SPELLCHECK)
-else()
-    find_package(PkgConfig REQUIRED)
-    pkg_check_modules(ENCHANT enchant-2)
-endif()
-
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
 
-set(TS_FILES translations/MarkdownEdit_de_de.ts)
+set(TS_FILES translations/i18n_de_de.ts)
 set(RC_FILES
     ressources/icons.qrc
     ressources/ressources.qrc
@@ -54,23 +47,35 @@ set(PROJECT_SOURCES
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_translation(QM_FILES ${TS_FILES})
+else()
+    qt5_add_translation(QM_FILES ${TS_FILES})
+endif()
 
+include(TranslationUtils)
+add_app_translations_resource(APP_RES ${QM_FILES})
+add_qt_translations_resource(QT_RES de_de)
+
+if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(markdownedit
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         ${QM_FILES}
+        ${APP_RES}
+        ${QT_RES}
     )
 
 else()
-    qt5_add_translation(QM_FILES ${TS_FILES})
-
     if(ANDROID)
         add_library(markdownedit SHARED
             ${PROJECT_SOURCES}
+            ${APP_RES}
+            ${QT_RES}
         )
     else()
         add_executable(markdownedit
             ${PROJECT_SOURCES}
+            ${APP_RES}
+            ${QT_RES}
         )
     endif()
 endif()
@@ -82,10 +87,19 @@ ENDIF(WIN32)
 target_include_directories(markdownedit PRIVATE ${CMAKE_SOURCE_DIR}/src)
 target_link_libraries(markdownedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport Qt${QT_VERSION_MAJOR}::Svg ${ENCHANT_LDFLAGS} ${INTL_LDFLAGS} 3rdparty)
 
+target_compile_definitions(markdownedit PUBLIC APP_VERSION="${PROJECT_VERSION}" QT_DISABLE_DEPRECATED_BEFORE=0x051208 CHECK_MARKDOWN)
+
+if(ANDROID OR EMSCRIPTEN)
+    target_compile_definitions(markdownedit PUBLIC NO_SPELLCHECK)
+else()
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(ENCHANT enchant-2)
+endif()
+
 if(ENCHANT_FOUND)
     target_include_directories(markdownedit PRIVATE ${ENCHANT_INCLUDE_DIRS})
 else()
-    add_compile_definitions(NO_SPELLCHECK)
+    target_compile_definitions(markdownedit PUBLIC NO_SPELLCHECK)
     message(STATUS "enchant-2 not found. Disable spell check.")
 endif()
 

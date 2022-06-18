@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
         a.installTranslator(&qtTranslator);
 
     // try to load translation for current locale from resource file
-    if (translator.load(lang, QStringLiteral("MarkdownEdit"),
+    if (translator.load(lang, QStringLiteral("i18n"),
                         QStringLiteral("_"), QStringLiteral(":/i18n")))
         a.installTranslator(&translator);
 

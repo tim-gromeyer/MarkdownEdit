@@ -36,7 +36,7 @@ FORMS += \
     ui/mainwindow.ui
 
 TRANSLATIONS += \
-    translations/MarkdownEdit_de_de.ts
+    translations/i18n_de_de.ts
 
 include(3rdparty/qmarkdowntextedit/qmarkdowntextedit.pri)
 include(3rdparty/md4c.pri)
