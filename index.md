@@ -9,6 +9,11 @@
 
 MarkdownEdit, as the name suggests, is a simple and easy program for creating and editing Markdown files.
 
+## Table of contents
+1. [Features](#features)
+2. [Preview](#preview)
+3. [Download](#download)
+
 -------
 
 ## Features:
@@ -35,8 +40,7 @@ A preview is available [here](https://software-made-easy.github.io/MarkdownEdit/
 
 Notes:
 - Performance might be bad
-- Some functions such as spellchecking are not available
-
+- Some features like spell check are not available
 
 ## Download
 ### Linux:
