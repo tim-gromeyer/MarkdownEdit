@@ -27,5 +27,6 @@
         <file>icons/text-html_32.png</file>
         <file>icons/text-html_24.png</file>
         <file>icons/text-html_16.png</file>
+        <file>icons/document-revert.svg</file>
     </qresource>
 </RCC>

@@ -19,6 +19,18 @@
         <source>License</source>
         <translation>Lizenz</translation>
     </message>
+    <message>
+        <source>Version:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Qt Version:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Credits</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>
@@ -140,15 +152,15 @@
     </message>
     <message>
         <source>Search/Replace</source>
-        <translation>Suchen/Ersetzen</translation>
+        <translation type="vanished">Suchen/Ersetzen</translation>
     </message>
     <message>
         <source>Export Html</source>
-        <translation>Html exportieren</translation>
+        <translation type="vanished">Html exportieren</translation>
     </message>
     <message>
         <source>Options</source>
-        <translation>Einstellungen</translation>
+        <translation type="vanished">Einstellungen</translation>
     </message>
     <message>
         <source>About</source>
@@ -188,7 +200,7 @@
     </message>
     <message>
         <source>new.md</source>
-        <translation>neu.md</translation>
+        <translation type="vanished">neu.md</translation>
     </message>
     <message>
         <source>Print Document</source>
@@ -240,7 +252,7 @@
     </message>
     <message>
         <source>&lt;p&gt;Spell checking is done with the &lt;a href=&quot;https://github.com/software-made-easy/qtspell&quot;&gt;QtSpell&lt;/a&gt; library based on the &lt;a href=&quot;https://github.com/manisandro/qtspell&quot;&gt;QtSpell&lt;/a&gt; library by &lt;em&gt;Sandro Mani&lt;/em&gt;.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Die Rechtschreibprüfung erfolgt mit der &lt;a href=&quot;https://github.com/software-made-easy/qtspell&quot;&gt;QtSpell&lt;/a&gt;-Bibliothek basierend auf &lt;a href=&quot;https: //github.com/manisandro/qtspell&quot;&gt;QtSpell&lt;/a&gt;-Bibliothek von &lt;em&gt;Sandro Mani&lt;/em&gt;.&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;Die Rechtschreibprüfung erfolgt mit der &lt;a href=&quot;https://github.com/software-made-easy/qtspell&quot;&gt;QtSpell&lt;/a&gt;-Bibliothek basierend auf &lt;a href=&quot;https: //github.com/manisandro/qtspell&quot;&gt;QtSpell&lt;/a&gt;-Bibliothek von &lt;em&gt;Sandro Mani&lt;/em&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>This file could not be found:
@@ -250,16 +262,16 @@
     </message>
     <message>
         <source>&lt;p&gt;Spell checking is done using the &lt;a href=&quot;https://github.com/manisandro/qtspell&quot;&gt;QtSpell&lt;/a&gt; library by &lt;em&gt;Sandro Mani&lt;/em&gt;.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Die Rechtschreibprüfung erfolgt mithilfe der &lt;a href=&quot;https://github.com/manisandro/qtspell&quot;&gt;QtSpell&lt;/a&gt;-Bibliothek von &lt;em&gt;Sandro Mani&lt;/em&gt;.&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;Die Rechtschreibprüfung erfolgt mithilfe der &lt;a href=&quot;https://github.com/manisandro/qtspell&quot;&gt;QtSpell&lt;/a&gt;-Bibliothek von &lt;em&gt;Sandro Mani&lt;/em&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;The HTML syntax is highlighted using &lt;em&gt;Waqar Ahmed&lt;/em&gt;&apos;s &lt;a href=&quot;https://github.com/Waqar144/QSourceHighlite&quot;&gt;QSourceHighlite&lt;/a&gt; library.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Die HTML-Syntax wird mithilfe der &lt;a href=&quot;https://github.com/Waqar144/QSourceHighlite&quot;&gt;QSourceHighlite&lt;/a&gt;-Bibliothek von &lt;em&gt;Waqar Ahmed&lt;/em&gt; hervorgehoben.&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;Die HTML-Syntax wird mithilfe der &lt;a href=&quot;https://github.com/Waqar144/QSourceHighlite&quot;&gt;QSourceHighlite&lt;/a&gt;-Bibliothek von &lt;em&gt;Waqar Ahmed&lt;/em&gt; hervorgehoben.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>This file could not be found:
 -%1.</source>
-        <translation>Diese Datei konnte nicht gefunden werden:
+        <translation type="vanished">Diese Datei konnte nicht gefunden werden:
 -%1.</translation>
     </message>
     <message>
@@ -286,12 +298,104 @@
         <source>Save changes?</source>
         <translation>Änderungen speichern?</translation>
     </message>
+    <message>
+        <source>Tab 1</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>E&amp;xtras</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Ctrl+N</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Ctrl+O</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Ctrl+S</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Ctrl+Shift+S</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Ctrl+P</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Ctrl+Shift+P</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Ctrl+Q</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Ctrl+Z</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Ctrl+Shift+Z</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Ctrl+X</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Ctrl+C</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Ctrl+V</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Ctrl+A</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Ctrl+F</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Ctrl+R</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Show line numbers</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Shift+F7</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>HTML</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Markdown Syntax</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>F1</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Reload &quot;%1&quot;</source>
+        <translation>&quot;%1&quot; neu laden</translation>
+    </message>
 </context>
 <context>
     <name>QApplication</name>
     <message>
         <source>Warning</source>
-        <translation>Warnung</translation>
+        <translation type="vanished">Warnung</translation>
     </message>
 </context>
 <context>
@@ -376,11 +480,11 @@
     <name>Settings</name>
     <message>
         <source>Settings</source>
-        <translation>Einstellungen</translation>
+        <translation type="vanished">Einstellungen</translation>
     </message>
     <message>
         <source>Auto add file path to icon path</source>
-        <translation>Dateipfad automatisch zum Bilderpfad hinzufügen</translation>
+        <translation type="vanished">Dateipfad automatisch zum Bilderpfad hinzufügen</translation>
     </message>
 </context>
 <context>

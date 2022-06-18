@@ -26,22 +26,15 @@ int main(int argc, char *argv[])
     parser.process(a);
 
     QTranslator translator, qtTranslator;
-#if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
-    const QString path = QLibraryInfo::path(QLibraryInfo::TranslationsPath);
-#else
-    const QString path = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
-#endif
-
-    const QLocale &lang = QLocale::system();
 
     // load translation for Qt
-    if (qtTranslator.load(lang, QStringLiteral("qt"),
-                          QStringLiteral("_"), path))
+    if (qtTranslator.load(QLocale::system(), QStringLiteral("qtbase"),
+                          QStringLiteral("_"), QStringLiteral(":/qtTranslations/")))
         a.installTranslator(&qtTranslator);
 
     // try to load translation for current locale from resource file
-    if (translator.load(lang, QStringLiteral("i18n"),
-                        QStringLiteral("_"), QStringLiteral(":/i18n")))
+    if (translator.load(QLocale::system(), QStringLiteral("i18n"),
+                        QStringLiteral("_"), QStringLiteral(":/translations")))
         a.installTranslator(&translator);
 
     MainWindow w(parser.positionalArguments().value(0, QLatin1String()));

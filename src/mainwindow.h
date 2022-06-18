@@ -37,6 +37,7 @@ private slots:
     void onFileOpen();
     void onFileSave();
     void onFileSaveAs();
+    inline void onFileReload() { openFile(path); };
     void onHelpAbout();
     void onTextChanged();
     void changeMode(const QString &);
@@ -67,7 +68,7 @@ private:
     void openRecent();
     void onSetText(const int &);
 
-    void loadIcon(const QLatin1String &name, QAction* &action);
+    void loadIcon(const QString &name, QAction* &action);
     void loadIcons();
 
     Ui::MainWindow *ui;

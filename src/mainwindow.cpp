@@ -118,6 +118,8 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
             this, &MainWindow::onSetText);
     connect(ui->actionWord_wrap, &QAction::triggered,
             this, &MainWindow::changeWordWrap);
+    connect(ui->actionReload, &QAction::triggered,
+            this, &MainWindow::onFileReload);
 
     ui->actionSave->setEnabled(false);
     ui->actionUndo->setEnabled(false);
@@ -147,6 +149,7 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
         if (f.open(QFile::ReadOnly | QFile::Text)) {
             ui->editor->setText(f.readAll(), QLatin1String(":/defauld.md"));
             setWindowFilePath(f.fileName());
+            ui->actionReload->setText(tr("Reload \"%1\"").arg(f.fileName()));
         }
         else {
             onFileNew();
@@ -160,33 +163,37 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
 
 void MainWindow::loadIcons()
 {
-    loadIcon(QLatin1String("application-exit"), ui->actionExit);
-    loadIcon(QLatin1String("document-new"), ui->actionNew);
-    loadIcon(QLatin1String("document-open-recent"), ui->actionOpen_last_document_on_start);
-    loadIcon(QLatin1String("document-open"), ui->actionOpen);
-    loadIcon(QLatin1String("document-print-preview"), ui->actionPrintPreview);
-    loadIcon(QLatin1String("document-print"), ui->actionPrint);
-    loadIcon(QLatin1String("document-save-as"), ui->actionSaveAs);
-    loadIcon(QLatin1String("document-save"), ui->actionSave);
-    loadIcon(QLatin1String("edit-copy"), ui->actionCopy);
-    loadIcon(QLatin1String("edit-cut"), ui->actionCut);
-    loadIcon(QLatin1String("edit-paste"), ui->actionPaste);
-    loadIcon(QLatin1String("edit-redo"), ui->actionRedo);
-    loadIcon(QLatin1String("edit-select-all"), ui->actionSelectAll);
-    loadIcon(QLatin1String("edit-undo"), ui->actionUndo);
-    loadIcon(QLatin1String("edit-copy"), ui->actionCopy);
-    loadIcon(QLatin1String("help-about"), ui->actionAbout);
-    loadIcon(QLatin1String("help-contents"), ui->actionMarkdown_Syntax);
-    loadIcon(QLatin1String("text-wrap"), ui->actionWord_wrap);
-    loadIcon(QLatin1String("tools-check-spelling"), ui->actionSpell_checking);
+    loadIcon(QStringLiteral("application-exit"), ui->actionExit);
+    loadIcon(QStringLiteral("document-new"), ui->actionNew);
+    loadIcon(QStringLiteral("document-open-recent"), ui->actionOpen_last_document_on_start);
+    loadIcon(QStringLiteral("document-open"), ui->actionOpen);
+    loadIcon(QStringLiteral("document-print-preview"), ui->actionPrintPreview);
+    loadIcon(QStringLiteral("document-print"), ui->actionPrint);
+    loadIcon(QStringLiteral("document-save-as"), ui->actionSaveAs);
+    loadIcon(QStringLiteral("document-save"), ui->actionSave);
+    loadIcon(QStringLiteral("edit-copy"), ui->actionCopy);
+    loadIcon(QStringLiteral("edit-cut"), ui->actionCut);
+    loadIcon(QStringLiteral("edit-paste"), ui->actionPaste);
+    loadIcon(QStringLiteral("edit-redo"), ui->actionRedo);
+    loadIcon(QStringLiteral("edit-select-all"), ui->actionSelectAll);
+    loadIcon(QStringLiteral("edit-undo"), ui->actionUndo);
+    loadIcon(QStringLiteral("edit-copy"), ui->actionCopy);
+    loadIcon(QStringLiteral("help-about"), ui->actionAbout);
+    loadIcon(QStringLiteral("help-contents"), ui->actionMarkdown_Syntax);
+    loadIcon(QStringLiteral("text-wrap"), ui->actionWord_wrap);
+    loadIcon(QStringLiteral("tools-check-spelling"), ui->actionSpell_checking);
+    loadIcon(QStringLiteral("document-revert"), ui->actionReload);
 
-    ui->menuExport->setIcon(QIcon::fromTheme(QLatin1String("document-export"), QIcon(QStringLiteral(":/icons/document-export.svg"))));
-    ui->menuRecentlyOpened->setIcon(QIcon::fromTheme(QLatin1String("document-open-recent"), QIcon(QStringLiteral(":/icons/document-open-recent.svg"))));
+    ui->menuExport->setIcon(QIcon::fromTheme(QStringLiteral("document-export"),
+                                             QIcon(QStringLiteral(":/icons/document-export.svg"))));
+    ui->menuRecentlyOpened->setIcon(QIcon::fromTheme(QLatin1String("document-open-recent"),
+                                                     QIcon(QStringLiteral(":/icons/document-open-recent.svg"))));
 }
 
-void MainWindow::loadIcon(const QLatin1String &name, QAction* &a)
+void MainWindow::loadIcon(const QString &name, QAction* &a)
 {
-    a->setIcon(QIcon::fromTheme(name, QIcon(QStringLiteral(":/icons/%1.svg").arg(name))));
+    a->setIcon(QIcon::fromTheme(name, QIcon(QStringLiteral(
+                                                ":/icons/%1.svg").arg(name))));
 }
 
 void MainWindow::onOrientationChanged(const Qt::ScreenOrientation &t)
@@ -431,6 +438,7 @@ void MainWindow::openFile(const QString &newFile)
     ui->editor->setText(f.readAll(), newFile);
 
     setWindowFilePath(QFileInfo(path).fileName());
+    ui->actionReload->setText(tr("Reload \"%1\"").arg(windowFilePath()));
     statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 30000);
 
     updateOpened();
@@ -450,6 +458,7 @@ void MainWindow::onFileNew()
     path = QLatin1String();
     ui->editor->setText(tr("## New document"));
     setWindowFilePath(QFileInfo(tr("untitled.md")).fileName());
+    ui->actionReload->setText(tr("Reload \"%1\"").arg(windowFilePath()));
 }
 
 void MainWindow::onFileOpen()
@@ -468,6 +477,7 @@ void MainWindow::onFileOpen()
             ui->editor->setText(fileContent, newFile);
 
             setWindowFilePath(QFileInfo(path).fileName());
+            ui->actionReload->setText(tr("Reload \"%1\"").arg(windowFilePath()));
             statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 30000);
 
             updateOpened();
@@ -563,6 +573,7 @@ void MainWindow::onFileSaveAs()
         path.append(".md");
 
     setWindowFilePath(QFileInfo(path).fileName());
+    ui->actionReload->setText(tr("Reload \"%1\"").arg(windowFilePath()));
 
     QMap<QString, QVariant> map = LANGUAGE_MAP();
     map[path] = ui->editor->getChecker()->getLanguage();

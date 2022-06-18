@@ -9,6 +9,12 @@
 
 MarkdownEdit, as the name suggests, is a simple and easy program for creating and editing Markdown files.
 
+## Table of contents
+
+1. [Features](#features)
+2. [Preview](#preview)
+3. [Dependencies](#dependencies)
+
 -------
 
 ## Features:
@@ -38,21 +44,24 @@ Important:
 - Some functions such as spellchecking are not available
 
 ## Dependencies:
+
 [Qt](https://qt.io/) and [enchant-2](https://github.com/AbiWord/enchant).
 
 ## Note(s):
+
 - To improve performance when using images, disable the "Auto add file path to icon path" option (menu <u>V</u>iew).
 
 
 -------
 
 ## Build instructions
+
 Run the [build script](scripts/build.sh) or follow the instructions below.
 
 - Clone MarkdownEdit: `git clone https://github.com/software-made-easy/MarkdownEdit && cd MarkdownEdit`
 - Clone all repositories required by MarkdownEdit by running the command `git submodule update --init --recursive -j 3`.
 - Create the build folder: `mkdir build && cd build`.
-- Now create a Makefile with CMake: `cmake ..` or qmake (not recommended): `qmake ..`
+- Now create a Makefile with CMake: `cmake ..`.
 - Run make: `make -j4`
 
 In summary:

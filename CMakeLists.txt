@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 3.12)
 
 project(MarkdownEdit VERSION 1.2.5 LANGUAGES CXX C)
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
-
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_AUTOUIC ON)
@@ -21,9 +19,11 @@ set(TS_FILES translations/i18n_de_de.ts)
 set(RC_FILES
     ressources/icons.qrc
     ressources/ressources.qrc
+    translations/translations.qrc
 )
 
 include(3rdparty/CMakeLists.txt)
+include(cmake/TranslationUtils.cmake)
 
 set(PROJECT_SOURCES
         src/main.cpp
@@ -47,35 +47,28 @@ set(PROJECT_SOURCES
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_translation(QM_FILES ${TS_FILES})
-else()
-    qt5_add_translation(QM_FILES ${TS_FILES})
-endif()
+    add_app_translations_resource(APP_RES ${QM_FILES})
 
-include(TranslationUtils)
-add_app_translations_resource(APP_RES ${QM_FILES})
-add_qt_translations_resource(QT_RES de_de)
-
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(markdownedit
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         ${QM_FILES}
         ${APP_RES}
-        ${QT_RES}
     )
 
 else()
+    qt5_add_translation(QM_FILES ${TS_FILES})
+    add_app_translations_resource(APP_RES ${QM_FILES})
+
     if(ANDROID)
         add_library(markdownedit SHARED
             ${PROJECT_SOURCES}
             ${APP_RES}
-            ${QT_RES}
         )
     else()
         add_executable(markdownedit
             ${PROJECT_SOURCES}
             ${APP_RES}
-            ${QT_RES}
         )
     endif()
 endif()
