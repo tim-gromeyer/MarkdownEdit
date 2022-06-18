@@ -186,7 +186,7 @@ void MainWindow::loadIcons()
 
     ui->menuExport->setIcon(QIcon::fromTheme(QStringLiteral("document-export"),
                                              QIcon(QStringLiteral(":/icons/document-export.svg"))));
-    ui->menuRecentlyOpened->setIcon(QIcon::fromTheme(QLatin1String("document-open-recent"),
+    ui->menuRecentlyOpened->setIcon(QIcon::fromTheme(QStringLiteral("document-open-recent"),
                                                      QIcon(QStringLiteral(":/icons/document-open-recent.svg"))));
 }
 
