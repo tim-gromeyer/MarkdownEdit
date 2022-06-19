@@ -4,7 +4,7 @@
 
 QMap<QString, QVariant> languages_map;
 
-QMap<QString, QVariant> LANGUAGE_MAP()
+QMap<QString, QVariant> getLanguageMap()
 {
     return languages_map;
 }

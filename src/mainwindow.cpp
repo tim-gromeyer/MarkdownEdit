@@ -49,8 +49,7 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     loadIcons();
 
     QScreen *screen = qApp->screenAt(pos());
-    if (screen->primaryOrientation() == Qt::PortraitOrientation)
-        disablePreview(true);
+    onOrientationChanged(screen->primaryOrientation());
     connect(screen, &QScreen::primaryOrientationChanged,
             this, &MainWindow::onOrientationChanged);
 
@@ -60,7 +59,7 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     _mode = 1;
 
     widgetBox = new QComboBox(this);
-    widgetBox->addItems({tr("Preview"), tr("HTML")});
+    widgetBox->addItems(QStringList() << tr("Preview") << tr("HTML"));
     widgetBox->setCurrentIndex(0);
 
     htmlHighliter = new Highliter(ui->raw->document());
@@ -198,10 +197,14 @@ void MainWindow::loadIcon(const QString &name, QAction* &a)
 
 void MainWindow::onOrientationChanged(const Qt::ScreenOrientation &t)
 {
-    if (t == Qt::PortraitOrientation)
+    if (t == Qt::PortraitOrientation) {
         disablePreview(true);
-    else if (t == Qt::LandscapeOrientation)
+        statusBar()->hide();
+    }
+    else if (t == Qt::LandscapeOrientation) {
         disablePreview(false);
+        statusBar()->show();
+    }
 }
 
 void MainWindow::changeWidget(const QString &text)
@@ -482,7 +485,7 @@ void MainWindow::onFileOpen()
 
             updateOpened();
 
-            QMap<QString, QVariant> map = LANGUAGE_MAP();
+            QMap<QString, QVariant> map = getLanguageMap();
 
             if (map.contains(path))
                 ui->editor->getChecker()->setLanguage(map[path].toString());
@@ -575,7 +578,7 @@ void MainWindow::onFileSaveAs()
     setWindowFilePath(QFileInfo(path).fileName());
     ui->actionReload->setText(tr("Reload \"%1\"").arg(windowFilePath()));
 
-    QMap<QString, QVariant> map = LANGUAGE_MAP();
+    QMap<QString, QVariant> map = getLanguageMap();
     map[path] = ui->editor->getChecker()->getLanguage();
     setLanguageMap(map);
 
@@ -735,7 +738,7 @@ void MainWindow::saveSettings() {
     settings->setValue("setPath", setPath);
     settings->setValue("spelling", spelling);
     settings->setValue("lineWrap", ui->actionWord_wrap->isChecked());
-    settings->setValue("languagesMap", LANGUAGE_MAP());
+    settings->setValue("languagesMap", getLanguageMap());
     settings->sync();
 }
 

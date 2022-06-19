@@ -15,7 +15,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
 
-set(TS_FILES translations/i18n_de_de.ts)
+set(TS_FILES translations/i18n_de_DE.ts)
 set(RC_FILES
     ressources/icons.qrc
     ressources/ressources.qrc
@@ -52,7 +52,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(markdownedit
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        ${QM_FILES}
         ${APP_RES}
     )
 

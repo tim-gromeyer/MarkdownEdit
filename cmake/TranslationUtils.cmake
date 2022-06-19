@@ -29,19 +29,12 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #=======================================================================
 
-if (NOT TARGET Qt${QT_VERSION_MAJOR}::lconvert)
-    message(FATAL_ERROR "The package \"Qt${QT_VERSION_MAJOR}LinguistTools\" is required.")
-endif()
-
-set(Qt_LCONVERT_EXECUTABLE Qt${QT_VERSION_MAJOR}::lconvert)
-
 function(ADD_APP_TRANSLATIONS_RESOURCE res_file)
     set(_qm_files ${ARGN})
     set(_res_file ${CMAKE_CURRENT_BINARY_DIR}/app_translations.qrc)
 
     file(WRITE ${_res_file} "<!DOCTYPE RCC><RCC version=\"1.0\">\n <qresource prefix=\"/translations\">\n")
     foreach(_lang ${_qm_files})
-        message(STATUS "Add ${_filename} to ressource")
         get_filename_component(_filename ${_lang} NAME)
         file(APPEND ${_res_file} "  <file>${_filename}</file>\n")
     endforeach()

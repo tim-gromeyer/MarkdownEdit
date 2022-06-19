@@ -1,282 +1,171 @@
-Markdown Cheatsheet
-===================
+# Markdown syntax
 
-This cheatsheet is intended as a quick reference and showcase of the markdown syntax in [MarkdownEdit](https://software-made-easy.github.io/MarkdownEdit/).
+Core of what MD4C can undertand is defined by [CommonMark specification](http://spec.commonmark.org/0.27/).
+Therefore the below is just a condensed summary.
 
-## Headers
+* Plain text (two paragraphs):
+```
+This is first paragraph.
+
+And this is second paragraph.
+```
+
+* Italic:
+
+```
+Text enclosed in *single asterisks* or _single underscores_ is recognized
+as an emphasis, and it usually gets rendered as an italic text.
+```
+
+* Bold:
+
+```
+Similarly, text enclosed in **double asterisks** or __double underscores__
+is recognized as a strong emphasis, and it usually gets rendered as a bold
+text.
+```
+
+* Bold italic:
+
+```
+*Italic* and **bold text** can be combined into ***bold italic***, even 
+__in quite a _complicated_ ways__.
+```
+
+* Headings:
 
 ```markdown
-# H1
-## H2
-### H3
-#### H4
-##### H5
-###### H6
+# Header level 1
+## Header level 2
+### Header level 3
+#### Header level 4
+##### Header level 5
+###### Header level 6
 
-Alternatively, for H1 and H2, an underline-ish style:
+First two header level may alternatively be written using an underline:
 
-Alt-H1
-======
+Header level 1
+==============
 
-Alt-H2
-------
+Header level 2
+--------------
 ```
 
-# H1
-## H2
-### H3
-#### H4
-##### H5
-###### H6
-
-Alternatively, for H1 and H2, an underline-ish style:
-
-Alt-H1
-======
-
-Alt-H2
-------
-
-
-## Emphasis
-
-```markdown
-Emphasis, aka italics, with *asterisks*.
-
-Strong emphasis, aka bold, with **asterisks**.
-```
-
-Emphasis, aka italics, with *asterisks*.
-
-Strong emphasis, aka bold, with **asterisks**.
-
-
-## Lists
-
-(In this example, leading and trailing spaces are shown with with dots: ⋅)
-
-```markdown
-1. First ordered list item
-2. Another item
-⋅⋅* Unordered sub-list. 
-1. Actual numbers don't matter, just that it's a number
-⋅⋅1. Ordered sub-list
-4. And another item.
-
-⋅⋅⋅You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we'll use three here to also align the raw Markdown).
-
-⋅⋅⋅To have a line break without a paragraph, you will need to use two trailing spaces.⋅⋅
-⋅⋅⋅Note that this line is separate, but within the same paragraph.⋅⋅
-
-* Unordered list can use asterisks
-- Or minuses
-+ Or pluses
-```
-
-1. First ordered list item
-2. Another item
-  * Unordered sub-list.
-1. Actual numbers don't matter, just that it's a number
-  1. Ordered sub-list
-4. And another item.
-
-   You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we'll use three here to also align the raw Markdown).
-
-   To have a line break without a paragraph, you will need to use two trailing spaces.  
-   Note that this line is separate, but within the same paragraph.  
-
-* Unordered list can use asterisks
-- Or minuses
-+ Or pluses
-
-
-## Links
-
-There are two ways to create links.
-
-```markdown
-[I'm an inline-style link](https://www.google.com)
-
-[I'm an inline-style link with title](https://www.google.com "Google's Homepage")
-
-[You can use numbers for reference-style link definitions][1]
-
-URLs and URLs in angle brackets will automatically get turned into links in the preview. 
-http://www.example.com or <http://www.example.com>
-
-[1]: https://software-made-easy.github.io/MarkdownEdit/
-```
-
-[I'm an inline-style link](https://www.google.com)
-
-[I'm an inline-style link with title](https://www.google.com "Google's Homepage")
-
-[You can use numbers for reference-style link definitions][1]
-
-URLs and URLs in angle brackets will automatically get turned into links in the preview. 
-http://www.example.com or <http://www.example.com>
-
-[1]: https://software-made-easy.github.io/MarkdownEdit/
-
-
-## Inline code and code blocks
-
-```markdown
-Inline `code` has `back-ticks around` it.
-```
-
-Inline `code` has `back-ticks around` it.
-
-Blocks of code are either fenced by lines with three back-ticks, or are indented with four spaces.
-
-### 4-Spaces fence
-
-```markdown
-	s = "Code with space indent"
-	print s
-```
-
-	s = "Code with space indent"
-	print s
-
-### Backtick fence
-
-    ```
-    Code goes here
-    Code goes here
-    ```
+* Link: 
 
 ```
-Code goes here
-Code goes here
+Inline link: [link text](http://www.example.com)
+
+Or link using a reference definition:
+
+[Reference link][1]
+
+[1]: http://www.example.com
 ```
 
-### Backtick fence with code highlighting
+* Image: 
 
-```bash
-# I am a comment
-cd Folder
+```
+Inline image: ![image alt text](http://www.example.com/image.png)
+
+Or image using a reference definition:
+
+![image alt text][2]
+
+[2]: http://www.example.com/image.png
 ```
 
-## Tables
+* Unordered lists:
 
-Tables are not part of the core Markdown spec, but MarkdownEdit's preview supports them.
+```
+* List item 1
+* List item 2
+* List item 3
 
-```markdown
-Colons can be used to align columns.
+or
 
-| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
-
-There must be at least 3 dashes separating each header cell.
-The outer pipes (|) are optional, and you don't need to make the 
-raw Markdown line up prettily. You can also use inline Markdown.
-
-Markdown | Less | Pretty
---- | --- | ---
-*Still* | `renders` | **nicely**
-1 | 2 | 3
+- List item 1
+- List item 2
+- List item 3
 ```
 
-Colons can be used to align columns.
+* Ordered lists:
 
-| Tables        | Are           | Cool |
-| ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
+```
+1. List item 1
+2. List item 2
+3. List item 3
 
-There must be at least 3 dashes separating each header cell. The outer pipes (|) are optional, and you don't need to make the raw Markdown line up prettily. You can also use inline Markdown.
+or
 
-Markdown | Less | Pretty
---- | --- | ---
-*Still* | `renders` | **nicely**
-1 | 2 | 3
-
-
-## Blockquotes
-
-```markdown
-> Blockquotes are very handy in email to emulate reply text.
-> This line is part of the same quote.
-
-Quote break.
-
-> This is a very long line that will still be quoted properly when it wraps. Oh boy let's keep writing to make sure this is long enough to actually wrap for everyone. Oh, you can *put* **Markdown** into a blockquote. 
+1) List item 1
+2) List item 2
+3) List item 3
 ```
 
-> Blockquotes are very handy in email to emulate reply text.
-> This line is part of the same quote.
+* Nested lists:
 
-Quote break.
-
-> This is a very long line that will still be quoted properly when it wraps. Oh boy let's keep writing to make sure this is long enough to actually wrap for everyone. Oh, you can *put* **Markdown** into a blockquote. 
-
-
-## Horizontal Rule
-
-```markdown
-Three or more...
-
----
-
-Hyphens
-
-***
-
-Asterisks
-
-___
-
-Underscores
+```
+* Foo
+* Foo's subitem
+* Bar
+* Bar's subitem 1
+* Bar's subitem 2
+* Bar's subitem 3
+* Baz
+* Baz's subitem 1
+* Baz's subitem 2
 ```
 
-Three or more...
+* Blockquote:
 
----
-
-Hyphens
-
-***
-
-Asterisks
-
-___
-
-Underscores
-
-## Line Breaks
-
-```markdown
-Here's a line for us to start with.
-
-This line is separated from the one above by two newlines, so it will be a *separate paragraph*.
-
-This line is also begins a separate paragraph, but...  
-This line is only separated by two trailing spaces and a single newline, so it's a separate line in the *same paragraph*.
+```
+> Part of documements with lines prepended with `>` is treated as a
+> blockquote.
+>
+> > It may contain even nested block quote or lists:
+> 
+> * List item 1
+> * List item 2
 ```
 
-Here's a line for us to start with.
+* Inline code (a.k.a code span):
 
-This line is separated from the one above by two newlines, so it will be a *separate paragraph*.
-
-This line is also begins a separate paragraph, but...  
-This line is only separated by two trailing spaces and a single newline, so it's a separate line in the *same paragraph*.
-
-## Checkbox lists
-
-```markdown
-- [x] done
-- [ ] todo
+```
+Run shell command `ls` to get contents of the current directory.
 ```
 
-- [x] done
-- [ ] todo
+* Code block:
 
----
+```
+Set of lines enclosed within a lines formed by three (or more) consecutive
+backticks (```) or tildes (~~~) is recognized as a code block.
 
-Credit: [markdown-here](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)  
-License: [CC-BY](https://creativecommons.org/licenses/by/3.0/)
+Alternatively, the code may just be indented by four or more spaces:
+
+  $ ./configure
+  $ make
+  $ make install
+
+An [info string] can be provided after the opening code fence.
+Although this spec doesn't mandate any particular treatment of
+the info string, the first word is typically used to specify
+the language of the code block. In HTML output, the language is
+normally indicated by adding a class to the `code` element consisting
+of `language-` followed by the language name.
+
+example:
+
+~~~ruby
+def foo(x)
+return 3
+end
+~~~
+
+will turn into:
+
+<pre><code class="language-ruby">def foo(x)
+return 3
+end
+</code></pre>
+```

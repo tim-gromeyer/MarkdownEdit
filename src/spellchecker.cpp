@@ -58,7 +58,7 @@ void SpellChecker::highlightBlock(const QString &text)
 {
 #ifdef CHECK_MARKDOWN
     if (markdownhig)
-        MarkdownHighlighter::highlightBlock(text);
+        MarkdownHighlighter::highlightMarkdown(text);
 #endif
 
     if (spellingEnabled)
@@ -76,8 +76,12 @@ void SpellChecker::checkSpelling(const QString &text)
     bool isLink = false;
     const int currentBlockNumber = currentBlock().blockNumber();
 
-    if (isCodeBlock(currentBlockState()))
+    if (isCodeBlock(currentBlockState())) {
+        if (!codeBlockList.contains(currentBlockNumber))
+            codeBlockList.append(currentBlockNumber);
+
         return;
+    }
 
     const int textLength = text.length();
 
@@ -104,12 +108,6 @@ void SpellChecker::checkSpelling(const QString &text)
         }
         else if (isLetterOrNumber)
                 word.append(c);
-        else if (c == QLatin1Char('_') || c == QLatin1Char('-')) {
-            if (i +1 < textLength) {
-                if (text.at(i +1).isLetter())
-                    word.append(c);
-                }
-        }
         else {
             wordList.append(word);
             word.clear();
@@ -168,37 +166,37 @@ bool SpellChecker::setLanguage(const QString &lang)
     Q_UNUSED(lang);
     return false;
 #else
+    if (lang == language) return true;
+
     delete speller;
     speller = nullptr;
-    language = lang;
+
+    QString newLang;
+
+    newLang = lang;
 
     // Determine language from system locale
-    if(lang.isEmpty()) {
-        language = QLocale::system().name();
-        if(language.toLower() == "c" || language.isEmpty()) {
-            qWarning() << "Cannot use system locale " << language;
-            language = QLatin1String();
+    if(newLang.isEmpty()) {
+        newLang = QLocale::system().name();
+        if(newLang.isEmpty()) {
+            qWarning() << "Cannot use system locale " << newLang;
+            language.clear();
             return false;
         }
     }
 
     // Request dictionary
     try {
-        speller = get_enchant_broker()->request_dict(language.toStdString());
-        emit languageChanged(lang);
+        speller = get_enchant_broker()->request_dict(newLang.toStdString());
+        language = newLang;
+        emit languageChanged(language);
     } catch(enchant::Exception& e) {
         qWarning() << "Failed to load dictionary: " << e.what();
-        language = QLatin1String();
+        language.clear();
         return false;
     }
 
-#ifdef CHECK_MARKDOWN
-    const bool wasMarkdownHigh = markdownhig;
     rehighlight();
-    markdownhig = wasMarkdownHigh;
-#else
-    rehighlight();
-#endif
 
     return true;
 #endif
@@ -247,6 +245,51 @@ QStringList SpellChecker::getSuggestion(const QString& word)
     return list;
 }
 
+#ifdef CHECK_MARKDOWN
+QString SpellChecker::getWord(const QTextBlock &block, const int &pos)
+{
+    if (MarkdownHighlighter::isPosInACodeSpan(block.blockNumber(), pos)
+        || codeBlockList.contains(block.blockNumber()))
+        return QLatin1String();
+
+    QString word;
+    const QString text = block.text();
+
+    bool isLink = false;
+
+    const int textLength = text.length();
+
+    for (int i = 0; i < textLength; i++) {
+        const QChar &c = text.at(i);
+        const bool isLetterOrNumber = c.isLetterOrNumber();
+
+        if (c == QLatin1Char('('))
+            if (block.text().mid(i +1, 4) == QStringLiteral("http"))
+                isLink = true;
+
+        if (isLink) {
+            if (c.isSpace() || c == QLatin1Char(')')) {
+                isLink = false;
+            }
+        }
+        else if (i == textLength -1 && isLetterOrNumber) {
+            word.append(c);
+            return word;
+        }
+        else if (isLetterOrNumber)
+            word.append(c);
+        else {
+            if (pos <= i)
+                return word;
+            else
+                word.clear();
+        }
+    }
+
+    return QLatin1String();
+}
+#endif
+
 void SpellChecker::showContextMenu(QMenu* menu, const QPoint& pos, int wordPos)
 {
     QAction *insertPos = menu->actions().at(0);
@@ -254,11 +297,15 @@ void SpellChecker::showContextMenu(QMenu* menu, const QPoint& pos, int wordPos)
     if(speller && spellingEnabled){
         QTextCursor c = textEdit->textCursor();
         c.setPosition(wordPos);
+
+#ifdef CHECK_MARKDOWN
+        const QString word = getWord(c.block(), c.positionInBlock());
+#else
         c.select(QTextCursor::WordUnderCursor);
         const QString word = c.selectedText();
+#endif
 
-        if(!isPosInACodeSpan(c.blockNumber(), c.positionInBlock() -1)
-            && !isCorrect(word)) {
+        if(!isCorrect(word)) {
             const QStringList suggestions = getSuggestion(word);
             if(!suggestions.isEmpty()) {
                 for(int i = 0, n = qMin(10, suggestions.length()); i < n; ++i) {

@@ -33,7 +33,7 @@ void MarkdownEditor::changeSpelling(const bool &c)
 void MarkdownEditor::onLanguageChanged(const QString &l)
 {
     if (!fileName.isEmpty()) {
-        QMap<QString, QVariant> map = LANGUAGE_MAP();
+        QMap<QString, QVariant> map = getLanguageMap();
         map[fileName] = l;
         setLanguageMap(map);
     }
@@ -55,6 +55,7 @@ void MarkdownEditor::showMarkdownSyntax()
         f.open(QIODevice::ReadOnly);
     }
     e.setPlainText(f.readAll());
+    e.setReadOnly(true);
     l.addWidget(&e);
 
     d.exec();
@@ -64,9 +65,9 @@ void MarkdownEditor::setText(const QString &t, const QString &newFile)
 {
     fileName = newFile;
 
-    QMap<QString, QVariant> map = LANGUAGE_MAP();
+    QMap<QString, QVariant> map = getLanguageMap();
 
-    if (fileName == QLatin1String(":/default.md") && !map.contains(fileName))
+    if (fileName == QStringLiteral(":/default.md") && !map.contains(fileName))
         map[fileName] = QLatin1String("en_us");
 
     if (checker) {
