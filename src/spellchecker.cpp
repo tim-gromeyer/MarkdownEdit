@@ -49,9 +49,11 @@ SpellChecker::SpellChecker(TextEditProxy *parent, const QString &lang)
 {
     setLanguage(lang);
 
+#ifndef NO_SPELLCHECK
     textEdit->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(textEdit, &TextEditProxy::customContextMenuRequested,
             this, &SpellChecker::slotShowContextMenu);
+#endif
 }
 
 void SpellChecker::highlightBlock(const QString &text)
@@ -380,6 +382,8 @@ void SpellChecker::slotAddWord()
 {
     QAction *a = qobject_cast<QAction*>(sender());
     addWort(a->data().toString());
+
+    rehighlight();
 }
 
 void SpellChecker::slotIgnoreWord()

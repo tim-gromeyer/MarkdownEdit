@@ -76,11 +76,6 @@ IF(WIN32)
     SET(INTL_LDFLAGS -lintl)
 ENDIF(WIN32)
 
-target_include_directories(markdownedit PRIVATE ${CMAKE_SOURCE_DIR}/src)
-target_link_libraries(markdownedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport Qt${QT_VERSION_MAJOR}::Svg ${ENCHANT_LDFLAGS} ${INTL_LDFLAGS} 3rdparty)
-
-target_compile_definitions(markdownedit PUBLIC APP_VERSION="${PROJECT_VERSION}" QT_DISABLE_DEPRECATED_BEFORE=0x051208 CHECK_MARKDOWN)
-
 if(ANDROID OR EMSCRIPTEN)
     target_compile_definitions(markdownedit PUBLIC NO_SPELLCHECK)
 else()
@@ -89,11 +84,16 @@ else()
 endif()
 
 if(ENCHANT_FOUND)
-    target_include_directories(markdownedit PRIVATE ${ENCHANT_INCLUDE_DIRS})
+    target_include_directories(markdownedit PUBLIC ${ENCHANT_INCLUDE_DIRS})
 else()
     target_compile_definitions(markdownedit PUBLIC NO_SPELLCHECK)
     message(STATUS "enchant-2 not found. Disable spell check.")
 endif()
+
+target_include_directories(markdownedit PRIVATE ${CMAKE_SOURCE_DIR}/src)
+target_link_libraries(markdownedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport Qt${QT_VERSION_MAJOR}::Svg ${ENCHANT_LDFLAGS} ${INTL_LDFLAGS} 3rdparty)
+
+target_compile_definitions(markdownedit PUBLIC APP_VERSION="${PROJECT_VERSION}" QT_DISABLE_DEPRECATED_BEFORE=0x051208 CHECK_MARKDOWN)
 
 set_target_properties(markdownedit PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER org.qtproject.markdownedit
