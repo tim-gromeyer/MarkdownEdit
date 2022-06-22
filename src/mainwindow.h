@@ -41,7 +41,9 @@ private slots:
     void onHelpAbout();
     void onTextChanged();
     void changeMode(const QString &);
+
     void exportHtml();
+    void exportPdf();
 
     void filePrint();
     void filePrintPreview();

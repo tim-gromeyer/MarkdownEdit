@@ -93,15 +93,12 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QTextBrowser" name="textBrowser">
-           <property name="acceptDrops">
-            <bool>false</bool>
+          <widget class="PreviewWidget" name="textBrowser">
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
            </property>
-           <property name="openExternalLinks">
-            <bool>true</bool>
-           </property>
-           <property name="openLinks">
-            <bool>false</bool>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
            </property>
           </widget>
          </item>
@@ -164,6 +161,7 @@
       <string>Export</string>
      </property>
      <addaction name="actionExportHtml"/>
+     <addaction name="actionExportPdf"/>
     </widget>
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
@@ -497,10 +495,6 @@
    </property>
   </action>
   <action name="actionExportHtml">
-   <property name="icon">
-    <iconset resource="../ressources/icons.qrc">
-     <normaloff>:/icons/text-html_32.png</normaloff>:/icons/text-html_32.png</iconset>
-   </property>
    <property name="text">
     <string>HTML</string>
    </property>
@@ -530,6 +524,11 @@
     <string>Reload &quot;%1&quot;</string>
    </property>
   </action>
+  <action name="actionExportPdf">
+   <property name="text">
+    <string>Pdf</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -540,10 +539,14 @@
     <slot>showMarkdownSyntax()</slot>
    </slots>
   </customwidget>
+  <customwidget>
+   <class>PreviewWidget</class>
+   <extends>QFrame</extends>
+   <header>previewwidget.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
- <resources>
-  <include location="../ressources/icons.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>actionMarkdown_Syntax</sender>

@@ -266,8 +266,13 @@ QString SpellChecker::getWord(const QTextBlock &block, const int &pos)
         const bool isLetterOrNumber = c.isLetterOrNumber();
 
         if (c == QLatin1Char('('))
-            if (block.text().mid(i +1, 4) == QStringLiteral("http"))
+            if (block.text().mid(i +1, 4) == QStringLiteral("http")) {
                 isLink = true;
+                if (text.indexOf(QChar(QChar::Space), i) > pos)
+                    return QLatin1String();
+                else if (text.indexOf(QChar(')'), i) > pos)
+                    return QLatin1String();
+            }
 
         if (isLink) {
             if (c.isSpace() || c == QLatin1Char(')')) {

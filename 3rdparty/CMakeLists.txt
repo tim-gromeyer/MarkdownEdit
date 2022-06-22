@@ -1,28 +1,18 @@
 option(STATIC_BUILD "Build librarys static instead of linking" OFF)
 
-
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Svg)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Svg)
 
-if(NOT (ANDROID OR EMSCRIPTEN) AND STATIC_BUILD)
-    find_package(PkgConfig REQUIRED)
+set(MD4C_FILES
+    ${CMAKE_CURRENT_LIST_DIR}/md4c/src/entity.h
+    ${CMAKE_CURRENT_LIST_DIR}/md4c/src/entity.c
+    ${CMAKE_CURRENT_LIST_DIR}/md4c/src/md4c.h
+    ${CMAKE_CURRENT_LIST_DIR}/md4c/src/md4c.c
+    ${CMAKE_CURRENT_LIST_DIR}/md4c/src/md4c-html.h
+    ${CMAKE_CURRENT_LIST_DIR}/md4c/src/md4c-html.c
+)
 
-    pkg_check_modules(MD4C md4c-html)
-endif()
-
-if(NOT MD4C_FOUND)
-    set(MD4C_FILES
-        ${CMAKE_CURRENT_LIST_DIR}/md4c/src/entity.h
-        ${CMAKE_CURRENT_LIST_DIR}/md4c/src/entity.c
-        ${CMAKE_CURRENT_LIST_DIR}/md4c/src/md4c.h
-        ${CMAKE_CURRENT_LIST_DIR}/md4c/src/md4c.c
-        ${CMAKE_CURRENT_LIST_DIR}/md4c/src/md4c-html.h
-        ${CMAKE_CURRENT_LIST_DIR}/md4c/src/md4c-html.c
-    )
-
-    add_library(md4c-html STATIC ${MD4C_FILES})
-    set(MD4C_LDFLAGS md4c-html)
-endif()
+add_library(md4c-html STATIC ${MD4C_FILES})
 
 set(QMARKDOWNTEXTEDIT_FILES
     ${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit/markdownhighlighter.h
@@ -46,5 +36,7 @@ if(NOT MD4C_FOUND)
     include_directories(${CMAKE_CURRENT_LIST_DIR}/md4c/src)
 endif()
 
-add_library(3rdparty STATIC "")
-target_link_libraries(3rdparty PRIVATE ${MD4C_LDFLAGS} qmarkdowntextedit)
+set(3rdparty
+    md4c-html
+    qmarkdowntextedit
+)

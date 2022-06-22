@@ -19,7 +19,7 @@
 #include <QSaveFile>
 #include <QPushButton>
 #include <QDebug>
-#include <QCompleter>
+#include <QTimer>
 
 #if QT_CONFIG(printdialog)
 #include <QtPrintSupport/QPrintDialog>
@@ -85,6 +85,7 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     connect(ui->actionAboutQt, &QAction::triggered, qApp, &QApplication::aboutQt);
     connect(mode, &QComboBox::currentTextChanged, this, &MainWindow::changeMode);
     connect(ui->actionExportHtml, &QAction::triggered, this, &MainWindow::exportHtml);
+    connect(ui->actionExportPdf, &QAction::triggered, this, &MainWindow::exportPdf);
     connect(ui->actionPrint, &QAction::triggered, this, &MainWindow::filePrint);
     connect(ui->actionPrintPreview, &QAction::triggered, this, &MainWindow::filePrintPreview);
     connect(ui->actionCut, &QAction::triggered, this, &MainWindow::cut);
@@ -130,7 +131,6 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     ui->File->addSeparator();
     ui->File->addWidget(toolbutton);
     ui->File->addSeparator();
-    ui->File->addAction(ui->actionExportHtml);
     ui->File->addAction(ui->actionPrint);
     ui->File->addAction(ui->actionPrintPreview);
     ui->Edit->addAction(ui->actionUndo);
@@ -182,6 +182,11 @@ void MainWindow::loadIcons()
     loadIcon(QStringLiteral("text-wrap"), ui->actionWord_wrap);
     loadIcon(QStringLiteral("tools-check-spelling"), ui->actionSpell_checking);
     loadIcon(QStringLiteral("document-revert"), ui->actionReload);
+
+    ui->actionExportHtml->setIcon(QIcon::fromTheme(QStringLiteral("text-html"),
+                                             QIcon(QStringLiteral(":/icons/text-html_16.png"))));
+    ui->actionExportPdf->setIcon(QIcon::fromTheme(QStringLiteral("application-pdf"),
+                                                   QIcon(QStringLiteral(":/icons/application-pdf_16.png"))));
 
     ui->menuExport->setIcon(QIcon::fromTheme(QStringLiteral("document-export"),
                                              QIcon(QStringLiteral(":/icons/document-export.svg"))));
@@ -366,6 +371,28 @@ void MainWindow::printPreview(QPrinter *printer)
 #endif
 }
 
+void MainWindow::exportPdf()
+{
+    QFileDialog dialog(this, tr("Export Pdf"));
+    dialog.setMimeTypeFilters({"application/pdf"});
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setDefaultSuffix("pdf");
+    if (dialog.exec() != QDialog::Accepted)
+        return;
+
+    const QString file = dialog.selectedFiles().at(0);
+
+    QPrinter printer(QPrinter::PrinterResolution);
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setOutputFileName(file);
+
+    ui->editor->print(&printer);
+
+    statusBar()->show();
+    statusBar()->showMessage(tr("Pdf exported to %1").arg(QDir::toNativeSeparators(file)), 15000);
+    QTimer::singleShot(15000, statusBar(), &QStatusBar::hide);
+}
+
 void MainWindow::exportHtml()
 {
     QFileDialog dialog(this, tr("Export HTML"));
@@ -388,7 +415,9 @@ void MainWindow::exportHtml()
     QTextStream str(&f);
     str << html;
 
-    statusBar()->showMessage(tr("HTML exported to %1").arg(QDir::toNativeSeparators(file)), 30000);
+    statusBar()->show();
+    statusBar()->showMessage(tr("HTML exported to %1").arg(QDir::toNativeSeparators(file)), 15000);
+    QTimer::singleShot(15000, statusBar(), &QStatusBar::hide);
 }
 
 // Indexchanged doesnt work in qt 5.12.8
@@ -442,7 +471,10 @@ void MainWindow::openFile(const QString &newFile)
 
     setWindowFilePath(QFileInfo(path).fileName());
     ui->actionReload->setText(tr("Reload \"%1\"").arg(windowFilePath()));
-    statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 30000);
+
+    statusBar()->show();
+    statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 15000);
+    QTimer::singleShot(15000, statusBar(), &QStatusBar::hide);
 
     updateOpened();
 
@@ -481,7 +513,10 @@ void MainWindow::onFileOpen()
 
             setWindowFilePath(QFileInfo(path).fileName());
             ui->actionReload->setText(tr("Reload \"%1\"").arg(windowFilePath()));
+
+            statusBar()->show();
             statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 30000);
+            QTimer::singleShot(15000, statusBar(), &QStatusBar::hide);
 
             updateOpened();
 
@@ -552,7 +587,9 @@ void MainWindow::onFileSave()
     }
 #endif
 
+    statusBar()->show();
     statusBar()->showMessage(tr("Wrote %1").arg(QDir::toNativeSeparators(path)), 30000);
+    QTimer::singleShot(15000, statusBar(), &QStatusBar::hide);
 
     updateOpened();
 

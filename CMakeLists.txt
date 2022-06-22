@@ -12,10 +12,10 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR}/ui)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg Network)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg Network)
 
-set(TS_FILES translations/i18n_de_DE.ts)
+set(TS_FILES translations/MarkdownEdit_de_DE.ts)
 set(RC_FILES
     ressources/icons.qrc
     ressources/ressources.qrc
@@ -40,6 +40,8 @@ set(PROJECT_SOURCES
         src/highlighter.h
         src/spellchecker.cpp
         src/spellchecker.h
+        src/previewwidget.cpp
+        src/previewwidget.h
         common.h
         ui/mainwindow.ui
         ${RC_FILES}
@@ -91,7 +93,7 @@ else()
 endif()
 
 target_include_directories(markdownedit PRIVATE ${CMAKE_SOURCE_DIR}/src)
-target_link_libraries(markdownedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport Qt${QT_VERSION_MAJOR}::Svg ${ENCHANT_LDFLAGS} ${INTL_LDFLAGS} 3rdparty)
+target_link_libraries(markdownedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport Qt${QT_VERSION_MAJOR}::Svg Qt${QT_VERSION_MAJOR}::Network ${ENCHANT_LDFLAGS} ${INTL_LDFLAGS} ${3rdparty})
 
 target_compile_definitions(markdownedit PUBLIC APP_VERSION="${PROJECT_VERSION}" QT_DISABLE_DEPRECATED_BEFORE=0x051208 CHECK_MARKDOWN)
 
@@ -107,4 +109,10 @@ if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(markdownedit)
 endif()
 
-install(TARGETS markdownedit DESTINATION bin)
+if(LINUX)
+    include(GNUInstallDirs)
+
+    install(TARGETS markdownedit DESTINATION ${CMAKE_INSTALL_BINDIR})
+    install(FILES packaging/MarkdownEdit/usr/share/applications/MarkdownEdit.desktop
+        DESTINATION "/usr/share/applications")
+endif()

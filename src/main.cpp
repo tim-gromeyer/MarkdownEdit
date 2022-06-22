@@ -28,11 +28,12 @@ int main(int argc, char *argv[])
 
     // load translation for Qt
     if (qtTranslator.load(QLocale::system(), QStringLiteral("qtbase"),
-                          QStringLiteral("_"), QStringLiteral(":/qtTranslations/")))
+                          QStringLiteral("_"), QStringLiteral(
+                              ":/qtTranslations/")))
         a.installTranslator(&qtTranslator);
 
     // try to load translation for current locale from resource file
-    if (translator.load(QLocale::system(), QStringLiteral("i18n"),
+    if (translator.load(QLocale::system(), QStringLiteral("MarkdownEdit"),
                         QStringLiteral("_"), QStringLiteral(":/translations")))
         a.installTranslator(&translator);
 

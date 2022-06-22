@@ -24,9 +24,8 @@
         <file>icons/document-new.svg</file>
         <file>icons/document-export.svg</file>
         <file>icons/application-exit.svg</file>
-        <file>icons/text-html_32.png</file>
-        <file>icons/text-html_24.png</file>
         <file>icons/text-html_16.png</file>
         <file>icons/document-revert.svg</file>
+        <file>icons/application-pdf_16.png</file>
     </qresource>
 </RCC>
