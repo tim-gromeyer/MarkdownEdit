@@ -14,6 +14,7 @@ int main(int argc, char *argv[])
 #error You must use Qt 5.10 or newer
 #endif
 
+
     QApplication a(argc, argv);
     a.setApplicationDisplayName(QStringLiteral("MarkdownEdit"));
     a.setApplicationVersion(APP_VERSION);
@@ -21,7 +22,12 @@ int main(int argc, char *argv[])
     QCommandLineParser parser;
     parser.addHelpOption();
     parser.addVersionOption();
-    parser.addPositionalArgument(QStringLiteral("File(s)"), QStringLiteral("The file(s) to open."));
+    parser.setApplicationDescription(QCoreApplication::translate(
+        "main", "Simple program for editing Markdown files"
+
+        ));
+    parser.addPositionalArgument("file", QCoreApplication::translate(
+                                             "main", "File to open."));
     parser.process(a);
 
     QTranslator translator, qtTranslator;
@@ -37,7 +43,7 @@ int main(int argc, char *argv[])
                         QStringLiteral("_"), QStringLiteral(":/translations")))
         a.installTranslator(&translator);
 
-    MainWindow w(parser.positionalArguments().value(0, QLatin1String()));
+    MainWindow w(parser.positionalArguments().value(0));
 
     w.show();
 

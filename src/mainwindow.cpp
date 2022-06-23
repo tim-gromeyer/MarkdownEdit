@@ -20,6 +20,9 @@
 #include <QPushButton>
 #include <QDebug>
 #include <QTimer>
+#include <QTemporaryFile>
+#include <QDesktopServices>
+#include <QFileSystemWatcher>
 
 #if QT_CONFIG(printdialog)
 #include <QtPrintSupport/QPrintDialog>
@@ -120,6 +123,8 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
             this, &MainWindow::changeWordWrap);
     connect(ui->actionReload, &QAction::triggered,
             this, &MainWindow::onFileReload);
+    connect(ui->actionOpen_in_web_browser, &QAction::triggered,
+            this, &MainWindow::openInWebBrowser);
 
     ui->actionSave->setEnabled(false);
     ui->actionUndo->setEnabled(false);
@@ -131,17 +136,15 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     ui->File->addSeparator();
     ui->File->addWidget(toolbutton);
     ui->File->addSeparator();
-    ui->File->addAction(ui->actionPrint);
     ui->File->addAction(ui->actionPrintPreview);
     ui->Edit->addAction(ui->actionUndo);
     ui->Edit->addAction(ui->actionRedo);
     ui->Edit->addAction(ui->actionCut);
     ui->Edit->addAction(ui->actionCopy);
     ui->Edit->addAction(ui->actionPaste);
-    ui->Edit->addSeparator();
-    ui->Edit->addWidget(mode);
-    ui->Edit->addSeparator();
-    ui->Edit->addWidget(widgetBox);
+    ui->toolBarPreview->addWidget(mode);
+    ui->toolBarPreview->addSeparator();
+    ui->toolBarPreview->addWidget(widgetBox);
 
     if (ui->editor->toPlainText().isEmpty()  && file.isEmpty()) {
         QFile f(QStringLiteral(":/default.md"), this);
@@ -155,9 +158,18 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
         }
     }
 
+    watcher = new QFileSystemWatcher(this);
+    connect(watcher, &QFileSystemWatcher::fileChanged,
+            this, &MainWindow::onFileChanged);
+
 #ifdef NO_SPELLCHECK
     ui->menuExtras->removeAction(ui->actionSpell_checking);
 #endif
+}
+
+void MainWindow::onFileChanged(const QString &f)
+{
+    if (f != path) return;
 }
 
 void MainWindow::loadIcons()
@@ -353,10 +365,14 @@ void MainWindow::filePrint()
 void MainWindow::filePrintPreview()
 {
 #if QT_CONFIG(printpreviewdialog)
+    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
+
     QPrinter printer(QPrinter::HighResolution);
 
     QPrintPreviewDialog preview(&printer, this);
     connect(&preview, &QPrintPreviewDialog::paintRequested, this, &MainWindow::printPreview);
+
+    QGuiApplication::restoreOverrideCursor();
 
     preview.exec();
 #endif
@@ -367,7 +383,12 @@ void MainWindow::printPreview(QPrinter *printer)
 #ifdef QT_NO_PRINTER
     Q_UNUSED(printer);
 #else
+    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
+
+    ui->textBrowser->setHtml(html);
     ui->textBrowser->print(printer);
+
+    QGuiApplication::restoreOverrideCursor();
 #endif
 }
 
@@ -382,15 +403,40 @@ void MainWindow::exportPdf()
 
     const QString file = dialog.selectedFiles().at(0);
 
+    if (file.isEmpty()) return;
+
     QPrinter printer(QPrinter::PrinterResolution);
     printer.setOutputFormat(QPrinter::PdfFormat);
     printer.setOutputFileName(file);
 
-    ui->editor->print(&printer);
+    printPreview(&printer);
 
     statusBar()->show();
     statusBar()->showMessage(tr("Pdf exported to %1").arg(QDir::toNativeSeparators(file)), 15000);
     QTimer::singleShot(15000, statusBar(), &QStatusBar::hide);
+}
+
+void MainWindow::openInWebBrowser()
+{
+    QTemporaryFile f(this);
+    f.setFileTemplate(f.fileTemplate() +
+                      QLatin1String(".html"));
+
+    if (!f.open()) {
+        qWarning() << "Could not create temporyry file: " << f.errorString();
+
+        QMessageBox::warning(this, tr("Warning"),
+                             tr("Could not create temporary file: %1").arg(
+                                 f.errorString()));
+
+        return;
+    }
+
+    QTextStream out(&f);
+    out << html;
+
+    if (!QDesktopServices::openUrl(QUrl::fromLocalFile(f.fileName())))
+        f.remove();
 }
 
 void MainWindow::exportHtml()
@@ -412,12 +458,16 @@ void MainWindow::exportHtml()
         return;
     }
 
+    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
+
     QTextStream str(&f);
     str << html;
 
     statusBar()->show();
     statusBar()->showMessage(tr("HTML exported to %1").arg(QDir::toNativeSeparators(file)), 15000);
     QTimer::singleShot(15000, statusBar(), &QStatusBar::hide);
+
+    QGuiApplication::restoreOverrideCursor();
 }
 
 // Indexchanged doesnt work in qt 5.12.8
@@ -566,6 +616,8 @@ void MainWindow::onFileSave()
 #if defined(Q_OS_WASM)
     QFileDialog::saveFileContent(ui->editor->toPlainText().toLocal8Bit(), path);
 #else
+    watcher->removePath(path);
+
     QSaveFile f(path, this);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QGuiApplication::restoreOverrideCursor();
@@ -594,6 +646,8 @@ void MainWindow::onFileSave()
     updateOpened();
 
     ui->editor->document()->setModified(false);
+
+    watcher->addPath(path);
 
     QGuiApplication::restoreOverrideCursor();
 }

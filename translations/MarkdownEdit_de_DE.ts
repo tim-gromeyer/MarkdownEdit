@@ -390,6 +390,26 @@
         <source>Reload &quot;%1&quot;</source>
         <translation>&quot;%1&quot; neu laden</translation>
     </message>
+    <message>
+        <source>Pdf</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Open in web browser</source>
+        <translation>Im Webbrowser öffnen</translation>
+    </message>
+    <message>
+        <source>Export Pdf</source>
+        <translation>Pdf exportieren</translation>
+    </message>
+    <message>
+        <source>Pdf exported to %1</source>
+        <translation>PDF nach %1 exportiert</translation>
+    </message>
+    <message>
+        <source>Could not create temporyry file: %1</source>
+        <translation>Temporäre Datei konnte nicht erstellt werden: %1</translation>
+    </message>
 </context>
 <context>
     <name>QApplication</name>
@@ -504,6 +524,17 @@
     <message>
         <source>Languages</source>
         <translation>Sprachen</translation>
+    </message>
+</context>
+<context>
+    <name>main</name>
+    <message>
+        <source>Simple program for editing Markdown files</source>
+        <translation>Einfaches Programm zum Bearbeiten von Markdown-Dateien</translation>
+    </message>
+    <message>
+        <source>File to open.</source>
+        <translation>Datei zu öffnen.</translation>
     </message>
 </context>
 </TS>

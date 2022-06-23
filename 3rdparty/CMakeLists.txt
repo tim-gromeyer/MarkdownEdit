@@ -1,5 +1,3 @@
-option(STATIC_BUILD "Build librarys static instead of linking" OFF)
-
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Svg)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Svg)
 

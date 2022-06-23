@@ -17,6 +17,7 @@ namespace QSourceHighlite { class QSourceHighliter; }
 class Highliter;
 class QPushButton;
 class QComboBox;
+class QFileSystemWatcher;
 QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
@@ -38,12 +39,17 @@ private slots:
     void onFileSave();
     void onFileSaveAs();
     inline void onFileReload() { openFile(path); };
+
+    void onFileChanged(const QString &);
+
     void onHelpAbout();
     void onTextChanged();
     void changeMode(const QString &);
 
     void exportHtml();
     void exportPdf();
+
+    void openInWebBrowser();
 
     void filePrint();
     void filePrintPreview();
@@ -98,5 +104,7 @@ private:
     QComboBox *mode;
 
     QMap<QString, QVariant> languagesMap;
+
+    QFileSystemWatcher *watcher;
 };
 #endif // MAINWINDOW_H
