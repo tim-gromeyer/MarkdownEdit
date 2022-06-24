@@ -544,7 +544,7 @@
   </action>
   <action name="actionOpen_in_web_browser">
    <property name="text">
-    <string>Open in web browser</string>
+    <string>Open HTML in web browser</string>
    </property>
   </action>
  </widget>

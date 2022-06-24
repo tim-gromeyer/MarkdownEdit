@@ -84,6 +84,10 @@ void SpellChecker::checkSpelling(const QString &text)
 
         return;
     }
+    else {
+        if (codeBlockList.contains(currentBlockNumber))
+            codeBlockList.removeOne(currentBlockNumber);
+    }
 
     const int textLength = text.length();
 
@@ -94,14 +98,22 @@ void SpellChecker::checkSpelling(const QString &text)
         if (isPosInACodeSpan(currentBlockNumber, i))
             continue;
 
-        if (c == QLatin1Char('('))
-            if (text.mid(i +1, 4) == QStringLiteral("http"))
+        if (c == QLatin1Char('(')) {
+            if (text.mid(i +1, 4) == QStringLiteral("http")) {
                 isLink = true;
+            }
+        }
+        else if (c == QLatin1Char('h'))
+            if (text.mid(i, 4) == QStringLiteral("http")) {
+                isLink = true;
+            }
 
         if (isLink) {
             if (c.isSpace() || c == QLatin1Char(')')) {
                 isLink = false;
             }
+            else
+                continue;
         }
         else if (i == textLength -1 && isLetterOrNumber) {
             word.append(c);
@@ -129,7 +141,7 @@ void SpellChecker::checkSpelling(const QString &text)
         index = text.indexOf(word_, index);
 
         if (!isCorrect(word_)) {
-            QTextCharFormat fmt = format(index);
+            QTextCharFormat fmt = QSyntaxHighlighter::format(index);
             fmt.setFontUnderline(true);
             fmt.setUnderlineStyle(QTextCharFormat::SpellCheckUnderline);
             fmt.setUnderlineColor(Qt::red);

@@ -421,15 +421,16 @@ void MainWindow::exportPdf()
 
     if (file.isEmpty()) return;
 
-    QPrinter printer(QPrinter::PrinterResolution);
+    QPrinter printer;
     printer.setOutputFormat(QPrinter::PdfFormat);
     printer.setOutputFileName(file);
+    printer.setResolution(QPrinter::HighResolution);
 
     printPreview(&printer);
 
     statusBar()->show();
-    statusBar()->showMessage(tr("Pdf exported to %1").arg(QDir::toNativeSeparators(file)), 15000);
-    QTimer::singleShot(15000, statusBar(), &QStatusBar::hide);
+    statusBar()->showMessage(tr("Pdf exported to %1").arg(QDir::toNativeSeparators(file)), 10000);
+    QTimer::singleShot(10000, statusBar(), &QStatusBar::hide);
 }
 
 void MainWindow::openInWebBrowser()
@@ -480,8 +481,8 @@ void MainWindow::exportHtml()
     str << html;
 
     statusBar()->show();
-    statusBar()->showMessage(tr("HTML exported to %1").arg(QDir::toNativeSeparators(file)), 15000);
-    QTimer::singleShot(15000, statusBar(), &QStatusBar::hide);
+    statusBar()->showMessage(tr("HTML exported to %1").arg(QDir::toNativeSeparators(file)), 10000);
+    QTimer::singleShot(10000, statusBar(), &QStatusBar::hide);
 
     QGuiApplication::restoreOverrideCursor();
 }
@@ -542,8 +543,8 @@ void MainWindow::openFile(const QString &newFile)
     ui->actionReload->setText(tr("Reload \"%1\"").arg(windowFilePath()));
 
     statusBar()->show();
-    statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 15000);
-    QTimer::singleShot(15000, statusBar(), &QStatusBar::hide);
+    statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 10000);
+    QTimer::singleShot(10000, statusBar(), &QStatusBar::hide);
 
     updateOpened();
 
@@ -587,7 +588,7 @@ void MainWindow::onFileOpen()
 
             statusBar()->show();
             statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 30000);
-            QTimer::singleShot(15000, statusBar(), &QStatusBar::hide);
+            QTimer::singleShot(10000, statusBar(), &QStatusBar::hide);
 
             updateOpened();
 
@@ -662,7 +663,7 @@ void MainWindow::onFileSave()
 
     statusBar()->show();
     statusBar()->showMessage(tr("Wrote %1").arg(QDir::toNativeSeparators(path)), 30000);
-    QTimer::singleShot(15000, statusBar(), &QStatusBar::hide);
+    QTimer::singleShot(10000, statusBar(), &QStatusBar::hide);
 
     updateOpened();
 

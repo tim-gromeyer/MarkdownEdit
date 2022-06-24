@@ -395,8 +395,8 @@
         <translation></translation>
     </message>
     <message>
-        <source>Open in web browser</source>
-        <translation>Im Webbrowser öffnen</translation>
+        <source>Open HTML in web browser</source>
+        <translation>Html im Webbrowser öffnen</translation>
     </message>
     <message>
         <source>Export Pdf</source>
@@ -405,10 +405,6 @@
     <message>
         <source>Pdf exported to %1</source>
         <translation>PDF nach %1 exportiert</translation>
-    </message>
-    <message>
-        <source>Could not create temporyry file: %1</source>
-        <translation type="vanished">Temporäre Datei konnte nicht erstellt werden: %1</translation>
     </message>
     <message>
         <source>File changed</source>
