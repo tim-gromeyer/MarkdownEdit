@@ -72,6 +72,10 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     toolbutton->setIcon(ui->menuRecentlyOpened->icon());
     toolbutton->setPopupMode(QToolButton::InstantPopup);
 
+    watcher = new QFileSystemWatcher(this);
+    connect(watcher, &QFileSystemWatcher::fileChanged,
+            this, &MainWindow::onFileChanged);
+
     // Settings
     settings = new QSettings(QStringLiteral("SME"),
                              QStringLiteral("MarkdownEdit"), this);
@@ -158,10 +162,6 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
         }
     }
 
-    watcher = new QFileSystemWatcher(this);
-    connect(watcher, &QFileSystemWatcher::fileChanged,
-            this, &MainWindow::onFileChanged);
-
 #ifdef NO_SPELLCHECK
     ui->menuExtras->removeAction(ui->actionSpell_checking);
 #endif
@@ -170,6 +170,22 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
 void MainWindow::onFileChanged(const QString &f)
 {
     if (f != path) return;
+
+    QMessageBox d(this);
+    d.setIcon(QMessageBox::Question);
+    d.setWindowTitle(tr("File changed"));
+    d.setText(tr("File changed"));
+    d.setInformativeText(tr("File <em>%1</em> has been modified.\nWould you like to reload them?").arg(f));
+    d.addButton(QMessageBox::Yes);
+    d.addButton(QMessageBox::No);
+    d.setDefaultButton(QMessageBox::Yes);
+
+    const int out = d.exec();
+
+    if (out == QMessageBox::Yes)
+        openFile(path);
+
+    watcher->addPath(path);
 }
 
 void MainWindow::loadIcons()
@@ -492,7 +508,7 @@ void MainWindow::openFile(const QString &newFile)
 {
     QFile f(newFile);
 
-    if (!f.open(QIODevice::ReadWrite)) {
+    if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QMessageBox::warning(this, tr("Couldn't open file"),
                              tr("Could not open file %1: %2").arg(
                                  QDir::toNativeSeparators(newFile), f.errorString()));
@@ -511,7 +527,10 @@ void MainWindow::openFile(const QString &newFile)
 
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
+    if (!path.isEmpty())
+        watcher->removePath(path);
     path = newFile;
+    watcher->addPath(path);
 
     if (setPath)
         if (!ui->textBrowser->searchPaths().contains(QFileInfo(newFile).path()))
@@ -540,6 +559,8 @@ void MainWindow::onFileNew()
             return;
     }
 
+    if (!path.isEmpty())
+        watcher->removePath(path);
     path = QLatin1String();
     ui->editor->setText(tr("## New document"));
     setWindowFilePath(QFileInfo(tr("untitled.md")).fileName());
@@ -661,7 +682,10 @@ void MainWindow::onFileSaveAs()
     if (dialog.exec() != QDialog::Accepted)
         return;
 
+    if (!path.isEmpty())
+        watcher->removePath(path);
     path = dialog.selectedFiles().at(0);
+    watcher->addPath(path);
 
     if (!(path.endsWith(QLatin1String(".md")) || path.endsWith(QLatin1String(".markdown")) || path.endsWith(QLatin1String(".mkd"))))
         path.append(".md");

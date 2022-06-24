@@ -408,6 +408,24 @@
     </message>
     <message>
         <source>Could not create temporyry file: %1</source>
+        <translation type="vanished">Temporäre Datei konnte nicht erstellt werden: %1</translation>
+    </message>
+    <message>
+        <source>File changed</source>
+        <translation>Datei geändert</translation>
+    </message>
+    <message>
+        <source>File changed.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>File &lt;em&gt;%1&lt;/em&gt; has been modified.
+Would you like to reload them?</source>
+        <translation>Datei &lt;em&gt;%1&lt;/em&gt; wurde geändert.
+Möchten Sie sie neu laden?</translation>
+    </message>
+    <message>
+        <source>Could not create temporary file: %1</source>
         <translation>Temporäre Datei konnte nicht erstellt werden: %1</translation>
     </message>
 </context>
