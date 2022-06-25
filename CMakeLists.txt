@@ -12,8 +12,22 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR}/ui)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg Concurrent)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg Concurrent)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
+
+if (EMSCRIPTEN)
+    add_compile_definitions(NO_THREADING)
+
+    set(CONCURRENT
+        ""
+    )
+else()
+    find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Concurrent)
+
+    set(CONCURRENT
+        Qt${QT_VERSION_MAJOR}::Concurrent
+    )
+endif()
 
 set(TS_FILES translations/MarkdownEdit_de_DE.ts)
 set(RC_FILES
@@ -93,7 +107,7 @@ else()
 endif()
 
 target_include_directories(markdownedit PRIVATE ${CMAKE_SOURCE_DIR}/src)
-target_link_libraries(markdownedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport Qt${QT_VERSION_MAJOR}::Svg Qt${QT_VERSION_MAJOR}::Concurrent ${ENCHANT_LDFLAGS} ${INTL_LDFLAGS} ${3rdparty})
+target_link_libraries(markdownedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport Qt${QT_VERSION_MAJOR}::Svg ${CONCURRENT} ${ENCHANT_LDFLAGS} ${INTL_LDFLAGS} ${3rdparty})
 
 target_compile_definitions(markdownedit PUBLIC APP_VERSION="${PROJECT_VERSION}" QT_DISABLE_DEPRECATED_BEFORE=0x051208 CHECK_MARKDOWN)
 

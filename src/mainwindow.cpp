@@ -22,9 +22,10 @@
 #include <QTemporaryFile>
 #include <QDesktopServices>
 #include <QFileSystemWatcher>
-#include <QtConcurrent/QtConcurrentRun>
 
-#include <QTime>
+#ifndef NO_THREADING
+#include <QtConcurrent/QtConcurrentRun>
+#endif
 
 #if QT_CONFIG(printdialog)
 #include <QtPrintSupport/QPrintDialog>
@@ -59,7 +60,15 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     toolbutton->setMenu(ui->menuRecentlyOpened);
     toolbutton->setPopupMode(QToolButton::InstantPopup);
 
+#ifndef NO_THREADING
+#if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
+    auto retVal = QtConcurrent::run(&MainWindow::loadIcons, this);
+#else
     QtConcurrent::run(this, &MainWindow::loadIcons);
+#endif
+#else
+    loadIcons();
+#endif
 
     watcher = new QFileSystemWatcher(this);
     connect(watcher, &QFileSystemWatcher::fileChanged,
@@ -69,10 +78,8 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     settings = new QSettings(QStringLiteral("SME"),
                              QStringLiteral("MarkdownEdit"), this);
 
-    QTime time = QTime::currentTime();
     loadSettings(file);
     updateOpened();
-    qDebug() << time.msecsTo(QTime::currentTime());
 
     mode = new QComboBox(ui->Edit);
     mode->addItems({QString::fromLatin1("Commonmark"), QString::fromLatin1("GitHub")});
@@ -150,7 +157,7 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     ui->Edit->addAction(ui->actionCut);
     ui->Edit->addAction(ui->actionCopy);
     ui->Edit->addAction(ui->actionPaste);
-        ui->toolBarPreview->addWidget(mode);
+    ui->toolBarPreview->addWidget(mode);
     ui->toolBarPreview->addSeparator();
     ui->toolBarPreview->addWidget(widgetBox);
 
@@ -161,6 +168,7 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
             setWindowFilePath(f.fileName());
             ui->actionReload->setText(tr("Reload \"%1\"").arg(f.fileName()));
             path = f.fileName();
+            statusBar()->hide();
         }
         else {
             onFileNew();
@@ -671,7 +679,7 @@ void MainWindow::onFileSave()
         if (QFile::exists(path))
             return;
 
-    if (path.isEmpty()) {
+    if (path.isEmpty() || path == QLatin1String(":/default.md")) {
         onFileSaveAs();
         return;
     }
