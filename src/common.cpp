@@ -3,6 +3,8 @@
 
 
 QMap<QString, QVariant> languages_map;
+QString currentDir;
+
 
 QMap<QString, QVariant> getLanguageMap()
 {

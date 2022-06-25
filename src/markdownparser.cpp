@@ -28,14 +28,14 @@ void captureHtmlFragment (const MD_CHAR* data, MD_SIZE data_size, void* userData
     array->append(data, data_size);
 }
 
-QString Parser::Parse(const QString &markdown, const int &dia)
+QString Parser::Parse(const QString &in, const int &dia)
 {
     if (dia == GitHub)
         parser_flags |= MD_DIALECT_GITHUB;
     else
         parser_flags |= MD_DIALECT_COMMONMARK;
 
-    const QByteArray array = markdown.toLocal8Bit();
+    const QByteArray array = in.toLocal8Bit();
     QByteArray out = templateArray;
 
     md_html(array.data(), array.size(), &captureHtmlFragment, &out,

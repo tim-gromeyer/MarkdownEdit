@@ -186,15 +186,13 @@ private slots:
 
     void slotReplaceWord();
 
-    void slotShowContextMenu(const QPoint &pos);
-
 private:
     bool spellingEnabled = true;
 #ifdef CHECK_MARKDOWN
     bool markdownhig = true;
 #endif
 
-    void showContextMenu(QMenu *menu, const QPoint &pos, int wordpos);
+    void showContextMenu(const QPoint &);
 
     QString language;
     void replaceWord(const int &wordPos, const QString &newWord);

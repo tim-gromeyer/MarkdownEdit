@@ -12,7 +12,6 @@
 #define SPELLCHECK true  // Not avaiable on android and webassembly
 
 QMap<QString, QVariant> getLanguageMap();
-
 void setLanguageMap(const QMap<QString, QVariant> &m);
 
 #if !SPELLCHECK

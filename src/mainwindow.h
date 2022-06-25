@@ -9,16 +9,16 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 class QPrinter;
 class QSettings;
-class QTimer;
 class QToolButton;
-namespace QtSpell { class TextEditChecker; }
-class SpellChecker;
-namespace QSourceHighlite { class QSourceHighliter; }
 class Highliter;
-class QPushButton;
 class QComboBox;
 class QFileSystemWatcher;
+class MarkdownEditor;
+class QHBoxLayout;
+class QLabel;
+class QDialogButtonBox;
 QT_END_NAMESPACE
+
 
 class MainWindow : public QMainWindow
 {
@@ -44,7 +44,7 @@ private slots:
 
     void onHelpAbout();
     void onTextChanged();
-    void changeMode(const QString &);
+    void changeMode(const int &);
 
     void exportHtml();
     void exportPdf();
@@ -61,7 +61,6 @@ private slots:
     void disablePreview(const bool &);
     void changeAddtoIconPath(const bool &);
     void changeWordWrap(const bool &);
-    void changeWidget(const QString &);
 
     void onOrientationChanged(const Qt::ScreenOrientation &);
 
@@ -76,8 +75,11 @@ private:
     void openRecent();
     void onSetText(const int &);
 
-    void loadIcon(const QString &name, QAction* &action);
+    void loadIcon(const char* name, QAction* &action);
     void loadIcons();
+
+    MarkdownEditor *currentEditor();
+    QList<MarkdownEditor> editorList;
 
     Ui::MainWindow *ui;
 
@@ -100,6 +102,11 @@ private:
 
     QToolButton *toolbutton;
     QComboBox *widgetBox;
+
+    QWidget *widgetReloadFile = nullptr;
+    QHBoxLayout *horizontalLayout = nullptr;
+    QLabel *labelReloadFile = nullptr;
+    QDialogButtonBox *buttonBox = nullptr;
 
     QComboBox *mode;
 

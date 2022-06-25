@@ -52,7 +52,7 @@ SpellChecker::SpellChecker(TextEditProxy *parent, const QString &lang)
 #ifndef NO_SPELLCHECK
     textEdit->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(textEdit, &TextEditProxy::customContextMenuRequested,
-            this, &SpellChecker::slotShowContextMenu);
+            this, &SpellChecker::showContextMenu);
 #endif
 }
 
@@ -277,7 +277,7 @@ QString SpellChecker::getWord(const QTextBlock &block, const int &pos)
         const QChar &c = text.at(i);
         const bool isLetterOrNumber = c.isLetterOrNumber();
 
-        if (c == QLatin1Char('('))
+        if (c == QLatin1Char('(')) {
             if (block.text().mid(i +1, 4) == QStringLiteral("http")) {
                 isLink = true;
                 if (text.indexOf(QChar(QChar::Space), i) > pos)
@@ -285,6 +285,17 @@ QString SpellChecker::getWord(const QTextBlock &block, const int &pos)
                 else if (text.indexOf(QChar(')'), i) > pos)
                     return QLatin1String();
             }
+        }
+        else if (c == QLatin1Char('h')) {
+            if (text.mid(i, 4) == QStringLiteral("http")) {
+                if (text.indexOf(QChar(QChar::Space), i) > pos)
+                    return QLatin1String();
+                else if (text.indexOf(QChar(')'), i) > pos)
+                    return QLatin1String();
+
+                isLink = true;
+            }
+        }
 
         if (isLink) {
             if (c.isSpace() || c == QLatin1Char(')')) {
@@ -309,8 +320,11 @@ QString SpellChecker::getWord(const QTextBlock &block, const int &pos)
 }
 #endif
 
-void SpellChecker::showContextMenu(QMenu* menu, const QPoint& pos, int wordPos)
+void SpellChecker::showContextMenu(const QPoint &pos)
 {
+    QMenu *menu = textEdit->createStandardContextMenu();
+    const int wordPos = textEdit->cursorForPosition(pos).position();
+
     QAction *insertPos = menu->actions().at(0);
 
     if(speller && spellingEnabled){
@@ -376,21 +390,21 @@ void SpellChecker::showContextMenu(QMenu* menu, const QPoint& pos, int wordPos)
         menu->insertSeparator(insertPos);
     }
 
-    menu->exec(pos);
+    menu->exec(textEdit->mapToGlobal(pos));
     menu->deleteLater();
     delete menu;
 }
 
-QString SpellChecker::encodeLanguageString(const QString &lang)
+QString SpellChecker::encodeLanguageString(const QString &langString)
 {
-    if (langMap.contains(lang))
-        return langMap[lang].toString();
+    if (langMap.contains(langString))
+        return langMap[langString].toString();
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
-    const QLocale l(lang);
+    const QLocale l(langString);
     return QStringLiteral("%1 (%2)").arg(l.nativeLanguageName(), l.nativeTerritoryName());
 #else
-    const QLocale l(lang);
+    const QLocale l(langString);
     return QStringLiteral("%1 (%2)").arg(l.nativeLanguageName(), l.nativeCountryName());
 #endif
 }
@@ -447,14 +461,6 @@ void SpellChecker::replaceWord(const int &wordPos, const QString &newWord)
     c.setPosition(wordPos);
     c.select(QTextCursor::WordUnderCursor);
     c.insertText(newWord);
-}
-
-void SpellChecker::slotShowContextMenu(const QPoint &pos)
-{
-    const QPoint globalPos = textEdit->mapToGlobal(pos);
-    QMenu *menu = textEdit->createStandardContextMenu();
-    const int wordPos = textEdit->cursorForPosition(pos).position();
-    showContextMenu(menu, globalPos, wordPos);
 }
 
 #ifdef CHECK_MARKDOWN

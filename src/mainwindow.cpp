@@ -90,7 +90,6 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     connect(ui->actionExit, &QAction::triggered, this, &QWidget::close);
     connect(ui->actionAbout, &QAction::triggered, this, &MainWindow::onHelpAbout);
     connect(ui->actionAboutQt, &QAction::triggered, qApp, &QApplication::aboutQt);
-    connect(mode, &QComboBox::currentTextChanged, this, &MainWindow::changeMode);
     connect(ui->actionExportHtml, &QAction::triggered, this, &MainWindow::exportHtml);
     connect(ui->actionExportPdf, &QAction::triggered, this, &MainWindow::exportPdf);
     connect(ui->actionPrint, &QAction::triggered, this, &MainWindow::filePrint);
@@ -99,8 +98,6 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     connect(ui->actionCopy, &QAction::triggered, this, &MainWindow::copy);
     connect(ui->actionPaste, &QAction::triggered, this, &MainWindow::paste);
 
-    connect(widgetBox, &QComboBox::currentTextChanged,
-            this, &MainWindow::changeWidget);
     connect(ui->editor, &QPlainTextEdit::textChanged,
             this, &MainWindow::onTextChanged);
     connect(ui->actionHighlighting_activated, &QAction::triggered,
@@ -129,6 +126,10 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
             this, &MainWindow::onFileReload);
     connect(ui->actionOpen_in_web_browser, &QAction::triggered,
             this, &MainWindow::openInWebBrowser);
+    connect(mode, qOverload<int>(&QComboBox::currentIndexChanged),
+            this, &MainWindow::changeMode);
+    connect(widgetBox, qOverload<int>(&QComboBox::currentIndexChanged),
+            ui->tabWidget, &QStackedWidget::setCurrentIndex);
 
     ui->actionSave->setEnabled(false);
     ui->actionUndo->setEnabled(false);
@@ -167,49 +168,74 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
 #endif
 }
 
+MarkdownEditor* MainWindow::currentEditor()
+{
+    return ui->editor;
+}
+
 void MainWindow::onFileChanged(const QString &f)
 {
     if (f != path) return;
 
-    QMessageBox d(this);
-    d.setIcon(QMessageBox::Question);
-    d.setWindowTitle(tr("File changed"));
-    d.setText(tr("File changed"));
-    d.setInformativeText(tr("File <em>%1</em> has been modified.\nWould you like to reload them?").arg(f));
-    d.addButton(QMessageBox::Yes);
-    d.addButton(QMessageBox::No);
-    d.setDefaultButton(QMessageBox::Yes);
+    if (!widgetReloadFile) {
+        QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
-    const int out = d.exec();
+        widgetReloadFile = new QWidget(this);
+        widgetReloadFile->setStyleSheet(QString::fromUtf8("background: orange"));
 
-    if (out == QMessageBox::Yes)
-        openFile(path);
+        horizontalLayout = new QHBoxLayout(widgetReloadFile);
+
+        labelReloadFile = new QLabel(widgetReloadFile);
+        labelReloadFile->setStyleSheet(QString::fromUtf8("color: black"));
+
+        horizontalLayout->addWidget(labelReloadFile);
+
+        buttonBox = new QDialogButtonBox(widgetReloadFile);
+        buttonBox->setStyleSheet(QString::fromUtf8("", 0));
+        buttonBox->setStandardButtons(QDialogButtonBox::No | QDialogButtonBox::Yes);
+
+        connect(buttonBox, &QDialogButtonBox::accepted,
+                this, [this]{
+                    openFile(path);
+                });
+        connect(buttonBox, &QDialogButtonBox::rejected,
+                widgetReloadFile, &QWidget::hide);
+
+        horizontalLayout->addWidget(buttonBox);
+
+        ui->verticalLayout_2->insertWidget(0, widgetReloadFile);
+
+        QGuiApplication::restoreOverrideCursor();
+    }
+
+    labelReloadFile->setText(tr("File <em>%1</em> has been modified.\nWould you like to reload them?").arg(f));
+    widgetReloadFile->show();
 
     watcher->addPath(path);
 }
 
 void MainWindow::loadIcons()
 {
-    loadIcon(QStringLiteral("application-exit"), ui->actionExit);
-    loadIcon(QStringLiteral("document-new"), ui->actionNew);
-    loadIcon(QStringLiteral("document-open-recent"), ui->actionOpen_last_document_on_start);
-    loadIcon(QStringLiteral("document-open"), ui->actionOpen);
-    loadIcon(QStringLiteral("document-print-preview"), ui->actionPrintPreview);
-    loadIcon(QStringLiteral("document-print"), ui->actionPrint);
-    loadIcon(QStringLiteral("document-save-as"), ui->actionSaveAs);
-    loadIcon(QStringLiteral("document-save"), ui->actionSave);
-    loadIcon(QStringLiteral("edit-copy"), ui->actionCopy);
-    loadIcon(QStringLiteral("edit-cut"), ui->actionCut);
-    loadIcon(QStringLiteral("edit-paste"), ui->actionPaste);
-    loadIcon(QStringLiteral("edit-redo"), ui->actionRedo);
-    loadIcon(QStringLiteral("edit-select-all"), ui->actionSelectAll);
-    loadIcon(QStringLiteral("edit-undo"), ui->actionUndo);
-    loadIcon(QStringLiteral("edit-copy"), ui->actionCopy);
-    loadIcon(QStringLiteral("help-about"), ui->actionAbout);
-    loadIcon(QStringLiteral("help-contents"), ui->actionMarkdown_Syntax);
-    loadIcon(QStringLiteral("text-wrap"), ui->actionWord_wrap);
-    loadIcon(QStringLiteral("tools-check-spelling"), ui->actionSpell_checking);
-    loadIcon(QStringLiteral("document-revert"), ui->actionReload);
+    loadIcon("application-exit", ui->actionExit);
+    loadIcon("document-new", ui->actionNew);
+    loadIcon("document-open-recent", ui->actionOpen_last_document_on_start);
+    loadIcon("document-open", ui->actionOpen);
+    loadIcon("document-print-preview", ui->actionPrintPreview);
+    loadIcon("document-print", ui->actionPrint);
+    loadIcon("document-save-as", ui->actionSaveAs);
+    loadIcon("document-save", ui->actionSave);
+    loadIcon("edit-copy", ui->actionCopy);
+    loadIcon("edit-cut", ui->actionCut);
+    loadIcon("edit-paste", ui->actionPaste);
+    loadIcon("edit-redo", ui->actionRedo);
+    loadIcon("edit-select-all", ui->actionSelectAll);
+    loadIcon("edit-undo", ui->actionUndo);
+    loadIcon("edit-copy", ui->actionCopy);
+    loadIcon("help-about", ui->actionAbout);
+    loadIcon("help-contents", ui->actionMarkdown_Syntax);
+    loadIcon("text-wrap", ui->actionWord_wrap);
+    loadIcon("tools-check-spelling", ui->actionSpell_checking);
+    loadIcon("document-revert", ui->actionReload);
 
     ui->actionExportHtml->setIcon(QIcon::fromTheme(QStringLiteral("text-html"),
                                              QIcon(QStringLiteral(":/icons/text-html_16.png"))));
@@ -222,9 +248,9 @@ void MainWindow::loadIcons()
                                                      QIcon(QStringLiteral(":/icons/document-open-recent.svg"))));
 }
 
-void MainWindow::loadIcon(const QString &name, QAction* &a)
+void MainWindow::loadIcon(const char* name, QAction* &a)
 {
-    a->setIcon(QIcon::fromTheme(name, QIcon(QStringLiteral(
+    a->setIcon(QIcon::fromTheme(name, QIcon(QString::fromLatin1(
                                                 ":/icons/%1.svg").arg(name))));
 }
 
@@ -238,13 +264,6 @@ void MainWindow::onOrientationChanged(const Qt::ScreenOrientation &t)
         disablePreview(false);
         statusBar()->show();
     }
-}
-
-void MainWindow::changeWidget(const QString &text)
-{
-    Q_UNUSED(text);
-
-    ui->tabWidget->setCurrentIndex(widgetBox->currentIndex());
 }
 
 void MainWindow::onSetText(const int &index)
@@ -436,8 +455,11 @@ void MainWindow::exportPdf()
 void MainWindow::openInWebBrowser()
 {
     QTemporaryFile f(this);
-    f.setFileTemplate(f.fileTemplate() +
-                      QLatin1String(".html"));
+
+    const QString name = f.fileTemplate() + QLatin1String(".html");
+
+    f.setFileTemplate(name);
+    f.setAutoRemove(false);
 
     if (!f.open()) {
         qWarning() << "Could not create temporyry file: " << f.errorString();
@@ -454,6 +476,10 @@ void MainWindow::openInWebBrowser()
 
     if (!QDesktopServices::openUrl(QUrl::fromLocalFile(f.fileName())))
         f.remove();
+
+    QTimer::singleShot(2000, this, [name]{
+        QFile::remove(name);
+    });
 }
 
 void MainWindow::exportHtml()
@@ -487,11 +513,10 @@ void MainWindow::exportHtml()
     QGuiApplication::restoreOverrideCursor();
 }
 
-// Indexchanged doesnt work in qt 5.12.8
-void MainWindow::changeMode(const QString &text)
+// Indexchanged doesn't work in qt 5.12.8
+void MainWindow::changeMode(const int &i)
 {
-    _mode = text == "GitHub" ? 1
-                             : 0;
+    _mode = i;
     onTextChanged();
 }
 
@@ -527,6 +552,9 @@ void MainWindow::openFile(const QString &newFile)
     }
 
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
+
+    if (widgetReloadFile)
+        widgetReloadFile->hide();
 
     if (!path.isEmpty())
         watcher->removePath(path);

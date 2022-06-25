@@ -147,7 +147,7 @@
         <translation>Vorschau deaktivieren</translation>
     </message>
     <message>
-        <source>Check spelling</source>
+        <source>Spell check</source>
         <translation>Rechtschreibprüfung</translation>
     </message>
     <message>
