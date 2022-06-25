@@ -17,12 +17,14 @@
 #include <QSettings>
 #include <QToolButton>
 #include <QSaveFile>
-#include <QPushButton>
 #include <QDebug>
 #include <QTimer>
 #include <QTemporaryFile>
 #include <QDesktopServices>
 #include <QFileSystemWatcher>
+#include <QtConcurrent/QtConcurrentRun>
+
+#include <QTime>
 
 #if QT_CONFIG(printdialog)
 #include <QtPrintSupport/QPrintDialog>
@@ -36,7 +38,7 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-    const QColor back = palette().base().color();
+    const QColor back = QPalette().base().color();
     int r, g, b, a;
     back.getRgb(&r, &g, &b, &a);
 
@@ -47,14 +49,30 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
         setWindowIcon(QIcon(QStringLiteral(":/Icon.svg")));
 
     ui->setupUi(this);
-    ui->editor->searchWidget()->setDarkMode(dark);
 
-    loadIcons();
-
-    QScreen *screen = qApp->screenAt(pos());
+    QScreen *screen = qApp->primaryScreen();
     onOrientationChanged(screen->primaryOrientation());
     connect(screen, &QScreen::primaryOrientationChanged,
             this, &MainWindow::onOrientationChanged);
+
+    toolbutton = new QToolButton(this);
+    toolbutton->setMenu(ui->menuRecentlyOpened);
+    toolbutton->setPopupMode(QToolButton::InstantPopup);
+
+    QtConcurrent::run(this, &MainWindow::loadIcons);
+
+    watcher = new QFileSystemWatcher(this);
+    connect(watcher, &QFileSystemWatcher::fileChanged,
+            this, &MainWindow::onFileChanged);
+
+    // Settings
+    settings = new QSettings(QStringLiteral("SME"),
+                             QStringLiteral("MarkdownEdit"), this);
+
+    QTime time = QTime::currentTime();
+    loadSettings(file);
+    updateOpened();
+    qDebug() << time.msecsTo(QTime::currentTime());
 
     mode = new QComboBox(ui->Edit);
     mode->addItems({QString::fromLatin1("Commonmark"), QString::fromLatin1("GitHub")});
@@ -65,23 +83,8 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     widgetBox->addItems(QStringList() << tr("Preview") << tr("HTML"));
     widgetBox->setCurrentIndex(0);
 
+
     htmlHighliter = new Highliter(ui->raw->document());
-
-    toolbutton = new QToolButton(this);
-    toolbutton->setMenu(ui->menuRecentlyOpened);
-    toolbutton->setIcon(ui->menuRecentlyOpened->icon());
-    toolbutton->setPopupMode(QToolButton::InstantPopup);
-
-    watcher = new QFileSystemWatcher(this);
-    connect(watcher, &QFileSystemWatcher::fileChanged,
-            this, &MainWindow::onFileChanged);
-
-    // Settings
-    settings = new QSettings(QStringLiteral("SME"),
-                             QStringLiteral("MarkdownEdit"), this);
-
-    loadSettings(file);
-    updateOpened();
 
     connect(ui->actionNew, &QAction::triggered, this, &MainWindow::onFileNew);
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::onFileOpen);
@@ -147,7 +150,7 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     ui->Edit->addAction(ui->actionCut);
     ui->Edit->addAction(ui->actionCopy);
     ui->Edit->addAction(ui->actionPaste);
-    ui->toolBarPreview->addWidget(mode);
+        ui->toolBarPreview->addWidget(mode);
     ui->toolBarPreview->addSeparator();
     ui->toolBarPreview->addWidget(widgetBox);
 
@@ -157,6 +160,7 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
             ui->editor->setText(f.readAll(), QLatin1String(":/defauld.md"));
             setWindowFilePath(f.fileName());
             ui->actionReload->setText(tr("Reload \"%1\"").arg(f.fileName()));
+            path = f.fileName();
         }
         else {
             onFileNew();
@@ -165,6 +169,13 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
 
 #ifdef NO_SPELLCHECK
     ui->menuExtras->removeAction(ui->actionSpell_checking);
+#endif
+#ifdef Q_OS_WASM
+    ui->menuExport->removeAction(ui->actionExportPdf);
+    ui->menuFile->removeAction(ui->actionPrint);
+    ui->menuFile->removeAction(ui->actionPrintPreview);
+
+    ui->File->removeAction(ui->actionPrintPreview);
 #endif
 }
 
@@ -246,6 +257,8 @@ void MainWindow::loadIcons()
                                              QIcon(QStringLiteral(":/icons/document-export.svg"))));
     ui->menuRecentlyOpened->setIcon(QIcon::fromTheme(QStringLiteral("document-open-recent"),
                                                      QIcon(QStringLiteral(":/icons/document-open-recent.svg"))));
+
+    toolbutton->setIcon(ui->menuRecentlyOpened->icon());
 }
 
 void MainWindow::loadIcon(const char* name, QAction* &a)
@@ -296,7 +309,7 @@ void MainWindow::changeSpelling(const bool &checked)
     return;
 #endif
 
-    ui->editor->getChecker()->setSpellCheckingEnabled(checked);
+    ui->editor->changeSpelling(checked);
 
     ui->actionSpell_checking->setChecked(checked);
     spelling = checked;
@@ -376,10 +389,6 @@ void MainWindow::changeHighlighting(const bool &enabled)
 
     ui->editor->getChecker()->setMarkdownHighlightingEnabled(enabled);
 
-    if (enabled)
-        htmlHighliter->setDocument(ui->raw->document());
-    else
-        htmlHighliter->setDocument(nullptr);
     dontUpdate = false;
     highlighting = enabled;
 }
@@ -476,14 +485,17 @@ void MainWindow::openInWebBrowser()
 
     if (!QDesktopServices::openUrl(QUrl::fromLocalFile(f.fileName())))
         f.remove();
-
-    QTimer::singleShot(2000, this, [name]{
-        QFile::remove(name);
-    });
+    else
+        QTimer::singleShot(2000, this, [name]{
+            QFile::remove(name);
+        });
 }
 
 void MainWindow::exportHtml()
 {
+#if defined(Q_OS_WASM)
+    QFileDialog::saveFileContent(html.toLocal8Bit(), QStringLiteral("Exported HTML.pdf"));
+#else
     QFileDialog dialog(this, tr("Export HTML"));
     dialog.setMimeTypeFilters({"text/html"});
     dialog.setAcceptMode(QFileDialog::AcceptSave);
@@ -492,6 +504,8 @@ void MainWindow::exportHtml()
         return;
 
     const QString file = dialog.selectedFiles().at(0);
+
+    if (file.isEmpty()) return;
 
     QFile f(file, this);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Text))  {
@@ -511,6 +525,7 @@ void MainWindow::exportHtml()
     QTimer::singleShot(10000, statusBar(), &QStatusBar::hide);
 
     QGuiApplication::restoreOverrideCursor();
+#endif
 }
 
 // Indexchanged doesn't work in qt 5.12.8
@@ -865,9 +880,6 @@ void MainWindow::loadSettings(const QString &f) {
     }
     else
         openFile(f);
-
-    spelling = settings->value(QStringLiteral("spelling"), true).toBool();
-    changeSpelling(spelling);
 
     onTextChanged();
 }

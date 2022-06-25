@@ -14,6 +14,9 @@
 QMap<QString, QVariant> getLanguageMap();
 void setLanguageMap(const QMap<QString, QVariant> &m);
 
+QString currDir();
+void setCurrDir(const QString &);
+
 #if !SPELLCHECK
 #define NO_SPELLCHECK
 #endif

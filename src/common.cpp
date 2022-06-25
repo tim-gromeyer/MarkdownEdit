@@ -15,3 +15,12 @@ void setLanguageMap(const QMap<QString, QVariant> &m)
 {
     languages_map = m;
 }
+
+QString currDir() {
+    return currentDir;
+}
+
+void setCurrDir(const QString &newDir)
+{
+    currentDir = newDir;
+}

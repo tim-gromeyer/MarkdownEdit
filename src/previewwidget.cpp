@@ -24,7 +24,7 @@ PreviewWidget::PreviewWidget(QWidget *parent)
 void PreviewWidget::openUrl(const QUrl &url)
 {
     const QString s = url.toString();
-    const QString basePath = qApp->property("currentDir").toString();
+    const QString basePath = currDir();
     const QString filePath = basePath + QLatin1Char('/') + s;
 
     if (s.startsWith(QLatin1String("http")))
