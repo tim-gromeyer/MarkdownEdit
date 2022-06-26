@@ -51,6 +51,8 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
 
     ui->setupUi(this);
 
+    editorList.append(ui->editor);
+
     QScreen *screen = qApp->primaryScreen();
     onOrientationChanged(screen->primaryOrientation());
     connect(screen, &QScreen::primaryOrientationChanged,
@@ -62,7 +64,7 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
 
 #ifndef NO_THREADING
 #if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
-    auto retVal = QtConcurrent::run(&MainWindow::loadIcons, this);
+    QFuture<void> retVal = QtConcurrent::run(&MainWindow::loadIcons, this);
 #else
     QtConcurrent::run(this, &MainWindow::loadIcons);
 #endif
@@ -189,7 +191,7 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
 
 MarkdownEditor* MainWindow::currentEditor()
 {
-    return ui->editor;
+    return editorList.at(ui->tabWidget->currentIndex());
 }
 
 void MainWindow::onFileChanged(const QString &f)
@@ -342,8 +344,8 @@ void MainWindow::pausePreview(const bool &checked)
 
 void MainWindow::cut()
 {
-    if (ui->editor->hasFocus())
-        ui->editor->cut();
+    if (currentEditor()->hasFocus())
+        currentEditor()->cut();
     else if (ui->textBrowser->hasFocus())
         ui->textBrowser->cut();
     else if (ui->raw->hasFocus())
@@ -352,8 +354,8 @@ void MainWindow::cut()
 
 void MainWindow::copy()
 {
-    if (ui->editor->hasFocus())
-        ui->editor->copy();
+    if (currentEditor()->hasFocus())
+        currentEditor()->copy();
     else if (ui->textBrowser->hasFocus())
         ui->textBrowser->copy();
     else if (ui->raw->hasFocus())
@@ -362,8 +364,8 @@ void MainWindow::copy()
 
 void MainWindow::paste()
 {
-    if (ui->editor->hasFocus()) {
-        ui->editor->paste();
+    if (currentEditor()->hasFocus()) {
+        currentEditor()->paste();
     }
     else if (ui->textBrowser->hasFocus())
         ui->textBrowser->paste();
@@ -548,7 +550,7 @@ void MainWindow::onTextChanged()
     if (dontUpdate)
         return;
 
-    html = Parser::Parse(ui->editor->document()->toPlainText(), _mode);
+    html = Parser::Parse(currentEditor()->document()->toPlainText(), _mode);
 
     onSetText(ui->tabWidget->currentIndex());
 }
@@ -588,7 +590,7 @@ void MainWindow::openFile(const QString &newFile)
         if (!ui->textBrowser->searchPaths().contains(QFileInfo(newFile).path()))
             ui->textBrowser->setSearchPaths(ui->textBrowser->searchPaths() << QFileInfo(newFile).path());
 
-    ui->editor->setText(f.readAll(), newFile);
+    currentEditor()->setText(f.readAll(), newFile);
 
     setWindowFilePath(QFileInfo(path).fileName());
     ui->actionReload->setText(tr("Reload \"%1\"").arg(windowFilePath()));
@@ -675,7 +677,7 @@ void MainWindow::onFileOpen()
 
 void MainWindow::onFileSave()
 {
-    if (!ui->editor->document()->isModified())
+    if (!currentEditor()->document()->isModified())
         if (QFile::exists(path))
             return;
 
@@ -687,7 +689,7 @@ void MainWindow::onFileSave()
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
 #if defined(Q_OS_WASM)
-    QFileDialog::saveFileContent(ui->editor->toPlainText().toLocal8Bit(), path);
+    QFileDialog::saveFileContent(currentEditor()->toPlainText().toLocal8Bit(), path);
 #else
     watcher->removePath(path);
 
@@ -701,7 +703,7 @@ void MainWindow::onFileSave()
     }
 
     QTextStream str(&f);
-    str << ui->editor->toPlainText();
+    str << currentEditor()->toPlainText();
 
     if (!f.commit()) {
         QGuiApplication::restoreOverrideCursor();
@@ -718,7 +720,7 @@ void MainWindow::onFileSave()
 
     updateOpened();
 
-    ui->editor->document()->setModified(false);
+    currentEditor()->document()->setModified(false);
 
     watcher->addPath(path);
 

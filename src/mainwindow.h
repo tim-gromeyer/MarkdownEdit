@@ -79,7 +79,7 @@ private:
     void loadIcons();
 
     MarkdownEditor *currentEditor();
-    QList<MarkdownEditor> editorList;
+    QList<MarkdownEditor*> editorList;
 
     Ui::MainWindow *ui;
 

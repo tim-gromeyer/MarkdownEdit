@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
     MainWindow w(parser.positionalArguments().value(0));
 
     w.show();
+    w.raise();
 
     return a.exec();
 }
