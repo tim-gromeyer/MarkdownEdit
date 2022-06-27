@@ -1,0 +1,18 @@
+name: markdownedit
+version: 1.4.0
+base: core20
+summary: Editor
+description: Simple program for editing Markdown files
+confinement: strict
+grade: stable
+
+apps:
+    MarkdownEdit:
+        command: desktop-launch markdownedit
+        plugs: [x11, home]
+
+parts:
+    markdownedit:
+        plugin: cmake
+        source: https://github.com/software-made-easy/MarkdownEdit/files/8987433/MarkdownEdit.tar.gz
+        build-packages: [qtbase5-dev, libqt5svg5-dev, qttools5-dev, qt5ct, libenchant-2-dev]

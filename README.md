@@ -58,7 +58,7 @@ Important:
 
 Run the [build script](scripts/build.sh) or follow the instructions below.
 
-- Clone MarkdownEdit: `git clone https://github.com/software-made-easy/MarkdownEdit && cd MarkdownEdit`
+- Clone MarkdownEdit: `git clone https://github.com/software-made-easy/MarkdownEdit --depth=1 && cd MarkdownEdit`
 - Clone all repositories required by MarkdownEdit by running the command `git submodule update --init --recursive -j 3`.
 - Create the build folder: `mkdir build && cd build`.
 - Now create a Makefile with CMake: `cmake ..`.
@@ -66,7 +66,7 @@ Run the [build script](scripts/build.sh) or follow the instructions below.
 
 In summary:
 ```bash
-git clone https://github.com/software-made-easy/MarkdownEdit && cd MarkdownEdit
+git clone https://github.com/software-made-easy/MarkdownEdit --depth=1 && cd MarkdownEdit
 git submodule update --init --recursive -j 3
 mkdir build && cd build
 cmake ..

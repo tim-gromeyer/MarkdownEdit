@@ -123,10 +123,9 @@ if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(markdownedit)
 endif()
 
-if(LINUX)
-    include(GNUInstallDirs)
-
-    install(TARGETS markdownedit DESTINATION ${CMAKE_INSTALL_BINDIR})
+include(GNUInstallDirs)
+install(TARGETS markdownedit DESTINATION ${CMAKE_INSTALL_BINDIR})
+if (LINUX)
     install(FILES packaging/MarkdownEdit/usr/share/applications/MarkdownEdit.desktop
         DESTINATION "/usr/share/applications")
 endif()

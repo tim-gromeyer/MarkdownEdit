@@ -30,9 +30,7 @@ add_library(qmarkdowntextedit STATIC ${QMARKDOWNTEXTEDIT_FILES})
 target_link_libraries(qmarkdowntextedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Svg)
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit)
-if(NOT MD4C_FOUND)
-    include_directories(${CMAKE_CURRENT_LIST_DIR}/md4c/src)
-endif()
+include_directories(${CMAKE_CURRENT_LIST_DIR}/md4c/src)
 
 set(3rdparty
     md4c-html
