@@ -504,7 +504,7 @@ void MainWindow::openInWebBrowser()
 void MainWindow::exportHtml()
 {
 #if defined(Q_OS_WASM)
-    QFileDialog::saveFileContent(html.toLocal8Bit(), QStringLiteral("Exported HTML.pdf"));
+    QFileDialog::saveFileContent(html.toLocal8Bit(), QStringLiteral("Exported HTML.html"));
 #else
     QFileDialog dialog(this, tr("Export HTML"));
     dialog.setMimeTypeFilters({"text/html"});
