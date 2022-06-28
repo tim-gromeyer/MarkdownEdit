@@ -18,8 +18,8 @@ MarkdownEdit, as the name suggests, is a simple and easy program for creating an
 
 ## Features:
 
-- Spell checker
-- Save and load Markdown files
+- Spell check
+- Load and save Markdown files
 - Undo-Redo
 - Preview Markdown files in real time (~1 ms)
 - Syntax highlighting editor
@@ -35,6 +35,7 @@ MarkdownEdit, as the name suggests, is a simple and easy program for creating an
 ![Example](https://github.com/software-made-easy/MarkdownEdit/raw/main/doc/images/Example.png)
 
 ## Preview
+
 A preview is available [here](https://software-made-easy.github.io/MarkdownEdit/markdownedit.html).
 
 
@@ -44,4 +45,5 @@ Notes:
 
 ## Download
 ### Linux:
+
 - [.deb file](https://github.com/software-made-easy/MarkdownEdit/releases/latest/download/MarkdownEdit.deb)
