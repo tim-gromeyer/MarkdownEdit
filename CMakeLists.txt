@@ -15,6 +15,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
 
+if(UNIX AND NOT APPLE AND NOT ANDROID)
+    set(LINUX TRUE)
+endif()
+
 if (EMSCRIPTEN)
     add_compile_definitions(NO_THREADING)
 
@@ -123,9 +127,13 @@ if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(markdownedit)
 endif()
 
-include(GNUInstallDirs)
-install(TARGETS markdownedit DESTINATION ${CMAKE_INSTALL_BINDIR})
 if (LINUX)
+    include(GNUInstallDirs)
+    install(TARGETS markdownedit DESTINATION ${CMAKE_INSTALL_BINDIR})
     install(FILES packaging/MarkdownEdit/usr/share/applications/MarkdownEdit.desktop
         DESTINATION "/usr/share/applications")
+endif()
+
+if (${MINGW})
+    list(APPEND CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES /home/tim/mxe/usr/i686-w64-mingw32.static/lib)
 endif()
