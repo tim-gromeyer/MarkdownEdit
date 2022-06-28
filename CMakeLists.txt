@@ -133,7 +133,3 @@ if (LINUX)
     install(FILES packaging/MarkdownEdit/usr/share/applications/MarkdownEdit.desktop
         DESTINATION "/usr/share/applications")
 endif()
-
-if (${MINGW})
-    list(APPEND CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES /home/tim/mxe/usr/i686-w64-mingw32.static/lib)
-endif()
