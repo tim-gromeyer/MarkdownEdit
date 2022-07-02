@@ -131,6 +131,12 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
             ui->tabWidget, &QStackedWidget::setCurrentIndex);
     connect(ui->tabWidget_2, &QTabWidget::currentChanged,
             this, &MainWindow::onEditorChanged);
+    connect(ui->actionSelectAll, &QAction::triggered,
+            this, &MainWindow::selectAll);
+    connect(ui->actionMarkdown_Syntax, &QAction::triggered,
+            this, []{ MarkdownEditor::showMarkdownSyntax(); });
+    connect(ui->tabWidget_2->tabBar(), &QTabBar::tabMoved,
+            this, &MainWindow::editorMoved);
 
     ui->actionSave->setEnabled(false);
     ui->actionUndo->setEnabled(false);
@@ -168,17 +174,20 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
 #endif
 }
 
+void MainWindow::editorMoved(const int &from, const int &to)
+{
+    editorList.move(from, to);
+}
+
 void MainWindow::closeEditor(const int &index)
 {
     overrideEditor = true;
     overrideVal = index;
 
     path = currentEditor()->getPath();
-    if (path == tr("untitled.md"))
-        path = QLatin1String();
-
-    if (!onFileSave())
-        return;
+    if (path != tr("untitled.md"))
+        if (!onFileSave())
+            return;
 
     watcher ->removePath(path);
 
@@ -203,6 +212,7 @@ void MainWindow::onEditorChanged(const int &index)
     ui->actionUndo->setEnabled(editor->document()->isUndoAvailable());
 
     path = editor->getPath();
+    onTextChanged();
 }
 
 MarkdownEditor *MainWindow::createEditor()
@@ -253,8 +263,6 @@ MarkdownEditor* MainWindow::currentEditor()
 
 void MainWindow::onFileChanged(const QString &f)
 {
-    // if (f != path) return;
-
     if (!widgetReloadFile) {
         QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
@@ -404,33 +412,42 @@ void MainWindow::pausePreview(const bool &checked)
 
 void MainWindow::cut()
 {
-    if (currentEditor()->hasFocus())
-        currentEditor()->cut();
-    else if (ui->textBrowser->hasFocus())
+    if (ui->textBrowser->hasFocus())
         ui->textBrowser->cut();
     else if (ui->raw->hasFocus())
         ui->raw->cut();
+    else
+        currentEditor()->cut();
 }
 
 void MainWindow::copy()
 {
-    if (currentEditor()->hasFocus())
-        currentEditor()->copy();
-    else if (ui->textBrowser->hasFocus())
+    if (ui->textBrowser->hasFocus())
         ui->textBrowser->copy();
     else if (ui->raw->hasFocus())
         ui->raw->copy();
+    else
+        currentEditor()->copy();
 }
 
 void MainWindow::paste()
 {
-    if (currentEditor()->hasFocus()) {
-        currentEditor()->paste();
-    }
-    else if (ui->textBrowser->hasFocus())
+    if (ui->textBrowser->hasFocus())
         ui->textBrowser->paste();
     else if (ui->raw->hasFocus())
         ui->raw->paste();
+    else
+        currentEditor()->paste();
+}
+
+void MainWindow::selectAll()
+{
+    if (ui->textBrowser->hasFocus())
+        ui->textBrowser->selectAll();
+    else if (ui->raw->hasFocus())
+        ui->raw->selectAll();
+    else
+        currentEditor()->selectAll();
 }
 
 void MainWindow::changeAddtoIconPath(const bool &c)
@@ -745,6 +762,8 @@ bool MainWindow::onFileSave()
     QFileDialog::saveFileContent(currentEditor()->toPlainText().toLocal8Bit(), path);
 #else
 
+    watcher->removePath(path);
+
     QSaveFile f(path, this);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QGuiApplication::restoreOverrideCursor();
@@ -764,6 +783,8 @@ bool MainWindow::onFileSave()
                                  QDir::toNativeSeparators(path), f.errorString()));
         return false;
     }
+
+    watcher->addPath(path);
 #endif
 
     statusBar()->show();
@@ -773,8 +794,6 @@ bool MainWindow::onFileSave()
     updateOpened();
 
     currentEditor()->document()->setModified(false);
-
-    watcher->addPath(path);
 
     QGuiApplication::restoreOverrideCursor();
 
@@ -788,7 +807,7 @@ bool MainWindow::onFileSaveAs()
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setDefaultSuffix("md");
     if (dialog.exec() == QDialog::Rejected)
-        return false;
+        return true;
 
     const QString file = dialog.selectedFiles().at(0);
 

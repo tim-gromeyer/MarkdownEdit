@@ -29,7 +29,7 @@ public:
     inline QString getPath() { return fileName; };
 
 public slots:
-    void showMarkdownSyntax();
+    static void showMarkdownSyntax();
 
 private slots:
     void onLanguageChanged(const QString &);

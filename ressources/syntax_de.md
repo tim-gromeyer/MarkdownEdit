@@ -158,14 +158,13 @@ Beispiel:
 
 ~~~ruby
 def foo(x)
-Rückkehr 3
-Ende
+  return 3
+end
 ~~~
 
 wird zu:
 
-
 <pre><code class="language-ruby">def foo(x)
-Rückkehr 3
-Ende
+  return 3
+end
 </code></pre>

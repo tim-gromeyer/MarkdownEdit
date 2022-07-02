@@ -1,11 +1,13 @@
 #include "markdowneditor.h"
+#include "qdir.h"
+#include "qlocale.h"
+#include "qmessagebox.h"
 #include "spellchecker.h"
 
 #include <QDialog>
 #include <QHBoxLayout>
 #include <QFile>
 #include <QFileInfo>
-#include <QDebug>
 
 
 MarkdownEditor::MarkdownEditor(QWidget *parent)
@@ -48,23 +50,37 @@ void MarkdownEditor::onLanguageChanged(const QString &l)
 
 void MarkdownEditor::showMarkdownSyntax()
 {
-    QDialog d(this);
+    QDialog d;
     QHBoxLayout l(&d);
     d.setLayout(&l);
     l.setContentsMargins(0, 0, 0, 0);
-    d.resize(size());
 
-    QMarkdownTextEdit e(&d, true);
+    MarkdownEditor e(&d);
 
-    QFile f(QStringLiteral(":/syntax_%1.md").arg(checker->getLanguage().split("_").at(0)), &d);
-    if (!f.open(QIODevice::ReadOnly)) {
-        f.setFileName(QStringLiteral(":/syntax_en.md"));
-        f.open(QIODevice::ReadOnly);
+    QString file = QLatin1String(":/syntax_en.md");
+    QString language = QLatin1String("en_US");
+
+    for (const QString &lang : QLocale::system().uiLanguages()) {
+        if (QFile::exists(QStringLiteral(":/syntax_%1.md").arg(lang))) {
+            file = QStringLiteral(":/syntax_%1.md").arg(lang);
+            language = lang;
+            break;
+        }
     }
-    e.setPlainText(f.readAll());
+
+    QFile f(file, &d);
+    if (!f.open(QIODevice::ReadOnly)) {
+        QMessageBox::warning(&d, tr("Couldn't open file"),
+                             tr("Could not open file %1: %2").arg(
+                                 QDir::toNativeSeparators(file), f.errorString()));
+    }
+    e.setText(f.readAll());
     e.setReadOnly(true);
+    if (!e.setLanguage(language))
+        e.setLanguage(QLocale::system().name());
     l.addWidget(&e);
 
+    d.showMaximized();
     d.exec();
 }
 

@@ -25,10 +25,10 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(const QString &file, QWidget *parent = nullptr);
+    explicit MainWindow(const QString &, QWidget *parent = nullptr);
     ~MainWindow();
 
-    void openFile(const QString &path);
+    void openFile(const QString &);
 
 protected:
     void closeEvent(QCloseEvent *e) override;
@@ -47,6 +47,7 @@ private slots:
 
     void onEditorChanged(const int &);
     void closeEditor(const int &);
+    void editorMoved(const int &, const int &);
 
     void onHelpAbout();
     void onTextChanged();
@@ -73,6 +74,7 @@ private slots:
     void cut();
     void copy();
     void paste();
+    void selectAll();
 
 private:
     void loadSettings(const QString &);
