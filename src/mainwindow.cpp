@@ -185,11 +185,17 @@ void MainWindow::closeEditor(const int &index)
     overrideVal = index;
 
     path = currentEditor()->getPath();
-    if (path != tr("untitled.md"))
+
+    if (path == tr("untitled.md"))
+        path.clear();
+
+    if (currentEditor()->document()->isModified()) {
         if (!onFileSave())
             return;
+    }
 
-    watcher ->removePath(path);
+    if (!path.isEmpty())
+        watcher->removePath(path);
 
     overrideEditor = false;
 
@@ -212,6 +218,10 @@ void MainWindow::onEditorChanged(const int &index)
     ui->actionUndo->setEnabled(editor->document()->isUndoAvailable());
 
     path = editor->getPath();
+
+    if (path == tr("untitled.md"))
+        path.clear();
+
     onTextChanged();
 }
 
@@ -807,7 +817,7 @@ bool MainWindow::onFileSaveAs()
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setDefaultSuffix("md");
     if (dialog.exec() == QDialog::Rejected)
-        return true;
+        return false;
 
     const QString file = dialog.selectedFiles().at(0);
 
@@ -900,7 +910,6 @@ void MainWindow::closeEvent(QCloseEvent *e)
                 e->ignore();
                 return;
             }
-
         }
     }
 

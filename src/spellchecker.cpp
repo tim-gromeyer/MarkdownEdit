@@ -447,8 +447,6 @@ void SpellChecker::slotReplaceWord()
 
 void SpellChecker::slotSetLanguage(const bool &checked)
 {
-
-
     if(checked) {
         QAction* action = qobject_cast<QAction*>(sender());
         const QString lang = action->data().toString();
