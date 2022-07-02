@@ -5,6 +5,7 @@
 #include "highlighter.h"
 #include "spellchecker.h"
 #include "common.h"
+#include "markdowneditor.h"
 
 #include <QMessageBox>
 #include <QFileDialog>
@@ -39,19 +40,12 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-    const QColor back = QPalette().base().color();
-    int r, g, b, a;
-    back.getRgb(&r, &g, &b, &a);
-
-    const bool dark = ((r + g + b + a) / 4) < 127;
-    if (dark)
+    if (isDarkMode())
         setWindowIcon(QIcon(QStringLiteral(":/Icon_dark.svg")));
     else
         setWindowIcon(QIcon(QStringLiteral(":/Icon.svg")));
 
     ui->setupUi(this);
-
-    editorList.append(ui->editor);
 
     QScreen *screen = qApp->primaryScreen();
     onOrientationChanged(screen->primaryOrientation());
@@ -75,6 +69,9 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     watcher = new QFileSystemWatcher(this);
     connect(watcher, &QFileSystemWatcher::fileChanged,
             this, &MainWindow::onFileChanged);
+
+    connect(ui->tabWidget_2, &QTabWidget::tabCloseRequested,
+            this, &MainWindow::closeEditor);
 
     // Settings
     settings = new QSettings(QStringLiteral("SME"),
@@ -110,20 +107,10 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     connect(ui->actionCopy, &QAction::triggered, this, &MainWindow::copy);
     connect(ui->actionPaste, &QAction::triggered, this, &MainWindow::paste);
 
-    connect(ui->editor, &QPlainTextEdit::textChanged,
-            this, &MainWindow::onTextChanged);
     connect(ui->actionHighlighting_activated, &QAction::triggered,
             this, &MainWindow::changeHighlighting);
     connect(ui->actionAuto_add_file_path_to_icon_path, &QAction::triggered,
             this, &MainWindow::changeAddtoIconPath);
-    connect(ui->editor->document(), &QTextDocument::modificationChanged,
-            ui->actionSave, &QAction::setEnabled);
-    connect(ui->editor->document(), &QTextDocument::modificationChanged,
-            this, &QMainWindow::setWindowModified);
-    connect(ui->editor->document(), &QTextDocument::undoAvailable,
-            ui->actionUndo, &QAction::setEnabled);
-    connect(ui->editor->document(), &QTextDocument::redoAvailable,
-            ui->actionRedo, &QAction::setEnabled);
     connect(ui->actionDisable_preview, &QAction::triggered,
             this, &MainWindow::disablePreview);
     connect(ui->actionPause_preview, &QAction::triggered,
@@ -142,6 +129,8 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
             this, &MainWindow::changeMode);
     connect(widgetBox, qOverload<int>(&QComboBox::currentIndexChanged),
             ui->tabWidget, &QStackedWidget::setCurrentIndex);
+    connect(ui->tabWidget_2, &QTabWidget::currentChanged,
+            this, &MainWindow::onEditorChanged);
 
     ui->actionSave->setEnabled(false);
     ui->actionUndo->setEnabled(false);
@@ -163,18 +152,8 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     ui->toolBarPreview->addSeparator();
     ui->toolBarPreview->addWidget(widgetBox);
 
-    if (ui->editor->toPlainText().isEmpty()  && file.isEmpty()) {
-        QFile f(QStringLiteral(":/default.md"), this);
-        if (f.open(QFile::ReadOnly | QFile::Text)) {
-            ui->editor->setText(f.readAll(), QLatin1String(":/defauld.md"));
-            setWindowFilePath(f.fileName());
-            ui->actionReload->setText(tr("Reload \"%1\"").arg(f.fileName()));
-            path = f.fileName();
-            statusBar()->hide();
-        }
-        else {
-            onFileNew();
-        }
+    if (editorList.isEmpty() && file.isEmpty()) {
+        openFile(QStringLiteral(":/default.md"));
     }
 
 #ifdef NO_SPELLCHECK
@@ -189,14 +168,92 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
 #endif
 }
 
+void MainWindow::closeEditor(const int &index)
+{
+    overrideEditor = true;
+    overrideVal = index;
+
+    path = currentEditor()->getPath();
+    if (path == tr("untitled.md"))
+        path = QLatin1String();
+
+    if (!onFileSave())
+        return;
+
+    watcher ->removePath(path);
+
+    overrideEditor = false;
+
+    editorList.removeAt(index);
+    ui->tabWidget_2->removeTab(index);
+}
+
+void MainWindow::onEditorChanged(const int &index)
+{
+    onTextChanged();
+
+    MarkdownEditor* &&editor = currentEditor();
+
+    setWindowFilePath(editor->getFileName());
+    setWindowModified(editor->document()->isModified());
+    ui->actionSave->setEnabled(editor->document()->isModified());
+    ui->actionReload->setText(tr("Reload \"%1\"").arg(editor->getFileName()));
+
+    ui->actionRedo->setEnabled(editor->document()->isRedoAvailable());
+    ui->actionUndo->setEnabled(editor->document()->isUndoAvailable());
+
+    path = editor->getPath();
+}
+
+MarkdownEditor *MainWindow::createEditor()
+{
+    MarkdownEditor *editor = new MarkdownEditor(this);
+    editor->changeSpelling(spelling);
+    editor->getChecker()->setMarkdownHighlightingEnabled(highlighting);
+
+    if(ui->actionWord_wrap->isChecked())
+        editor->setLineWrapMode(QPlainTextEdit::WidgetWidth);
+    else
+        editor->setLineWrapMode(QPlainTextEdit::NoWrap);
+
+    connect(editor, &QPlainTextEdit::textChanged,
+            this, &MainWindow::onTextChanged);
+    connect(editor->document(), &QTextDocument::modificationChanged,
+            ui->actionSave, &QAction::setEnabled);
+    connect(editor->document(), &QTextDocument::modificationChanged,
+            this, &QMainWindow::setWindowModified);
+    connect(editor->document(), &QTextDocument::undoAvailable,
+            ui->actionUndo, &QAction::setEnabled);
+    connect(editor->document(), &QTextDocument::redoAvailable,
+            ui->actionRedo, &QAction::setEnabled);
+
+    editorList.append(editor);
+
+    return editor;
+}
+
+void MainWindow::receivedMessage(const qint32 &id, const QByteArray &msg)
+{
+    QString f = msg;
+    f.remove(QLatin1String("file://"));
+
+    if (f.isEmpty())
+        onFileNew();
+    else
+        openFile(f);
+}
+
 MarkdownEditor* MainWindow::currentEditor()
 {
-    return editorList.at(ui->tabWidget->currentIndex());
+    if (overrideEditor)
+        return editorList.at(overrideVal);
+    else
+        return editorList.at(ui->tabWidget_2->currentIndex());
 }
 
 void MainWindow::onFileChanged(const QString &f)
 {
-    if (f != path) return;
+    // if (f != path) return;
 
     if (!widgetReloadFile) {
         QGuiApplication::setOverrideCursor(Qt::WaitCursor);
@@ -212,7 +269,6 @@ void MainWindow::onFileChanged(const QString &f)
         horizontalLayout->addWidget(labelReloadFile);
 
         buttonBox = new QDialogButtonBox(widgetReloadFile);
-        buttonBox->setStyleSheet(QString::fromUtf8("", 0));
         buttonBox->setStandardButtons(QDialogButtonBox::No | QDialogButtonBox::Yes);
 
         connect(buttonBox, &QDialogButtonBox::accepted,
@@ -271,10 +327,10 @@ void MainWindow::loadIcons()
     toolbutton->setIcon(ui->menuRecentlyOpened->icon());
 }
 
-void MainWindow::loadIcon(const char* name, QAction* &a)
+void MainWindow::loadIcon(const char* &&name, QAction* &a)
 {
-    a->setIcon(QIcon::fromTheme(name, QIcon(QString::fromLatin1(
-                                                ":/icons/%1.svg").arg(name))));
+    a->setIcon(QIcon::fromTheme(QString::fromUtf8(name), QIcon(QString::fromLatin1(
+                                                ":/icons/%1.svg").arg(QString::fromUtf8(name)))));
 }
 
 void MainWindow::onOrientationChanged(const Qt::ScreenOrientation &t)
@@ -305,10 +361,12 @@ void MainWindow::onSetText(const int &index)
 
 void MainWindow::changeWordWrap(const bool &c)
 {
-    if (c)
-        ui->editor->setLineWrapMode(QPlainTextEdit::WidgetWidth);
-    else
-        ui->editor->setLineWrapMode(QPlainTextEdit::NoWrap);
+    for (MarkdownEditor* &editor : editorList) {
+        if (c)
+            editor->setLineWrapMode(QPlainTextEdit::WidgetWidth);
+        else
+            editor->setLineWrapMode(QPlainTextEdit::NoWrap);
+    }
 
     ui->actionWord_wrap->setChecked(c);
 }
@@ -319,7 +377,9 @@ void MainWindow::changeSpelling(const bool &checked)
     return;
 #endif
 
-    ui->editor->changeSpelling(checked);
+    for (MarkdownEditor* &editor : editorList) {
+        editor->changeSpelling(checked);
+    }
 
     ui->actionSpell_checking->setChecked(checked);
     spelling = checked;
@@ -397,7 +457,9 @@ void MainWindow::changeHighlighting(const bool &enabled)
 {
     dontUpdate = true;
 
-    ui->editor->getChecker()->setMarkdownHighlightingEnabled(enabled);
+    for (MarkdownEditor* &editor : editorList) {
+        editor->getChecker()->setMarkdownHighlightingEnabled(enabled);
+    }
 
     dontUpdate = false;
     highlighting = enabled;
@@ -581,8 +643,6 @@ void MainWindow::openFile(const QString &newFile)
     if (widgetReloadFile)
         widgetReloadFile->hide();
 
-    if (!path.isEmpty())
-        watcher->removePath(path);
     path = newFile;
     watcher->addPath(path);
 
@@ -590,10 +650,15 @@ void MainWindow::openFile(const QString &newFile)
         if (!ui->textBrowser->searchPaths().contains(QFileInfo(newFile).path()))
             ui->textBrowser->setSearchPaths(ui->textBrowser->searchPaths() << QFileInfo(newFile).path());
 
-    currentEditor()->setText(f.readAll(), newFile);
+    MarkdownEditor* &&editor = createEditor();
+    editor->setFile(newFile);
+    ui->tabWidget_2->insertTab(editorList.length() -1,
+                               editor, editor->getFileName());
+    ui->tabWidget_2->setCurrentIndex(editorList.length() -1);
+    editor->setText(f.readAll(), newFile);
 
-    setWindowFilePath(QFileInfo(path).fileName());
-    ui->actionReload->setText(tr("Reload \"%1\"").arg(windowFilePath()));
+    setWindowFilePath(editor->getFileName());
+    ui->actionReload->setText(tr("Reload \"%1\"").arg(editor->getFileName()));
 
     statusBar()->show();
     statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 10000);
@@ -606,19 +671,15 @@ void MainWindow::openFile(const QString &newFile)
 
 void MainWindow::onFileNew()
 {
-    if (ui->editor->document()->isModified()) {
-        const int button = QMessageBox::question(this, tr("Save changes?"),
-                                           tr("You have unsaved changes. Do you want to create a new document anyway?"));
-        if (button != QMessageBox::Yes)
-            return;
-    }
-
-    if (!path.isEmpty())
-        watcher->removePath(path);
     path = QLatin1String();
-    ui->editor->setText(tr("## New document"));
-    setWindowFilePath(QFileInfo(tr("untitled.md")).fileName());
-    ui->actionReload->setText(tr("Reload \"%1\"").arg(windowFilePath()));
+    const QString file = tr("untitled.md");
+
+    MarkdownEditor* &&editor = createEditor();
+    editor->setFile(file);
+
+    ui->tabWidget_2->insertTab(editorList.length() -1, editor, editor->getFileName());
+    ui->tabWidget_2->setCurrentIndex(editorList.count() -1);
+    editor->setText(tr("## New document"), file);
 }
 
 void MainWindow::onFileOpen()
@@ -657,13 +718,6 @@ void MainWindow::onFileOpen()
     };
     QFileDialog::getOpenFileContent("Markdown (*.md *.markdown *.mkd)", fileContentReady);
 #else
-    if (ui->editor->document()->isModified()) {
-        const int button = QMessageBox::question(this, tr("Save changes?"),
-                                           tr("You have unsaved changes. Do you want to open a new document anyway?"));
-        if (button != QMessageBox::Yes)
-            return;
-    }
-
     QFileDialog dialog(this, tr("Open MarkDown File"));
     dialog.setMimeTypeFilters({"text/markdown"});
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
@@ -675,15 +729,14 @@ void MainWindow::onFileOpen()
 #endif
 }
 
-void MainWindow::onFileSave()
+bool MainWindow::onFileSave()
 {
     if (!currentEditor()->document()->isModified())
         if (QFile::exists(path))
-            return;
+            return true;
 
     if (path.isEmpty() || path == QLatin1String(":/default.md")) {
-        onFileSaveAs();
-        return;
+        return onFileSaveAs();
     }
 
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
@@ -691,7 +744,6 @@ void MainWindow::onFileSave()
 #if defined(Q_OS_WASM)
     QFileDialog::saveFileContent(currentEditor()->toPlainText().toLocal8Bit(), path);
 #else
-    watcher->removePath(path);
 
     QSaveFile f(path, this);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -699,7 +751,7 @@ void MainWindow::onFileSave()
         QMessageBox::warning(this, tr("Warning"),
                              tr("Could not write to file %1: %2").arg(
                                  QDir::toNativeSeparators(path), f.errorString()));
-        return;
+        return false;
     }
 
     QTextStream str(&f);
@@ -710,7 +762,7 @@ void MainWindow::onFileSave()
         QMessageBox::warning(this, tr("Warning"),
                              tr("Could not write to file %1: %2").arg(
                                  QDir::toNativeSeparators(path), f.errorString()));
-        return;
+        return false;
     }
 #endif
 
@@ -725,33 +777,34 @@ void MainWindow::onFileSave()
     watcher->addPath(path);
 
     QGuiApplication::restoreOverrideCursor();
+
+    return true;
 }
 
-void MainWindow::onFileSaveAs()
+bool MainWindow::onFileSaveAs()
 {
     QFileDialog dialog(this, tr("Save MarkDown File"));
     dialog.setMimeTypeFilters({"text/markdown"});
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setDefaultSuffix("md");
-    if (dialog.exec() != QDialog::Accepted)
-        return;
+    if (dialog.exec() == QDialog::Rejected)
+        return false;
 
-    if (!path.isEmpty())
-        watcher->removePath(path);
-    path = dialog.selectedFiles().at(0);
-    watcher->addPath(path);
+    const QString file = dialog.selectedFiles().at(0);
+
+    if (file.isEmpty())
+        return false;
+    else
+        path = file;
+
+    watcher->addPath(file);
 
     if (!(path.endsWith(QLatin1String(".md")) || path.endsWith(QLatin1String(".markdown")) || path.endsWith(QLatin1String(".mkd"))))
         path.append(".md");
 
-    setWindowFilePath(QFileInfo(path).fileName());
-    ui->actionReload->setText(tr("Reload \"%1\"").arg(windowFilePath()));
+    setMapAttribute(path, currentEditor()->getChecker()->getLanguage());
 
-    QMap<QString, QVariant> map = getLanguageMap();
-    map[path] = ui->editor->getChecker()->getLanguage();
-    setLanguageMap(map);
-
-    onFileSave();
+    return onFileSave();
 }
 
 void MainWindow::onHelpAbout()
@@ -781,13 +834,6 @@ void MainWindow::openRecent() {
         recentOpened.removeAll(filename);
         updateOpened();
         return;
-    }
-
-    if (ui->editor->document()->isModified()) {
-        const int button = QMessageBox::question(this, tr("Save changes?"),
-                                           tr("You have unsaved changes. Do you want to open a new document anyway?"));
-        if (button != QMessageBox::Yes)
-            return;
     }
 
     recentOpened.move(recentOpened.indexOf(filename), 0);
@@ -826,20 +872,22 @@ void MainWindow::updateOpened() {
 
 void MainWindow::closeEvent(QCloseEvent *e)
 {
-    if (ui->editor->document()->isModified()) {
-        const int button = QMessageBox::question(this, tr("Save changes?"),
-                                           tr("You have unsaved changes. Do you want to exit anyway?"));
-        if (button == QMessageBox::No)
-            e->ignore();
-        else {
-            saveSettings();
-            e->accept();
+    for(MarkdownEditor* &editor : editorList) {
+        if (editor->document()->isModified()) {
+            const int button = QMessageBox::question(this, tr("Save changes?"),
+                                               tr("The file <em>%1</em> has been changed.\n"
+                                                  "Do you want to leave anyway?").arg(editor->getFileName()));
+            if (button == QMessageBox::No) {
+                e->ignore();
+                return;
+            }
+
         }
     }
-    else {
-        saveSettings();
-        e->accept();
-    }
+
+    saveSettings();
+    e->accept();
+    QMainWindow::closeEvent(e);
 }
 
 void MainWindow::loadSettings(const QString &f) {
@@ -891,7 +939,8 @@ void MainWindow::loadSettings(const QString &f) {
     else
         openFile(f);
 
-    onTextChanged();
+    if (editorList.length() > 0)
+        onTextChanged();
 }
 
 void MainWindow::saveSettings() {

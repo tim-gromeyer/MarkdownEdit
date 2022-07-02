@@ -23,10 +23,10 @@ public:
 
     void changeSpelling(const bool &);
 
+    inline void setFile(const QString &file) { fileName = file; };
     QString getDir();
-
-signals:
-    void languageChanged(const QString &lang = QLatin1String());
+    QString getFileName();
+    inline QString getPath() { return fileName; };
 
 public slots:
     void showMarkdownSyntax();

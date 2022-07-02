@@ -1,9 +1,17 @@
 #include "mainwindow.h"
+#include "common.h"
 
 #include <QApplication>
 #include <QLocale>
 #include <QTranslator>
 #include <QCommandLineParser>
+
+
+#if defined(Q_OS_WASM) || defined(Q_OS_ANDROID)
+#define NOT_SUPPORTET
+#else
+#include "singleapplication.h"
+#endif
 
 
 int main(int argc, char *argv[])
@@ -14,21 +22,13 @@ int main(int argc, char *argv[])
 #error You must use Qt 5.10 or newer
 #endif
 
-
+#ifndef NOT_SUPPORTET
+    SingleApplication a(argc, argv, true);
+#else
     QApplication a(argc, argv);
+#endif
     a.setApplicationDisplayName(QStringLiteral("MarkdownEdit"));
     a.setApplicationVersion(APP_VERSION);
-
-    QCommandLineParser parser;
-    parser.addHelpOption();
-    parser.addVersionOption();
-    parser.setApplicationDescription(QCoreApplication::translate(
-        "main", "Simple program for editing Markdown files"
-
-        ));
-    parser.addPositionalArgument("file", QCoreApplication::translate(
-                                             "main", "File to open."));
-    parser.process(a);
 
     QTranslator translator, qtTranslator;
 
@@ -43,7 +43,42 @@ int main(int argc, char *argv[])
                         QStringLiteral("_"), QStringLiteral(":/translations")))
         a.installTranslator(&translator);
 
+    QCommandLineParser parser;
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.setApplicationDescription(QCoreApplication::translate(
+        "main", "Simple program for editing Markdown files"
+
+        ));
+    parser.addPositionalArgument("file", QCoreApplication::translate(
+                                             "main", "File to open."));
+    parser.process(a);
+
+#ifndef NOT_SUPPORTET
+    if(a.isSecondary()) {
+        a.sendMessage(QByteArrayLiteral("file://") +
+                      parser.positionalArguments().value(0).toLocal8Bit());
+        return 0;
+    }
+#endif
+
     MainWindow w(parser.positionalArguments().value(0));
+
+#ifndef NOT_SUPPORTET
+    QObject::connect(
+        &a,
+        &SingleApplication::instanceStarted,
+        &w,
+        &QMainWindow::raise
+    );
+
+    QObject::connect(
+        &a,
+        &SingleApplication::receivedMessage,
+        &w,
+        &MainWindow::receivedMessage
+    );
+#endif
 
     w.show();
     w.raise();

@@ -4,3 +4,6 @@
 [submodule "3rdparty/qmarkdowntextedit"]
 	path = 3rdparty/qmarkdowntextedit
 	url = https://github.com/pbek/qmarkdowntextedit.git
+[submodule "3rdparty/SingleApplication"]
+	path = 3rdparty/SingleApplication
+	url = https://github.com/itay-grudev/SingleApplication

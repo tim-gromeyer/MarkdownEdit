@@ -29,10 +29,20 @@ set(QMARKDOWNTEXTEDIT_FILES
 add_library(qmarkdowntextedit STATIC ${QMARKDOWNTEXTEDIT_FILES})
 target_link_libraries(qmarkdowntextedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Svg)
 
+if(NOT ANDROID AND NOT EMSCRIPTEN)
+    set(QT_DEFAULT_MAJOR_VERSION ${QT_VERSION_MAJOR})
+    set(QAPPLICATION_CLASS QApplication CACHE STRING "Inheritance class for SingleApplication")
+    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/SingleApplication)
+    set(singleapp SingleApplication::SingleApplication)
+else()
+    set(singleapp "")
+endif()
+
 include_directories(${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit)
 include_directories(${CMAKE_CURRENT_LIST_DIR}/md4c/src)
 
 set(3rdparty
     md4c-html
     qmarkdowntextedit
+    ${singleapp}
 )

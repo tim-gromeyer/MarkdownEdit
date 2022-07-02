@@ -5,6 +5,7 @@
 #include <QHBoxLayout>
 #include <QFile>
 #include <QFileInfo>
+#include <QDebug>
 
 
 MarkdownEditor::MarkdownEditor(QWidget *parent)
@@ -13,6 +14,19 @@ MarkdownEditor::MarkdownEditor(QWidget *parent)
     checker = new SpellChecker(new TextEditProxyT(this));
     connect(checker, &SpellChecker::languageChanged,
             this, &MarkdownEditor::onLanguageChanged);
+}
+
+bool MarkdownEditor::setLanguage(const QString &lang)
+{
+    if (checker->getLanguageList().contains(lang))
+        return checker->setLanguage(lang);
+    else
+        return false;
+}
+
+QString MarkdownEditor::getFileName()
+{
+    return QFileInfo(fileName).fileName();
 }
 
 QString MarkdownEditor::getDir()
@@ -28,9 +42,7 @@ void MarkdownEditor::changeSpelling(const bool &c)
 void MarkdownEditor::onLanguageChanged(const QString &l)
 {
     if (!fileName.isEmpty()) {
-        QMap<QString, QVariant> map = getLanguageMap();
-        map[fileName] = l;
-        setLanguageMap(map);
+        setMapAttribute(fileName, l);
     }
 }
 
@@ -58,12 +70,13 @@ void MarkdownEditor::showMarkdownSyntax()
 
 void MarkdownEditor::setText(const QString &t, const QString &newFile)
 {
-    fileName = newFile;
+    if (!newFile.isEmpty())
+        fileName = newFile;
 
     QMap<QString, QVariant> map = getLanguageMap();
 
     if (fileName == QStringLiteral(":/default.md") && !map.contains(fileName))
-        map[fileName] = QLatin1String("en_us");
+        map[fileName] = QLatin1String("en_US");
 
     if (checker) {
         checker->clearDirtyBlocks();

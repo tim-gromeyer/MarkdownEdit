@@ -33,14 +33,20 @@ public:
 protected:
     void closeEvent(QCloseEvent *e) override;
 
+public slots:
+    void receivedMessage(const qint32 &, const QByteArray &);
+
 private slots:
     void onFileNew();
     void onFileOpen();
-    void onFileSave();
-    void onFileSaveAs();
+    bool onFileSave();
+    bool onFileSaveAs();
     inline void onFileReload() { openFile(path); };
 
     void onFileChanged(const QString &);
+
+    void onEditorChanged(const int &);
+    void closeEditor(const int &);
 
     void onHelpAbout();
     void onTextChanged();
@@ -75,9 +81,10 @@ private:
     void openRecent();
     void onSetText(const int &);
 
-    void loadIcon(const char* name, QAction* &action);
+    void loadIcon(const char* &&name, QAction* &action);
     void loadIcons();
 
+    MarkdownEditor *createEditor();
     MarkdownEditor *currentEditor();
     QList<MarkdownEditor*> editorList;
 
@@ -97,6 +104,9 @@ private:
     bool setPath;
     bool spelling;
     bool highlighting;
+
+    bool overrideEditor = false;
+    int overrideVal = 0;
 
     Highliter *htmlHighliter;
 

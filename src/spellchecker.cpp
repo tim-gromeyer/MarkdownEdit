@@ -180,10 +180,7 @@ bool SpellChecker::setLanguage(const QString &lang)
     Q_UNUSED(lang);
     return false;
 #else
-    if (lang == language) return true;
-
-    delete speller;
-    speller = nullptr;
+    if (lang == language && !lang.isEmpty()) return true;
 
     QString newLang;
 
@@ -198,6 +195,12 @@ bool SpellChecker::setLanguage(const QString &lang)
             return false;
         }
     }
+
+    if (newLang == language) return true;
+
+    if (speller)
+        delete speller;
+    speller = nullptr;
 
     // Request dictionary
     try {
@@ -238,11 +241,21 @@ const QStringList SpellChecker::getLanguageList()
     QStringList languages;
     broker->list_dicts(dict_describe_cb, &languages);
     std::sort(languages.begin(), languages.end());
+    if (languages.isEmpty())
+        qWarning() << "No language dict found";
+
+    languages.removeDuplicates();
+
+    for (const QString &s : languages) {
+        if (s.length() > 5)
+            languages.removeOne(s);
+    }
+
     return languages;
 #endif
 }
 
-QStringList SpellChecker::getSuggestion(const QString& word)
+QStringList SpellChecker::getSuggestion(const QString &word)
 {
     QStringList list;
 #ifdef NO_SPELLCHECK
@@ -380,7 +393,7 @@ void SpellChecker::showContextMenu(const QPoint &pos)
             QAction* action = new QAction(encodeLanguageString(lang), languagesMenu);
             action->setData(lang);
             action->setCheckable(true);
-            action->setChecked(lang == getLanguage());
+            action->setChecked(lang == language);
             connect(action, &QAction::triggered, this, &SpellChecker::slotSetLanguage);
             languagesMenu->addAction(action);
             actionGroup->addAction(action);
@@ -402,10 +415,12 @@ QString SpellChecker::encodeLanguageString(const QString &langString)
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
     const QLocale l(langString);
-    return QStringLiteral("%1 (%2)").arg(l.nativeLanguageName(), l.nativeTerritoryName());
+    langMap[langString] = QStringLiteral("%1 (%2)").arg(l.nativeLanguageName(), l.nativeTerritoryName());
+    return langMap[langString].toString();
 #else
     const QLocale l(langString);
-    return QStringLiteral("%1 (%2)").arg(l.nativeLanguageName(), l.nativeCountryName());
+    langMap[langString] = QStringLiteral("%1 (%2)").arg(l.nativeLanguageName(), l.nativeCountryName());
+    return langMap[langString].toString();
 #endif
 }
 
@@ -432,10 +447,15 @@ void SpellChecker::slotReplaceWord()
 
 void SpellChecker::slotSetLanguage(const bool &checked)
 {
+
+
     if(checked) {
         QAction* action = qobject_cast<QAction*>(sender());
-        language = action->data().toString();
-        if(!setLanguage(language)){
+        const QString lang = action->data().toString();
+
+        if(setLanguage(lang))
+            language = lang;
+        else {
             action->setChecked(false);
             language = QLatin1String();
         }
@@ -474,14 +494,14 @@ void SpellChecker::setMarkdownHighlightingEnabled(const bool &enabled)
 
 void SpellChecker::setSpellCheckingEnabled(const bool &enabled)
 {
-    spellingEnabled = enabled;
-
-    if (enabled)
+    if (enabled && !spellingEnabled)
         rehighlight();
-    else {
+    else if (!enabled && spellingEnabled) {
         setDocument(Q_NULLPTR);
         setDocument(textEdit->document());
     }
+
+    spellingEnabled = enabled;
 }
 
 

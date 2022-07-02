@@ -4,7 +4,6 @@
 #include <QMap>
 #include <QVariant>
 
-
 #define RECENT_OPENED_LIST_LENGTH 7
 
 #define MD_UNDERLINE true
@@ -13,9 +12,12 @@
 
 QMap<QString, QVariant> getLanguageMap();
 void setLanguageMap(const QMap<QString, QVariant> &m);
+void setMapAttribute(const QString &, const QVariant &);
 
 QString currDir();
 void setCurrDir(const QString &);
+
+const bool isDarkMode();
 
 #if !SPELLCHECK
 #define NO_SPELLCHECK
