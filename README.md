@@ -66,6 +66,7 @@ Run the [build script](scripts/build.sh) or follow the instructions below.
 
 In summary:
 ```bash
+git clone https://github.com/software-made-easy/MarkdownEdit --depth=1 && cd MarkdownEdit
 git submodule update --init --recursive -j 3 --depth=1
 mkdir build && cd build
 cmake ..

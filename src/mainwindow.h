@@ -17,6 +17,7 @@ class MarkdownEditor;
 class QHBoxLayout;
 class QLabel;
 class QDialogButtonBox;
+class QShortcut;
 QT_END_NAMESPACE
 
 
@@ -29,6 +30,8 @@ public:
     ~MainWindow();
 
     void openFile(const QString &);
+
+    void fullyLoadSettings();
 
 protected:
     void closeEvent(QCloseEvent *e) override;
@@ -45,9 +48,12 @@ private slots:
 
     void onFileChanged(const QString &);
 
+    void setupThings();
+
     void onEditorChanged(const int &);
     void closeEditor(const int &);
     void editorMoved(const int &, const int &);
+    void closeCurrEditor();
 
     void onHelpAbout();
     void onTextChanged();
@@ -76,6 +82,9 @@ private slots:
     void paste();
     void selectAll();
 
+    void undo();
+    void redo();
+
 private:
     void loadSettings(const QString &);
     void saveSettings();
@@ -91,12 +100,15 @@ private:
     QList<MarkdownEditor*> editorList;
     QStringList fileList;
 
+    QShortcut *shortcutNew;
+    QShortcut *shortcutClose;
+
     Ui::MainWindow *ui;
 
     QString path;
     int _mode;
 
-    QSettings *settings;
+    QSettings *settings = nullptr;
 
     QStringList recentOpened;
 

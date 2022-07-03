@@ -57,14 +57,20 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     toolbutton->setMenu(ui->menuRecentlyOpened);
     toolbutton->setPopupMode(QToolButton::InstantPopup);
 
+    shortcutNew = new QShortcut(this);
+    shortcutClose = new QShortcut(this);
+
 #ifndef NO_THREADING
 #if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
     QFuture<void> retVal = QtConcurrent::run(&MainWindow::loadIcons, this);
+    QFuture<void> retVal2 = QtConcurrent::run(&MainWindow::setupThings, this);
 #else
     QtConcurrent::run(this, &MainWindow::loadIcons);
+    QtConcurrent::run(this, &MainWindow::setupThings);
 #endif
 #else
     loadIcons();
+    setupThings();
 #endif
 
     watcher = new QFileSystemWatcher(this);
@@ -74,12 +80,8 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     connect(ui->tabWidget_2, &QTabWidget::tabCloseRequested,
             this, &MainWindow::closeEditor);
 
-    // Settings
-    settings = new QSettings(QStringLiteral("SME"),
-                             QStringLiteral("MarkdownEdit"), this);
-
-    loadSettings(file);
-    updateOpened();
+    path = file;
+    fullyLoadSettings();
 
     mode = new QComboBox(ui->Edit);
     mode->addItems({QString::fromLatin1("Commonmark"), QString::fromLatin1("GitHub")});
@@ -89,7 +91,6 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     widgetBox = new QComboBox(this);
     widgetBox->addItems(QStringList() << tr("Preview") << tr("HTML"));
     widgetBox->setCurrentIndex(0);
-
 
     htmlHighliter = new Highliter(ui->raw->document());
 
@@ -132,8 +133,18 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
             ui->tabWidget, &QStackedWidget::setCurrentIndex);
     connect(ui->tabWidget_2, &QTabWidget::currentChanged,
             this, &MainWindow::onEditorChanged);
+    connect(ui->actionCut, &QAction::triggered,
+            this, &MainWindow::cut);
+    connect(ui->actionCopy, &QAction::triggered,
+            this, &MainWindow::copy);
+    connect(ui->actionPaste, &QAction::triggered,
+            this, &MainWindow::paste);
     connect(ui->actionSelectAll, &QAction::triggered,
             this, &MainWindow::selectAll);
+    connect(ui->actionUndo, &QAction::triggered,
+            this, &MainWindow::undo);
+    connect(ui->actionRedo, &QAction::triggered,
+            this, &MainWindow::redo);
     connect(ui->actionMarkdown_Syntax, &QAction::triggered,
             this, []{ MarkdownEditor::showMarkdownSyntax(); });
     connect(ui->tabWidget_2->tabBar(), &QTabBar::tabMoved,
@@ -159,10 +170,6 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     ui->toolBarPreview->addSeparator();
     ui->toolBarPreview->addWidget(widgetBox);
 
-    if (editorList.isEmpty() && file.isEmpty()) {
-        openFile(QStringLiteral(":/default.md"));
-    }
-
 #ifdef NO_SPELLCHECK
     ui->menuExtras->removeAction(ui->actionSpell_checking);
 #endif
@@ -173,6 +180,59 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
 
     ui->File->removeAction(ui->actionPrintPreview);
 #endif
+}
+
+void MainWindow::fullyLoadSettings()
+{
+    // Settings
+    settings = new QSettings(QStringLiteral("SME"),
+                             QStringLiteral("MarkdownEdit"), this);
+
+    loadSettings(path);
+    updateOpened();
+}
+
+void MainWindow::setupThings()
+{
+    shortcutNew->setKey(QKeySequence::AddTab);
+    connect(shortcutNew, &QShortcut::activated,
+            this, &MainWindow::onFileNew);
+
+    shortcutClose->setKey(QKeySequence::Close);
+    connect(shortcutClose, &QShortcut::activated,
+            this, &MainWindow::closeCurrEditor);
+
+    ui->actionNew->setShortcuts(QKeySequence::New);
+    ui->actionOpen->setShortcuts(QKeySequence::Open);
+    ui->actionSave->setShortcuts(QKeySequence::Save);
+    ui->actionSaveAs->setShortcuts(QKeySequence::SaveAs);
+    ui->actionReload->setShortcuts(QKeySequence::Refresh);
+    ui->actionNew->setShortcuts(QKeySequence::New);
+    ui->actionPrint->setShortcuts(QKeySequence::Print);
+    ui->actionPrintPreview->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_P));
+    ui->actionExit->setShortcuts(QKeySequence::Quit);
+
+    ui->actionUndo->setShortcuts(QKeySequence::Undo);
+    ui->actionRedo->setShortcuts(QKeySequence::Redo);
+    ui->actionCut->setShortcuts(QKeySequence::Cut);
+    ui->actionCopy->setShortcuts(QKeySequence::Copy);
+    ui->actionPaste->setShortcuts(QKeySequence::Paste);
+    ui->actionSelectAll->setShortcuts(QKeySequence::SelectAll);
+
+    ui->actionSpell_checking->setShortcut(QKeySequence(Qt::ShiftModifier | Qt::Key_F7));
+
+    ui->actionMarkdown_Syntax->setShortcuts(QKeySequence::HelpContents);
+
+    if (ui->actionSaveAs->shortcuts().isEmpty())
+        ui->actionSaveAs->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
+}
+
+void MainWindow::closeCurrEditor()
+{
+    const int i = ui->tabWidget_2->currentIndex();
+
+    if (i != -1)
+        closeEditor(i);
 }
 
 void MainWindow::editorMoved(const int &from, const int &to)
@@ -204,13 +264,17 @@ void MainWindow::closeEditor(const int &index)
 
     editorList.removeAt(index);
     ui->tabWidget_2->removeTab(index);
+
+    if (editorList.isEmpty()) {
+        html.clear();
+        onSetText(ui->tabWidget->currentIndex());
+    }
 }
 
 void MainWindow::onEditorChanged(const int &index)
 {
-    onTextChanged();
-
     MarkdownEditor* &&editor = currentEditor();
+    if (!editor) return;
 
     setWindowFilePath(editor->getFileName());
     setWindowModified(editor->document()->isModified());
@@ -247,8 +311,6 @@ MarkdownEditor *MainWindow::createEditor()
             this, &QMainWindow::setWindowModified);
     connect(editor->document(), &QTextDocument::undoAvailable,
             ui->actionUndo, &QAction::setEnabled);
-    connect(editor->document(), &QTextDocument::redoAvailable,
-            ui->actionRedo, &QAction::setEnabled);
 
     editorList.append(editor);
 
@@ -270,8 +332,11 @@ MarkdownEditor* MainWindow::currentEditor()
 {
     if (overrideEditor)
         return editorList.at(overrideVal);
-    else
-        return editorList.at(ui->tabWidget_2->currentIndex());
+    else {
+        if (editorList.isEmpty()) return nullptr;
+        else
+            return editorList.at(ui->tabWidget_2->currentIndex());
+    }
 }
 
 void MainWindow::onFileChanged(const QString &f)
@@ -430,7 +495,8 @@ void MainWindow::cut()
     else if (ui->raw->hasFocus())
         ui->raw->cut();
     else
-        currentEditor()->cut();
+        if (currentEditor())
+            currentEditor()->cut();
 }
 
 void MainWindow::copy()
@@ -440,7 +506,8 @@ void MainWindow::copy()
     else if (ui->raw->hasFocus())
         ui->raw->copy();
     else
-        currentEditor()->copy();
+        if (currentEditor())
+            currentEditor()->copy();
 }
 
 void MainWindow::paste()
@@ -450,7 +517,8 @@ void MainWindow::paste()
     else if (ui->raw->hasFocus())
         ui->raw->paste();
     else
-        currentEditor()->paste();
+        if (currentEditor())
+            currentEditor()->paste();
 }
 
 void MainWindow::selectAll()
@@ -460,7 +528,26 @@ void MainWindow::selectAll()
     else if (ui->raw->hasFocus())
         ui->raw->selectAll();
     else
-        currentEditor()->selectAll();
+        if (currentEditor())
+            currentEditor()->selectAll();
+}
+
+void MainWindow::undo()
+{
+    if (ui->raw->hasFocus())
+        ui->raw->undo();
+    else
+        if (currentEditor())
+            currentEditor()->undo();
+}
+
+void MainWindow::redo()
+{
+    if (ui->raw->hasFocus())
+        ui->raw->redo();
+    else
+        if (currentEditor())
+            currentEditor()->redo();
 }
 
 void MainWindow::changeAddtoIconPath(const bool &c)
@@ -719,7 +806,6 @@ void MainWindow::onFileNew()
 
     ui->tabWidget_2->insertTab(editorList.length() -1, editor, editor->getFileName());
     ui->tabWidget_2->setCurrentIndex(editorList.count() -1);
-    editor->setText(tr("## New document"), file);
 }
 
 void MainWindow::onFileOpen()
@@ -866,17 +952,13 @@ void MainWindow::onHelpAbout()
 
 void MainWindow::openRecent() {
     // A QAction represents the action of the user clicking
-    QAction *action = qobject_cast<QAction *>(sender());
-    const QString filename = action->data().toString();
-
-    // Don't open the save file again
-    if (filename == path) return;
+    const QString filename = qobject_cast<QAction *>(sender())->data().toString();
 
     if (!QFile::exists(filename)) {
         QMessageBox::warning(this, tr("Warning"),
                              tr("This file could not be found:\n%1.").arg(
                                  QDir::toNativeSeparators(filename)));
-        recentOpened.removeAll(filename);
+        recentOpened.removeOne(filename);
         updateOpened();
         return;
     }
@@ -895,6 +977,8 @@ void MainWindow::updateOpened() {
     }
 
     ui->menuRecentlyOpened->clear();
+
+    recentOpened.removeDuplicates();
 
     if (recentOpened.contains(path) && recentOpened.at(0) != path)
         recentOpened.move(recentOpened.indexOf(path), 0);
@@ -974,10 +1058,12 @@ void MainWindow::loadSettings(const QString &f) {
         if (openLast) {
             ui->actionOpen_last_document_on_start->setChecked(openLast);
 
-            const QString last(settings->value(QStringLiteral("last"),
-                                               QLatin1String()).toString());
+            const QString last = settings->value(QStringLiteral("last"),
+                                               QLatin1String()).toString();
             if (!last.isEmpty())
                 openFile(last);
+            else
+                onFileNew();
         }
     }
     else

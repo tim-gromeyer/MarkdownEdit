@@ -81,7 +81,6 @@ int main(int argc, char *argv[])
 #endif
 
     w.show();
-    w.raise();
 
     return a.exec();
 }
