@@ -89,6 +89,7 @@ private:
     MarkdownEditor *createEditor();
     MarkdownEditor *currentEditor();
     QList<MarkdownEditor*> editorList;
+    QStringList fileList;
 
     Ui::MainWindow *ui;
 

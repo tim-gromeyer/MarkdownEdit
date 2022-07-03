@@ -26,7 +26,7 @@ MarkdownEdit, as the name suggests, is a simple and easy program for creating an
 - Syntax highlighting editor
 - Auto-complete (close brackets, list, ...)
 - Find/Replace(Ctrl+F/Ctrl+R)
-- Export to HTML
+- Export to HTML and PDF
 - Bad in resources
 - Quick opening of recent files (Button in toolbar or in the file menu)
 - Open source
@@ -59,18 +59,17 @@ Important:
 Run the [build script](scripts/build.sh) or follow the instructions below.
 
 - Clone MarkdownEdit: `git clone https://github.com/software-made-easy/MarkdownEdit --depth=1 && cd MarkdownEdit`
-- Clone all repositories required by MarkdownEdit by running the command `git submodule update --init --recursive -j 3`.
+- Clone all repositories required by MarkdownEdit by running the command `git submodule update --init --recursive -j 3 --depth=1`.
 - Create the build folder: `mkdir build && cd build`.
 - Now create a Makefile with CMake: `cmake ..`.
-- Run make: `make -j4`
+- Build it: `cmake --build . -j4`
 
 In summary:
 ```bash
-git clone https://github.com/software-made-easy/MarkdownEdit --depth=1 && cd MarkdownEdit
-git submodule update --init --recursive -j 3
+git submodule update --init --recursive -j 3 --depth=1
 mkdir build && cd build
 cmake ..
-make -j4
+cmake --build . -j4
 ```
 
 ## Credits

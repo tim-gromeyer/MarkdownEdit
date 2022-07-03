@@ -23,6 +23,7 @@
 #include <QTemporaryFile>
 #include <QDesktopServices>
 #include <QFileSystemWatcher>
+#include <QShortcut>
 
 #ifndef NO_THREADING
 #include <QtConcurrent/QtConcurrentRun>
@@ -194,8 +195,10 @@ void MainWindow::closeEditor(const int &index)
             return;
     }
 
-    if (!path.isEmpty())
+    if (!path.isEmpty()) {
         watcher->removePath(path);
+        fileList.removeOne(path);
+    }
 
     overrideEditor = false;
 
@@ -646,6 +649,15 @@ void MainWindow::onTextChanged()
 
 void MainWindow::openFile(const QString &newFile)
 {
+    if (fileList.contains(newFile)) {
+        for (int i = 0; editorList.length(); i++) {
+            if (editorList.at(i)->getPath() == newFile) {
+                ui->tabWidget_2->setCurrentIndex(i);
+                return;
+            }
+        }
+    }
+
     QFile f(newFile);
 
     if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -674,8 +686,7 @@ void MainWindow::openFile(const QString &newFile)
     watcher->addPath(path);
 
     if (setPath)
-        if (!ui->textBrowser->searchPaths().contains(QFileInfo(newFile).path()))
-            ui->textBrowser->setSearchPaths(ui->textBrowser->searchPaths() << QFileInfo(newFile).path());
+        ui->textBrowser->setSearchPaths(QStringList() << QFileInfo(newFile).path());
 
     MarkdownEditor* &&editor = createEditor();
     editor->setFile(newFile);
@@ -686,6 +697,8 @@ void MainWindow::openFile(const QString &newFile)
 
     setWindowFilePath(editor->getFileName());
     ui->actionReload->setText(tr("Reload \"%1\"").arg(editor->getFileName()));
+
+    fileList.append(newFile);
 
     statusBar()->show();
     statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 10000);
@@ -826,10 +839,13 @@ bool MainWindow::onFileSaveAs()
     else
         path = file;
 
-    watcher->addPath(file);
-
     if (!(path.endsWith(QLatin1String(".md")) || path.endsWith(QLatin1String(".markdown")) || path.endsWith(QLatin1String(".mkd"))))
         path.append(".md");
+
+    watcher->addPath(file);
+
+    if (fileList.contains(file))
+        openFile(file);
 
     setMapAttribute(path, currentEditor()->getChecker()->getLanguage());
 
