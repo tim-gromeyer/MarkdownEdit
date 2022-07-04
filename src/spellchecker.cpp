@@ -47,7 +47,8 @@ SpellChecker::SpellChecker(TextEditProxy *parent, const QString &lang)
     textEdit(parent)
 #endif
 {
-    setLanguage(lang);
+    if (!lang.isEmpty())
+        setLanguage(lang);
 
 #ifndef NO_SPELLCHECK
     textEdit->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -190,7 +191,6 @@ bool SpellChecker::setLanguage(const QString &lang)
     if(newLang.isEmpty()) {
         newLang = QLocale::system().name();
         if(newLang.isEmpty()) {
-            qWarning() << "Cannot use system locale " << newLang;
             language.clear();
             return false;
         }
@@ -492,14 +492,11 @@ void SpellChecker::setMarkdownHighlightingEnabled(const bool &enabled)
 
 void SpellChecker::setSpellCheckingEnabled(const bool &enabled)
 {
-    if (enabled && !spellingEnabled)
-        rehighlight();
-    else if (!enabled && spellingEnabled) {
-        setDocument(Q_NULLPTR);
-        setDocument(textEdit->document());
-    }
+    if ((enabled && !spellingEnabled) || (!enabled && spellingEnabled)) {
+        spellingEnabled = enabled;
 
-    spellingEnabled = enabled;
+        QSyntaxHighlighter::rehighlight();
+    }
 }
 
 

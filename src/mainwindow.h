@@ -115,6 +115,8 @@ private:
     QString html;
     QString spellLang;
 
+    QString reloadFile;
+
     bool dontUpdate;
     bool setPath;
     bool spelling;

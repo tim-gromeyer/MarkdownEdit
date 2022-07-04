@@ -184,19 +184,19 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
 
 void MainWindow::onFileReload()
 {
-    QFile f(path);
+    QFile f(reloadFile);
 
     if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QMessageBox::warning(this, tr("Couldn't open file"),
                              tr("Could not open file %1: %2").arg(
-                                 QDir::toNativeSeparators(path), f.errorString()));
-        recentOpened.removeOne(path);
+                                 QDir::toNativeSeparators(reloadFile), f.errorString()));
+        recentOpened.removeOne(reloadFile);
         updateOpened();
         return;
     }
 
     for (MarkdownEditor* &editor : editorList) {
-        if (editor->getPath() == path) {
+        if (editor->getPath() == reloadFile) {
             editor->setText(f.readAll());
             break;
         }
@@ -292,6 +292,7 @@ void MainWindow::closeEditor(const int &index)
     if (editorList.isEmpty()) {
         html.clear();
         onSetText(ui->tabWidget->currentIndex());
+        ui->actionReload->setText(tr("Reload \"%1\"").arg('\0'));
     }
 }
 
@@ -309,6 +310,7 @@ void MainWindow::onEditorChanged(const int &index)
     ui->actionUndo->setEnabled(editor->document()->isUndoAvailable());
 
     path = editor->getPath();
+    reloadFile = path;
 
     if (path == tr("untitled.md"))
         path.clear();
@@ -398,7 +400,9 @@ void MainWindow::onFileChanged(const QString &f)
     labelReloadFile->setText(tr("File <em>%1</em> has been modified.\nWould you like to reload them?").arg(f));
     widgetReloadFile->show();
 
-    watcher->addPath(path);
+    reloadFile = f;
+
+    watcher->addPath(f);
 }
 
 void MainWindow::loadIcons()
@@ -750,7 +754,7 @@ void MainWindow::changeMode(const int &i)
 
 void MainWindow::onTextChanged()
 {
-    if (dontUpdate)
+    if (dontUpdate || !currentEditor())
         return;
 
     html = Parser::Parse(currentEditor()->document()->toPlainText(), _mode);
@@ -1078,6 +1082,9 @@ void MainWindow::loadSettings(const QString &f) {
 
     setLanguageMap(settings->value(QStringLiteral("languagesMap"),
                                    QMap<QString, QVariant>()).toMap());
+
+    spelling = settings->value(QStringLiteral("spelling"), true).toBool();
+    changeSpelling(spelling);
 
     if (f.isEmpty()) {
         const bool openLast = settings->value(QStringLiteral("openLast"), true).toBool();
