@@ -44,7 +44,7 @@ private slots:
     void onFileOpen();
     bool onFileSave();
     bool onFileSaveAs();
-    inline void onFileReload() { openFile(path); };
+    void onFileReload();
 
     void onFileChanged(const QString &);
 

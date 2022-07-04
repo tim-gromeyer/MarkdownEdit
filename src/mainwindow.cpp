@@ -182,6 +182,30 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
 #endif
 }
 
+void MainWindow::onFileReload()
+{
+    QFile f(path);
+
+    if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QMessageBox::warning(this, tr("Couldn't open file"),
+                             tr("Could not open file %1: %2").arg(
+                                 QDir::toNativeSeparators(path), f.errorString()));
+        recentOpened.removeOne(path);
+        updateOpened();
+        return;
+    }
+
+    for (MarkdownEditor* &editor : editorList) {
+        if (editor->getPath() == path) {
+            editor->setText(f.readAll());
+            break;
+        }
+    }
+
+    if ( widgetReloadFile)
+         widgetReloadFile->hide();
+}
+
 void MainWindow::fullyLoadSettings()
 {
     // Settings
@@ -311,6 +335,8 @@ MarkdownEditor *MainWindow::createEditor()
             this, &QMainWindow::setWindowModified);
     connect(editor->document(), &QTextDocument::undoAvailable,
             ui->actionUndo, &QAction::setEnabled);
+    connect(editor->document(), &QTextDocument::redoAvailable,
+            ui->actionRedo, &QAction::setEnabled);
 
     editorList.append(editor);
 
@@ -358,9 +384,7 @@ void MainWindow::onFileChanged(const QString &f)
         buttonBox->setStandardButtons(QDialogButtonBox::No | QDialogButtonBox::Yes);
 
         connect(buttonBox, &QDialogButtonBox::accepted,
-                this, [this]{
-                    openFile(path);
-                });
+                this, &MainWindow::onFileReload);
         connect(buttonBox, &QDialogButtonBox::rejected,
                 widgetReloadFile, &QWidget::hide);
 
@@ -751,7 +775,7 @@ void MainWindow::openFile(const QString &newFile)
         QMessageBox::warning(this, tr("Couldn't open file"),
                              tr("Could not open file %1: %2").arg(
                                  QDir::toNativeSeparators(newFile), f.errorString()));
-        recentOpened.removeAll(newFile);
+        recentOpened.removeOne(newFile);
         updateOpened();
         return;
     }
@@ -766,8 +790,10 @@ void MainWindow::openFile(const QString &newFile)
 
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
+    /*
     if (widgetReloadFile)
         widgetReloadFile->hide();
+    */
 
     path = newFile;
     watcher->addPath(path);
