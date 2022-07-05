@@ -79,16 +79,7 @@ void SpellChecker::checkSpelling(const QString &text)
     bool isLink = false;
     const int currentBlockNumber = currentBlock().blockNumber();
 
-    if (isCodeBlock(currentBlockState())) {
-        if (!codeBlockList.contains(currentBlockNumber))
-            codeBlockList.append(currentBlockNumber);
-
-        return;
-    }
-    else {
-        if (codeBlockList.contains(currentBlockNumber))
-            codeBlockList.removeOne(currentBlockNumber);
-    }
+    if (isCodeBlock(currentBlockState())) return;
 
     const int textLength = text.length();
 
@@ -276,7 +267,7 @@ QStringList SpellChecker::getSuggestion(const QString &word)
 QString SpellChecker::getWord(const QTextBlock &block, const int &pos)
 {
     if (MarkdownHighlighter::isPosInACodeSpan(block.blockNumber(), pos)
-        || codeBlockList.contains(block.blockNumber()))
+        || MarkdownHighlighter::isCodeBlock(block.userState()))
         return QLatin1String();
 
     QString word;

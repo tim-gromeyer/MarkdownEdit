@@ -206,8 +206,6 @@ private:
 #ifdef CHECK_MARKDOWN
     QString getWord(const QTextBlock &, const int &);
 
-    QList<int> codeBlockList;
-
     QStringList markdownCharachters = {QStringLiteral("##"), QStringLiteral("###"), QStringLiteral("####"), QStringLiteral("#####"), QStringLiteral("######")};
 #endif
 };

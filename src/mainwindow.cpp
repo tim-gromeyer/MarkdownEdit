@@ -48,11 +48,6 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
 
     ui->setupUi(this);
 
-    QScreen *screen = qApp->primaryScreen();
-    onOrientationChanged(screen->primaryOrientation());
-    connect(screen, &QScreen::primaryOrientationChanged,
-            this, &MainWindow::onOrientationChanged);
-
     toolbutton = new QToolButton(this);
     toolbutton->setMenu(ui->menuRecentlyOpened);
     toolbutton->setPopupMode(QToolButton::InstantPopup);
@@ -146,7 +141,7 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     connect(ui->actionRedo, &QAction::triggered,
             this, &MainWindow::redo);
     connect(ui->actionMarkdown_Syntax, &QAction::triggered,
-            this, []{ MarkdownEditor::showMarkdownSyntax(); });
+            &MarkdownEditor::showMarkdownSyntax);
     connect(ui->tabWidget_2->tabBar(), &QTabBar::tabMoved,
             this, &MainWindow::editorMoved);
 
@@ -184,6 +179,9 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
 
 void MainWindow::onFileReload()
 {
+    if (reloadFile.isEmpty())
+        reloadFile = path;
+
     QFile f(reloadFile);
 
     if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -204,6 +202,8 @@ void MainWindow::onFileReload()
 
     if ( widgetReloadFile)
          widgetReloadFile->hide();
+
+    reloadFile.clear();
 }
 
 void MainWindow::fullyLoadSettings()
@@ -218,6 +218,11 @@ void MainWindow::fullyLoadSettings()
 
 void MainWindow::setupThings()
 {
+    QScreen *screen = qApp->primaryScreen();
+    onOrientationChanged(screen->primaryOrientation());
+    connect(screen, &QScreen::primaryOrientationChanged,
+            this, &MainWindow::onOrientationChanged);
+
     shortcutNew->setKey(QKeySequence::AddTab);
     connect(shortcutNew, &QShortcut::activated,
             this, &MainWindow::onFileNew);
@@ -310,7 +315,6 @@ void MainWindow::onEditorChanged(const int &index)
     ui->actionUndo->setEnabled(editor->document()->isUndoAvailable());
 
     path = editor->getPath();
-    reloadFile = path;
 
     if (path == tr("untitled.md"))
         path.clear();
@@ -794,11 +798,6 @@ void MainWindow::openFile(const QString &newFile)
 
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
-    /*
-    if (widgetReloadFile)
-        widgetReloadFile->hide();
-    */
-
     path = newFile;
     watcher->addPath(path);
 
@@ -851,23 +850,23 @@ void MainWindow::onFileOpen()
                 if (!ui->textBrowser->searchPaths().contains(QFileInfo(newFile).path()))
                     ui->textBrowser->setSearchPaths(ui->textBrowser->searchPaths() << QFileInfo(newFile).path());
 
-            ui->editor->setText(fileContent, newFile);
+            MarkdownEditor* &&editor = createEditor();
+            editor->setFile(newFile);
+            ui->tabWidget_2->insertTab(editorList.length() -1,
+                                       editor, editor->getFileName());
+            ui->tabWidget_2->setCurrentIndex(editorList.length() -1);
+            editor->setText(fileContent, newFile);
 
-            setWindowFilePath(QFileInfo(path).fileName());
-            ui->actionReload->setText(tr("Reload \"%1\"").arg(windowFilePath()));
+            setWindowFilePath(editor->getFileName());
+            ui->actionReload->setText(tr("Reload \"%1\"").arg(editor->getFileName()));
+
+            fileList.append(newFile);
 
             statusBar()->show();
             statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 30000);
             QTimer::singleShot(10000, statusBar(), &QStatusBar::hide);
 
             updateOpened();
-
-            QMap<QString, QVariant> map = getLanguageMap();
-
-            if (map.contains(path))
-                ui->editor->getChecker()->setLanguage(map[path].toString());
-            else
-                map[path] = ui->editor->getChecker()->getLanguage();
 
             QGuiApplication::restoreOverrideCursor();
         }
