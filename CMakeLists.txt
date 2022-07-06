@@ -123,6 +123,11 @@ set_target_properties(markdownedit PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
+if(ANDROID)
+    set_property(TARGET markdownedit APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+        ${CMAKE_CURRENT_SOURCE_DIR}/android)
+endif()
+
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(markdownedit)
 endif()

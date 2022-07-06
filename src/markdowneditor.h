@@ -15,7 +15,7 @@ public:
     explicit MarkdownEditor(QWidget *parent = nullptr);
     ~MarkdownEditor();
 
-    void setText(const QString &, const QString &fileName = QLatin1String());
+    void setText(const QString &, const QString &newFile = QLatin1String());
 
     bool setLanguage(const QString &);
 

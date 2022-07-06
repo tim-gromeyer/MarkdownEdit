@@ -37,7 +37,7 @@
 #include "qplaintexteditsearchwidget.h"
 
 
-MainWindow::MainWindow(const QString &file, QWidget *parent)
+MainWindow::MainWindow(const QStringList &file, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
@@ -75,8 +75,11 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
     connect(ui->tabWidget_2, &QTabWidget::tabCloseRequested,
             this, &MainWindow::closeEditor);
 
-    path = file;
-    fullyLoadSettings();
+    settings = new QSettings(QStringLiteral("SME"),
+                             QStringLiteral("MarkdownEdit"), this);
+
+    loadSettings(file);
+    updateOpened();
 
     mode = new QComboBox(ui->Edit);
     mode->addItems({QString::fromLatin1("Commonmark"), QString::fromLatin1("GitHub")});
@@ -177,6 +180,12 @@ MainWindow::MainWindow(const QString &file, QWidget *parent)
 #endif
 }
 
+void MainWindow::toForeground()
+{
+    raise();
+    activateWindow();
+}
+
 void MainWindow::onFileReload()
 {
     if (reloadFile.isEmpty())
@@ -204,16 +213,6 @@ void MainWindow::onFileReload()
          widgetReloadFile->hide();
 
     reloadFile.clear();
-}
-
-void MainWindow::fullyLoadSettings()
-{
-    // Settings
-    settings = new QSettings(QStringLiteral("SME"),
-                             QStringLiteral("MarkdownEdit"), this);
-
-    loadSettings(path);
-    updateOpened();
 }
 
 void MainWindow::setupThings()
@@ -343,6 +342,11 @@ MarkdownEditor *MainWindow::createEditor()
             ui->actionUndo, &QAction::setEnabled);
     connect(editor->document(), &QTextDocument::redoAvailable,
             ui->actionRedo, &QAction::setEnabled);
+    connect(editor, &QMarkdownTextEdit::zoomIn, this,
+            [editor]{ static_cast<QPlainTextEdit*>(editor)->zoomOut(-1); });
+    connect(editor, &QMarkdownTextEdit::zoomOut, this,
+            [editor]{ static_cast<QPlainTextEdit*>(editor)->zoomIn(-1); });
+
 
     editorList.append(editor);
 
@@ -357,7 +361,7 @@ void MainWindow::receivedMessage(const qint32 &id, const QByteArray &msg)
     if (f.isEmpty())
         onFileNew();
     else
-        openFile(f);
+        openFiles(f.split(QChar(QChar::Space)));
 }
 
 MarkdownEditor* MainWindow::currentEditor()
@@ -377,12 +381,12 @@ void MainWindow::onFileChanged(const QString &f)
         QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
         widgetReloadFile = new QWidget(this);
-        widgetReloadFile->setStyleSheet(QString::fromUtf8("background: orange"));
+        widgetReloadFile->setStyleSheet(QLatin1String("background: orange"));
 
         horizontalLayout = new QHBoxLayout(widgetReloadFile);
 
         labelReloadFile = new QLabel(widgetReloadFile);
-        labelReloadFile->setStyleSheet(QString::fromUtf8("color: black"));
+        labelReloadFile->setStyleSheet(QLatin1String("color: black"));
 
         horizontalLayout->addWidget(labelReloadFile);
 
@@ -455,11 +459,9 @@ void MainWindow::onOrientationChanged(const Qt::ScreenOrientation &t)
 {
     if (t == Qt::PortraitOrientation) {
         disablePreview(true);
-        statusBar()->hide();
     }
     else if (t == Qt::LandscapeOrientation) {
         disablePreview(false);
-        statusBar()->show();
     }
 }
 
@@ -491,7 +493,7 @@ void MainWindow::changeWordWrap(const bool &c)
 
 void MainWindow::changeSpelling(const bool &checked)
 {
-#ifdef NO_SPELLCHECK
+#if defined(NO_SPELLCHECK)
     return;
 #endif
 
@@ -761,7 +763,7 @@ void MainWindow::onTextChanged()
     if (dontUpdate || !currentEditor())
         return;
 
-    html = Parser::Parse(currentEditor()->document()->toPlainText(), _mode);
+    html = Parser::toHtml(currentEditor()->document()->toPlainText(), _mode);
 
     onSetText(ui->tabWidget->currentIndex());
 }
@@ -1047,7 +1049,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
     QMainWindow::closeEvent(e);
 }
 
-void MainWindow::loadSettings(const QString &f) {
+void MainWindow::loadSettings(const QStringList &files) {
     const QByteArray geo = settings->value(QStringLiteral("geometry"),
                                            QByteArrayLiteral("")).toByteArray();
     if (geo.isEmpty()) {
@@ -1085,7 +1087,7 @@ void MainWindow::loadSettings(const QString &f) {
     spelling = settings->value(QStringLiteral("spelling"), true).toBool();
     changeSpelling(spelling);
 
-    if (f.isEmpty()) {
+    if (files.isEmpty()) {
         const bool openLast = settings->value(QStringLiteral("openLast"), true).toBool();
         if (openLast) {
             ui->actionOpen_last_document_on_start->setChecked(openLast);
@@ -1099,7 +1101,7 @@ void MainWindow::loadSettings(const QString &f) {
         }
     }
     else
-        openFile(f);
+        openFiles(files);
 
     if (editorList.length() > 0)
         onTextChanged();

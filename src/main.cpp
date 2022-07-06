@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 #endif
 
 #ifndef NOT_SUPPORTET
-    SingleApplication a(argc, argv, true);
+    SingleApplication a(argc, argv, true, SingleApplication::Mode::SecondaryNotification);
 #else
     QApplication a(argc, argv);
 #endif
@@ -55,21 +55,19 @@ int main(int argc, char *argv[])
     parser.process(a);
 
 #ifndef NOT_SUPPORTET
-    if(a.isSecondary()) {
-        a.sendMessage(QByteArrayLiteral("file://") +
-                      parser.positionalArguments().value(0).toLocal8Bit());
+    if(a.sendMessage(QByteArrayLiteral("file://") +
+                  parser.positionalArguments().join(' ').toUtf8()))
         return 0;
-    }
 #endif
 
-    MainWindow w(parser.positionalArguments().value(0));
+    MainWindow w(parser.positionalArguments());
 
 #ifndef NOT_SUPPORTET
     QObject::connect(
         &a,
         &SingleApplication::instanceStarted,
         &w,
-        &QMainWindow::raise
+        &MainWindow::toForeground
     );
 
     QObject::connect(

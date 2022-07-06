@@ -4,9 +4,6 @@
 #include <QUrl>
 #include <QDesktopServices>
 #include <QFile>
-#include <QApplication>
-#include <QDebug>
-#include <QTextBlock>
 
 
 PreviewWidget::PreviewWidget(QWidget *parent)

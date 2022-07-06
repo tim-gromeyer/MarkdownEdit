@@ -16,7 +16,7 @@ class About : public QDialog
 
 public:
     explicit About(QWidget *parent = nullptr);
-    explicit About(const QString &titel, QWidget *parent = nullptr);
+    explicit About(const QString &title, QWidget *parent = nullptr);
 
     QLabel* addCredit(QString text);
     QList<QLabel*> addCredits(QStringList credits);

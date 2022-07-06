@@ -68,14 +68,7 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="PreviewWidget" name="textBrowser">
-           <property name="frameShape">
-            <enum>QFrame::StyledPanel</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
-           </property>
-          </widget>
+          <widget class="PreviewWidget" name="textBrowser"/>
          </item>
         </layout>
        </widget>
@@ -478,9 +471,8 @@
  <customwidgets>
   <customwidget>
    <class>PreviewWidget</class>
-   <extends>QFrame</extends>
+   <extends>QTextBrowser</extends>
    <header>previewwidget.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

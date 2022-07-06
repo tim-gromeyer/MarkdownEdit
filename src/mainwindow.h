@@ -26,18 +26,22 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(const QString &, QWidget *parent = nullptr);
+    explicit MainWindow(const QStringList &, QWidget *parent = nullptr);
     ~MainWindow();
 
     void openFile(const QString &);
-
-    void fullyLoadSettings();
+    inline void openFiles(const QStringList &files) {
+        for (const QString &file : files) {
+            openFile(file);
+    }; };
 
 protected:
     void closeEvent(QCloseEvent *e) override;
 
 public slots:
     void receivedMessage(const qint32 &, const QByteArray &);
+
+    void toForeground();
 
 private slots:
     void onFileNew();
@@ -86,13 +90,13 @@ private slots:
     void redo();
 
 private:
-    void loadSettings(const QString &);
+    void loadSettings(const QStringList &);
     void saveSettings();
     void updateOpened();
     void openRecent();
     void onSetText(const int &);
 
-    void loadIcon(const char* &&name, QAction* &action);
+    void loadIcon(const char* &&name, QAction* &a);
     void loadIcons();
 
     MarkdownEditor *createEditor();
@@ -108,7 +112,7 @@ private:
     QString path;
     int _mode;
 
-    QSettings *settings = nullptr;
+    QSettings *settings;
 
     QStringList recentOpened;
 
