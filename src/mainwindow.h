@@ -103,6 +103,7 @@ private:
     MarkdownEditor *currentEditor();
     QList<MarkdownEditor*> editorList;
     QStringList fileList;
+    QList<QMap<QString, int>> fileNameList;
 
     QShortcut *shortcutNew;
     QShortcut *shortcutClose;

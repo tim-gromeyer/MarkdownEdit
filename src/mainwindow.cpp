@@ -131,12 +131,6 @@ MainWindow::MainWindow(const QStringList &file, QWidget *parent)
             ui->tabWidget, &QStackedWidget::setCurrentIndex);
     connect(ui->tabWidget_2, &QTabWidget::currentChanged,
             this, &MainWindow::onEditorChanged);
-    connect(ui->actionCut, &QAction::triggered,
-            this, &MainWindow::cut);
-    connect(ui->actionCopy, &QAction::triggered,
-            this, &MainWindow::copy);
-    connect(ui->actionPaste, &QAction::triggered,
-            this, &MainWindow::paste);
     connect(ui->actionSelectAll, &QAction::triggered,
             this, &MainWindow::selectAll);
     connect(ui->actionUndo, &QAction::triggered,
@@ -305,7 +299,7 @@ void MainWindow::onEditorChanged(const int &index)
     MarkdownEditor* &&editor = currentEditor();
     if (!editor) return;
 
-    setWindowFilePath(editor->getFileName());
+    setWindowTitle(editor->filePath());
     setWindowModified(editor->document()->isModified());
     ui->actionSave->setEnabled(editor->document()->isModified());
     ui->actionReload->setText(tr("Reload \"%1\"").arg(editor->getFileName()));
@@ -811,9 +805,10 @@ void MainWindow::openFile(const QString &newFile)
     ui->tabWidget_2->insertTab(editorList.length() -1,
                                editor, editor->getFileName());
     ui->tabWidget_2->setCurrentIndex(editorList.length() -1);
+    ui->tabWidget_2->tabBar()->setTabToolTip(editorList.length() -1, newFile);
     editor->setText(f.readAll(), newFile);
 
-    setWindowFilePath(editor->getFileName());
+    setWindowTitle(editor->filePath());
     ui->actionReload->setText(tr("Reload \"%1\"").arg(editor->getFileName()));
 
     fileList.append(newFile);
@@ -859,7 +854,7 @@ void MainWindow::onFileOpen()
             ui->tabWidget_2->setCurrentIndex(editorList.length() -1);
             editor->setText(fileContent, newFile);
 
-            setWindowFilePath(editor->getFileName());
+            setWindowTitle(editor->filePath());
             ui->actionReload->setText(tr("Reload \"%1\"").arg(editor->getFileName()));
 
             fileList.append(newFile);
@@ -950,6 +945,7 @@ bool MainWindow::onFileSaveAs()
         return false;
 
     const QString file = dialog.selectedFiles().at(0);
+    const QString fileName = QFileInfo(file).fileName();
 
     if (file.isEmpty())
         return false;
@@ -965,6 +961,12 @@ bool MainWindow::onFileSaveAs()
         openFile(file);
 
     setMapAttribute(path, currentEditor()->getChecker()->getLanguage());
+
+    ui->tabWidget_2->tabBar()->setTabText(editorList.length() -1, fileName);
+    ui->tabWidget_2->tabBar()->setTabToolTip(editorList.length() -1, file);
+
+    currentEditor()->setFile(file);
+    setWindowTitle(currentEditor()->filePath());
 
     return onFileSave();
 }

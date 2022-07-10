@@ -28,6 +28,8 @@ public:
     QString getFileName();
     inline QString getPath() { return fileName; };
 
+    QString filePath();
+
 public slots:
     static void showMarkdownSyntax();
 

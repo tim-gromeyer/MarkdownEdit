@@ -8,6 +8,7 @@
 #include <QHBoxLayout>
 #include <QFile>
 #include <QFileInfo>
+#include <QDebug>
 
 
 MarkdownEditor::MarkdownEditor(QWidget *parent)
@@ -24,6 +25,14 @@ bool MarkdownEditor::setLanguage(const QString &lang)
         return checker->setLanguage(lang);
     else
         return false;
+}
+
+QString MarkdownEditor::filePath()
+{
+    if (getDir() == QChar('.'))
+        return getFileName() + QLatin1String("[*]");
+    else
+        return QStringLiteral("%1[*] (%2)").arg(getFileName(), getDir());
 }
 
 QString MarkdownEditor::getFileName()
