@@ -17,7 +17,7 @@ public:
 
     void setText(const QString &, const QString &newFile = QLatin1String());
 
-    bool setLanguage(const QString &);
+    bool setLanguage(const QString & = QLatin1String());
 
     inline SpellChecker* getChecker() { return checker; };
 

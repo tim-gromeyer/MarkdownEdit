@@ -94,7 +94,7 @@ private:
     void saveSettings();
     void updateOpened();
     void openRecent();
-    void onSetText(const int &);
+    void setText(const int &);
 
     void loadIcon(const char* &&name, QAction* &a);
     void loadIcons();
@@ -103,7 +103,6 @@ private:
     MarkdownEditor *currentEditor();
     QList<MarkdownEditor*> editorList;
     QStringList fileList;
-    QList<QMap<QString, int>> fileNameList;
 
     QShortcut *shortcutNew;
     QShortcut *shortcutClose;
@@ -118,7 +117,6 @@ private:
     QStringList recentOpened;
 
     QString html;
-    QString spellLang;
 
     QString reloadFile;
 
@@ -141,8 +139,6 @@ private:
     QDialogButtonBox *buttonBox = nullptr;
 
     QComboBox *mode;
-
-    QMap<QString, QVariant> languagesMap;
 
     QFileSystemWatcher *watcher;
 };

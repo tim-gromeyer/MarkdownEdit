@@ -5,13 +5,12 @@
 #include <QTabWidget>
 #include <QScrollArea>
 #include <QUrl>
+#include <QTextDocument> // needed dor Qt::mightBeRichText
 
 #include "about.h"
 
 #if defined(Q_OS_BLACKBERRY) || defined(Q_OS_ANDROID) || defined(Q_OS_IOS) || defined(Q_OS_WP)
 #define Q_OS_MOBILE
-#else
-#define Q_OS_DESKTOP
 #endif
 
 
@@ -31,90 +30,65 @@ About::About(const QString &title, QWidget *parent) :
 
 void About::setupUi() {
     verticalLayout = new QVBoxLayout(this);
-    verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+
     tabWidget = new QTabWidget(this);
-    tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
+
     tab = new QWidget();
-    tab->setObjectName(QString::fromUtf8("tab"));
+
     formLayout = new QFormLayout(tab);
-    formLayout->setObjectName(QString::fromUtf8("formLayout"));
 
     label_9 = new QLabel(tab);
-    label_9->setObjectName(QString::fromUtf8("label_9"));
-
-    formLayout->setWidget(0, QFormLayout::LabelRole, label_9);
 
     label_10 = new QLabel(tab);
-    label_10->setObjectName(QString::fromUtf8("label_10"));
     label_10->setWordWrap(true);
     label_10->setOpenExternalLinks(true);
 
-    formLayout->setWidget(0, QFormLayout::FieldRole, label_10);
+    formLayout->addRow(label_9, label_10);
 
     label = new QLabel(tab);
-    label->setObjectName(QString::fromUtf8("label"));
-
-    formLayout->setWidget(1, QFormLayout::LabelRole, label);
 
 #if defined(APP_VERSION)
     _version = APP_VERSION;
 #endif
     label_2 = new QLabel(tab);
-    label_2->setObjectName(QString::fromUtf8("label_2"));
 
-    formLayout->setWidget(1, QFormLayout::FieldRole, label_2);
+    formLayout->addRow(label, label_2);
 
     label_3 = new QLabel(tab);
-    label_3->setObjectName(QString::fromUtf8("label_3"));
-
-    formLayout->setWidget(2, QFormLayout::LabelRole, label_3);
 
     label_4 = new QLabel(tab);
-    label_4->setObjectName(QString::fromUtf8("label_4"));
 #ifdef Q_OS_MOBILE
     label_4->setWordWrap(true);
 #endif
     label_4->setOpenExternalLinks(true);
 
-    formLayout->setWidget(2, QFormLayout::FieldRole, label_4);
+    formLayout->addRow(label_3, label_4);
 
     label_6 = new QLabel(tab);
-    label_6->setObjectName(QString::fromUtf8("label_6"));
-
-    formLayout->setWidget(3, QFormLayout::LabelRole, label_6);
-
     label_7 = new QLabel(tab);
-    label_7->setObjectName(QString::fromUtf8("label_7"));
 
-    formLayout->setWidget(3, QFormLayout::FieldRole, label_7);
+    formLayout->addRow(label_6, label_7);
 
-    tabWidget->addTab(tab, QString());
-    tab_2 = new QWidget();
-    tab_2->setObjectName(QString::fromUtf8("tab_2"));
-#define CREDITS_PAGE
+    tabWidget->addTab(tab, QLatin1String());
+    tab_2 = new QWidget(tabWidget);
     verticalLayout_3 = new QVBoxLayout(tab_2);
-    verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
+    verticalLayout_3->addStretch(1);
 
-    verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-    verticalLayout_3->addItem(verticalSpacer);
-
-    tabWidget->addTab(tab_2, QString());
+    tabWidget->addTab(tab_2, QLatin1String());
     tab_3 = new QWidget();
-    tab_3->setObjectName(QString::fromUtf8("tab_3"));
+
     verticalLayout_2 = new QVBoxLayout(tab_3);
-    verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+
     scrollArea = new QScrollArea(tab_3);
-    scrollArea->setObjectName(QString::fromUtf8("scrollArea"));
+
     scrollArea->setFrameShadow(QFrame::Sunken);
     scrollArea->setWidgetResizable(true);
     scrollAreaWidgetContents = new QWidget();
-    scrollAreaWidgetContents->setObjectName(QString::fromUtf8("scrollAreaWidgetContents"));
-    scrollAreaWidgetContents->setGeometry(QRect(0, 0, 344, 15333));
+
     verticalLayout_4 = new QVBoxLayout(scrollAreaWidgetContents);
-    verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
+
     label_5 = new QLabel(scrollAreaWidgetContents);
-    label_5->setObjectName(QString::fromUtf8("label_5"));
+
     label_5->setWordWrap(true);
 
     verticalLayout_4->addWidget(label_5);
@@ -123,53 +97,41 @@ void About::setupUi() {
 
     verticalLayout_2->addWidget(scrollArea);
 
-    tabWidget->addTab(tab_3, QString());
+    tabWidget->addTab(tab_3, QLatin1String());
 
     verticalLayout->addWidget(tabWidget);
 
-    buttonBox = new QDialogButtonBox(this);
-    buttonBox->setObjectName(QString::fromUtf8("buttonBox"));
-    buttonBox->setOrientation(Qt::Horizontal);
-    buttonBox->setStandardButtons(QDialogButtonBox::Ok);
+    buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok, Qt::Horizontal, this);
 
     verticalLayout->addWidget(buttonBox);
 
     retranslateUi();
 
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-
-    tabWidget->setCurrentIndex(0);
-
-
-    QMetaObject::connectSlotsByName(this);
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
 void About::retranslateUi() {
     label_9->setText(tr("Description:"));
 
-    if (!_description.isNull())
-        label_10->setText(_description);
+    label_10->setText(_description);
 
     label->setText(tr("Version:"));
-    if (!_version.isNull())
-        label_2->setText(_version);
+    label_2->setText(_version);
 
     label_3->setText(tr("Homepage:"));
-    if (!homepage.isEmpty() || !homepage.isNull())
-        label_4->setText(QString("<a href=\"%1\">%1</a>").arg(homepage));
+    label_4->setText(homepage);
 
     label_6->setText(tr("Qt Version:"));
 
-#if defined(QT_VERSION_STR)
-    label_7->setText(QT_VERSION_STR);
-#endif
+    label_7->setText(qVersion());
 
-     tabWidget->setTabText(tabWidget->indexOf(tab), tr("About"));
-#ifdef CREDITS_PAGE
-    tabWidget->setTabText(tabWidget->indexOf(tab_2), tr("Credits"));
-#endif
-    label_5->setText("                    GNU GENERAL PUBLIC LICENSE\n"
+    tabWidget->setTabText(tabWidget->indexOf(tab), tr("About"));
+
+    if (creditPage)
+        tabWidget->setTabText(tabWidget->indexOf(tab_2), tr("Credits"));
+
+    label_5->setText(QStringLiteral("                    GNU GENERAL PUBLIC LICENSE\n"
     "                       Version 3, 29 June 2007\n"
     "\n"
     " Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>\n"
@@ -805,7 +767,7 @@ void About::retranslateUi() {
     "\n"
     "  IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING\n"
     "WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS\n"
-    "THE PROGRAM AS PERMITTED");
+    "THE PROGRAM AS PERMITTED"));
     tabWidget->setTabText(tabWidget->indexOf(tab_3), tr("License"));
 }
 
@@ -813,47 +775,46 @@ void About::retranslateUi() {
  * @brief About::addCredit - add Credits. Provide HTML or Plain Text
  * @param text - HTML or Plain Text
  */
-QLabel* About::addCredit(QString text) {
+QLabel* About::addCredit(const QString &text) {
     if (creditPage) {
-        QLabel *label = new QLabel(text);
+        QLabel *label = new QLabel(text, this);
         label->setOpenExternalLinks(true);
         label->setWordWrap(true);
 
-        verticalLayout_3->insertWidget(verticalLayout_3->count() - 1, label);
+        verticalLayout_3->insertWidget(verticalLayout_3->count() -1,
+                                       label, 0, Qt::AlignTop);
         return label;
     }
     else {
-        return new QLabel;
+        return nullptr;
     }
 }
 
-QList<QLabel*> About::addCredits(QStringList credits) {
+QList<QLabel*> About::addCredits(const QStringList &credits) {
     QList<QLabel*> labelList;
-    foreach(const QString text, credits) {
+    for (const QString &text : credits) {
         labelList.append(addCredit(text));
     }
     return labelList;
 }
 
 void About::deleteCreditPage() {
-    if(!creditPage) {
-        return;
-    }
-    else {
+    if(creditPage) {
         tabWidget->removeTab(1);
         creditPage = false;
-#undef CREDITS_PAGE
     }
 }
 
 void About::setAppUrl(const QString &url) {
     homepage = url;
-    label_4->setText(QString("<a href=\"%1\">%1</a>").arg(homepage));
+    if (Qt::mightBeRichText(url))
+        label_4->setText(url);
+    else
+        label_4->setText(QStringLiteral("<a href=\"%1\">%1</a>").arg(homepage));
 }
 
-void About::setAppUrl(QUrl url) {
-    homepage = url.toString();
-    label_4->setText(QString("<a href=\"%1\">%1</a>").arg(homepage));
+void About::setAppUrl(const QUrl &url) {
+    setAppUrl(url.toString());
 }
 
 void About::setAppVersion(const QString &version) {

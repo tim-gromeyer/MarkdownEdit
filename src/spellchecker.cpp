@@ -174,20 +174,8 @@ bool SpellChecker::setLanguage(const QString &lang)
 #else
     if (lang == language && !lang.isEmpty()) return true;
 
-    QString newLang;
-
-    newLang = lang;
-
-    // Determine language from system locale
-    if(newLang.isEmpty()) {
-        newLang = QLocale::system().name();
-        if(newLang.isEmpty()) {
-            language.clear();
-            return false;
-        }
-    }
-
-    if (newLang == language) return true;
+    if(lang.isEmpty())
+        return setLanguage(QLocale::system().name());
 
     if (speller)
         delete speller;
@@ -195,8 +183,8 @@ bool SpellChecker::setLanguage(const QString &lang)
 
     // Request dictionary
     try {
-        speller = get_enchant_broker()->request_dict(newLang.toStdString());
-        language = newLang;
+        speller = get_enchant_broker()->request_dict(lang.toStdString());
+        language = lang;
         emit languageChanged(language);
     } catch(enchant::Exception& e) {
         qWarning() << "Failed to load dictionary: " << e.what();

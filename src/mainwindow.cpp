@@ -118,7 +118,7 @@ MainWindow::MainWindow(const QStringList &file, QWidget *parent)
     connect(ui->actionSpell_checking, &QAction::triggered,
             this, &MainWindow::changeSpelling);
     connect(ui->tabWidget, &QStackedWidget::currentChanged,
-            this, &MainWindow::onSetText);
+            this, &MainWindow::setText);
     connect(ui->actionWord_wrap, &QAction::triggered,
             this, &MainWindow::changeWordWrap);
     connect(ui->actionReload, &QAction::triggered,
@@ -289,7 +289,7 @@ void MainWindow::closeEditor(const int &index)
 
     if (editorList.isEmpty()) {
         html.clear();
-        onSetText(ui->tabWidget->currentIndex());
+        setText(ui->tabWidget->currentIndex());
         ui->actionReload->setText(tr("Reload \"%1\"").arg('\0'));
     }
 }
@@ -301,7 +301,6 @@ void MainWindow::onEditorChanged(const int &index)
 
     setWindowTitle(editor->filePath());
     setWindowModified(editor->document()->isModified());
-    ui->actionSave->setEnabled(editor->document()->isModified());
     ui->actionReload->setText(tr("Reload \"%1\"").arg(editor->getFileName()));
 
     ui->actionRedo->setEnabled(editor->document()->isRedoAvailable());
@@ -459,7 +458,7 @@ void MainWindow::onOrientationChanged(const Qt::ScreenOrientation &t)
     }
 }
 
-void MainWindow::onSetText(const int &index)
+void MainWindow::setText(const int &index)
 {
     if (index == 0) {
         const int v = ui->textBrowser->verticalScrollBar()->value();
@@ -759,7 +758,7 @@ void MainWindow::onTextChanged()
 
     html = Parser::toHtml(currentEditor()->document()->toPlainText(), _mode);
 
-    onSetText(ui->tabWidget->currentIndex());
+    setText(ui->tabWidget->currentIndex());
 }
 
 void MainWindow::openFile(const QString &newFile)
@@ -829,6 +828,8 @@ void MainWindow::onFileNew()
 
     MarkdownEditor* &&editor = createEditor();
     editor->setFile(file);
+    if (!editor->setLanguage(QStringLiteral("en-US")))
+        editor->setLanguage();
 
     ui->tabWidget_2->insertTab(editorList.length() -1, editor, editor->getFileName());
     ui->tabWidget_2->setCurrentIndex(editorList.count() -1);
@@ -974,7 +975,7 @@ bool MainWindow::onFileSaveAs()
 void MainWindow::onHelpAbout()
 {
     About dialog(tr("About MarkdownEdit"), this);
-    dialog.setAppUrl("https://github.com/software-made-easy/MarkdownEdit");
+    dialog.setAppUrl("https://software-made-easy.github.io/MarkdownEdit/");
     dialog.setDescription(tr("MarkdownEdit, as the name suggests, is a simple and easy program to create and edit Markdown files."));
 
     dialog.addCredit(tr("<p>The conversion from Markdown to HTML is done with the help of the <a href=\"https://github.com/mity/md4c\">md4c</a> library by <em>Martin Mitáš</em>.</p>"));

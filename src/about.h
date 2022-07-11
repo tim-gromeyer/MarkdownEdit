@@ -18,11 +18,11 @@ public:
     explicit About(QWidget *parent = nullptr);
     explicit About(const QString &title, QWidget *parent = nullptr);
 
-    QLabel* addCredit(QString text);
-    QList<QLabel*> addCredits(QStringList credits);
+    QLabel* addCredit(const QString &text);
+    QList<QLabel*> addCredits(const QStringList &credits);
     void deleteCreditPage();
     inline bool creditPageAvaiable() { return creditPage; }
-    void setAppUrl(QUrl url);
+    void setAppUrl(const QUrl &url);
     void setAppUrl(const QString &url);
     void setAppVersion(const QString &version);
     void setDescription(const QString &description);
@@ -33,32 +33,32 @@ private:
 
     bool creditPage = true;
     QString homepage;
-    QString _version = nullptr;
-    QString _description = nullptr;
+    QString _version;
+    QString _description;
 
-    QVBoxLayout *verticalLayout;
-    QTabWidget *tabWidget;
-    QWidget *tab;
-    QFormLayout *formLayout;
-    QLabel *label;
-    QLabel *label_2;
-    QLabel *label_3;
-    QLabel *label_4;
-    QLabel *label_6;
-    QLabel *label_7;
-    QLabel *label_9;
-    QLabel *label_10;
-    QWidget *tab_2;
-    QVBoxLayout *verticalLayout_3;
-    QLabel *label_8;
-    QSpacerItem *verticalSpacer;
-    QWidget *tab_3;
-    QVBoxLayout *verticalLayout_2;
-    QScrollArea *scrollArea;
-    QWidget *scrollAreaWidgetContents;
-    QVBoxLayout *verticalLayout_4;
-    QLabel *label_5;
-    QDialogButtonBox *buttonBox;
+    QVBoxLayout *verticalLayout = nullptr;
+    QTabWidget *tabWidget = nullptr;
+    QWidget *tab = nullptr;
+    QFormLayout *formLayout = nullptr;
+    QLabel *label = nullptr;
+    QLabel *label_2 = nullptr;
+    QLabel *label_3 = nullptr;
+    QLabel *label_4 = nullptr;
+    QLabel *label_6 = nullptr;
+    QLabel *label_7 = nullptr;
+    QLabel *label_9 = nullptr;
+    QLabel *label_10 = nullptr;
+    QWidget *tab_2 = nullptr;
+    QVBoxLayout *verticalLayout_3 = nullptr;
+    QLabel *label_8 = nullptr;
+    QSpacerItem *verticalSpacer = nullptr;
+    QWidget *tab_3 = nullptr;
+    QVBoxLayout *verticalLayout_2 = nullptr;
+    QScrollArea *scrollArea = nullptr;
+    QWidget *scrollAreaWidgetContents = nullptr;
+    QVBoxLayout *verticalLayout_4 = nullptr;
+    QLabel *label_5 = nullptr;
+    QDialogButtonBox *buttonBox = nullptr;
 };
 
 #endif // ABOUT_H

@@ -7,5 +7,6 @@ Exec=/usr/bin/markdownedit %F
 Icon=text-markdown
 Terminal=false
 Type=Application
-Categories=Qt; Utility;TextEditor;
+Categories=Qt;Utility;TextEditor;
+Keywords=text;editor;tabs;highlighting;code;multiple;files;
 MimeType=text/markdown
