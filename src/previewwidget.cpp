@@ -22,7 +22,7 @@ void PreviewWidget::openUrl(const QUrl &url)
 {
     const QString s = url.toString();
     const QString basePath = currDir();
-    const QString filePath = basePath + QLatin1Char('/') + s;
+    const QString filePath = basePath + QChar('/') + s;
 
     if (s.startsWith(QLatin1String("http")))
         QDesktopServices::openUrl(url);

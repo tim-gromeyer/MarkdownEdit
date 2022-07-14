@@ -41,11 +41,6 @@ MainWindow::MainWindow(const QStringList &file, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-    if (isDarkMode())
-        setWindowIcon(QIcon(QStringLiteral(":/Icon_dark.svg")));
-    else
-        setWindowIcon(QIcon(QStringLiteral(":/Icon.svg")));
-
     ui->setupUi(this);
 
     toolbutton = new QToolButton(this);
@@ -75,14 +70,14 @@ MainWindow::MainWindow(const QStringList &file, QWidget *parent)
     connect(ui->tabWidget_2, &QTabWidget::tabCloseRequested,
             this, &MainWindow::closeEditor);
 
-    settings = new QSettings(QStringLiteral("SME"),
-                             QStringLiteral("MarkdownEdit"), this);
+    settings = new QSettings(QLatin1String("SME"),
+                             QLatin1String("MarkdownEdit"), this);
 
     loadSettings(file);
     updateOpened();
 
     mode = new QComboBox(ui->Edit);
-    mode->addItems({QString::fromLatin1("Commonmark"), QString::fromLatin1("GitHub")});
+    mode->addItems(QStringList() << QLatin1String("Commonmark") << QLatin1String("GitHub"));
     mode->setCurrentIndex(1);
     _mode = 1;
 
@@ -203,8 +198,8 @@ void MainWindow::onFileReload()
         }
     }
 
-    if ( widgetReloadFile)
-         widgetReloadFile->hide();
+    if (widgetReloadFile)
+        widgetReloadFile->hide();
 
     reloadFile.clear();
 }
@@ -325,6 +320,8 @@ MarkdownEditor *MainWindow::createEditor()
     else
         editor->setLineWrapMode(QPlainTextEdit::NoWrap);
 
+    editorList.append(editor);
+
     connect(editor, &QPlainTextEdit::textChanged,
             this, &MainWindow::onTextChanged);
     connect(editor->document(), &QTextDocument::modificationChanged,
@@ -339,9 +336,6 @@ MarkdownEditor *MainWindow::createEditor()
             [editor]{ static_cast<QPlainTextEdit*>(editor)->zoomOut(-1); });
     connect(editor, &QMarkdownTextEdit::zoomOut, this,
             [editor]{ static_cast<QPlainTextEdit*>(editor)->zoomIn(-1); });
-
-
-    editorList.append(editor);
 
     return editor;
 }
@@ -429,17 +423,22 @@ void MainWindow::loadIcons()
     loadIcon("tools-check-spelling", ui->actionSpell_checking);
     loadIcon("document-revert", ui->actionReload);
 
-    ui->actionExportHtml->setIcon(QIcon::fromTheme(QStringLiteral("text-html"),
-                                             QIcon(QStringLiteral(":/icons/text-html_16.png"))));
-    ui->actionExportPdf->setIcon(QIcon::fromTheme(QStringLiteral("application-pdf"),
-                                                   QIcon(QStringLiteral(":/icons/application-pdf_16.png"))));
+    ui->actionExportHtml->setIcon(QIcon::fromTheme(QLatin1String("text-html"),
+                                             QIcon(QLatin1String(":/icons/text-html_16.png"))));
+    ui->actionExportPdf->setIcon(QIcon::fromTheme(QLatin1String("application-pdf"),
+                                                   QIcon(QLatin1String(":/icons/application-pdf_16.png"))));
 
-    ui->menuExport->setIcon(QIcon::fromTheme(QStringLiteral("document-export"),
-                                             QIcon(QStringLiteral(":/icons/document-export.svg"))));
-    ui->menuRecentlyOpened->setIcon(QIcon::fromTheme(QStringLiteral("document-open-recent"),
-                                                     QIcon(QStringLiteral(":/icons/document-open-recent.svg"))));
+    ui->menuExport->setIcon(QIcon::fromTheme(QLatin1String("document-export"),
+                                             QIcon(QLatin1String(":/icons/document-export.svg"))));
+    ui->menuRecentlyOpened->setIcon(QIcon::fromTheme(QLatin1String("document-open-recent"),
+                                                     QIcon(QLatin1String(":/icons/document-open-recent.svg"))));
 
     toolbutton->setIcon(ui->menuRecentlyOpened->icon());
+
+    if (isDarkMode())
+        setWindowIcon(QIcon(QLatin1String(":/Icon_dark.svg")));
+    else
+        setWindowIcon(QIcon(QLatin1String(":/Icon.svg")));
 }
 
 void MainWindow::loadIcon(const char* &&name, QAction* &a)
@@ -630,7 +629,8 @@ void MainWindow::filePrintPreview()
     QPrinter printer(QPrinter::HighResolution);
 
     QPrintPreviewDialog preview(&printer, this);
-    connect(&preview, &QPrintPreviewDialog::paintRequested, this, &MainWindow::printPreview);
+    connect(&preview, &QPrintPreviewDialog::paintRequested,
+            this, &MainWindow::printPreview);
 
     QGuiApplication::restoreOverrideCursor();
 
@@ -673,7 +673,8 @@ void MainWindow::exportPdf()
     printPreview(&printer);
 
     statusBar()->show();
-    statusBar()->showMessage(tr("Pdf exported to %1").arg(QDir::toNativeSeparators(file)), 10000);
+    statusBar()->showMessage(tr("Pdf exported to %1").arg(
+                                 QDir::toNativeSeparators(file)), 10000);
     QTimer::singleShot(10000, statusBar(), &QStatusBar::hide);
 }
 
@@ -710,7 +711,7 @@ void MainWindow::openInWebBrowser()
 void MainWindow::exportHtml()
 {
 #if defined(Q_OS_WASM)
-    QFileDialog::saveFileContent(html.toLocal8Bit(), QStringLiteral("Exported HTML.html"));
+    QFileDialog::saveFileContent(html.toLocal8Bit(), QLatin1String("Exported HTML.html"));
 #else
     QFileDialog dialog(this, tr("Export HTML"));
     dialog.setMimeTypeFilters({"text/html"});
@@ -744,7 +745,6 @@ void MainWindow::exportHtml()
 #endif
 }
 
-// Indexchanged doesn't work in qt 5.12.8
 void MainWindow::changeMode(const int &i)
 {
     _mode = i;
@@ -805,6 +805,9 @@ void MainWindow::openFile(const QString &newFile)
                                editor, editor->getFileName());
     ui->tabWidget_2->setCurrentIndex(editorList.length() -1);
     ui->tabWidget_2->tabBar()->setTabToolTip(editorList.length() -1, newFile);
+
+    QCoreApplication::processEvents();
+
     editor->setText(f.readAll(), newFile);
 
     setWindowTitle(editor->filePath());
@@ -828,11 +831,13 @@ void MainWindow::onFileNew()
 
     MarkdownEditor* &&editor = createEditor();
     editor->setFile(file);
-    if (!editor->setLanguage(QStringLiteral("en-US")))
-        editor->setLanguage();
 
-    ui->tabWidget_2->insertTab(editorList.length() -1, editor, editor->getFileName());
-    ui->tabWidget_2->setCurrentIndex(editorList.count() -1);
+    ui->tabWidget_2->insertTab(editorList.length() -1,
+                               editor, editor->getFileName());
+    ui->tabWidget_2->setCurrentIndex(editorList.length() -1);
+
+    if (!editor->setLanguage(QLatin1String("en-US")))
+            editor->setLanguage();
 }
 
 void MainWindow::onFileOpen()
@@ -954,7 +959,7 @@ bool MainWindow::onFileSaveAs()
         path = file;
 
     if (!(path.endsWith(QLatin1String(".md")) || path.endsWith(QLatin1String(".markdown")) || path.endsWith(QLatin1String(".mkd"))))
-        path.append(".md");
+        path.append(QLatin1String(".md"));
 
     watcher->addPath(file);
 
@@ -1053,7 +1058,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
 }
 
 void MainWindow::loadSettings(const QStringList &files) {
-    const QByteArray geo = settings->value(QStringLiteral("geometry"),
+    const QByteArray geo = settings->value(QLatin1String("geometry"),
                                            QByteArrayLiteral("")).toByteArray();
     if (geo.isEmpty()) {
         const QRect availableGeometry = QGuiApplication::screenAt(pos())->availableGeometry();
@@ -1065,37 +1070,37 @@ void MainWindow::loadSettings(const QStringList &files) {
         restoreGeometry(geo);
     }
 
-    restoreState(settings->value(QStringLiteral("state"), QByteArrayLiteral("")).toByteArray());
+    restoreState(settings->value(QLatin1String("state"), QByteArrayLiteral("")).toByteArray());
 
-    highlighting = settings->value(QStringLiteral("highlighting"), true).toBool();
+    highlighting = settings->value(QLatin1String("highlighting"), true).toBool();
     ui->actionHighlighting_activated->setChecked(highlighting);
     changeHighlighting(highlighting);
 
-    setPath = settings->value(QStringLiteral("setPath"), true).toBool();
+    setPath = settings->value(QLatin1String("setPath"), true).toBool();
     changeAddtoIconPath(setPath);
 
-    recentOpened = settings->value(QStringLiteral("recent"), QStringList()).toStringList();
+    recentOpened = settings->value(QLatin1String("recent"), QStringList()).toStringList();
     if (!recentOpened.isEmpty()) {
         if (recentOpened.first().isEmpty()) {
             recentOpened.takeFirst();
         }
     }
 
-    const bool lineWrap = settings->value(QStringLiteral("lineWrap"), false).toBool();
+    const bool lineWrap = settings->value(QLatin1String("lineWrap"), false).toBool();
     changeWordWrap(lineWrap);
 
-    setLanguageMap(settings->value(QStringLiteral("languagesMap"),
+    setLanguageMap(settings->value(QLatin1String("languagesMap"),
                                    QMap<QString, QVariant>()).toMap());
 
-    spelling = settings->value(QStringLiteral("spelling"), true).toBool();
+    spelling = settings->value(QLatin1String("spelling"), true).toBool();
     changeSpelling(spelling);
 
     if (files.isEmpty()) {
-        const bool openLast = settings->value(QStringLiteral("openLast"), true).toBool();
+        const bool openLast = settings->value(QLatin1String("openLast"), true).toBool();
         if (openLast) {
             ui->actionOpen_last_document_on_start->setChecked(openLast);
 
-            const QString last = settings->value(QStringLiteral("last"),
+            const QString last = settings->value(QLatin1String("last"),
                                                QLatin1String()).toString();
             if (!last.isEmpty())
                 openFile(last);

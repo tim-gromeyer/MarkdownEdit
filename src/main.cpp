@@ -23,24 +23,31 @@ int main(int argc, char *argv[])
 #endif
 
 #ifndef NOT_SUPPORTET
-    SingleApplication a(argc, argv, true, SingleApplication::Mode::SecondaryNotification);
+    SingleApplication a(argc, argv, true,
+                        SingleApplication::Mode::SecondaryNotification);
 #else
     QApplication a(argc, argv);
 #endif
     a.setApplicationDisplayName(QStringLiteral("MarkdownEdit"));
     a.setApplicationVersion(APP_VERSION);
 
+    static const QChar underscore[] = {
+        QLatin1Char('_')
+    };
+
     QTranslator translator, qtTranslator;
 
     // load translation for Qt
-    if (qtTranslator.load(QLocale::system(), QStringLiteral("qtbase"),
-                          QStringLiteral("_"), QStringLiteral(
+    if (qtTranslator.load(QLocale::system(), QLatin1String("qtbase"),
+                          QString::fromRawData(underscore, 1),
+                          QLatin1String(
                               ":/qtTranslations/")))
         a.installTranslator(&qtTranslator);
 
     // try to load translation for current locale from resource file
-    if (translator.load(QLocale::system(), QStringLiteral("MarkdownEdit"),
-                        QStringLiteral("_"), QStringLiteral(":/translations")))
+    if (translator.load(QLocale::system(), QLatin1String("MarkdownEdit"),
+                        QString::fromRawData(underscore, 1),
+                        QLatin1String(":/translations")))
         a.installTranslator(&translator);
 
     QCommandLineParser parser;

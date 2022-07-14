@@ -38,8 +38,8 @@ void Highliter::highlightBlock(const QString &text)
     setFormat(0, textLen, _formats[CodeBlock]);
 
     for (int i = 0; i < textLen; ++i) {
-        if (text[i] == QLatin1Char('<') && text[i+1] != QLatin1Char('!')) {
-            const int found = text.indexOf(QLatin1Char('>'), i);
+        if (text[i] == QLatin1Char('<') && text[i+1] != QChar('!')) {
+            const int found = text.indexOf(QChar('>'), i);
             if (found > 0) {
                 ++i;
                 if (text[i] == QLatin1Char('/')) ++i;
@@ -48,8 +48,8 @@ void Highliter::highlightBlock(const QString &text)
         }
 
         if (text[i] == QLatin1Char('=')) {
-            int lastSpace = text.lastIndexOf(QLatin1Char(' '), i);
-            if (lastSpace == i-1) lastSpace = text.lastIndexOf(QLatin1Char(' '), i-2);
+            int lastSpace = text.lastIndexOf(QChar(' '), i);
+            if (lastSpace == i-1) lastSpace = text.lastIndexOf(QChar(' '), i-2);
             if (lastSpace > 0) {
                 setFormat(lastSpace, i - lastSpace, _formats[CodeBuiltIn]);
             }

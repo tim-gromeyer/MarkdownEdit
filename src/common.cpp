@@ -1,6 +1,8 @@
 #include <QString>
 #include <QVariant>
 #include <QPalette>
+#include <QDir>
+#include <QLocale>
 
 
 QMap<QString, QVariant> languages_map;
@@ -19,6 +21,17 @@ void setLanguageMap(const QMap<QString, QVariant> &m)
 void setMapAttribute(const QString &name, const QVariant &value)
 {
     languages_map[name] = value;
+}
+
+const QString mapAttribute(const QString &s)
+{
+    return languages_map.value(s, QLatin1String()
+                               ).toString();
+}
+
+bool mapContains(const QString &s)
+{
+    return languages_map.contains(s);
 }
 
 
@@ -40,4 +53,17 @@ bool isDarkMode()
     static const bool dark = ((r + g + b + a) / 4) < 127;
 
     return dark;
+}
+
+namespace common {
+const QString homeDict()
+{
+    static const QString homeDirectory = QDir::homePath();
+    return homeDirectory;
+}
+
+const QStringList languages()
+{
+    return QLocale::system().uiLanguages();
+}
 }

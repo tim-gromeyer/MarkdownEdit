@@ -91,12 +91,12 @@ void SpellChecker::checkSpelling(const QString &text)
             continue;
 
         if (c == QLatin1Char('(')) {
-            if (text.mid(i +1, 4) == QStringLiteral("http")) {
+            if (text.mid(i +1, 4) == QLatin1String("http")) {
                 isLink = true;
             }
         }
         else if (c == QLatin1Char('h'))
-            if (text.mid(i, 4) == QStringLiteral("http")) {
+            if (text.mid(i, 4) == QLatin1String("http")) {
                 isLink = true;
             }
 
@@ -130,7 +130,7 @@ void SpellChecker::checkSpelling(const QString &text)
     int index = 0;
 
     for (const QString &word_ : wordList) {
-        index = text.indexOf(word_, index);
+        index = text.indexOf(word_, index); // is still faster
 
         if (!isCorrect(word_)) {
             QTextCharFormat fmt = QSyntaxHighlighter::format(index);
@@ -192,7 +192,7 @@ bool SpellChecker::setLanguage(const QString &lang)
         return false;
     }
 
-    rehighlight();
+    QSyntaxHighlighter::rehighlight();
 
     return true;
 #endif
@@ -270,7 +270,7 @@ QString SpellChecker::getWord(const QTextBlock &block, const int &pos)
         const bool isLetterOrNumber = c.isLetterOrNumber();
 
         if (c == QLatin1Char('(')) {
-            if (block.text().mid(i +1, 4) == QStringLiteral("http")) {
+            if (block.text().mid(i +1, 4) == QLatin1String("http")) {
                 isLink = true;
                 if (text.indexOf(QChar(QChar::Space), i) > pos)
                     return QLatin1String();
@@ -279,7 +279,7 @@ QString SpellChecker::getWord(const QTextBlock &block, const int &pos)
             }
         }
         else if (c == QLatin1Char('h')) {
-            if (text.mid(i, 4) == QStringLiteral("http")) {
+            if (text.mid(i, 4) == QLatin1String("http")) {
                 if (text.indexOf(QChar(QChar::Space), i) > pos)
                     return QLatin1String();
                 else if (text.indexOf(QChar(')'), i) > pos)
