@@ -70,8 +70,8 @@ void MarkdownEditor::showMarkdownSyntax()
 
     MarkdownEditor e(&d);
 
-    QString file = QStringLiteral(":/syntax_en.md");
-    QString language = QStringLiteral("en_US");
+    QString file = QLatin1String(":/syntax_en.md");
+    QString language = QLatin1String("en_US");
 
     for (const QString &lang : common::languages()) {
         if (QFile::exists(QStringLiteral(":/syntax_%1.md").arg(lang))) {
@@ -102,7 +102,7 @@ void MarkdownEditor::setText(const QString &t, const QString &newFile)
     if (!newFile.isEmpty())
         fileName = newFile;
 
-    if (fileName == QStringViewLiteral(":/default.md") && !mapContains(fileName))
+    if (fileName == QLatin1String(":/default.md") && !mapContains(fileName))
         setMapAttribute(fileName, QLatin1String("en_US"));
 
     if (checker) {

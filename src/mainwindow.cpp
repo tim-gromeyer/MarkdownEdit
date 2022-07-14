@@ -711,7 +711,7 @@ void MainWindow::openInWebBrowser()
 void MainWindow::exportHtml()
 {
 #if defined(Q_OS_WASM)
-    QFileDialog::saveFileContent(html.toLocal8Bit(), QLatin1String("Exported HTML.html"));
+    QFileDialog::saveFileContent(html.toUtf8(), QLatin1String("Exported HTML.html"));
 #else
     QFileDialog dialog(this, tr("Export HTML"));
     dialog.setMimeTypeFilters({"text/html"});
@@ -900,7 +900,7 @@ bool MainWindow::onFileSave()
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
 #if defined(Q_OS_WASM)
-    QFileDialog::saveFileContent(currentEditor()->toPlainText().toLocal8Bit(), path);
+    QFileDialog::saveFileContent(currentEditor()->toPlainText().toUtf8(), path);
 #else
 
     watcher->removePath(path);

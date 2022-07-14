@@ -34,7 +34,7 @@ QString Parser::toHtml(const QString &in, const int &dia)
     else
         parser_flags |= MD_DIALECT_COMMONMARK;
 
-    const QByteArray array = in.toLocal8Bit();
+    const QByteArray array = in.toUtf8();
     QByteArray out = templateArray;
 
     md_html(array.data(), array.size(), &captureHtmlFragment, &out,
