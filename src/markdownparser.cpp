@@ -5,7 +5,6 @@
 #include "md4c-html.h"
 #include "common.h"
 
-
 /* Global options. */
 #if MD_UNDERLINE
 static unsigned parser_flags = MD_FLAG_UNDERLINE;
@@ -49,11 +48,7 @@ QString Parser::toHtml(const QString &in, const int &dia)
 QString Parser::toMarkdown(QString in)
 {
     // replace Windows line breaks
-    in.replace(QChar(QChar::LineSeparator), QStringLiteral("\n"));
-
-    // remove all null characters
-    // we can get those from Google Chrome via the clipboard
-    in.remove(QChar(QChar::Null));
+    in.replace(QChar(QChar::LineSeparator), QLatin1String("\n"));
 
     // remove some blocks
     in.remove(

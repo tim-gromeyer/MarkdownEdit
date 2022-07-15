@@ -7,9 +7,7 @@
 #include <QCommandLineParser>
 
 
-#if defined(Q_OS_WASM) || defined(Q_OS_ANDROID)
-#define NOT_SUPPORTET
-#else
+#ifndef NOT_SUPPORTET
 #include "singleapplication.h"
 #endif
 

@@ -10,6 +10,8 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QDebug>
+#include <QMimeData>
+#include <QImageReader>
 
 
 MarkdownEditor::MarkdownEditor(QWidget *parent)
@@ -18,6 +20,37 @@ MarkdownEditor::MarkdownEditor(QWidget *parent)
     checker = new SpellChecker(new TextEditProxyT(this));
     connect(checker, &SpellChecker::languageChanged,
             this, &MarkdownEditor::onLanguageChanged);
+
+    setAcceptDrops(true);
+}
+
+void MarkdownEditor::dragEnterEvent(QDragEnterEvent *event)
+{
+    event->accept();
+}
+
+void MarkdownEditor::dragMoveEvent(QDragMoveEvent *event)
+{
+    event->accept();
+}
+
+void MarkdownEditor::dropEvent(QDropEvent *event)
+{
+    const QMimeData *data = event->mimeData();
+
+    if (data->hasUrls()) {
+        const QUrl file = data->urls().at(0);
+        if (!QImageReader::imageFormat(file.toLocalFile()).isEmpty()) {
+            QTextCursor c = cursorForPosition(event->pos());
+            c.insertText(
+                        QStringLiteral("![%1](%2)").arg(file.fileName(),
+                                                        QLatin1String(file.toEncoded())));
+        } else {
+            event->acceptProposedAction();
+        }
+    } else {
+        event->ignore();
+    }
 }
 
 bool MarkdownEditor::setLanguage(const QString &lang)
@@ -103,7 +136,7 @@ void MarkdownEditor::setText(const QString &t, const QString &newFile)
         fileName = newFile;
 
     if (fileName == QLatin1String(":/default.md") && !mapContains(fileName))
-        setMapAttribute(fileName, QLatin1String("en_US"));
+        setMapAttribute(fileName, QLatin1String("en-US"));
 
     if (checker) {
         checker->clearDirtyBlocks();

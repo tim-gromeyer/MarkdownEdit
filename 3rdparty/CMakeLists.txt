@@ -36,6 +36,7 @@ if(NOT ANDROID AND NOT EMSCRIPTEN)
     set(singleapp SingleApplication::SingleApplication)
 else()
     set(singleapp "")
+    add_compile_definitions(NOT_SUPPORTET)
 endif()
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit)

@@ -30,6 +30,11 @@ public:
 
     QString filePath();
 
+protected:
+    void dragEnterEvent(QDragEnterEvent *) override;
+    void dragMoveEvent(QDragMoveEvent *) override;
+    void dropEvent(QDropEvent *) override;
+
 public slots:
     static void showMarkdownSyntax();
 
