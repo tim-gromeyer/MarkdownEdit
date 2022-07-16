@@ -70,7 +70,7 @@ void SpellChecker::highlightBlock(const QString &text)
 
 void SpellChecker::checkSpelling(const QString &text)
 {
-    if (!spellingEnabled) return;
+    if (!speller || !spellingEnabled) return;
 
 #ifdef CHECK_MARKDOWN
     QStringList wordList;
