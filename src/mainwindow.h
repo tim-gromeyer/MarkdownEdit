@@ -54,14 +54,14 @@ private slots:
 
     void setupThings();
 
-    void onEditorChanged(const int &);
-    void closeEditor(const int &);
-    void editorMoved(const int &, const int &);
+    void onEditorChanged(const int );
+    void closeEditor(const int );
+    void editorMoved(const int , const int );
     void closeCurrEditor();
 
     void onHelpAbout();
     void onTextChanged();
-    void changeMode(const int &);
+    void changeMode(const int );
 
     void exportHtml();
     void exportPdf();
@@ -72,12 +72,12 @@ private slots:
     void filePrintPreview();
     void printPreview(QPrinter *);
 
-    void changeHighlighting(const bool &);
-    void changeSpelling(const bool &);
-    void pausePreview(const bool &);
-    void disablePreview(const bool &);
-    void changeAddtoIconPath(const bool &);
-    void changeWordWrap(const bool &);
+    void changeHighlighting(const bool );
+    void changeSpelling(const bool );
+    void pausePreview(const bool );
+    void disablePreview(const bool );
+    void changeAddtoIconPath(const bool );
+    void changeWordWrap(const bool );
 
     void onOrientationChanged(const Qt::ScreenOrientation &);
 
@@ -95,9 +95,9 @@ private:
     void saveSettings();
     void updateOpened();
     void openRecent();
-    void setText(const int &);
+    void setText(const int );
 
-    void loadIcon(const char* &&name, QAction* &a);
+    void loadIcon(const QString &name, QAction* a);
     void loadIcons();
 
     MarkdownEditor *createEditor();
@@ -111,7 +111,7 @@ private:
     Ui::MainWindow *ui;
 
     QString path;
-    int _mode;
+    int _mode; // TODO init
 
     QSettings *settings;
 
@@ -121,6 +121,7 @@ private:
 
     QString reloadFile;
 
+    // TODO init these
     bool dontUpdate;
     bool setPath;
     bool spelling;
