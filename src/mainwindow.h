@@ -30,10 +30,7 @@ public:
     ~MainWindow();
 
     void openFile(const QString &);
-    inline void openFiles(const QStringList &files) {
-        for (const QString &file : files) {
-            openFile(file);
-    }; };
+    void openFiles(const QStringList &files);
 
 protected:
     void closeEvent(QCloseEvent *e) override;

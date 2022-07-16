@@ -766,16 +766,27 @@ void MainWindow::changeMode(const int i)
 
 void MainWindow::onTextChanged()
 {
+    // Dont go any futher if preview is paused or the current editor is invalid
     if (dontUpdate || !currentEditor())
         return;
 
+    // Genarate HTML from Markdown
     html = Parser::toHtml(currentEditor()->document()->toPlainText(), _mode);
 
+    // Set the genarated HTML to the currently visible widget
     setText(ui->tabWidget->currentIndex());
+}
+
+void MainWindow::openFiles(const QStringList &files)
+{
+    for (const QString &file : files) {
+        openFile(QFileInfo(file).absoluteFilePath()); // ensure filepath is absolute
+    }
 }
 
 void MainWindow::openFile(const QString &newFile)
 {
+    // Check of file is already open
     if (fileList.contains(newFile)) {
         for (int i = 0; editorList.length(); i++) {
             if (editorList.at(i)->getPath() == newFile) {
