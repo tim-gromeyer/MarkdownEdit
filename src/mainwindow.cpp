@@ -33,7 +33,7 @@
 #include "qplaintexteditsearchwidget.h"
 
 
-MainWindow::MainWindow(const QStringList &file, QWidget *parent)
+MainWindow::MainWindow(const QStringList &files, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
@@ -59,7 +59,7 @@ MainWindow::MainWindow(const QStringList &file, QWidget *parent)
     settings = new QSettings(QLatin1String("SME"),
                              QLatin1String("MarkdownEdit"), this);
 
-    loadSettings(file);
+    loadSettings();
     updateOpened();
 
     mode = new QComboBox(ui->Edit);
@@ -142,6 +142,10 @@ MainWindow::MainWindow(const QStringList &file, QWidget *parent)
     ui->toolBarPreview->addWidget(mode);
     ui->toolBarPreview->addSeparator();
     ui->toolBarPreview->addWidget(widgetBox);
+
+    QMetaObject::invokeMethod(this, [files, this]{
+        loadFiles(files);
+    }, Qt::QueuedConnection);
 
 #ifdef NO_SPELLCHECK
     ui->menuExtras->removeAction(ui->actionSpell_checking);
@@ -779,7 +783,8 @@ void MainWindow::openFile(const QString &newFile)
         updateOpened();
         return;
     }
-    if (f.size() > 50000) {
+    constexpr int limit = 1000000; // 1MB
+    if (f.size() > limit) {
         const int out = QMessageBox::warning(this, tr("Large file"),
                                              tr("This is a large file that can potentially cause performance issues."),
                                              QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok);
@@ -1054,7 +1059,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
     QMainWindow::closeEvent(e);
 }
 
-void MainWindow::loadSettings(const QStringList &files) {
+void MainWindow::loadSettings() {
     const QByteArray geo = settings->value(QLatin1String("geometry"),
                                            QByteArrayLiteral("")).toByteArray();
     if (geo.isEmpty()) {
@@ -1092,6 +1097,11 @@ void MainWindow::loadSettings(const QStringList &files) {
     spelling = settings->value(QLatin1String("spelling"), true).toBool();
     changeSpelling(spelling);
 
+    ui->splitter->setSizes({QWIDGETSIZE_MAX, QWIDGETSIZE_MAX});
+}
+
+void MainWindow::loadFiles(const QStringList &files)
+{
     if (files.isEmpty()) {
         const bool openLast = settings->value(QLatin1String("openLast"), true).toBool();
         if (openLast) {

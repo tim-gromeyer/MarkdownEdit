@@ -90,7 +90,8 @@ private slots:
     void redo();
 
 private:
-    void loadSettings(const QStringList &);
+    void loadSettings();
+    void loadFiles(const QStringList &);
     void saveSettings();
     void updateOpened();
     void openRecent();
