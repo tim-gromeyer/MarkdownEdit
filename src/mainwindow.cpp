@@ -177,7 +177,7 @@ void MainWindow::onFileReload()
         return;
     }
 
-    for (MarkdownEditor* &editor : editorList) {
+    for (MarkdownEditor* editor : qAsConst(editorList)) {
         if (editor->getPath() == reloadFile) {
             editor->setText(f.readAll());
             break;
@@ -238,12 +238,12 @@ void MainWindow::closeCurrEditor()
         closeEditor(i);
 }
 
-void MainWindow::editorMoved(const int &from, const int &to)
+void MainWindow::editorMoved(const int from, const int to)
 {
     editorList.move(from, to);
 }
 
-void MainWindow::closeEditor(const int &index)
+void MainWindow::closeEditor(const int index)
 {
     overrideEditor = true;
     overrideVal = index;
@@ -286,9 +286,9 @@ void MainWindow::closeEditor(const int &index)
     }
 }
 
-void MainWindow::onEditorChanged(const int &index)
+void MainWindow::onEditorChanged(const int index)
 {
-    MarkdownEditor* &&editor = currentEditor();
+    MarkdownEditor* editor = currentEditor();
     if (!editor) return;
 
     setWindowTitle(editor->filePath());
@@ -399,49 +399,50 @@ void MainWindow::onFileChanged(const QString &f)
 
 void MainWindow::loadIcons()
 {
-    loadIcon("application-exit", ui->actionExit);
-    loadIcon("document-new", ui->actionNew);
-    loadIcon("document-open-recent", ui->actionOpen_last_document_on_start);
-    loadIcon("document-open", ui->actionOpen);
-    loadIcon("document-print-preview", ui->actionPrintPreview);
-    loadIcon("document-print", ui->actionPrint);
-    loadIcon("document-save-as", ui->actionSaveAs);
-    loadIcon("document-save", ui->actionSave);
-    loadIcon("edit-copy", ui->actionCopy);
-    loadIcon("edit-cut", ui->actionCut);
-    loadIcon("edit-paste", ui->actionPaste);
-    loadIcon("edit-redo", ui->actionRedo);
-    loadIcon("edit-select-all", ui->actionSelectAll);
-    loadIcon("edit-undo", ui->actionUndo);
-    loadIcon("edit-copy", ui->actionCopy);
-    loadIcon("help-about", ui->actionAbout);
-    loadIcon("help-contents", ui->actionMarkdown_Syntax);
-    loadIcon("text-wrap", ui->actionWord_wrap);
-    loadIcon("tools-check-spelling", ui->actionSpell_checking);
-    loadIcon("document-revert", ui->actionReload);
+#define S(x) QStringLiteral(x)
+    loadIcon(S("application-exit"), ui->actionExit);
+    loadIcon(S("document-new"), ui->actionNew);
+    loadIcon(S("document-open-recent"), ui->actionOpen_last_document_on_start);
+    loadIcon(S("document-open"), ui->actionOpen);
+    loadIcon(S("document-print-preview"), ui->actionPrintPreview);
+    loadIcon(S("document-print"), ui->actionPrint);
+    loadIcon(S("document-save-as"), ui->actionSaveAs);
+    loadIcon(S("document-save"), ui->actionSave);
+    loadIcon(S("edit-copy"), ui->actionCopy);
+    loadIcon(S("edit-cut"), ui->actionCut);
+    loadIcon(S("edit-paste"), ui->actionPaste);
+    loadIcon(S("edit-redo"), ui->actionRedo);
+    loadIcon(S("edit-select-all"), ui->actionSelectAll);
+    loadIcon(S("edit-undo"), ui->actionUndo);
+    loadIcon(S("edit-copy"), ui->actionCopy);
+    loadIcon(S("help-about"), ui->actionAbout);
+    loadIcon(S("help-contents"), ui->actionMarkdown_Syntax);
+    loadIcon(S("text-wrap"), ui->actionWord_wrap);
+    loadIcon(S("tools-check-spelling"), ui->actionSpell_checking);
+    loadIcon(S("document-revert"), ui->actionReload);
 
-    ui->actionExportHtml->setIcon(QIcon::fromTheme(QLatin1String("text-html"),
-                                             QIcon(QLatin1String(":/icons/text-html_16.png"))));
-    ui->actionExportPdf->setIcon(QIcon::fromTheme(QLatin1String("application-pdf"),
-                                                   QIcon(QLatin1String(":/icons/application-pdf_16.png"))));
+    ui->actionExportHtml->setIcon(QIcon::fromTheme(S("text-html"),
+                                             QIcon(S(":/icons/text-html_16.png"))));
+    ui->actionExportPdf->setIcon(QIcon::fromTheme(S("application-pdf"),
+                                                   QIcon(S(":/icons/application-pdf_16.png"))));
 
-    ui->menuExport->setIcon(QIcon::fromTheme(QLatin1String("document-export"),
-                                             QIcon(QLatin1String(":/icons/document-export.svg"))));
-    ui->menuRecentlyOpened->setIcon(QIcon::fromTheme(QLatin1String("document-open-recent"),
-                                                     QIcon(QLatin1String(":/icons/document-open-recent.svg"))));
+    ui->menuExport->setIcon(QIcon::fromTheme(S("document-export"),
+                                             QIcon(S(":/icons/document-export.svg"))));
+    ui->menuRecentlyOpened->setIcon(QIcon::fromTheme(S("document-open-recent"),
+                                                     QIcon(S(":/icons/document-open-recent.svg"))));
 
     toolbutton->setIcon(ui->menuRecentlyOpened->icon());
 
     if (isDarkMode())
-        setWindowIcon(QIcon(QLatin1String(":/Icon_dark.svg")));
+        setWindowIcon(QIcon(S(":/Icon_dark.svg")));
     else
-        setWindowIcon(QIcon(QLatin1String(":/Icon.svg")));
+        setWindowIcon(QIcon(S(":/Icon.svg")));
+#undef S
 }
 
-void MainWindow::loadIcon(const char* &&name, QAction* &a)
+void MainWindow::loadIcon(const QString &name, QAction* a)
 {
-    a->setIcon(QIcon::fromTheme(QString::fromUtf8(name), QIcon(QString::fromLatin1(
-                                                ":/icons/%1.svg").arg(QString::fromUtf8(name)))));
+    a->setIcon(QIcon::fromTheme(name, QIcon(QString::fromLatin1(":/icons/%1.svg").arg(name))));
 }
 
 void MainWindow::onOrientationChanged(const Qt::ScreenOrientation &t)
@@ -454,7 +455,7 @@ void MainWindow::onOrientationChanged(const Qt::ScreenOrientation &t)
     }
 }
 
-void MainWindow::setText(const int &index)
+void MainWindow::setText(const int index)
 {
     if (index == 0) {
         const int v = ui->textBrowser->verticalScrollBar()->value();
@@ -468,9 +469,9 @@ void MainWindow::setText(const int &index)
     }
 }
 
-void MainWindow::changeWordWrap(const bool &c)
+void MainWindow::changeWordWrap(const bool c)
 {
-    for (MarkdownEditor* &editor : editorList) {
+    for (MarkdownEditor* editor : qAsConst(editorList)) {
         if (c)
             editor->setLineWrapMode(QPlainTextEdit::WidgetWidth);
         else
@@ -480,13 +481,13 @@ void MainWindow::changeWordWrap(const bool &c)
     ui->actionWord_wrap->setChecked(c);
 }
 
-void MainWindow::changeSpelling(const bool &checked)
+void MainWindow::changeSpelling(const bool checked)
 {
 #if defined(NO_SPELLCHECK)
     return;
 #endif
 
-    for (MarkdownEditor* &editor : editorList) {
+    for (MarkdownEditor* editor : qAsConst(editorList)) {
         editor->changeSpelling(checked);
     }
 
@@ -494,7 +495,7 @@ void MainWindow::changeSpelling(const bool &checked)
     spelling = checked;
 }
 
-void MainWindow::disablePreview(const bool &checked)
+void MainWindow::disablePreview(const bool checked)
 {
     ui->tabWidget->setVisible(!checked);
 
@@ -506,7 +507,7 @@ void MainWindow::disablePreview(const bool &checked)
     ui->actionDisable_preview->setChecked(checked);
 }
 
-void MainWindow::pausePreview(const bool &checked)
+void MainWindow::pausePreview(const bool checked)
 {
     dontUpdate = checked;
 }
@@ -573,7 +574,7 @@ void MainWindow::redo()
             currentEditor()->redo();
 }
 
-void MainWindow::changeAddtoIconPath(const bool &c)
+void MainWindow::changeAddtoIconPath(const bool c)
 {
     setPath = c;
 
@@ -593,11 +594,11 @@ void MainWindow::changeAddtoIconPath(const bool &c)
     ui->actionAuto_add_file_path_to_icon_path->setChecked(c);
 }
 
-void MainWindow::changeHighlighting(const bool &enabled)
+void MainWindow::changeHighlighting(const bool enabled)
 {
     dontUpdate = true;
 
-    for (MarkdownEditor* &editor : editorList) {
+    for (MarkdownEditor* editor : qAsConst(editorList)) {
         editor->getChecker()->setMarkdownHighlightingEnabled(enabled);
     }
 
@@ -742,7 +743,7 @@ void MainWindow::exportHtml()
 #endif
 }
 
-void MainWindow::changeMode(const int &i)
+void MainWindow::changeMode(const int i)
 {
     _mode = i;
     onTextChanged();
@@ -796,7 +797,7 @@ void MainWindow::openFile(const QString &newFile)
     if (setPath)
         ui->textBrowser->setSearchPaths(QStringList() << QFileInfo(newFile).path());
 
-    MarkdownEditor* &&editor = createEditor();
+    MarkdownEditor* editor = createEditor();
     editor->setFile(newFile);
     ui->tabWidget_2->insertTab(editorList.length() -1,
                                editor, editor->getFileName());
@@ -826,7 +827,7 @@ void MainWindow::onFileNew()
     path = QLatin1String();
     const QString file = tr("untitled.md");
 
-    MarkdownEditor* &&editor = createEditor();
+    MarkdownEditor* editor = createEditor();
     editor->setFile(file);
 
     ui->tabWidget_2->insertTab(editorList.length() -1,
@@ -1006,7 +1007,7 @@ void MainWindow::openRecent() {
 }
 
 void MainWindow::updateOpened() {
-    for (QAction* &a : ui->menuRecentlyOpened->actions()) {
+    for (QAction* a : ui->menuRecentlyOpened->actions()) {
         disconnect(a, &QAction::triggered, this, &MainWindow::openRecent);
         a->deleteLater();
         delete a;
@@ -1037,7 +1038,7 @@ void MainWindow::updateOpened() {
 
 void MainWindow::closeEvent(QCloseEvent *e)
 {
-    for(MarkdownEditor* &editor : editorList) {
+    for(MarkdownEditor* editor : qAsConst(editorList)) {
         if (editor->document()->isModified()) {
             const int button = QMessageBox::question(this, tr("Save changes?"),
                                                tr("The file <em>%1</em> has been changed.\n"
