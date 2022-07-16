@@ -25,10 +25,6 @@
 #include <QFileSystemWatcher>
 #include <QShortcut>
 
-#ifndef NO_THREADING
-#include <QtConcurrent/QtConcurrentRun>
-#endif
-
 #if QT_CONFIG(printdialog)
 #include <QtPrintSupport/QPrintDialog>
 #include <QtPrintSupport/QPrintPreviewDialog>
@@ -50,18 +46,8 @@ MainWindow::MainWindow(const QStringList &file, QWidget *parent)
     shortcutNew = new QShortcut(this);
     shortcutClose = new QShortcut(this);
 
-#ifndef NO_THREADING
-#if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
-    QFuture<void> retVal = QtConcurrent::run(&MainWindow::loadIcons, this);
-    QFuture<void> retVal2 = QtConcurrent::run(&MainWindow::setupThings, this);
-#else
-    QtConcurrent::run(this, &MainWindow::loadIcons);
-    QtConcurrent::run(this, &MainWindow::setupThings);
-#endif
-#else
     loadIcons();
     setupThings();
-#endif
 
     watcher = new QFileSystemWatcher(this);
     connect(watcher, &QFileSystemWatcher::fileChanged,
@@ -264,10 +250,21 @@ void MainWindow::closeEditor(const int &index)
 
     path = currentEditor()->getPath();
 
-    if (path == tr("untitled.md"))
+    if (path == tr("untitled.md")) {
         path.clear();
 
-    if (currentEditor()->document()->isModified()) {
+        QMessageBox d(this);
+        d.setText(tr("The dockument has been edited, do you want to save it?"));
+        d.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        d.setDefaultButton(QMessageBox::Yes);
+        d.setIcon(QMessageBox::Question);
+
+        const int retVal = d.exec();
+        if (retVal == QMessageBox::Yes)
+            if (!onFileSave())
+                return;
+    }
+    else if (currentEditor()->document()->isModified()) {
         if (!onFileSave())
             return;
     }
@@ -282,9 +279,9 @@ void MainWindow::closeEditor(const int &index)
     editorList.removeAt(index);
     ui->tabWidget_2->removeTab(index);
 
-    if (editorList.isEmpty()) {
-        html.clear();
-        setText(ui->tabWidget->currentIndex());
+    if (editorList.isEmpty()) { // If all editors are closed
+        html.clear(); // Clear html
+        setText(ui->tabWidget->currentIndex()); // set the empty html to the preview widget
         ui->actionReload->setText(tr("Reload \"%1\"").arg('\0'));
     }
 }

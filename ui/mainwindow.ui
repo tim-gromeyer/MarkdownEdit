@@ -427,7 +427,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Auto add file path to icon path</string>
+    <string>Load images in preview</string>
    </property>
   </action>
   <action name="actionExportHtml">

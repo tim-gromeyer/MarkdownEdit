@@ -11,8 +11,8 @@ PreviewWidget::PreviewWidget(QWidget *parent)
 {
     QTextBrowser::setOpenLinks(false);
     QTextBrowser::setOpenExternalLinks(true);
-    QTextBrowser::setReadOnly(true);
-    QTextBrowser::setUndoRedoEnabled(false);
+    QTextEdit::setReadOnly(true);
+    QTextEdit::setUndoRedoEnabled(false);
 
     connect(this, &QTextBrowser::anchorClicked,
             this, &PreviewWidget::openUrl);
@@ -30,7 +30,7 @@ void PreviewWidget::openUrl(const QUrl &url)
     if (QFile::exists(filePath))
         QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
 
-    if (s.startsWith(QChar('#')))
+    if (s.startsWith(QLatin1Char('#')))
         scrollToHeader(s);
 }
 
@@ -38,4 +38,6 @@ void PreviewWidget::scrollToHeader(QString name)
 {
     if (name.startsWith(QChar('#')))
         name.remove(QChar('#'));
+
+    // TODO: Implement
 }

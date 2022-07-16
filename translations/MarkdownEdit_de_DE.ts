@@ -180,15 +180,15 @@
     </message>
     <message>
         <source>You have unsaved changes. Do you want to create a new document anyway?</source>
-        <translation>Du hast nicht gespeicherte Änderungen. Möchten Sie trotzdem ein neues Dokument erstellen?</translation>
+        <translation type="vanished">Du hast nicht gespeicherte Änderungen. Möchten Sie trotzdem ein neues Dokument erstellen?</translation>
     </message>
     <message>
         <source>## New document</source>
-        <translation>## Neues Dokument</translation>
+        <translation type="vanished">## Neues Dokument</translation>
     </message>
     <message>
         <source>You have unsaved changes. Do you want to open a new document anyway?</source>
-        <translation>Du hast nicht gespeicherte Änderungen. Möchten Sie trotzdem ein neues Dokument öffnen?</translation>
+        <translation type="vanished">Du hast nicht gespeicherte Änderungen. Möchten Sie trotzdem ein neues Dokument öffnen?</translation>
     </message>
     <message>
         <source>Open MarkDown File</source>
@@ -276,11 +276,11 @@
     </message>
     <message>
         <source>You have unsaved changes. Do you want to exit anyway?</source>
-        <translation>Du hast nicht gespeicherte Änderungen. Willst du trotzdem beenden?</translation>
+        <translation type="vanished">Du hast nicht gespeicherte Änderungen. Willst du trotzdem beenden?</translation>
     </message>
     <message>
         <source>Auto add file path to icon path</source>
-        <translation>Dateipfad automatisch zum Bilderpfad hinzufügen</translation>
+        <translation type="vanished">Dateipfad automatisch zum Bilderpfad hinzufügen</translation>
     </message>
     <message>
         <source>Export</source>
@@ -299,31 +299,7 @@
         <translation>Änderungen speichern?</translation>
     </message>
     <message>
-        <source>Tab 1</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>E&amp;xtras</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+N</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+O</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+S</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+Shift+S</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+P</source>
         <translation></translation>
     </message>
     <message>
@@ -331,47 +307,7 @@
         <translation></translation>
     </message>
     <message>
-        <source>Ctrl+Q</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+Z</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+Shift+Z</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+X</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+C</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+V</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+A</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+F</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Ctrl+R</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Show line numbers</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Shift+F7</source>
         <translation></translation>
     </message>
     <message>
@@ -380,10 +316,6 @@
     </message>
     <message>
         <source>Markdown Syntax</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>F1</source>
         <translation></translation>
     </message>
     <message>
@@ -408,11 +340,7 @@
     </message>
     <message>
         <source>File changed</source>
-        <translation>Datei geändert</translation>
-    </message>
-    <message>
-        <source>File changed.</source>
-        <translation></translation>
+        <translation type="vanished">Datei geändert</translation>
     </message>
     <message>
         <source>File &lt;em&gt;%1&lt;/em&gt; has been modified.
@@ -423,6 +351,31 @@ Möchten Sie sie neu laden?</translation>
     <message>
         <source>Could not create temporary file: %1</source>
         <translation>Temporäre Datei konnte nicht erstellt werden: %1</translation>
+    </message>
+    <message>
+        <source>Load images in preview</source>
+        <translation>Bilder in der Vorschau laden</translation>
+    </message>
+    <message>
+        <source>The dockument has been edited, do you want to save it?</source>
+        <translation>Das Dockument wurde bearbeitet, möchten Sie es speichern?</translation>
+    </message>
+    <message>
+        <source>The file &lt;em&gt;%1&lt;/em&gt; has been changed.
+Do you want to leave anyway?</source>
+        <translation>Die Datei &lt;em&gt;%1&lt;/em&gt; wurde geändert.
+Willst du trotzdem verlassen?</translation>
+    </message>
+</context>
+<context>
+    <name>MarkdownEditor</name>
+    <message>
+        <source>Couldn&apos;t open file</source>
+        <translation>Datei konnte nicht geöffnet werden</translation>
+    </message>
+    <message>
+        <source>Could not open file %1: %2</source>
+        <translation>Datei %1 konnte nicht geöffnet werden: %2</translation>
     </message>
 </context>
 <context>
@@ -436,71 +389,71 @@ Möchten Sie sie neu laden?</translation>
     <name>QPlainTextEditSearchWidget</name>
     <message>
         <source>Find in text</source>
-        <translation>Im Text finden</translation>
+        <translation type="vanished">Im Text finden</translation>
     </message>
     <message>
         <source>Replace with</source>
-        <translation>Replace with</translation>
+        <translation type="vanished">Replace with</translation>
     </message>
     <message>
         <source>Find:</source>
-        <translation>Finden:</translation>
+        <translation type="vanished">Finden:</translation>
     </message>
     <message>
         <source>Search backward</source>
-        <translation>Rückwärts suchen</translation>
+        <translation type="vanished">Rückwärts suchen</translation>
     </message>
     <message>
         <source>Replace:</source>
-        <translation>Ersetzen:</translation>
+        <translation type="vanished">Ersetzen:</translation>
     </message>
     <message>
         <source>Close search</source>
-        <translation>Suche schließen</translation>
+        <translation type="vanished">Suche schließen</translation>
     </message>
     <message>
         <source>Advanced search / replace text</source>
-        <translation>Erweiterte Suche / Text ersetzen</translation>
+        <translation type="vanished">Erweiterte Suche / Text ersetzen</translation>
     </message>
     <message>
         <source>Search forward</source>
-        <translation>Vorwärts suchen</translation>
+        <translation type="vanished">Vorwärts suchen</translation>
     </message>
     <message>
         <source>Match case sensitive</source>
-        <translation>Groß-/Kleinschreibung beachten</translation>
+        <translation type="vanished">Groß-/Kleinschreibung beachten</translation>
     </message>
     <message>
         <source>Mode:</source>
-        <translation>Modus:</translation>
+        <translation type="vanished">Modus:</translation>
     </message>
     <message>
         <source>Plain text</source>
-        <translation>Klartext</translation>
+        <translation type="vanished">Klartext</translation>
     </message>
     <message>
         <source>Whole words</source>
-        <translation>Ganze Wörter</translation>
+        <translation type="vanished">Ganze Wörter</translation>
     </message>
     <message>
         <source>Regular expression</source>
-        <translation>Regulären Ausdruck</translation>
+        <translation type="vanished">Regulären Ausdruck</translation>
     </message>
     <message>
         <source>Replace one text occurrence</source>
-        <translation>Ersetzen Sie ein Textvorkommen</translation>
+        <translation type="vanished">Ersetzen Sie ein Textvorkommen</translation>
     </message>
     <message>
         <source>Replace</source>
-        <translation>Ersetzen</translation>
+        <translation type="vanished">Ersetzen</translation>
     </message>
     <message>
         <source>Replace all text occurrences</source>
-        <translation>Ersetzen Sie alle Textvorkommen</translation>
+        <translation type="vanished">Ersetzen Sie alle Textvorkommen</translation>
     </message>
     <message>
         <source>Replace all</source>
-        <translation>Alles ersetzen</translation>
+        <translation type="vanished">Alles ersetzen</translation>
     </message>
 </context>
 <context>

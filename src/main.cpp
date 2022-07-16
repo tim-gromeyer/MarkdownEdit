@@ -7,6 +7,8 @@
 #include <QCommandLineParser>
 
 
+#include <QElapsedTimer>
+
 #ifndef NOT_SUPPORTET
 #include "singleapplication.h"
 #endif
