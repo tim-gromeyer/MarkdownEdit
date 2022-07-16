@@ -25,10 +25,6 @@
 #include <QFileSystemWatcher>
 #include <QShortcut>
 
-#ifndef NO_THREADING
-#include <QtConcurrent/QtConcurrentRun>
-#endif
-
 #if QT_CONFIG(printdialog)
 #include <QtPrintSupport/QPrintDialog>
 #include <QtPrintSupport/QPrintPreviewDialog>
@@ -50,18 +46,8 @@ MainWindow::MainWindow(const QStringList &file, QWidget *parent)
     shortcutNew = new QShortcut(this);
     shortcutClose = new QShortcut(this);
 
-#ifndef NO_THREADING
-#if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
-    QFuture<void> retVal = QtConcurrent::run(&MainWindow::loadIcons, this);
-    QFuture<void> retVal2 = QtConcurrent::run(&MainWindow::setupThings, this);
-#else
-    QtConcurrent::run(this, &MainWindow::loadIcons);
-    QtConcurrent::run(this, &MainWindow::setupThings);
-#endif
-#else
     loadIcons();
     setupThings();
-#endif
 
     watcher = new QFileSystemWatcher(this);
     connect(watcher, &QFileSystemWatcher::fileChanged,
