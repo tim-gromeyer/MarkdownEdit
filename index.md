@@ -21,23 +21,21 @@ MarkdownEdit, as the name suggests, is a simple and easy program for creating an
 - Spell check
 - Load and save Markdown files
 - Undo-Redo
-- Preview Markdown files in real time (~1 ms)
+- Preview Markdown files in real time (<1 ms)
 - Syntax highlighting editor
 - Auto-complete (close brackets, list, ...)
-- Find/Replace(Ctrl+F/Ctrl+R)
-- Export to HTML
-- Bad in resources
+- Export to HTML and PDF
+- Poor in resources
 - Quick opening of recent files (Button in toolbar or in the file menu)
 - Open source
 - Native look and feel
-- Remember spelling language for every document
+- Reminds spelling language for each document
 
 ![Example](https://github.com/software-made-easy/MarkdownEdit/raw/main/doc/images/Example.png)
 
 ## Preview
 
 A preview is available [here](https://software-made-easy.github.io/MarkdownEdit/markdownedit.html).
-
 
 Notes:
 - Performance might be bad
