@@ -86,6 +86,7 @@ int main(int argc, char *argv[])
 #endif
 
     w.show();
+    a.processEvents(); // Startup looks smoother
 
     return a.exec();
 }

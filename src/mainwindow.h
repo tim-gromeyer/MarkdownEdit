@@ -111,7 +111,7 @@ private:
     Ui::MainWindow *ui;
 
     QString path;
-    int _mode; // TODO init
+    int _mode = 1;
 
     QSettings *settings;
 
@@ -121,11 +121,10 @@ private:
 
     QString reloadFile;
 
-    // TODO init these
-    bool dontUpdate;
-    bool setPath;
-    bool spelling;
-    bool highlighting;
+    bool dontUpdate = false;
+    bool setPath = false;
+    bool spelling = true;
+    bool highlighting = true;
 
     bool overrideEditor = false;
     int overrideVal = 0;

@@ -986,6 +986,7 @@ void MainWindow::onHelpAbout()
     dialog.setAppUrl("https://software-made-easy.github.io/MarkdownEdit/");
     dialog.setDescription(tr("MarkdownEdit, as the name suggests, is a simple and easy program to create and edit Markdown files."));
 
+    dialog.addCredit(tr("<p>Thanks to <a href=\"https://github.com/Waqar144\">Waqar Ahmed</a> for helping with development</p>"));
     dialog.addCredit(tr("<p>The conversion from Markdown to HTML is done with the help of the <a href=\"https://github.com/mity/md4c\">md4c</a> library by <em>Martin Mitáš</em>.</p>"));
     dialog.addCredit(tr("<p>The <a href=\"https://github.com/pbek/qmarkdowntextedit\">widget</a> used for writing was created by <em>Patrizio Bekerle</em>.</p>"));
 

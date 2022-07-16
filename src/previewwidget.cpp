@@ -36,8 +36,8 @@ void PreviewWidget::openUrl(const QUrl &url)
 
 void PreviewWidget::scrollToHeader(QString name)
 {
-    if (name.startsWith(QChar('#')))
-        name.remove(QChar('#'));
+    if (name.startsWith(QLatin1Char('#')))
+        name.remove(0, 1);
 
     // TODO: Implement
 }

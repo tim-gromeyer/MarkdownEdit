@@ -366,6 +366,10 @@ Do you want to leave anyway?</source>
         <translation>Die Datei &lt;em&gt;%1&lt;/em&gt; wurde geändert.
 Willst du trotzdem verlassen?</translation>
     </message>
+    <message>
+        <source>&lt;p&gt;Thanks to &lt;a href=&quot;https://github.com/Waqar144&quot;&gt;Waqar Ahmed&lt;/a&gt; for helping with development&lt;/p&gt;</source>
+        <translation>&quot;&lt;p&gt;Danke an &lt;a href=\&quot;https://github.com/Waqar144\&quot;&gt;Waqar Ahmed&lt;/a&gt; für die Unterstützung bei der Entwicklung&lt;/p&gt;&quot;</translation>
+    </message>
 </context>
 <context>
     <name>MarkdownEditor</name>

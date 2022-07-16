@@ -75,5 +75,6 @@ cmake --build . -j4
 
 ## Credits
 
+- Thanks to [Waqar Ahmed](https://github.com/Waqar144) for helping with development
 - The conversion from Markdown to HTML is done with the help of the [md4c](https://github.com/mity/md4c) - library by *Martin Mitáš*.
-- The [widget](https://github.com/pbek/qmarkdowntextedit) used for writing was created by *Patrizio Bekerle*.
+- The [widget](https://github.com/pbek/qmarkdowntextedit) used for writing was created by *Patrizio Bekerle* and *Waqar Ahmed*.
