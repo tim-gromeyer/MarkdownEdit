@@ -201,7 +201,7 @@ private:
 
     QString encodeLanguageString(const QString &langString);
 
-    enchant::Dict *speller = nullptr; 
+    enchant::Dict *speller = nullptr;
 
 #ifdef CHECK_MARKDOWN
     QString getWord(const QTextBlock &, const int &);

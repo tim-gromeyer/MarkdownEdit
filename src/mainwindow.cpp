@@ -25,7 +25,7 @@
 #include <QFileSystemWatcher>
 #include <QShortcut>
 
-#if QT_CONFIG(printdialog)
+#ifdef QT_PRINTSUPPORT_LIB
 #include <QtPrintSupport/QPrintDialog>
 #include <QtPrintSupport/QPrintPreviewDialog>
 #endif
@@ -256,17 +256,26 @@ void MainWindow::closeEditor(const int index)
 
     if (path == tr("untitled.md")) {
         path.clear();
+        if (currentEditor()->document()->isModified()) {
+            QMessageBox d(this);
+            d.setText(tr("The document has been edited, do you want to save it?"));
+            d.setStandardButtons(QMessageBox::Yes | QMessageBox::No | QMessageBox::Abort);
+            d.setDefaultButton(QMessageBox::Yes);
+            d.setIcon(QMessageBox::Question);
 
-        QMessageBox d(this);
-        d.setText(tr("The dockument has been edited, do you want to save it?"));
-        d.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-        d.setDefaultButton(QMessageBox::Yes);
-        d.setIcon(QMessageBox::Question);
+            const int retVal = d.exec();
 
-        const int retVal = d.exec();
-        if (retVal == QMessageBox::Yes)
-            if (!onFileSave())
+            if (retVal == QMessageBox::Abort) {
+                overrideEditor = false;
                 return;
+            }
+            if (retVal == QMessageBox::Yes) {
+                if (!onFileSave()) {
+                    overrideEditor = false;
+                    return;
+                }
+            }
+        }
     }
     else if (currentEditor()->document()->isModified()) {
         if (!onFileSave())
@@ -365,7 +374,7 @@ MarkdownEditor* MainWindow::currentEditor()
 
 void MainWindow::onFileChanged(const QString &f)
 {
-    if (!widgetReloadFile) {
+    if (!widgetReloadFile) { // Dont set it up on startup because off performance
         QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
         widgetReloadFile = new QWidget(this);
@@ -514,6 +523,7 @@ void MainWindow::disablePreview(const bool checked)
 void MainWindow::pausePreview(const bool checked)
 {
     dontUpdate = checked;
+    ui->tabWidget->setDisabled(checked);
 }
 
 void MainWindow::cut()
@@ -702,12 +712,13 @@ void MainWindow::openInWebBrowser()
     QTextStream out(&f);
     out << html;
 
-    if (!QDesktopServices::openUrl(QUrl::fromLocalFile(f.fileName())))
-        f.remove();
-    else
-        QTimer::singleShot(2000, this, [name]{
-            QFile::remove(name);
-        });
+    QDesktopServices::openUrl(QUrl::fromLocalFile(f.fileName()));
+    const QString file = f.fileName();
+
+    // Delete the file file after 5s
+    QTimer::singleShot(5000, this, [file]{
+        QFile::remove(file);
+    });
 }
 
 void MainWindow::exportHtml()
@@ -1013,7 +1024,7 @@ void MainWindow::openRecent() {
 }
 
 void MainWindow::updateOpened() {
-    for (QAction* a : ui->menuRecentlyOpened->actions()) {
+    for (QAction* &a : ui->menuRecentlyOpened->actions()) { // Fixed warning
         disconnect(a, &QAction::triggered, this, &MainWindow::openRecent);
         a->deleteLater();
         delete a;

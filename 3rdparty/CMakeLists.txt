@@ -39,11 +39,14 @@ else()
     add_compile_definitions(NOT_SUPPORTET)
 endif()
 
+# include(${CMAKE_CURRENT_LIST_DIR}/hunspell.cmake)
+
 include_directories(${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit)
 include_directories(${CMAKE_CURRENT_LIST_DIR}/md4c/src)
 
 set(3rdparty
     md4c-html
     qmarkdowntextedit
+    # hunspell
     ${singleapp}
 )

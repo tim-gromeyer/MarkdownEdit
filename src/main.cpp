@@ -57,8 +57,8 @@ int main(int argc, char *argv[])
         "main", "Simple program for editing Markdown files"
 
         ));
-    parser.addPositionalArgument("file", QCoreApplication::translate(
-                                             "main", "File to open."));
+    parser.addPositionalArgument("files", QCoreApplication::translate(
+                                             "main", "Files to open."));
     parser.process(a);
 
 #ifndef NOT_SUPPORTET

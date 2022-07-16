@@ -1,5 +1,5 @@
 # change directory to the scripts parent directory
-$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/..
+cd $( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/..
 
 # clone dependencies
 git submodule update --init --recursive -j 3 --depth=1

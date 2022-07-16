@@ -358,7 +358,7 @@ Möchten Sie sie neu laden?</translation>
     </message>
     <message>
         <source>The dockument has been edited, do you want to save it?</source>
-        <translation>Das Dockument wurde bearbeitet, möchten Sie es speichern?</translation>
+        <translation type="vanished">Das Dockument wurde bearbeitet, möchten Sie es speichern?</translation>
     </message>
     <message>
         <source>The file &lt;em&gt;%1&lt;/em&gt; has been changed.
@@ -368,7 +368,11 @@ Willst du trotzdem verlassen?</translation>
     </message>
     <message>
         <source>&lt;p&gt;Thanks to &lt;a href=&quot;https://github.com/Waqar144&quot;&gt;Waqar Ahmed&lt;/a&gt; for helping with development&lt;/p&gt;</source>
-        <translation>&quot;&lt;p&gt;Danke an &lt;a href=\&quot;https://github.com/Waqar144\&quot;&gt;Waqar Ahmed&lt;/a&gt; für die Unterstützung bei der Entwicklung&lt;/p&gt;&quot;</translation>
+        <translation>&lt;p&gt;Danke an &lt;a href=&quot;https://github.com/Waqar144&quot;&gt;Waqar Ahmed&lt;/a&gt; für die Unterstützung bei der Entwicklung&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>The document has been edited, do you want to save it?</source>
+        <translation>Das Dokument wurde bearbeitet, möchten Sie es speichern?</translation>
     </message>
 </context>
 <context>
@@ -505,7 +509,11 @@ Willst du trotzdem verlassen?</translation>
     </message>
     <message>
         <source>File to open.</source>
-        <translation>Datei zu öffnen.</translation>
+        <translation type="vanished">Datei zu öffnen.</translation>
+    </message>
+    <message>
+        <source>Files to open.</source>
+        <translation>Zu öffnende Dateien.</translation>
     </message>
 </context>
 </TS>
