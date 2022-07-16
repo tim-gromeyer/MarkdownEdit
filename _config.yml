@@ -1,1 +1,20 @@
-theme: jekyll-theme-cayman
+# SEO Values
+title: MarkdownEdit
+tagline: Simple program for editing Markdown files
+description: Simple program for editing Markdown files
+url: https://dracula.github.io/gh-pages/
+
+# GitHub Values
+github:
+  owner_name: Dracula
+  owner_url: https://github.com/dracula
+  repository_url: https://github.com/dracula/gh-pages
+
+show_header: false
+remote_theme: "dracula/gh-pages"
+
+sass:
+    style: compressed
+
+plugins:
+  - jekyll-seo-tag
