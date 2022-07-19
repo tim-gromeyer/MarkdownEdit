@@ -49,7 +49,7 @@ Important:
 
 ## Note(s):
 
-- To improve performance when using images, disable the "Auto add file path to icon path" option (menu <u>V</u>iew).
+- To improve performance when using images, disable the "Show images in preview" option (menu <u>V</u>iew).
 
 
 -------

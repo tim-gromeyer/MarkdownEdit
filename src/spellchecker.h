@@ -99,7 +99,7 @@ public:
      * @brief getLanguageList returns a list with all avaiable languages
      * @return list with all avaiable languages
      */
-    Q_REQUIRED_RESULT const QStringList getLanguageList();
+    Q_REQUIRED_RESULT static const QStringList getLanguageList();
 
     /**
      * @brief getLanguage returns the current language

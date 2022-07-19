@@ -374,6 +374,10 @@ Willst du trotzdem verlassen?</translation>
         <source>The document has been edited, do you want to save it?</source>
         <translation>Das Dokument wurde bearbeitet, möchten Sie es speichern?</translation>
     </message>
+    <message>
+        <source>New document created</source>
+        <translation>Neues Dokument erstellt</translation>
+    </message>
 </context>
 <context>
     <name>MarkdownEditor</name>

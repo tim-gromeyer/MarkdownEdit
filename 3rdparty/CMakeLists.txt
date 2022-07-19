@@ -1,5 +1,5 @@
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Svg)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Svg)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(MD4C_FILES
     ${CMAKE_CURRENT_LIST_DIR}/md4c/src/entity.h
@@ -27,7 +27,7 @@ set(QMARKDOWNTEXTEDIT_FILES
 )
 
 add_library(qmarkdowntextedit STATIC ${QMARKDOWNTEXTEDIT_FILES})
-target_link_libraries(qmarkdowntextedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Svg)
+target_link_libraries(qmarkdowntextedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
 if(NOT ANDROID AND NOT EMSCRIPTEN)
     set(QT_DEFAULT_MAJOR_VERSION ${QT_VERSION_MAJOR})

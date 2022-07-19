@@ -1,3 +1,4 @@
+// imports
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "about.h"
@@ -7,6 +8,7 @@
 #include "common.h"
 #include "markdowneditor.h"
 
+// qt imports
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QFileInfo>
@@ -30,6 +32,7 @@
 #include <QtPrintSupport/QPrintPreviewDialog>
 #endif
 
+// 3rdparty imports
 #include "qplaintexteditsearchwidget.h"
 
 
@@ -170,6 +173,9 @@ void MainWindow::onFileReload()
     if (reloadFile.isEmpty())
         reloadFile = path;
 
+    if (reloadFile.isEmpty())
+        return;
+
     QFile f(reloadFile);
 
     if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -294,7 +300,7 @@ void MainWindow::closeEditor(const int index)
 
     if (editorList.isEmpty()) { // If all editors are closed
         html.clear(); // Clear html
-        setText(ui->tabWidget->currentIndex()); // set the empty html to the preview widget
+        setText(ui->tabWidget->currentIndex()); // apply the empty html to the preview widget
         ui->actionReload->setText(tr("Reload \"%1\"").arg('\0'));
     }
 }
@@ -313,8 +319,10 @@ void MainWindow::onEditorChanged(const int index)
 
     path = editor->getPath();
 
-    if (path == tr("untitled.md"))
+    if (path == tr("untitled.md")) {
         path.clear();
+        ui->actionReload->setText(tr("Reload \"%1\"").arg(QLatin1Char('\0')));
+    }
 
     onTextChanged();
 }
@@ -352,8 +360,8 @@ MarkdownEditor *MainWindow::createEditor()
 
 void MainWindow::receivedMessage(const qint32 &id, const QByteArray &msg)
 {
-    QString f = msg;
-    f.remove(QLatin1String("file://"));
+    QString f = QString::fromLatin1(msg); // is a bit faster
+    f.remove(0, 7);
 
     if (f.isEmpty())
         onFileNew();
@@ -460,12 +468,7 @@ void MainWindow::loadIcon(const QString &name, QAction* a)
 
 void MainWindow::onOrientationChanged(const Qt::ScreenOrientation &t)
 {
-    if (t == Qt::PortraitOrientation) {
-        disablePreview(true);
-    }
-    else if (t == Qt::LandscapeOrientation) {
-        disablePreview(false);
-    }
+    disablePreview(t == Qt::PortraitOrientation);
 }
 
 void MainWindow::setText(const int index)
@@ -510,20 +513,26 @@ void MainWindow::changeSpelling(const bool checked)
 
 void MainWindow::disablePreview(const bool checked)
 {
-    ui->tabWidget->setVisible(!checked);
+    ui->tabWidget->setHidden(checked);
 
     dontUpdate = checked;
 
     ui->actionPause_preview->setChecked(checked);
-    ui->actionPause_preview->setEnabled(!checked);
+    ui->actionPause_preview->setDisabled(checked);
 
     ui->actionDisable_preview->setChecked(checked);
+
+    if (!checked)
+        onTextChanged();
 }
 
 void MainWindow::pausePreview(const bool checked)
 {
     dontUpdate = checked;
     ui->tabWidget->setDisabled(checked);
+
+    if (!checked)
+        onTextChanged();
 }
 
 void MainWindow::cut()
@@ -592,20 +601,21 @@ void MainWindow::changeAddtoIconPath(const bool c)
 {
     setPath = c;
 
-    QStringList searchPaths = ui->textBrowser->searchPaths();
-    const bool contains = searchPaths.contains(QFileInfo(path).path());
-
-    if (c && !contains) {
-        ui->textBrowser->setSearchPaths(searchPaths << QFileInfo(path).path());
-        onTextChanged();
-    }
-    else if (!c && contains) {
-        searchPaths.removeAll(QFileInfo(path).path());
-        ui->textBrowser->setSearchPaths(searchPaths);
-        onTextChanged();
-    }
-
     ui->actionAuto_add_file_path_to_icon_path->setChecked(c);
+
+    if (!c) {
+        ui->textBrowser->setSearchPaths(QStringList());
+        return setText(0);
+    }
+
+    QStringList searchPaths;
+
+    for (const QString &file : qAsConst(fileList)) {
+        searchPaths << QFileInfo(file).absolutePath();
+    }
+
+    ui->textBrowser->setSearchPaths(searchPaths);
+    setText(0);
 }
 
 void MainWindow::changeHighlighting(const bool enabled)
@@ -766,7 +776,7 @@ void MainWindow::changeMode(const int i)
 
 void MainWindow::onTextChanged()
 {
-    // Dont go any futher if preview is paused or the current editor is invalid
+    // Don't continue if the preview is paused or the current editor is invalid.
     if (dontUpdate || !currentEditor())
         return;
 
@@ -822,7 +832,7 @@ void MainWindow::openFile(const QString &newFile)
     watcher->addPath(path);
 
     if (setPath)
-        ui->textBrowser->setSearchPaths(QStringList() << QFileInfo(newFile).path());
+        ui->textBrowser->setSearchPaths(ui->textBrowser->searchPaths() << QFileInfo(newFile).path());
 
     MarkdownEditor* editor = createEditor();
     editor->setFile(newFile);
@@ -831,7 +841,8 @@ void MainWindow::openFile(const QString &newFile)
     ui->tabWidget_2->setCurrentIndex(editorList.length() -1);
     ui->tabWidget_2->tabBar()->setTabToolTip(editorList.length() -1, newFile);
 
-    QCoreApplication::processEvents();
+    if (isVisible())
+        QCoreApplication::processEvents();
 
     editor->setText(f.readAll(), newFile);
 
@@ -863,20 +874,23 @@ void MainWindow::onFileNew()
 
     if (!editor->setLanguage(QLatin1String("en-US")))
             editor->setLanguage();
+
+    statusBar()->show();
+    statusBar()->showMessage(tr("New document created"), 10000);
+    QTimer::singleShot(10000, statusBar(), &QStatusBar::hide);
 }
 
 void MainWindow::onFileOpen()
 {
 #if defined(Q_OS_WASM)
-    auto fileContentReady = [this](const QString &newFile, const QByteArray &fileContent) {
+    static auto fileContentReady = [this](const QString &newFile, const QByteArray &fileContent) {
         if (!newFile.isEmpty()) {
             QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
             path = newFile;
 
             if (setPath)
-                if (!ui->textBrowser->searchPaths().contains(QFileInfo(newFile).path()))
-                    ui->textBrowser->setSearchPaths(ui->textBrowser->searchPaths() << QFileInfo(newFile).path());
+                ui->textBrowser->setSearchPaths(ui->textBrowser->searchPaths() << QFileInfo(newFile).path());
 
             MarkdownEditor* &&editor = createEditor();
             editor->setFile(newFile);
@@ -925,7 +939,7 @@ bool MainWindow::onFileSave()
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
 #if defined(Q_OS_WASM)
-    QFileDialog::saveFileContent(currentEditor()->toPlainText().toUtf8(), path);
+    QFileDialog::saveFileContent(currentEditor()->toPlainText().toLatin1(), path);
 #else
 
     watcher->removePath(path);
@@ -968,6 +982,10 @@ bool MainWindow::onFileSave()
 
 bool MainWindow::onFileSaveAs()
 {
+#ifdef Q_OS_WASM
+    path = QLatin1String("Markdown.md");
+    return onFileSave();
+#endif
     QFileDialog dialog(this, tr("Save MarkDown File"));
     dialog.setMimeTypeFilters({"text/markdown"});
     dialog.setAcceptMode(QFileDialog::AcceptSave);
@@ -976,7 +994,6 @@ bool MainWindow::onFileSaveAs()
         return false;
 
     const QString file = dialog.selectedFiles().at(0);
-    const QString fileName = QFileInfo(file).fileName();
 
     if (file.isEmpty())
         return false;
@@ -993,11 +1010,11 @@ bool MainWindow::onFileSaveAs()
 
     setMapAttribute(path, currentEditor()->getChecker()->getLanguage());
 
-    ui->tabWidget_2->tabBar()->setTabText(editorList.length() -1, fileName);
+    ui->tabWidget_2->tabBar()->setTabText(editorList.length() -1, QFileInfo(file).fileName());
     ui->tabWidget_2->tabBar()->setTabToolTip(editorList.length() -1, file);
 
     currentEditor()->setFile(file);
-    setWindowTitle(currentEditor()->filePath());
+    setWindowTitle(currentEditor()->filePath()); 
 
     return onFileSave();
 }
@@ -1005,7 +1022,7 @@ bool MainWindow::onFileSaveAs()
 void MainWindow::onHelpAbout()
 {
     About dialog(tr("About MarkdownEdit"), this);
-    dialog.setAppUrl("https://software-made-easy.github.io/MarkdownEdit/");
+    dialog.setAppUrl(QStringLiteral("https://software-made-easy.github.io/MarkdownEdit/"));
     dialog.setDescription(tr("MarkdownEdit, as the name suggests, is a simple and easy program to create and edit Markdown files."));
 
     dialog.addCredit(tr("<p>Thanks to <a href=\"https://github.com/Waqar144\">Waqar Ahmed</a> for helping with development</p>"));
@@ -1048,12 +1065,12 @@ void MainWindow::updateOpened() {
     if (recentOpened.contains(path) && recentOpened.at(0) != path)
         recentOpened.move(recentOpened.indexOf(path), 0);
     else if (!path.isEmpty() && !recentOpened.contains(path))
-        recentOpened.insert(0, path);
+        recentOpened.prepend(path);
 
-    if (recentOpened.size() > RECENT_OPENED_LIST_LENGTH)
+    if (recentOpened.count() > RECENT_OPENED_LIST_LENGTH)
         recentOpened.takeLast();
 
-    for (int i = 0; i < recentOpened.size(); i++) {
+    for (int i = 0; i < recentOpened.count(); i++) {
         const QString document = recentOpened.at(i);
         QAction *action = new QAction(QStringLiteral("&%1 | %2").arg(QString::number(i + 1),
                                                                      document), this);
@@ -1084,7 +1101,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
 }
 
 void MainWindow::loadSettings() {
-    const QByteArray geo = settings->value(QLatin1String("geometry"),
+    const QByteArray geo = settings->value(QStringLiteral("geometry"),
                                            QByteArrayLiteral("")).toByteArray();
     if (geo.isEmpty()) {
         const QRect availableGeometry = QGuiApplication::screenAt(pos())->availableGeometry();
@@ -1096,42 +1113,43 @@ void MainWindow::loadSettings() {
         restoreGeometry(geo);
     }
 
-    restoreState(settings->value(QLatin1String("state"), QByteArrayLiteral("")).toByteArray());
+    restoreState(settings->value(QStringLiteral("state"), QByteArrayLiteral("")).toByteArray());
 
-    highlighting = settings->value(QLatin1String("highlighting"), true).toBool();
+    highlighting = settings->value(QStringLiteral("highlighting"), true).toBool();
     ui->actionHighlighting_activated->setChecked(highlighting);
     changeHighlighting(highlighting);
 
-    setPath = settings->value(QLatin1String("setPath"), true).toBool();
-    changeAddtoIconPath(setPath);
+    setPath = settings->value(QStringLiteral("setPath"), true).toBool();
+     // changeAddtoIconPath(setPath); files aren't loaded yet
 
-    recentOpened = settings->value(QLatin1String("recent"), QStringList()).toStringList();
+    recentOpened = settings->value(QStringLiteral("recent"), QStringList()).toStringList();
     if (!recentOpened.isEmpty()) {
         if (recentOpened.first().isEmpty()) {
             recentOpened.takeFirst();
         }
     }
 
-    const bool lineWrap = settings->value(QLatin1String("lineWrap"), false).toBool();
+    const bool lineWrap = settings->value(QStringLiteral("lineWrap"), false).toBool();
     changeWordWrap(lineWrap);
 
-    setLanguageMap(settings->value(QLatin1String("languagesMap"),
+    setLanguageMap(settings->value(QStringLiteral("languagesMap"),
                                    QMap<QString, QVariant>()).toMap());
 
-    spelling = settings->value(QLatin1String("spelling"), true).toBool();
+    spelling = settings->value(QStringLiteral("spelling"), true).toBool();
     changeSpelling(spelling);
 
-    ui->splitter->setSizes({QWIDGETSIZE_MAX, QWIDGETSIZE_MAX});
+    ui->splitter->setSizes(QList<int>() << QWIDGETSIZE_MAX << QWIDGETSIZE_MAX);
 }
 
 void MainWindow::loadFiles(const QStringList &files)
 {
+    // Ensure settings are set up
     if (files.isEmpty()) {
-        const bool openLast = settings->value(QLatin1String("openLast"), true).toBool();
+        const bool openLast = settings->value(QStringLiteral("openLast"), true).toBool();
         if (openLast) {
-            ui->actionOpen_last_document_on_start->setChecked(openLast);
+            ui->actionOpen_last_document_on_start->setChecked(true);
 
-            const QString last = settings->value(QLatin1String("last"),
+            const QString last = settings->value(QStringLiteral("last"),
                                                QLatin1String()).toString();
             if (!last.isEmpty())
                 openFile(last);
@@ -1147,16 +1165,18 @@ void MainWindow::loadFiles(const QStringList &files)
 }
 
 void MainWindow::saveSettings() {
-    settings->setValue("geometry", saveGeometry());
-    settings->setValue("state", saveState());
-    settings->setValue("highlighting", highlighting);
-    settings->setValue("recent", recentOpened);
-    settings->setValue("openLast", ui->actionOpen_last_document_on_start->isChecked());
-    settings->setValue("last", path);
-    settings->setValue("setPath", setPath);
-    settings->setValue("spelling", spelling);
-    settings->setValue("lineWrap", ui->actionWord_wrap->isChecked());
-    settings->setValue("languagesMap", getLanguageMap());
+#define S(x) QStringLiteral(x)
+
+    settings->setValue(S("geometry"), saveGeometry());
+    settings->setValue(S("state"), saveState());
+    settings->setValue(S("highlighting"), highlighting);
+    settings->setValue(S("recent"), recentOpened);
+    settings->setValue(S("openLast"), ui->actionOpen_last_document_on_start->isChecked());
+    settings->setValue(S("last"), path);
+    settings->setValue(S("setPath"), setPath);
+    settings->setValue(S("spelling"), spelling);
+    settings->setValue(S("lineWrap"), ui->actionWord_wrap->isChecked());
+    settings->setValue(S("languagesMap"), getLanguageMap());
     settings->sync();
 }
 

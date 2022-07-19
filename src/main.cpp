@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 
 #ifndef NOT_SUPPORTET
     if(a.sendMessage(QByteArrayLiteral("file://") +
-                  parser.positionalArguments().join(' ').toUtf8()))
+                  parser.positionalArguments().join(' ').toLatin1()))
         return 0;
 #endif
 

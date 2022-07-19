@@ -55,7 +55,7 @@ void MarkdownEditor::dropEvent(QDropEvent *event)
 
 bool MarkdownEditor::setLanguage(const QString &lang)
 {
-    if (checker->getLanguageList().contains(lang))
+    if (SpellChecker::getLanguageList().contains(lang))
         return checker->setLanguage(lang);
     else
         return false;
@@ -142,11 +142,7 @@ void MarkdownEditor::setText(const QString &t, const QString &newFile)
         checker->clearDirtyBlocks();
         checker->setDocument(nullptr);
         if (mapContains(fileName))
-            checker->setLanguage(mapAttribute(fileName));
-        else
-            if (checker->getLanguage().isEmpty())
-                if (!checker->setLanguage(QLocale::system().name()))
-                    checker->setLanguage(QLatin1String("en-US"));
+            setLanguage(mapAttribute(fileName));
     }
 
     QMarkdownTextEdit::setPlainText(t);

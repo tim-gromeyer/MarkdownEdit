@@ -20,7 +20,7 @@ static QByteArray templateArray = QByteArrayLiteral("<!DOCTYPE html>\n"
                                                     "<body class=\"preview\">\n");
 
 
-void captureHtmlFragment (const MD_CHAR* data, MD_SIZE data_size, void* userData) {
+void captureHtmlFragment(const MD_CHAR* data, const MD_SIZE data_size, void* userData) {
     QByteArray *array = static_cast<QByteArray*>(userData);
 
     array->append(data, data_size);
@@ -33,10 +33,10 @@ QString Parser::toHtml(const QString &in, const int &dia)
     else
         parser_flags |= MD_DIALECT_COMMONMARK;
 
-    const QByteArray array = in.toUtf8();
+    const QByteArray array = in.toLatin1(); // Latin1 is a lot faster than utf8
     QByteArray out = templateArray;
 
-    md_html(array.data(), array.size(), &captureHtmlFragment, &out,
+    md_html(array.data(), array.count(), &captureHtmlFragment, &out,
             parser_flags, MD_HTML_FLAG_DEBUG | MD_HTML_FLAG_SKIP_UTF8_BOM);
 
     out.append("</body>\n"
