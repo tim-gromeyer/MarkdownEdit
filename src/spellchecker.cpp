@@ -27,8 +27,10 @@ static void dict_describe_cb(const char* const lang_tag,
                              const char* const /*provider_file*/,
                              void* user_data)
 {
-    QStringList *languages = static_cast<QStringList*>(user_data);
-    languages->append(lang_tag);
+    if (strlen(lang_tag) <= 5) {
+        QStringList *languages = static_cast<QStringList*>(user_data);
+        languages->append(QString::fromLatin1(lang_tag));
+    }
 }
 
 static enchant::Broker* get_enchant_broker() {
@@ -37,6 +39,7 @@ static enchant::Broker* get_enchant_broker() {
 }
 #endif
 
+// NOTE: Language format: de_DE, en_US
 #ifdef CHECK_MARKDOWN
 SpellChecker::SpellChecker(TextEditProxy *parent, const QString &lang)
     : MarkdownHighlighter{parent->document()},
@@ -180,6 +183,7 @@ bool SpellChecker::setLanguage(const QString &lang)
     if (speller)
         delete speller;
     speller = nullptr;
+    language.clear();
 
     // Request dictionary
     try {
@@ -224,11 +228,6 @@ const QStringList SpellChecker::getLanguageList()
         qWarning() << "No language dict found";
 
     languages.removeDuplicates();
-
-    for (const QString &s : languages) {
-        if (s.length() > 5)
-            languages.removeOne(s);
-    }
 
     return languages;
 #endif
@@ -434,7 +433,7 @@ void SpellChecker::slotSetLanguage(const bool &checked)
             language = lang;
         else {
             action->setChecked(false);
-            language = QLatin1String();
+            language.clear();
         }
     }
 }

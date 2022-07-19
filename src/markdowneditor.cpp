@@ -38,19 +38,28 @@ void MarkdownEditor::dropEvent(QDropEvent *event)
 {
     const QMimeData *data = event->mimeData();
 
-    if (data->hasUrls()) {
-        const QUrl file = data->urls().at(0);
-        if (!QImageReader::imageFormat(file.toLocalFile()).isEmpty()) {
-            QTextCursor c = cursorForPosition(event->pos());
-            c.insertText(
-                        QStringLiteral("![%1](%2)").arg(file.fileName(),
-                                                        QLatin1String(file.toEncoded())));
-        } else {
-            event->acceptProposedAction();
+    if (!data->hasUrls())
+        return event->ignore();
+
+    const QList<QUrl> files = data->urls();
+
+    QDir dir;
+
+    for (int i = 0; files.count() > i; i++) {
+        QTextCursor c = cursorForPosition(event->pos());
+
+        const QUrl file = files.at(i);
+        const QString path = dir.relativeFilePath(file.toLocalFile());
+
+        if (QImageReader::imageFormat(file.toLocalFile()).isEmpty()) {
+            c.insertText(path + QLatin1Char('\n'));
+            continue;
         }
-    } else {
-        event->ignore();
+
+        c.insertText(QStringLiteral("![%1](%2)\n").arg(file.fileName(),
+                                                    path));
     }
+    event->accept();
 }
 
 bool MarkdownEditor::setLanguage(const QString &lang)
@@ -68,7 +77,8 @@ QString MarkdownEditor::filePath()
     else {
         QFileInfo info(fileName);
         return QStringLiteral("%1[*] (%2)").arg(info.fileName(),
-                                                info.path()).replace(common::homeDict(), QChar('~'));
+                                                info.path()).replace(common::homeDict(),
+                                                                     QChar('~'));
     }
 }
 

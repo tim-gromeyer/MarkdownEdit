@@ -26,6 +26,8 @@
 #include <QDesktopServices>
 #include <QFileSystemWatcher>
 #include <QShortcut>
+#include <QLabel>
+#include <QDialogButtonBox>
 
 #ifdef QT_PRINTSUPPORT_LIB
 #include <QtPrintSupport/QPrintDialog>
@@ -321,7 +323,7 @@ void MainWindow::onEditorChanged(const int index)
 
     if (path == tr("untitled.md")) {
         path.clear();
-        ui->actionReload->setText(tr("Reload \"%1\"").arg(QLatin1Char('\0')));
+        ui->actionReload->setText(tr("Reload \"%1\"").arg('\0'));
     }
 
     onTextChanged();
@@ -410,7 +412,8 @@ void MainWindow::onFileChanged(const QString &f)
         QGuiApplication::restoreOverrideCursor();
     }
 
-    labelReloadFile->setText(tr("File <em>%1</em> has been modified.\nWould you like to reload them?").arg(f));
+    labelReloadFile->setText(tr("File <em>%1</em> has been modified.\n"
+                                "Would you like to reload them?").arg(f));
     widgetReloadFile->show();
 
     reloadFile = f;
@@ -862,7 +865,7 @@ void MainWindow::openFile(const QString &newFile)
 
 void MainWindow::onFileNew()
 {
-    path = QLatin1String();
+    path.clear();
     const QString file = tr("untitled.md");
 
     MarkdownEditor* editor = createEditor();
@@ -872,7 +875,7 @@ void MainWindow::onFileNew()
                                editor, editor->getFileName());
     ui->tabWidget_2->setCurrentIndex(editorList.length() -1);
 
-    if (!editor->setLanguage(QLatin1String("en-US")))
+    if (!editor->setLanguage(QLatin1String("en_US")))
             editor->setLanguage();
 
     statusBar()->show();
@@ -1165,18 +1168,16 @@ void MainWindow::loadFiles(const QStringList &files)
 }
 
 void MainWindow::saveSettings() {
-#define S(x) QStringLiteral(x)
-
-    settings->setValue(S("geometry"), saveGeometry());
-    settings->setValue(S("state"), saveState());
-    settings->setValue(S("highlighting"), highlighting);
-    settings->setValue(S("recent"), recentOpened);
-    settings->setValue(S("openLast"), ui->actionOpen_last_document_on_start->isChecked());
-    settings->setValue(S("last"), path);
-    settings->setValue(S("setPath"), setPath);
-    settings->setValue(S("spelling"), spelling);
-    settings->setValue(S("lineWrap"), ui->actionWord_wrap->isChecked());
-    settings->setValue(S("languagesMap"), getLanguageMap());
+    settings->setValue(QStringLiteral("geometry"), saveGeometry());
+    settings->setValue(QStringLiteral("state"), saveState());
+    settings->setValue(QStringLiteral("highlighting"), highlighting);
+    settings->setValue(QStringLiteral("recent"), recentOpened);
+    settings->setValue(QStringLiteral("openLast"), ui->actionOpen_last_document_on_start->isChecked());
+    settings->setValue(QStringLiteral("last"), path);
+    settings->setValue(QStringLiteral("setPath"), setPath);
+    settings->setValue(QStringLiteral("spelling"), spelling);
+    settings->setValue(QStringLiteral("lineWrap"), ui->actionWord_wrap->isChecked());
+    settings->setValue(QStringLiteral("languagesMap"), getLanguageMap());
     settings->sync();
 }
 

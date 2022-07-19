@@ -3,7 +3,7 @@
 
 #include "markdownparser.h"
 #include "md4c-html.h"
-#include "common.h"
+#include "common.h" // needed for MD_UNDERLINE
 
 /* Global options. */
 #if MD_UNDERLINE

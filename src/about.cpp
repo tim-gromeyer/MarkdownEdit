@@ -1,5 +1,5 @@
-#include <QWidget>
 #include <QLabel>
+#include <QDialogButtonBox>
 #include <QFormLayout>
 #include <QVBoxLayout>
 #include <QTabWidget>

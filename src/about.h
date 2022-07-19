@@ -2,12 +2,17 @@
 #define ABOUT_H
 
 #include <QDialog>
-#include <QLabel>
-#include <QTabWidget>
-#include <QVBoxLayout>
-#include <QFormLayout>
-#include <QScrollArea>
-#include <QDialogButtonBox>
+
+QT_BEGIN_NAMESPACE
+class QDialogButtonBox;
+class QScrollArea;
+class QFormLayout;
+class QVBoxLayout;
+class QTabWidget;
+class QTabWidget;
+class QLabel;
+class QSpacerItem;
+QT_END_NAMESPACE
 
 
 class About : public QDialog

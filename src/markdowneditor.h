@@ -2,10 +2,10 @@
 #define MARKDOWNEDITOR_H
 
 #include "qmarkdowntextedit.h"
-#include "spellchecker.h"
 
-#include <QWidget>
-#include <QCompleter>
+QT_BEGIN_NAMESPACE
+class SpellChecker;
+QT_END_NAMESPACE
 
 
 class MarkdownEditor : public QMarkdownTextEdit

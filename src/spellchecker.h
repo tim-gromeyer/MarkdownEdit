@@ -2,10 +2,7 @@
 #define SPELLCHECKER_H
 
 #include <QSyntaxHighlighter>
-#include <QPlainTextEdit>
-#include <QTextBrowser>
 #include <QMap>
-#include <QVariant>
 
 #include "common.h"
 
@@ -15,6 +12,8 @@
 
 QT_BEGIN_NAMESPACE
 namespace enchant { class Dict; };
+class QVariant;
+class QMenu;
 QT_END_NAMESPACE
 
 

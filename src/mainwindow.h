@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QMap>
 
 
 QT_BEGIN_NAMESPACE
@@ -69,12 +68,12 @@ private slots:
     void filePrintPreview();
     void printPreview(QPrinter *);
 
-    void changeHighlighting(const bool );
-    void changeSpelling(const bool );
-    void pausePreview(const bool );
-    void disablePreview(const bool );
-    void changeAddtoIconPath(const bool );
-    void changeWordWrap(const bool );
+    void changeHighlighting(const bool);
+    void changeSpelling(const bool);
+    void pausePreview(const bool);
+    void disablePreview(const bool);
+    void changeAddtoIconPath(const bool);
+    void changeWordWrap(const bool);
 
     void onOrientationChanged(const Qt::ScreenOrientation &);
 
