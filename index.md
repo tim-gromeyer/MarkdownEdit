@@ -33,7 +33,7 @@ MarkdownEdit is, as the name suggests, a simple and lightweight program for crea
 - Native look and feel
 - Reminds spelling language for each document
 
-![Example](doc/images/Example.png)
+![Example](https://raw.githubusercontent.com/software-made-easy/MarkdownEdit/main/doc/images/Example.png)
 
 ## Preview
 
