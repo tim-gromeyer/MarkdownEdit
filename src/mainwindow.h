@@ -52,13 +52,13 @@ private slots:
     void setupThings();
 
     void onEditorChanged(const int );
-    void closeEditor(const int );
-    void editorMoved(const int , const int );
+    void closeEditor(const int);
+    void editorMoved(const int, const int);
     void closeCurrEditor();
 
     void onHelpAbout();
     void onTextChanged();
-    void changeMode(const int );
+    void changeMode(const int);
 
     void exportHtml();
     void exportPdf();
