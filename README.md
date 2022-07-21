@@ -27,7 +27,7 @@ MarkdownEdit is, as the name suggests, a simple and lightweight program for crea
 - Auto-completion ( close brackets, list, ...)
 - Find/Replace (Ctrl+F/Ctrl+R)
 - Export to HTML and PDF
-- Bad in resources
+- Poor in resources
 - Quick opening of recent files (toolbar button or file menu)
 - Open source
 - Native look and feel

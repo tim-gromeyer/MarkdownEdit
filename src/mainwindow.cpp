@@ -313,8 +313,11 @@ void MainWindow::onEditorChanged(const int index)
     MarkdownEditor* editor = currentEditor();
     if (!editor) return;
 
+    const bool modified = editor->document()->isModified();
+
     setWindowTitle(editor->filePath());
-    setWindowModified(editor->document()->isModified());
+    setWindowModified(modified);
+    ui->actionSave->setEnabled(modified);
 
     ui->actionRedo->setEnabled(editor->document()->isRedoAvailable());
     ui->actionUndo->setEnabled(editor->document()->isUndoAvailable());
@@ -934,9 +937,8 @@ bool MainWindow::onFileSave()
         if (QFile::exists(path))
             return true;
 
-    if (path.isEmpty() || path == QLatin1String(":/default.md")) {
+    if (path.isEmpty() || path == QLatin1String(":/default.md"))
         return onFileSaveAs();
-    }
 
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 

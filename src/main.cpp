@@ -11,15 +11,15 @@
 #include "singleapplication.h"
 #endif
 
-
-int main(int argc, char *argv[])
-{
 #if defined(Q_OS_WASM) && QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
 #error You must use Qt 5.14 or newer
 #elif QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
 #error You must use Qt 5.10 or newer
 #endif
 
+
+int main(int argc, char *argv[])
+{
 #ifndef NOT_SUPPORTET
     SingleApplication a(argc, argv, true,
                         SingleApplication::Mode::SecondaryNotification);
@@ -51,11 +51,12 @@ int main(int argc, char *argv[])
     QCommandLineParser parser;
     parser.addHelpOption();
     parser.addVersionOption();
-    parser.setApplicationDescription(QCoreApplication::translate(
+    parser.setApplicationDescription(translator.translate(
         "main", "Simple program for editing Markdown files"
 
         ));
-    parser.addPositionalArgument("files", QCoreApplication::translate(
+    parser.addPositionalArgument(translator.translate("main", "Files"),
+                                 translator.translate(
                                              "main", "Files to open."));
     parser.process(a);
 

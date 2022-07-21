@@ -519,5 +519,9 @@ Willst du trotzdem verlassen?</translation>
         <source>Files to open.</source>
         <translation>Zu öffnende Dateien.</translation>
     </message>
+    <message>
+        <source>Files</source>
+        <translation>Datein</translation>
+    </message>
 </context>
 </TS>
