@@ -5,41 +5,43 @@
 [![GitHub release](https://img.shields.io/github/release/software-made-easy/MarkdownEdit.svg)](https://github.com/software-made-easy/MarkdownEdit/releases/)
 
 
-# MarkdownEdit
+# [MarkdownEdit](https://software-made-easy.github.io/MarkdownEdit/)
 
-MarkdownEdit, as the name suggests, is a simple and easy program for creating and editing Markdown files.
+MarkdownEdit is, as the name suggests, a simple and lightweight program for creating and editing Markdown files.
 
-## Table of contents
+## Table of Contents
+
 1. [Features](#features)
 2. [Preview](#preview)
-3. [Download](#download)
+3. [Download](#dependencies)
 
 -------
 
 ## Features:
 
-- Spell check
-- Load and save Markdown files
-- Undo-Redo
+- Spell checker
+- Save and load Markdown files
+- Undo/Redo
 - Preview Markdown files in real time (<1 ms)
-- Syntax highlighting editor
-- Auto-complete (close brackets, list, ...)
+- Editor with syntax highlighting
+- Auto-completion ( close brackets, list, ...)
+- Find/Replace (Ctrl+F/Ctrl+R)
 - Export to HTML and PDF
 - Poor in resources
-- Quick opening of recent files (Button in toolbar or in the file menu)
+- Quick opening of recent files (toolbar button or file menu)
 - Open source
 - Native look and feel
 - Reminds spelling language for each document
 
-![Example](https://github.com/software-made-easy/MarkdownEdit/raw/main/doc/images/Example.png)
+![Example](doc/images/Example.png)
 
 ## Preview
 
 A preview is available [here](https://software-made-easy.github.io/MarkdownEdit/markdownedit.html).
 
-Notes:
+Important:
 - Performance might be bad
-- Some features like spell check are not available
+- Some functions like spell check are not available
 
 ## Download
 ### Linux:
