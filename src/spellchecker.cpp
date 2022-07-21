@@ -6,16 +6,16 @@
 #endif
 
 #include <QLocale>
-#include <QtDebug>
 #include <QMenu>
-#include <QRegularExpression>
 #include <QActionGroup>
+#include <QDebug>
 
 #ifndef NO_SPELLCHECK
 #include <enchant++.h>
 #endif
 
 #ifndef CHECK_MARKDOWN
+#include <QRegularExpression>
 static const QRegularExpression expr(QStringLiteral("\\W+"));
 #endif
 
@@ -388,18 +388,17 @@ void SpellChecker::showContextMenu(const QPoint &pos)
 
 QString SpellChecker::encodeLanguageString(const QString &langString)
 {
-    if (langMap.contains(langString))
-        return langMap[langString].toString();
-
+    if (!langMap.contains(langString)) {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 2, 0)
-    const QLocale l(langString);
-    langMap[langString] = QStringLiteral("%1 (%2)").arg(l.nativeLanguageName(), l.nativeTerritoryName());
-    return langMap[langString].toString();
+        const QLocale l(langString);
+        langMap[langString] = QStringLiteral("%1 (%2)").arg(l.nativeLanguageName(), l.nativeTerritoryName());
 #else
-    const QLocale l(langString);
-    langMap[langString] = QStringLiteral("%1 (%2)").arg(l.nativeLanguageName(), l.nativeCountryName());
-    return langMap[langString].toString();
+        const QLocale l(langString);
+        langMap[langString] = QStringLiteral("%1 (%2)").arg(l.nativeLanguageName(), l.nativeCountryName());
 #endif
+    }
+
+    return langMap[langString];
 }
 
 void SpellChecker::slotAddWord()

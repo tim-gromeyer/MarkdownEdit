@@ -5,7 +5,7 @@
 #include "markdownparser.h"
 #include "highlighter.h"
 #include "spellchecker.h"
-#include "common.h"
+#include "settings.h"
 #include "markdowneditor.h"
 
 // qt imports
@@ -172,34 +172,35 @@ void MainWindow::toForeground()
 
 void MainWindow::onFileReload()
 {
-    if (reloadFile.isEmpty())
-        reloadFile = path;
+    QWidget *widget = qobject_cast<QWidget*>(sender()->parent());
 
-    if (reloadFile.isEmpty())
+    const QString file = sender()->property("file").toString();
+
+    if (file.isEmpty())
         return;
 
-    QFile f(reloadFile);
+    QFile f(file);
 
     if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QMessageBox::warning(this, tr("Couldn't open file"),
                              tr("Could not open file %1: %2").arg(
-                                 QDir::toNativeSeparators(reloadFile), f.errorString()));
-        recentOpened.removeOne(reloadFile);
+                                 QDir::toNativeSeparators(file), f.errorString()));
+        recentOpened.removeOne(file);
         updateOpened();
         return;
     }
 
     for (MarkdownEditor* editor : qAsConst(editorList)) {
-        if (editor->getPath() == reloadFile) {
+        if (editor->getPath() == file) {
             editor->setText(f.readAll());
             break;
         }
     }
 
-    if (widgetReloadFile)
-        widgetReloadFile->hide();
-
-    reloadFile.clear();
+    if (widget->objectName() != QLatin1String("MainWindow")) {
+        widget->deleteLater();
+        delete widget;
+    }
 }
 
 void MainWindow::setupThings()
@@ -314,17 +315,22 @@ void MainWindow::onEditorChanged(const int index)
 
     setWindowTitle(editor->filePath());
     setWindowModified(editor->document()->isModified());
-    ui->actionReload->setText(tr("Reload \"%1\"").arg(editor->getFileName()));
 
     ui->actionRedo->setEnabled(editor->document()->isRedoAvailable());
     ui->actionUndo->setEnabled(editor->document()->isUndoAvailable());
 
     path = editor->getPath();
 
+    ui->actionReload->setProperty("file", path);
+
     if (path == tr("untitled.md")) {
         path.clear();
         ui->actionReload->setText(tr("Reload \"%1\"").arg('\0'));
     }
+    else
+        ui->actionReload->setText(tr("Reload \"%1\"").arg(editor->getFileName()));
+
+    setCurrDir(editor->getDir());
 
     onTextChanged();
 }
@@ -384,39 +390,32 @@ MarkdownEditor* MainWindow::currentEditor()
 
 void MainWindow::onFileChanged(const QString &f)
 {
-    if (!widgetReloadFile) { // Dont set it up on startup because off performance
-        QGuiApplication::setOverrideCursor(Qt::WaitCursor);
+    QWidget *widgetReloadFile = new QWidget(this);
+    widgetReloadFile->setStyleSheet(QLatin1String("background: orange"));
 
-        widgetReloadFile = new QWidget(this);
-        widgetReloadFile->setStyleSheet(QLatin1String("background: orange"));
+    QHBoxLayout* horizontalLayout = new QHBoxLayout(widgetReloadFile);
 
-        horizontalLayout = new QHBoxLayout(widgetReloadFile);
+    QLabel *labelReloadFile = new QLabel(widgetReloadFile);
+    labelReloadFile->setStyleSheet(QLatin1String("color: black"));
 
-        labelReloadFile = new QLabel(widgetReloadFile);
-        labelReloadFile->setStyleSheet(QLatin1String("color: black"));
+    horizontalLayout->addWidget(labelReloadFile);
 
-        horizontalLayout->addWidget(labelReloadFile);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(widgetReloadFile);
+    buttonBox->setStandardButtons(QDialogButtonBox::No | QDialogButtonBox::Yes);
+    buttonBox->setProperty("file", f);
 
-        buttonBox = new QDialogButtonBox(widgetReloadFile);
-        buttonBox->setStandardButtons(QDialogButtonBox::No | QDialogButtonBox::Yes);
+    connect(buttonBox, &QDialogButtonBox::accepted,
+            this, &MainWindow::onFileReload);
+    connect(buttonBox, &QDialogButtonBox::rejected,
+            widgetReloadFile, &QWidget::hide);
 
-        connect(buttonBox, &QDialogButtonBox::accepted,
-                this, &MainWindow::onFileReload);
-        connect(buttonBox, &QDialogButtonBox::rejected,
-                widgetReloadFile, &QWidget::hide);
-
-        horizontalLayout->addWidget(buttonBox);
-
-        ui->verticalLayout_2->insertWidget(0, widgetReloadFile);
-
-        QGuiApplication::restoreOverrideCursor();
-    }
+    horizontalLayout->addWidget(buttonBox);
 
     labelReloadFile->setText(tr("File <em>%1</em> has been modified.\n"
                                 "Would you like to reload them?").arg(f));
-    widgetReloadFile->show();
 
-    reloadFile = f;
+    ui->verticalLayout_2->insertWidget(0, widgetReloadFile);
+    widgetReloadFile->show();
 
     watcher->addPath(f);
 }
@@ -1136,7 +1135,7 @@ void MainWindow::loadSettings() {
     changeWordWrap(lineWrap);
 
     setLanguageMap(settings->value(QStringLiteral("languagesMap"),
-                                   QMap<QString, QVariant>()).toMap());
+                                   QHash<QString, QVariant>()).toHash());
 
     spelling = settings->value(QStringLiteral("spelling"), true).toBool();
     changeSpelling(spelling);

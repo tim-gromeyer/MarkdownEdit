@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(MarkdownEdit VERSION 1.4.1 LANGUAGES CXX C)
+project(MarkdownEdit VERSION 1.4.2 LANGUAGES CXX C)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -35,7 +35,6 @@ set(PROJECT_SOURCES
         src/mainwindow.h
         src/about.cpp
         src/about.h
-        src/common.cpp
         src/markdowneditor.cpp
         src/markdowneditor.h
         src/markdownparser.cpp
@@ -46,6 +45,8 @@ set(PROJECT_SOURCES
         src/spellchecker.h
         src/previewwidget.cpp
         src/previewwidget.h
+        src/settings.h
+        src/settings.cpp
         common.h
         ui/mainwindow.ui
         ${RC_FILES}

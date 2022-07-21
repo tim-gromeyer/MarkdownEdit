@@ -1,5 +1,5 @@
 #include "previewwidget.h"
-#include "common.h"
+#include "settings.h"
 
 #include <QUrl>
 #include <QDesktopServices>
@@ -21,15 +21,16 @@ PreviewWidget::PreviewWidget(QWidget *parent)
 void PreviewWidget::openUrl(const QUrl &url)
 {
     const QString s = url.toString();
-    const QString basePath = currDir();
-    const QString filePath = basePath + QChar('/') + s;
+    const QString filePath = currDir() + QChar('/') + s;
 
     if (s.startsWith(QLatin1String("http")))
         QDesktopServices::openUrl(url);
 
+    else
     if (QFile::exists(filePath))
         QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
 
+    else
     if (s.startsWith(QLatin1Char('#')))
         scrollToHeader(s);
 }

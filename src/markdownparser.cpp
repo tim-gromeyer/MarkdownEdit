@@ -33,7 +33,7 @@ QString Parser::toHtml(const QString &in, const int &dia)
     else
         parser_flags |= MD_DIALECT_COMMONMARK;
 
-    const QByteArray array = in.toLatin1(); // Latin1 is a lot faster than utf8
+    const QByteArray array = in.toUtf8(); // Use UTF-8 for better support
     QByteArray out = templateArray;
 
     md_html(array.data(), array.count(), &captureHtmlFragment, &out,

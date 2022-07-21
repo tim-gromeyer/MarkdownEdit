@@ -1,10 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>media/window-close.svg</file>
-        <file>media/go-top.svg</file>
-        <file>media/go-bottom.svg</file>
-        <file>media/format-text-superscript.svg</file>
-        <file>media/edit-find-replace.svg</file>
         <file>icons/tools-check-spelling.svg</file>
         <file>icons/text-wrap.svg</file>
         <file>icons/help-contents.svg</file>

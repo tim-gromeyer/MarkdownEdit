@@ -2,7 +2,6 @@
 #define SPELLCHECKER_H
 
 #include <QSyntaxHighlighter>
-#include <QMap>
 
 #include "common.h"
 
@@ -14,6 +13,7 @@ QT_BEGIN_NAMESPACE
 namespace enchant { class Dict; };
 class QVariant;
 class QMenu;
+template <typename Key, typename T> class QHash;
 QT_END_NAMESPACE
 
 
@@ -85,7 +85,7 @@ public:
     explicit SpellChecker(TextEditProxy *parent, const QString &lang = QLatin1String());
     ~SpellChecker();
 
-    QMap<QString, QVariant> langMap;
+    QHash<QString, QString> langMap;
 
     /**
      * @brief highlightBlock function thats call checkSpelling()

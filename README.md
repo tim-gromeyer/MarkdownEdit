@@ -7,9 +7,9 @@
 
 # [MarkdownEdit](https://software-made-easy.github.io/MarkdownEdit/)
 
-MarkdownEdit, as the name suggests, is a simple and easy program for creating and editing Markdown files.
+MarkdownEdit is, as the name suggests, a simple and lightweight program for creating and editing Markdown files.
 
-## Table of contents
+## Table of Contents
 
 1. [Features](#features)
 2. [Preview](#preview)
@@ -21,14 +21,14 @@ MarkdownEdit, as the name suggests, is a simple and easy program for creating an
 
 - Spell checker
 - Save and load Markdown files
-- Undo-Redo
+- Undo/Redo
 - Preview Markdown files in real time (<1 ms)
-- Syntax highlighting editor
-- Auto-complete (close brackets, list, ...)
-- Find/Replace(Ctrl+F/Ctrl+R)
+- Editor with syntax highlighting
+- Auto-completion ( close brackets, list, ...)
+- Find/Replace (Ctrl+F/Ctrl+R)
 - Export to HTML and PDF
 - Bad in resources
-- Quick opening of recent files (Button in toolbar or in the file menu)
+- Quick opening of recent files (toolbar button or file menu)
 - Open source
 - Native look and feel
 - Reminds spelling language for each document
@@ -41,7 +41,7 @@ A preview is available [here](https://software-made-easy.github.io/MarkdownEdit/
 
 Important:
 - Performance might be bad
-- Some functions such as spellchecking are not available
+- Some functions like spell check are not available
 
 ## Dependencies:
 
@@ -49,8 +49,7 @@ Important:
 
 ## Note(s):
 
-- To improve performance when using images, disable the "Show images in preview" option (menu <u>V</u>iew).
-
+- To improve performance when using images, disable the "Show images in preview" option (<u>V</u>iew menu).
 
 -------
 
@@ -58,13 +57,13 @@ Important:
 
 Run the [build script](scripts/build.sh) or follow the instructions below.
 
-- Clone MarkdownEdit: `git clone https://github.com/software-made-easy/MarkdownEdit --depth=1 && cd MarkdownEdit`
+- Clone MarkdownEdit: `git clone https://github.com/software-made-easy/MarkdownEdit --depth=1 && cd MarkdownEdit`.
 - Clone all repositories required by MarkdownEdit by running the command `git submodule update --init --recursive -j 3 --depth=1`.
 - Create the build folder: `mkdir build && cd build`.
 - Now create a Makefile with CMake: `cmake ..`.
 - Build it: `cmake --build . -j4`
 
-In summary:
+Summarize:
 ```bash
 git clone https://github.com/software-made-easy/MarkdownEdit --depth=1 && cd MarkdownEdit
 git submodule update --init --recursive -j 3 --depth=1
@@ -75,6 +74,6 @@ cmake --build . -j4
 
 ## Credits
 
-- Thanks to [Waqar Ahmed](https://github.com/Waqar144) for helping with development
-- The conversion from Markdown to HTML is done with the help of the [md4c](https://github.com/mity/md4c) - library by *Martin Mitáš*.
+- Thanks to [Waqar Ahmed](https://github.com/Waqar144) for help with development.
+- The conversion from Markdown to HTML is done using the [md4c](https://github.com/mity/md4c) library by *Martin Mitáš*.
 - The [widget](https://github.com/pbek/qmarkdowntextedit) used for writing was created by *Patrizio Bekerle* and *Waqar Ahmed*.

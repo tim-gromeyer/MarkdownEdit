@@ -3,7 +3,7 @@
 #include "qlocale.h"
 #include "qmessagebox.h"
 #include "spellchecker.h"
-#include "common.h"
+#include "settings.h"
 
 #include <QDialog>
 #include <QHBoxLayout>

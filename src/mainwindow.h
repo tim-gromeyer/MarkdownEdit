@@ -17,6 +17,7 @@ class QHBoxLayout;
 class QLabel;
 class QDialogButtonBox;
 class QShortcut;
+template <typename Key, typename T> class QHash;
 QT_END_NAMESPACE
 
 
@@ -115,8 +116,6 @@ private:
 
     QString html;
 
-    QString reloadFile;
-
     bool dontUpdate = false;
     bool setPath = false;
     bool spelling = true;
@@ -129,11 +128,6 @@ private:
 
     QToolButton *toolbutton;
     QComboBox *widgetBox;
-
-    QWidget *widgetReloadFile = nullptr;
-    QHBoxLayout *horizontalLayout = nullptr;
-    QLabel *labelReloadFile = nullptr;
-    QDialogButtonBox *buttonBox = nullptr;
 
     QComboBox *mode;
 
