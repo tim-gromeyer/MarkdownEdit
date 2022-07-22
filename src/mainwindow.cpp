@@ -172,7 +172,7 @@ void MainWindow::toForeground()
 
 void MainWindow::onFileReload()
 {
-    QWidget *widget = qobject_cast<QWidget*>(sender()->parent());
+    QObject *widget = sender()->parent();
 
     const QString file = sender()->property("file").toString();
 
@@ -192,12 +192,12 @@ void MainWindow::onFileReload()
 
     for (MarkdownEditor* editor : qAsConst(editorList)) {
         if (editor->getPath() == file) {
-            editor->setText(f.readAll());
+            editor->setText(f.readAll(), QLatin1String(), false);
             break;
         }
     }
 
-    if (widget->objectName() != QLatin1String("MainWindow")) {
+    if (widget->objectName() == QLatin1String("widgetReloadFile")) {
         widget->deleteLater();
         delete widget;
     }
@@ -324,14 +324,16 @@ void MainWindow::onEditorChanged(const int index)
 
     path = editor->getPath();
 
-    ui->actionReload->setProperty("file", path);
-
     if (path == tr("untitled.md")) {
         path.clear();
         ui->actionReload->setText(tr("Reload \"%1\"").arg('\0'));
+        ui->actionReload->setEnabled(false);
     }
-    else
+    else {
         ui->actionReload->setText(tr("Reload \"%1\"").arg(editor->getFileName()));
+        ui->actionReload->setEnabled(true);
+        ui->actionReload->setProperty("file", path);
+    }
 
     setCurrDir(editor->getDir());
 
@@ -395,6 +397,7 @@ void MainWindow::onFileChanged(const QString &f)
 {
     QWidget *widgetReloadFile = new QWidget(this);
     widgetReloadFile->setStyleSheet(QLatin1String("background: orange"));
+    widgetReloadFile->setObjectName(QLatin1String("widgetReloadFile"));
 
     QHBoxLayout* horizontalLayout = new QHBoxLayout(widgetReloadFile);
 
@@ -852,7 +855,7 @@ void MainWindow::openFile(const QString &newFile)
     editor->setText(f.readAll(), newFile);
 
     setWindowTitle(editor->filePath());
-    ui->actionReload->setText(tr("Reload \"%1\"").arg(editor->getFileName()));
+    ui->actionReload->setText(tr("Reload \"%1\"").arg(editor->getFileName()));    
 
     fileList.append(newFile);
 

@@ -140,8 +140,15 @@ void MarkdownEditor::showMarkdownSyntax()
     d.exec();
 }
 
-void MarkdownEditor::setText(const QString &t, const QString &newFile)
+void MarkdownEditor::setText(const QString &t, const QString &newFile, const bool setLangugae)
 {
+    if (!setLangugae) {
+        if (checker)
+            checker->clearDirtyBlocks();
+
+        return QMarkdownTextEdit::setPlainText(t);
+    }
+
     if (!newFile.isEmpty())
         fileName = newFile;
 
