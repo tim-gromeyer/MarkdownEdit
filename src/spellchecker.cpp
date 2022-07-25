@@ -1,5 +1,4 @@
 #include "spellchecker.h"
-#include "common.h"
 
 #ifdef CHECK_MARKDOWN
 #include "markdownhighlighter.h"
@@ -160,7 +159,7 @@ bool SpellChecker::isCorrect(const QString &word) {
 #endif
 
     try {
-        return speller->check(word.toUtf8().data());
+        return speller->check(word.toStdString());
     }
     catch (const enchant::Exception &e){
         qWarning() << e.what();
@@ -187,7 +186,7 @@ bool SpellChecker::setLanguage(const QString &lang)
 
     // Request dictionary
     try {
-        speller = get_enchant_broker()->request_dict(lang.toStdString());
+        speller = get_enchant_broker()->request_dict(lang.toLatin1().data());
         language = lang;
         emit languageChanged(language);
     } catch(enchant::Exception& e) {

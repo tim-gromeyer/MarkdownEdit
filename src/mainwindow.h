@@ -51,12 +51,13 @@ private slots:
 
     void setupThings();
 
-    void onEditorChanged(const int );
+    void onEditorChanged(const int);
     void closeEditor(const int);
     void editorMoved(const int, const int);
     void closeCurrEditor();
 
     void onHelpAbout();
+
     void onTextChanged();
     void changeMode(const int);
 
@@ -92,7 +93,7 @@ private:
     void saveSettings();
     void updateOpened();
     void openRecent();
-    void setText(const int );
+    void setText(const int);
 
     void loadIcon(const QString &name, QAction* a);
     void loadIcons();

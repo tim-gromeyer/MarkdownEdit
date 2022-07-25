@@ -91,7 +91,7 @@
         <translation>Druckvorschau</translation>
     </message>
     <message>
-        <source>Exit</source>
+        <source>Quit</source>
         <translation>Beenden</translation>
     </message>
     <message>
@@ -291,7 +291,7 @@
         <translation>Zeilenumbruch</translation>
     </message>
     <message>
-        <source>untitled.md</source>
+        <source>Untitled.md</source>
         <translation>Unbenannt.md</translation>
     </message>
     <message>

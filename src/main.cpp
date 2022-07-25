@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "common.h"
 
 #include <QApplication>
 #include <QLocale>
@@ -36,16 +35,16 @@ int main(int argc, char *argv[])
     QTranslator translator, qtTranslator;
 
     // load translation for Qt
-    if (qtTranslator.load(QLocale::system(), QLatin1String("qtbase"),
+    if (qtTranslator.load(QLocale::system(), QStringLiteral("qtbase"),
                           QString::fromRawData(underscore, 1),
-                          QLatin1String(
+                          QStringLiteral(
                               ":/qtTranslations/")))
         a.installTranslator(&qtTranslator);
 
     // try to load translation for current locale from resource file
-    if (translator.load(QLocale::system(), QLatin1String("MarkdownEdit"),
+    if (translator.load(QLocale::system(), QStringLiteral("MarkdownEdit"),
                         QString::fromRawData(underscore, 1),
-                        QLatin1String(":/translations")))
+                        QStringLiteral(":/translations")))
         a.installTranslator(&translator);
 
     QCommandLineParser parser;

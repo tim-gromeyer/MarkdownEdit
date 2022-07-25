@@ -166,9 +166,7 @@
     <property name="title">
      <string>E&amp;xtras</string>
     </property>
-    <addaction name="separator"/>
     <addaction name="actionSpell_checking"/>
-    <addaction name="separator"/>
     <addaction name="separator"/>
     <addaction name="actionOpen_last_document_on_start"/>
     <addaction name="separator"/>
@@ -277,7 +275,7 @@
   </action>
   <action name="actionExit">
    <property name="text">
-    <string>Exit</string>
+    <string>Quit</string>
    </property>
    <property name="menuRole">
     <enum>QAction::QuitRole</enum>
@@ -313,30 +311,6 @@
     <string>Select all</string>
    </property>
   </action>
-  <action name="actionSearch">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>.</normaloff>.</iconset>
-   </property>
-   <property name="text">
-    <string>Search</string>
-   </property>
-  </action>
-  <action name="action_2">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>.</normaloff>.</iconset>
-   </property>
-   <property name="text">
-    <string>Export HTML</string>
-   </property>
-  </action>
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
@@ -351,26 +325,6 @@
    </property>
    <property name="menuRole">
     <enum>QAction::AboutQtRole</enum>
-   </property>
-  </action>
-  <action name="actionReplace">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>.</normaloff>.</iconset>
-   </property>
-   <property name="text">
-    <string>Replace</string>
-   </property>
-  </action>
-  <action name="actionShow_line_numbers">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Show line numbers</string>
    </property>
   </action>
   <action name="actionHighlighting_activated">

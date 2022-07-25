@@ -9,7 +9,6 @@
 #include <QHBoxLayout>
 #include <QFile>
 #include <QFileInfo>
-#include <QDebug>
 #include <QMimeData>
 #include <QImageReader>
 
@@ -17,7 +16,7 @@
 MarkdownEditor::MarkdownEditor(QWidget *parent)
     : QMarkdownTextEdit(parent, false)
 {
-    checker = new SpellChecker(new TextEditProxyT(this));
+    checker = new SpellChecker(new TextEditProxyT<QPlainTextEdit>(this, this));
     connect(checker, &SpellChecker::languageChanged,
             this, &MarkdownEditor::onLanguageChanged);
 
@@ -113,8 +112,8 @@ void MarkdownEditor::showMarkdownSyntax()
 
     MarkdownEditor e(&d);
 
-    QString file = QLatin1String(":/syntax_en.md");
-    QString language = QLatin1String("en_US");
+    QString file = QStringLiteral(":/syntax_en.md");
+    QString language = QStringLiteral("en_US");
 
     for (const QString &lang : common::languages()) {
         if (QFile::exists(QStringLiteral(":/syntax_%1.md").arg(lang))) {
@@ -125,12 +124,12 @@ void MarkdownEditor::showMarkdownSyntax()
     }
 
     QFile f(file, &d);
-    if (!f.open(QIODevice::ReadOnly)) {
+    if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QMessageBox::warning(&d, tr("Couldn't open file"),
                              tr("Could not open file %1: %2").arg(
                                  QDir::toNativeSeparators(file), f.errorString()));
     }
-    e.setText(f.readAll());
+    e.setText(f.readAll(), QLatin1String(), false);
     e.setReadOnly(true);
     if (!e.setLanguage(language))
         e.setLanguage(QLocale::system().name());
@@ -146,23 +145,22 @@ void MarkdownEditor::setText(const QString &t, const QString &newFile, const boo
         if (checker)
             checker->clearDirtyBlocks();
 
-        return QMarkdownTextEdit::setPlainText(t);
+        return document()->setPlainText(t);
     }
 
     if (!newFile.isEmpty())
         fileName = newFile;
 
     if (fileName == QLatin1String(":/default.md") && !mapContains(fileName))
-        setMapAttribute(fileName, QLatin1String("en-US"));
+        setMapAttribute(fileName, QStringLiteral("en_US"));
 
-    if (checker) {
-        checker->clearDirtyBlocks();
-        checker->setDocument(nullptr);
-        if (mapContains(fileName))
-            setLanguage(mapAttribute(fileName));
-    }
+    checker->clearDirtyBlocks();
+    checker->setDocument(nullptr);
 
-    QMarkdownTextEdit::setPlainText(t);
+    if (mapContains(fileName))
+        setLanguage(mapAttribute(fileName));
+
+    document()->setPlainText(t);
 
     checker->setDocument(document());
 

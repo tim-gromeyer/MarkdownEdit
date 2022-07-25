@@ -62,6 +62,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${APP_RES}
     )
 
+    set_property(TARGET markdownedit APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
+
 else()
     qt5_add_translation(QM_FILES ${TS_FILES})
     add_app_translations_resource(APP_RES ${QM_FILES})
@@ -71,6 +74,9 @@ else()
             ${PROJECT_SOURCES}
             ${APP_RES}
         )
+
+        set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+
     else()
         add_executable(markdownedit
             ${PROJECT_SOURCES}
@@ -109,11 +115,6 @@ set_target_properties(markdownedit PROPERTIES
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
-
-if(ANDROID)
-    set_property(TARGET markdownedit APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-        ${CMAKE_CURRENT_SOURCE_DIR}/android)
-endif()
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(markdownedit)

@@ -3,8 +3,6 @@
 
 #include <QSyntaxHighlighter>
 
-#include "common.h"
-
 #ifdef CHECK_MARKDOWN
 #include "markdownhighlighter.h"
 #endif
@@ -14,13 +12,14 @@ namespace enchant { class Dict; };
 class QVariant;
 class QMenu;
 template <typename Key, typename T> class QHash;
+class QPlainTextEdit;
 QT_END_NAMESPACE
 
 
 class TextEditProxy : public QObject {
     Q_OBJECT
 public:
-    TextEditProxy(QObject* parent = nullptr) : QObject(parent) {}
+    TextEditProxy(QObject* parent) : QObject(parent) {}
     virtual QTextCursor textCursor() const = 0;
     virtual QTextDocument* document() const = 0;
     virtual QPoint mapToGlobal(const QPoint& pos) const = 0;
@@ -47,6 +46,7 @@ public:
         connect(textEdit, &T::textChanged, this, &TextEditProxy::textChanged);
         connect(textEdit, &T::destroyed, this, &TextEditProxy::editDestroyed);
     }
+    // static TextEditProxyT* createTextEditProxy(QPlainTextEdit *textEdit) { return new TextEditProxyT(textEdit, textEdit); };
     QTextCursor textCursor() const override { return m_textEdit->textCursor(); }
     QTextDocument* document() const override { return m_textEdit->document(); }
     QPoint mapToGlobal(const QPoint& pos) const override { return m_textEdit->mapToGlobal(pos); }

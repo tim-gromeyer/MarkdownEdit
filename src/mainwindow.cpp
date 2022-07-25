@@ -28,14 +28,12 @@
 #include <QShortcut>
 #include <QLabel>
 #include <QDialogButtonBox>
+#include <QHBoxLayout>
 
 #ifdef QT_PRINTSUPPORT_LIB
 #include <QtPrintSupport/QPrintDialog>
 #include <QtPrintSupport/QPrintPreviewDialog>
 #endif
-
-// 3rdparty imports
-#include "qplaintexteditsearchwidget.h"
 
 
 MainWindow::MainWindow(const QStringList &files, QWidget *parent)
@@ -61,14 +59,14 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
     connect(ui->tabWidget_2, &QTabWidget::tabCloseRequested,
             this, &MainWindow::closeEditor);
 
-    settings = new QSettings(QLatin1String("SME"),
-                             QLatin1String("MarkdownEdit"), this);
+    settings = new QSettings(QStringLiteral("SME"),
+                             QStringLiteral("MarkdownEdit"), this);
 
     loadSettings();
     updateOpened();
 
     mode = new QComboBox(ui->Edit);
-    mode->addItems(QStringList() << QLatin1String("Commonmark") << QLatin1String("GitHub"));
+    mode->addItems(QStringList() << QStringLiteral("Commonmark") << QStringLiteral("GitHub"));
     mode->setCurrentIndex(1);
     _mode = 1;
 
@@ -263,7 +261,7 @@ void MainWindow::closeEditor(const int index)
 
     path = currentEditor()->getPath();
 
-    if (path == tr("untitled.md")) {
+    if (path == tr("Untitled.md")) {
         path.clear();
         if (currentEditor()->document()->isModified()) {
             QMessageBox d(this);
@@ -324,7 +322,7 @@ void MainWindow::onEditorChanged(const int index)
 
     path = editor->getPath();
 
-    if (path == tr("untitled.md")) {
+    if (path == tr("Untitled.md")) {
         path.clear();
         ui->actionReload->setText(tr("Reload \"%1\"").arg('\0'));
         ui->actionReload->setEnabled(false);
@@ -396,13 +394,13 @@ MarkdownEditor* MainWindow::currentEditor()
 void MainWindow::onFileChanged(const QString &f)
 {
     QWidget *widgetReloadFile = new QWidget(this);
-    widgetReloadFile->setStyleSheet(QLatin1String("background: orange"));
-    widgetReloadFile->setObjectName(QLatin1String("widgetReloadFile"));
+    widgetReloadFile->setStyleSheet(QStringLiteral("background: orange"));
+    widgetReloadFile->setObjectName(QStringLiteral("widgetReloadFile"));
 
     QHBoxLayout* horizontalLayout = new QHBoxLayout(widgetReloadFile);
 
     QLabel *labelReloadFile = new QLabel(widgetReloadFile);
-    labelReloadFile->setStyleSheet(QLatin1String("color: black"));
+    labelReloadFile->setStyleSheet(QStringLiteral("color: black"));
 
     horizontalLayout->addWidget(labelReloadFile);
 
@@ -712,7 +710,7 @@ void MainWindow::openInWebBrowser()
 {
     QTemporaryFile f(this);
 
-    const QString name = f.fileTemplate() + QLatin1String(".html");
+    const QString name = f.fileTemplate() + QStringLiteral(".html");
 
     f.setFileTemplate(name);
     f.setAutoRemove(false);
@@ -742,7 +740,7 @@ void MainWindow::openInWebBrowser()
 void MainWindow::exportHtml()
 {
 #if defined(Q_OS_WASM)
-    QFileDialog::saveFileContent(html.toUtf8(), QLatin1String("Exported HTML.html"));
+    QFileDialog::saveFileContent(html.toUtf8(), QStringLiteral("Exported HTML.html"));
 #else
     QFileDialog dialog(this, tr("Export HTML"));
     dialog.setMimeTypeFilters({"text/html"});
@@ -855,7 +853,7 @@ void MainWindow::openFile(const QString &newFile)
     editor->setText(f.readAll(), newFile);
 
     setWindowTitle(editor->filePath());
-    ui->actionReload->setText(tr("Reload \"%1\"").arg(editor->getFileName()));    
+    ui->actionReload->setText(tr("Reload \"%1\"").arg(editor->getFileName()));
 
     fileList.append(newFile);
 
@@ -871,7 +869,7 @@ void MainWindow::openFile(const QString &newFile)
 void MainWindow::onFileNew()
 {
     path.clear();
-    const QString file = tr("untitled.md");
+    const QString file = tr("Untitled.md");
 
     MarkdownEditor* editor = createEditor();
     editor->setFile(file);
@@ -881,7 +879,7 @@ void MainWindow::onFileNew()
     ui->tabWidget_2->setCurrentIndex(editorList.length() -1);
 
     if (!editor->setLanguage(QLatin1String("en_US")))
-            editor->setLanguage();
+        editor->setLanguage(QLocale::system().name());
 
     statusBar()->show();
     statusBar()->showMessage(tr("New document created"), 10000);
@@ -946,7 +944,7 @@ bool MainWindow::onFileSave()
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
 #if defined(Q_OS_WASM)
-    QFileDialog::saveFileContent(currentEditor()->toPlainText().toLatin1(), path);
+    QFileDialog::saveFileContent(currentEditor()->toPlainText().toUtf8(), path);
 #else
 
     watcher->removePath(path);
@@ -1166,9 +1164,6 @@ void MainWindow::loadFiles(const QStringList &files)
     }
     else
         openFiles(files);
-
-    if (editorList.length() > 0)
-        onTextChanged();
 }
 
 void MainWindow::saveSettings() {
