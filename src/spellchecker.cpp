@@ -154,10 +154,6 @@ bool SpellChecker::isCorrect(const QString &word) {
 
     if (word.length() < 2) return true;
 
-#ifdef CHECK_MARKDOWN
-    if (markdownCharachters.contains(word)) return true;
-#endif
-
     try {
         return speller->check(word.toStdString());
     }

@@ -21,6 +21,8 @@ MarkdownEditor::MarkdownEditor(QWidget *parent)
             this, &MarkdownEditor::onLanguageChanged);
 
     setAcceptDrops(true);
+
+    searchWidget()->setDarkMode(settings::isDarkMode());
 }
 
 void MarkdownEditor::dragEnterEvent(QDragEnterEvent *event)
@@ -44,10 +46,9 @@ void MarkdownEditor::dropEvent(QDropEvent *event)
 
     QDir dir;
 
-    for (int i = 0; files.count() > i; i++) {
-        QTextCursor c = cursorForPosition(event->pos());
+    QTextCursor c = cursorForPosition(event->pos());
 
-        const QUrl file = files.at(i);
+    for (const QUrl &file : files) {
         const QString path = dir.relativeFilePath(file.toLocalFile());
 
         if (QImageReader::imageFormat(file.toLocalFile()).isEmpty()) {

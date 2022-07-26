@@ -460,7 +460,7 @@ void MainWindow::loadIcons()
 
     toolbutton->setIcon(ui->menuRecentlyOpened->icon());
 
-    if (isDarkMode())
+    if (settings::isDarkMode())
         setWindowIcon(QIcon(S(":/Icon_dark.svg")));
     else
         setWindowIcon(QIcon(S(":/Icon.svg")));
@@ -1149,11 +1149,11 @@ void MainWindow::loadSettings() {
 void MainWindow::loadFiles(const QStringList &files)
 {
     // Ensure settings are set up
-    if (files.isEmpty()) {
-        const bool openLast = settings->value(QStringLiteral("openLast"), true).toBool();
-        if (openLast) {
-            ui->actionOpen_last_document_on_start->setChecked(true);
+    const bool openLast = settings->value(QStringLiteral("openLast"), true).toBool();
+    ui->actionOpen_last_document_on_start->setChecked(openLast);
 
+    if (files.isEmpty()) {
+        if (openLast) {
             const QString last = settings->value(QStringLiteral("last"),
                                                QLatin1String()).toString();
             if (!last.isEmpty())

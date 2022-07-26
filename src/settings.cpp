@@ -1,3 +1,5 @@
+#include "settings.h"
+
 #include <QString>
 #include <QVariant>
 #include <QPalette>
@@ -45,7 +47,8 @@ void setCurrDir(const QString &newDir)
     currentDir = newDir;
 }
 
-bool isDarkMode()
+namespace settings {
+const bool isDarkMode()
 {
     static const QColor back = QPalette().base().color();
     static int r, g, b, a;
@@ -54,6 +57,7 @@ bool isDarkMode()
     static const bool dark = ((r + g + b + a) / 4) < 127;
 
     return dark;
+}
 }
 
 namespace common {

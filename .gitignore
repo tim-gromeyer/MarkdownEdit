@@ -1,8 +1,6 @@
 3rdparty/*
 android/*
 *.user
-packaging/installer/packages/com.sme.markdownedit/data/*
 packaging/*.deb
-packaging/installer/Installer*
 packaging/MarkdownEdit/usr/bin/*
 wasm/*

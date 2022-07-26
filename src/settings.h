@@ -18,7 +18,9 @@ bool mapContains(const QString &);
 QString currDir();
 void setCurrDir(const QString &);
 
-const bool isDarkMode();
+namespace settings {
+    const bool isDarkMode();
+}
 
 namespace common {
 const QString homeDict();

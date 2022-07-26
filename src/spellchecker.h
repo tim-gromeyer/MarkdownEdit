@@ -9,10 +9,8 @@
 
 QT_BEGIN_NAMESPACE
 namespace enchant { class Dict; };
-class QVariant;
 class QMenu;
 template <typename Key, typename T> class QHash;
-class QPlainTextEdit;
 QT_END_NAMESPACE
 
 
@@ -204,8 +202,6 @@ private:
 
 #ifdef CHECK_MARKDOWN
     QString getWord(const QTextBlock &, const int &);
-
-    QStringList markdownCharachters = {QStringLiteral("##"), QStringLiteral("###"), QStringLiteral("####"), QStringLiteral("#####"), QStringLiteral("######")};
 #endif
 };
 
