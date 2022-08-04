@@ -1,3 +1,22 @@
+/**
+ ** This file is part of the MarkdownEdit project.
+ ** Copyright 2022 Tim Gromeyer <sakul8825@gmail.com>.
+ **
+ ** This program is free software: you can redistribute it and/or modify
+ ** it under the terms of the GNU General Public License as published by
+ ** the Free Software Foundation, either version 3 of the License, or
+ ** (at your option) any later version.
+ **
+ ** This program is distributed in the hope that it will be useful,
+ ** but WITHOUT ANY WARRANTY; without even the implied warranty of
+ ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ ** GNU General Public License for more details.
+ **
+ ** You should have received a copy of the GNU General Public License
+ ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ **/
+
+
 #include <QByteArray>
 #include <QRegularExpression>
 
@@ -26,7 +45,7 @@ void captureHtmlFragment(const MD_CHAR* data, const MD_SIZE data_size, void* use
     array->append(data, data_size);
 }
 
-QString Parser::toHtml(const QString &in, const int &dia)
+QString Parser::toHtml(const QString &in, const int dia)
 {
     if (dia == GitHub)
         parser_flags |= MD_DIALECT_GITHUB;
@@ -37,12 +56,12 @@ QString Parser::toHtml(const QString &in, const int &dia)
     QByteArray out = templateArray;
 
     md_html(array.data(), array.count(), &captureHtmlFragment, &out,
-            parser_flags, MD_HTML_FLAG_DEBUG | MD_HTML_FLAG_SKIP_UTF8_BOM);
+            parser_flags, MD_HTML_FLAG_SKIP_UTF8_BOM);
 
     out.append("</body>\n"
                "</html>\n");
 
-    return out;
+    return QString::fromUtf8(out);
 }
 
 QString Parser::toMarkdown(QString in)

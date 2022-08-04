@@ -1,3 +1,22 @@
+/**
+ ** This file is part of the MarkdownEdit project.
+ ** Copyright 2022 Tim Gromeyer <sakul8825@gmail.com>.
+ **
+ ** This program is free software: you can redistribute it and/or modify
+ ** it under the terms of the GNU General Public License as published by
+ ** the Free Software Foundation, either version 3 of the License, or
+ ** (at your option) any later version.
+ **
+ ** This program is distributed in the hope that it will be useful,
+ ** but WITHOUT ANY WARRANTY; without even the implied warranty of
+ ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ ** GNU General Public License for more details.
+ **
+ ** You should have received a copy of the GNU General Public License
+ ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ **/
+
+
 #include "mainwindow.h"
 
 #include <QApplication>
@@ -25,24 +44,25 @@ int main(int argc, char *argv[])
 #else
     QApplication a(argc, argv);
 #endif
-    a.setApplicationDisplayName(QStringLiteral("MarkdownEdit"));
-    a.setApplicationVersion(APP_VERSION);
+    a.setApplicationVersion(QStringLiteral(APP_VERSION));
 
-    static const QChar underscore[] = {
+    static constexpr QChar underscore[] = {
         QLatin1Char('_')
     };
+
+    const QLocale system = QLocale::system();
 
     QTranslator translator, qtTranslator;
 
     // load translation for Qt
-    if (qtTranslator.load(QLocale::system(), QStringLiteral("qtbase"),
+    if (qtTranslator.load(system, QStringLiteral("qtbase"),
                           QString::fromRawData(underscore, 1),
                           QStringLiteral(
                               ":/qtTranslations/")))
         a.installTranslator(&qtTranslator);
 
     // try to load translation for current locale from resource file
-    if (translator.load(QLocale::system(), QStringLiteral("MarkdownEdit"),
+    if (translator.load(system, QStringLiteral("MarkdownEdit"),
                         QString::fromRawData(underscore, 1),
                         QStringLiteral(":/translations")))
         a.installTranslator(&translator);
@@ -52,7 +72,6 @@ int main(int argc, char *argv[])
     parser.addVersionOption();
     parser.setApplicationDescription(translator.translate(
         "main", "Simple program for editing Markdown files"
-
         ));
     parser.addPositionalArgument(translator.translate("main", "Files"),
                                  translator.translate(
@@ -61,7 +80,7 @@ int main(int argc, char *argv[])
 
 #ifndef NOT_SUPPORTET
     if(a.sendMessage(QByteArrayLiteral("file://") +
-                  parser.positionalArguments().join(' ').toLatin1()))
+                  parser.positionalArguments().join(QLatin1Char(' ')).toLatin1()))
         return 0;
 #endif
 
@@ -84,7 +103,6 @@ int main(int argc, char *argv[])
 #endif
 
     w.show();
-    a.processEvents(); // Startup looks smoother
 
     return a.exec();
 }

@@ -1,21 +1,43 @@
-#include "spellchecker.h"
+/**
+ ** This file is part of the MarkdownEdit project.
+ ** Copyright 2022 Tim Gromeyer <sakul8825@gmail.com>.
+ **
+ ** This program is free software: you can redistribute it and/or modify
+ ** it under the terms of the GNU General Public License as published by
+ ** the Free Software Foundation, either version 3 of the License, or
+ ** (at your option) any later version.
+ **
+ ** This program is distributed in the hope that it will be useful,
+ ** but WITHOUT ANY WARRANTY; without even the implied warranty of
+ ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ ** GNU General Public License for more details.
+ **
+ ** You should have received a copy of the GNU General Public License
+ ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ **/
 
-#ifdef CHECK_MARKDOWN
-#include "markdownhighlighter.h"
-#endif
+
+#include "spellchecker.h"
 
 #include <QLocale>
 #include <QMenu>
 #include <QActionGroup>
-#include <QDebug>
+#include <QDebug> // needed for qWaring()
 
 #ifndef NO_SPELLCHECK
 #include <enchant++.h>
 #endif
 
-#ifndef CHECK_MARKDOWN
-#include <QRegularExpression>
-static const QRegularExpression expr(QStringLiteral("\\W+"));
+// Needed for wasm
+#ifndef QStringViewLiteral
+# define QStringViewLiteral(str) QStringView(QT_UNICODE_LITERAL(str))
+#endif
+
+// We use sliced with Qt 6
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    #define SUBSTR(text, pos, len) QStringView(text).mid(pos, len)
+#else
+    #define SUBSTR(text, pos, len) QStringView(text).sliced(pos, len)
 #endif
 
 
@@ -39,16 +61,12 @@ static enchant::Broker* get_enchant_broker() {
 #endif
 
 // NOTE: Language format: de_DE, en_US
-#ifdef CHECK_MARKDOWN
 SpellChecker::SpellChecker(TextEditProxy *parent, const QString &lang)
-    : MarkdownHighlighter{parent->document()},
+    : SpellCheckerBaseClass{parent->document()},
     textEdit(parent)
-#else
-SpellChecker::SpellChecker(TextEditProxy *parent, const QString &lang)
-    : QSyntaxHighlighter{parent->document()},
-    textEdit(parent)
-#endif
 {
+    Q_ASSERT(parent);
+
     if (!lang.isEmpty())
         setLanguage(lang);
 
@@ -78,7 +96,6 @@ void SpellChecker::checkSpelling(const QString &text)
     QStringList wordList;
     QString word;
 
-    bool isLink = false;
     const int currentBlockNumber = currentBlock().blockNumber();
 
     if (isCodeBlock(currentBlockState())) return;
@@ -86,30 +103,30 @@ void SpellChecker::checkSpelling(const QString &text)
     const int textLength = text.length();
 
     for (int i = 0; i < textLength; i++) {
-        const QChar &c = text.at(i);
+        const QChar c = text[i];
         const bool isLetterOrNumber = c.isLetterOrNumber();
 
         if (isPosInACodeSpan(currentBlockNumber, i))
-            continue;
-
-        if (c == QLatin1Char('(')) {
-            if (text.mid(i +1, 4) == QLatin1String("http")) {
-                isLink = true;
-            }
-        }
-        else if (c == QLatin1Char('h'))
-            if (text.mid(i, 4) == QLatin1String("http")) {
-                isLink = true;
-            }
-
-        if (isLink) {
-            if (c.isSpace() || c == QLatin1Char(')')) {
-                isLink = false;
-            }
-            else
                 continue;
+
+        if (c == QLatin1Char('h')) {
+            if (textLength -i >= 10) { // http 4; :// 7; * >1; .de 10
+                if (SUBSTR(text, i, 4) == QStringViewLiteral("http")) {
+                    const int last = i;
+
+                    i = text.indexOf(QChar(')'), i);
+
+                    if (i == -1) {
+                        i = text.indexOf(QChar(' '), last);
+
+                        if (i == -1)
+                            break;
+                    }
+                }
+            }
         }
-        else if (i == textLength -1 && isLetterOrNumber) {
+
+        if (i == textLength -1 && isLetterOrNumber) {
             word.append(c);
             wordList.append(word);
             word.clear();
@@ -131,7 +148,7 @@ void SpellChecker::checkSpelling(const QString &text)
 
     int index = 0;
 
-    for (const QString &word_ : wordList) {
+    for (const QString &word_ : qAsConst(wordList)) {
         index = text.indexOf(word_, index); // is still faster
 
         if (!isCorrect(word_)) {
@@ -175,14 +192,15 @@ bool SpellChecker::setLanguage(const QString &lang)
     if(lang.isEmpty())
         return setLanguage(QLocale::system().name());
 
-    if (speller)
-        delete speller;
-    speller = nullptr;
-    language.clear();
+    std::string newLang = lang.toStdString();
+
+    enchant::Broker *broker = get_enchant_broker();
+        if (!broker->dict_exists(newLang))
+            return false;
 
     // Request dictionary
     try {
-        speller = get_enchant_broker()->request_dict(lang.toLatin1().data());
+        speller.reset(broker->request_dict(newLang));
         language = lang;
         emit languageChanged(language);
     } catch(enchant::Exception& e) {
@@ -194,6 +212,18 @@ bool SpellChecker::setLanguage(const QString &lang)
     QSyntaxHighlighter::rehighlight();
 
     return true;
+#endif
+}
+
+QString SpellChecker::getLanguage()
+{
+#ifndef NO_SPELLCHECK
+    if (speller)
+        return QString::fromStdString(speller->get_lang());
+    else
+        return QLatin1String();
+#else
+    return QLatin1String();
 #endif
 }
 
@@ -260,20 +290,11 @@ QString SpellChecker::getWord(const QTextBlock &block, const int &pos)
     const int textLength = text.length();
 
     for (int i = 0; i < textLength; i++) {
-        const QChar &c = text.at(i);
+        const QChar c = text[i];
         const bool isLetterOrNumber = c.isLetterOrNumber();
 
-        if (c == QLatin1Char('(')) {
-            if (block.text().mid(i +1, 4) == QLatin1String("http")) {
-                isLink = true;
-                if (text.indexOf(QChar(QChar::Space), i) > pos)
-                    return QLatin1String();
-                else if (text.indexOf(QChar(')'), i) > pos)
-                    return QLatin1String();
-            }
-        }
-        else if (c == QLatin1Char('h')) {
-            if (text.mid(i, 4) == QLatin1String("http")) {
+        if (c == QLatin1Char('h')) {
+            if (SUBSTR(text, i, 4) == QStringViewLiteral("http")) {
                 if (text.indexOf(QChar(QChar::Space), i) > pos)
                     return QLatin1String();
                 else if (text.indexOf(QChar(')'), i) > pos)
@@ -309,13 +330,14 @@ QString SpellChecker::getWord(const QTextBlock &block, const int &pos)
 void SpellChecker::showContextMenu(const QPoint &pos)
 {
     QMenu *menu = textEdit->createStandardContextMenu();
-    const int wordPos = textEdit->cursorForPosition(pos).position();
+    QTextCursor c = textEdit->cursorForPosition(pos);
+
+    const int wordPos = c.position();
 
     QAction *insertPos = menu->actions().at(0);
 
     if(speller && spellingEnabled){
-        QTextCursor c = textEdit->textCursor();
-        c.setPosition(wordPos);
+        c.clearSelection();
 
 #ifdef CHECK_MARKDOWN
         const QString word = getWord(c.block(), c.positionInBlock());
@@ -361,7 +383,7 @@ void SpellChecker::showContextMenu(const QPoint &pos)
         }
 
         QMenu *languagesMenu = new QMenu(tr("Languages"), menu);
-        QActionGroup *actionGroup = new QActionGroup(languagesMenu);
+        QScopedPointer<QActionGroup> actionGroup(new QActionGroup(languagesMenu)); // Fix warning
         for (const QString &lang : getLanguageList()) {
             QAction* action = new QAction(encodeLanguageString(lang), languagesMenu);
             action->setData(lang);
@@ -412,24 +434,21 @@ void SpellChecker::slotIgnoreWord()
 
 void SpellChecker::slotReplaceWord()
 {
-    QAction* action = qobject_cast<QAction*>(sender());
+    QObject* action = sender();
     replaceWord(action->property("wordPos").toInt(),
                 action->property("suggestion").toString());
 }
 
 void SpellChecker::slotSetLanguage(const bool &checked)
 {
-    if(checked) {
-        QAction* action = qobject_cast<QAction*>(sender());
-        const QString lang = action->data().toString();
+    if (!checked) return;
 
-        if(setLanguage(lang))
-            language = lang;
-        else {
-            action->setChecked(false);
-            language.clear();
-        }
-    }
+    QAction* action = qobject_cast<QAction*>(sender());
+    const QString lang = action->data().toString();
+
+    if(!setLanguage(lang))
+        action->setChecked(false);
+        language.clear();
 }
 
 void SpellChecker::ignoreWord(const QString &word)
@@ -456,12 +475,15 @@ void SpellChecker::replaceWord(const int &wordPos, const QString &newWord)
 #ifdef CHECK_MARKDOWN
 void SpellChecker::setMarkdownHighlightingEnabled(const bool &enabled)
 {
-    markdownhig = enabled;
+    if ((enabled && !markdownhig) || (!enabled && markdownhig)) {
+        markdownhig = enabled;
 
-    rehighlight();
+        QSyntaxHighlighter::rehighlight();
+    }
 }
 #endif
 
+// FIXME: Code is spell checked when the markdownhighlighter is disabled
 void SpellChecker::setSpellCheckingEnabled(const bool &enabled)
 {
     if ((enabled && !spellingEnabled) || (!enabled && spellingEnabled)) {
@@ -471,10 +493,6 @@ void SpellChecker::setSpellCheckingEnabled(const bool &enabled)
     }
 }
 
-
 SpellChecker::~SpellChecker()
 {
-#ifndef NO_SPELLCHECK
-    delete speller;
-#endif
 }

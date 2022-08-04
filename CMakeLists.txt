@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(MarkdownEdit VERSION 1.4.2 LANGUAGES CXX C)
+project(MarkdownEdit VERSION 1.4.3 LANGUAGES CXX C)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 

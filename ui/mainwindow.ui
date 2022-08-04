@@ -68,7 +68,11 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="PreviewWidget" name="textBrowser"/>
+          <widget class="PreviewWidget" name="textBrowser">
+           <property name="acceptRichText">
+            <bool>false</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -392,10 +396,6 @@
   <action name="actionWord_wrap">
    <property name="checkable">
     <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset theme="text-wrap">
-     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Line wrap</string>

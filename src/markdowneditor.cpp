@@ -1,22 +1,39 @@
+/**
+ ** This file is part of the MarkdownEdit project.
+ ** Copyright 2022 Tim Gromeyer <sakul8825@gmail.com>.
+ **
+ ** This program is free software: you can redistribute it and/or modify
+ ** it under the terms of the GNU General Public License as published by
+ ** the Free Software Foundation, either version 3 of the License, or
+ ** (at your option) any later version.
+ **
+ ** This program is distributed in the hope that it will be useful,
+ ** but WITHOUT ANY WARRANTY; without even the implied warranty of
+ ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ ** GNU General Public License for more details.
+ **
+ ** You should have received a copy of the GNU General Public License
+ ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ **/
+
+
 #include "markdowneditor.h"
-#include "qdir.h"
-#include "qlocale.h"
-#include "qmessagebox.h"
 #include "spellchecker.h"
 #include "settings.h"
 
-#include <QDialog>
-#include <QHBoxLayout>
-#include <QFile>
 #include <QFileInfo>
 #include <QMimeData>
 #include <QImageReader>
+#include <QSignalBlocker>
+#include <QDir>
 
 
 MarkdownEditor::MarkdownEditor(QWidget *parent)
     : QMarkdownTextEdit(parent, false)
 {
-    checker = new SpellChecker(new TextEditProxyT<QPlainTextEdit>(this, this));
+    TextEditProxy *proxy = new TextEditProxyT<QPlainTextEdit>(this, this);
+
+    checker = new SpellChecker(proxy);
     connect(checker, &SpellChecker::languageChanged,
             this, &MarkdownEditor::onLanguageChanged);
 
@@ -75,7 +92,7 @@ QString MarkdownEditor::filePath()
     if (getDir() == QLatin1Char('.'))
         return getFileName() + QLatin1String("[*]");
     else {
-        QFileInfo info(fileName);
+        const QFileInfo info(fileName);
         return QStringLiteral("%1[*] (%2)").arg(info.fileName(),
                                                 info.path()).replace(common::homeDict(),
                                                                      QChar('~'));
@@ -104,49 +121,14 @@ void MarkdownEditor::onLanguageChanged(const QString &l)
     }
 }
 
-void MarkdownEditor::showMarkdownSyntax()
-{
-    QDialog d;
-    QHBoxLayout l(&d);
-    d.setLayout(&l);
-    l.setContentsMargins(0, 0, 0, 0);
-
-    MarkdownEditor e(&d);
-
-    QString file = QStringLiteral(":/syntax_en.md");
-    QString language = QStringLiteral("en_US");
-
-    for (const QString &lang : common::languages()) {
-        if (QFile::exists(QStringLiteral(":/syntax_%1.md").arg(lang))) {
-            file = QStringLiteral(":/syntax_%1.md").arg(lang);
-            language = lang;
-            break;
-        }
-    }
-
-    QFile f(file, &d);
-    if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QMessageBox::warning(&d, tr("Couldn't open file"),
-                             tr("Could not open file %1: %2").arg(
-                                 QDir::toNativeSeparators(file), f.errorString()));
-    }
-    e.setText(f.readAll(), QLatin1String(), false);
-    e.setReadOnly(true);
-    if (!e.setLanguage(language))
-        e.setLanguage(QLocale::system().name());
-    l.addWidget(&e);
-
-    d.showMaximized();
-    d.exec();
-}
-
 void MarkdownEditor::setText(const QString &t, const QString &newFile, const bool setLangugae)
 {
     if (!setLangugae) {
         if (checker)
             checker->clearDirtyBlocks();
 
-        return document()->setPlainText(t);
+        document()->setPlainText(t);
+        return document()->setModified(false);
     }
 
     if (!newFile.isEmpty())
@@ -155,20 +137,20 @@ void MarkdownEditor::setText(const QString &t, const QString &newFile, const boo
     if (fileName == QLatin1String(":/default.md") && !mapContains(fileName))
         setMapAttribute(fileName, QStringLiteral("en_US"));
 
-    checker->clearDirtyBlocks();
-    checker->setDocument(nullptr);
+    // Improve performance
+    QMetaObject::invokeMethod(this, [this, t]{
+        blockSignals(true);
 
-    if (mapContains(fileName))
-        setLanguage(mapAttribute(fileName));
+        checker->clearDirtyBlocks();
+        checker->setDocument(nullptr);
 
-    document()->setPlainText(t);
+        if (mapContains(fileName))
+            setLanguage(mapAttribute(fileName));
 
-    checker->setDocument(document());
+        document()->setPlainText(t);
+        document()->setModified(false);
+        checker->setDocument(document());
 
-    document()->setModified(false);
-}
-
-MarkdownEditor::~MarkdownEditor()
-{
-    // delete checker;
+        blockSignals(false);
+    }, Qt::QueuedConnection);
 }

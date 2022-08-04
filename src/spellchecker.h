@@ -1,3 +1,22 @@
+/**
+ ** This file is part of the MarkdownEdit project.
+ ** Copyright 2022 Tim Gromeyer <sakul8825@gmail.com>.
+ **
+ ** This program is free software: you can redistribute it and/or modify
+ ** it under the terms of the GNU General Public License as published by
+ ** the Free Software Foundation, either version 3 of the License, or
+ ** (at your option) any later version.
+ **
+ ** This program is distributed in the hope that it will be useful,
+ ** but WITHOUT ANY WARRANTY; without even the implied warranty of
+ ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ ** GNU General Public License for more details.
+ **
+ ** You should have received a copy of the GNU General Public License
+ ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ **/
+
+
 #ifndef SPELLCHECKER_H
 #define SPELLCHECKER_H
 
@@ -5,6 +24,9 @@
 
 #ifdef CHECK_MARKDOWN
 #include "markdownhighlighter.h"
+#define SpellCheckerBaseClass MarkdownHighlighter
+#else
+#define SpellCheckerBaseClass QSyntaxHighlighter
 #endif
 
 QT_BEGIN_NAMESPACE
@@ -24,16 +46,9 @@ public:
     virtual QMenu* createStandardContextMenu() = 0;
     virtual QTextCursor cursorForPosition(const QPoint& pos) const = 0;
     virtual void setContextMenuPolicy(Qt::ContextMenuPolicy policy) = 0;
-    virtual void setTextCursor(const QTextCursor& cursor) = 0;
-    virtual Qt::ContextMenuPolicy contextMenuPolicy() const = 0;
-    virtual void installEventFilter(QObject* filterObj) = 0;
-    virtual void removeEventFilter(QObject* filterObj) = 0;
-    virtual void ensureCursorVisible() = 0;
 
 signals:
     void customContextMenuRequested(const QPoint& pos);
-    void textChanged();
-    void editDestroyed();
 };
 
 template<class T>
@@ -41,9 +56,9 @@ class TextEditProxyT : public TextEditProxy {
 public:
     explicit TextEditProxyT(T* textEdit, QObject* parent = nullptr) : TextEditProxy(parent), m_textEdit(textEdit) {
         connect(textEdit, &T::customContextMenuRequested, this, &TextEditProxy::customContextMenuRequested);
-        connect(textEdit, &T::textChanged, this, &TextEditProxy::textChanged);
-        connect(textEdit, &T::destroyed, this, &TextEditProxy::editDestroyed);
     }
+    ~TextEditProxyT() {}; // app will crash if u delete m_textEdit;
+
     // static TextEditProxyT* createTextEditProxy(QPlainTextEdit *textEdit) { return new TextEditProxyT(textEdit, textEdit); };
     QTextCursor textCursor() const override { return m_textEdit->textCursor(); }
     QTextDocument* document() const override { return m_textEdit->document(); }
@@ -51,127 +66,53 @@ public:
     QMenu* createStandardContextMenu() override { return m_textEdit->createStandardContextMenu(); }
     QTextCursor cursorForPosition(const QPoint& pos) const override { return m_textEdit->cursorForPosition(pos); }
     void setContextMenuPolicy(Qt::ContextMenuPolicy policy) override { m_textEdit->setContextMenuPolicy(policy); }
-    void setTextCursor(const QTextCursor& cursor) override { m_textEdit->setTextCursor(cursor); }
-    Qt::ContextMenuPolicy contextMenuPolicy() const override { return m_textEdit->contextMenuPolicy(); }
-    void installEventFilter(QObject* filterObj) override { m_textEdit->installEventFilter(filterObj); }
-    void removeEventFilter(QObject* filterObj) override { m_textEdit->removeEventFilter(filterObj); }
-    void ensureCursorVisible() override { m_textEdit->ensureCursorVisible(); }
 
 private:
-    T* m_textEdit = nullptr;
+    T* m_textEdit;
 };
 
-#ifdef CHECK_MARKDOWN
-/**
- * @brief SpellChecker for QPlainTextEdit, QTextEdit, QTextBrowser
- */
-class SpellChecker : public MarkdownHighlighter
-#else
-/**
- * @brief SpellChecker for QPlainTextEdit, QTextEdit, QTextBrowser
- */
-class SpellChecker : public QSyntaxHighlighter
-#endif
+class SpellChecker : public SpellCheckerBaseClass
 {
     Q_OBJECT
 public:
-    /**
-     * @brief SpellChecker initializer.
-     * @param parent parent: new new TextEditProxyT(textEdit)
-     * @param lang Spell language, if empty or not set QLocale::system().name() is used.
-     */
     explicit SpellChecker(TextEditProxy *parent, const QString &lang = QLatin1String());
     ~SpellChecker();
 
     QHash<QString, QString> langMap;
 
-    /**
-     * @brief highlightBlock function thats call checkSpelling()
-     * @param text text passed to checkSpelling()
-     */
-    void highlightBlock(const QString &text) Q_DECL_OVERRIDE;
+    void highlightBlock(const QString &text) override;
 
 
-    /**
-     * @brief getLanguageList returns a list with all avaiable languages
-     * @return list with all avaiable languages
-     */
     Q_REQUIRED_RESULT static const QStringList getLanguageList();
 
-    /**
-     * @brief getLanguage returns the current language
-     * @return current language
-     */
-    inline QString getLanguage() { return language; };
+    QString getLanguage();
 
-    /**
-     * @brief isCorrect returns true if @word is correct otherwise false
-     * @param word returns if the word is spelled correct
-     * @return returns true if @word is correct otherwise false
-     */
     Q_REQUIRED_RESULT bool isCorrect(const QString &word);
 
-    /**
-     * @brief getSuggestion
-     * @return
-     */
     Q_REQUIRED_RESULT QStringList getSuggestion(const QString &);
 
-    /**
-     * @brief addWort
-     */
     void addWort(const QString &);
 
-    /**
-     * @brief ignoreWord
-     */
     void ignoreWord(const QString &);
 
 #ifdef CHECK_MARKDOWN
-    /**
-     * @brief isMarkdownHighlightingEnabled
-     * @return
-     */
     inline bool isMarkdownHighlightingEnabled() { return markdownhig; };
 #endif
 
-    /**
-     * @brief isSpellCheckingEnabled
-     * @return
-     */
     inline bool isSpellCheckingEnabled() { return spellingEnabled; };
 
 public slots:
 #ifdef CHECK_MARKDOWN
-    /**
-     * @brief setMarkdownHighlightingEnabled
-     * @param enabled
-     */
     void setMarkdownHighlightingEnabled(const bool &enabled);
 #endif
 
-    /**
-     * @brief setSpellCheckingEnabled
-     * @param enabled
-     */
     void setSpellCheckingEnabled(const bool &enabled);
 
-    /**
-     * @brief setLanguage
-     * @return
-     */
     bool setLanguage(const QString &);
 
-    /**
-     * @brief checkSpelling
-     */
     void checkSpelling(const QString &);
 
 signals:
-    /**
-     * @brief languageChanged
-     * @param lang
-     */
     void languageChanged(const QString &lang = QLatin1String());
 
 private slots:
@@ -194,11 +135,15 @@ private:
     QString language;
     void replaceWord(const int &wordPos, const QString &newWord);
 
-    TextEditProxy *textEdit;
+    TextEditProxy *textEdit = nullptr; // Fix warning
 
     QString encodeLanguageString(const QString &langString);
 
+#ifndef NO_SPELLCHECK
+    QScopedPointer<enchant::Dict> speller;
+#else
     enchant::Dict *speller = nullptr;
+#endif
 
 #ifdef CHECK_MARKDOWN
     QString getWord(const QTextBlock &, const int &);
