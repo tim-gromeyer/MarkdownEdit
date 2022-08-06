@@ -33,13 +33,17 @@
 # define QStringViewLiteral(str) QStringView(QT_UNICODE_LITERAL(str))
 #endif
 
-// We use sliced with Qt 6
+// We use sliced with Qt 6 (it's faster)
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     #define SUBSTR(text, pos, len) QStringView(text).mid(pos, len)
 #else
     #define SUBSTR(text, pos, len) QStringView(text).sliced(pos, len)
 #endif
 
+static const QColor red() {
+    static const QColor red = QColor(255, 0, 0);
+    return red;
+}
 
 #ifndef NO_SPELLCHECK
 static void dict_describe_cb(const char* const lang_tag,
@@ -107,7 +111,7 @@ void SpellChecker::checkSpelling(const QString &text)
         const bool isLetterOrNumber = c.isLetterOrNumber();
 
         if (isPosInACodeSpan(currentBlockNumber, i))
-                continue;
+            continue;
 
         if (c == QLatin1Char('h')) {
             if (textLength -i >= 10) { // http 4; :// 7; * >1; .de 10
@@ -155,7 +159,7 @@ void SpellChecker::checkSpelling(const QString &text)
             QTextCharFormat fmt = QSyntaxHighlighter::format(index);
             fmt.setFontUnderline(true);
             fmt.setUnderlineStyle(QTextCharFormat::SpellCheckUnderline);
-            fmt.setUnderlineColor(Qt::red);
+            fmt.setUnderlineColor(red());
             setFormat(index, word_.length(), fmt);
         }
         index += word_.length();
@@ -260,7 +264,7 @@ const QStringList SpellChecker::getLanguageList()
 
 QStringList SpellChecker::getSuggestion(const QString &word)
 {
-    QStringList list;
+    QStringList list = {}; // Fix warning
 #ifdef NO_SPELLCHECK
     Q_UNUSED(word);
 #else

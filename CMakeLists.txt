@@ -103,6 +103,12 @@ else()
     message(STATUS "enchant-2 not found. Disable spell check.")
 endif()
 
+# Svg package needed for android
+if(ANDROID)
+    find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Svg)
+    list(APPEND 3rdparty Qt${QT_VERSION_MAJOR}::Svg)
+endif()
+
 target_include_directories(markdownedit PRIVATE ${CMAKE_SOURCE_DIR}/src)
 target_link_libraries(markdownedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport ${ENCHANT_LDFLAGS} ${INTL_LDFLAGS} ${3rdparty})
 

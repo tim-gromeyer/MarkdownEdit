@@ -33,6 +33,7 @@ PreviewWidget::PreviewWidget(QWidget *parent)
     QTextBrowser::setOpenExternalLinks(true);
     QTextEdit::setReadOnly(true);
     QTextEdit::setUndoRedoEnabled(false);
+    QTextEdit::setAcceptRichText(false);
 
     connect(this, &QTextBrowser::anchorClicked,
             this, &PreviewWidget::openUrl);

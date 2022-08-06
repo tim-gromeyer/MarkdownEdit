@@ -45,8 +45,8 @@ public:
     explicit MainWindow(const QStringList &, QWidget *parent = nullptr);
     ~MainWindow();
 
-    void openFile(const QString &, const QString &lang = QLatin1String());
-    void openFiles(const QStringList &files);
+    void openFile(const QString &, const QString & = QLatin1String());
+    void openFiles(const QStringList &);
 
 protected:
     void closeEvent(QCloseEvent *e) override;
@@ -68,6 +68,7 @@ private slots:
     void onFileChanged(const QString &);
 
     void setupThings();
+    void setupConnections();
 
     void onEditorChanged(const int);
     void closeEditor(const int);

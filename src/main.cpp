@@ -29,10 +29,11 @@
 #include "singleapplication.h"
 #endif
 
+
 #if defined(Q_OS_WASM) && QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-#error You must use Qt 5.14 or newer
+#error You must use Qt 5.14 or newer // Becouse of the file dialogs
 #elif QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
-#error You must use Qt 5.10 or newer
+#error You must use Qt 5.10 or newer // Because of QGuiApplication::screenAt
 #endif
 
 
@@ -46,23 +47,21 @@ int main(int argc, char *argv[])
 #endif
     a.setApplicationVersion(QStringLiteral(APP_VERSION));
 
-    static constexpr QChar underscore[] = {
+    static constexpr QChar underscore[1] = {
         QLatin1Char('_')
     };
-
-    const QLocale system = QLocale::system();
 
     QTranslator translator, qtTranslator;
 
     // load translation for Qt
-    if (qtTranslator.load(system, QStringLiteral("qtbase"),
+    if (qtTranslator.load(QLocale::system(), QStringLiteral("qtbase"),
                           QString::fromRawData(underscore, 1),
                           QStringLiteral(
                               ":/qtTranslations/")))
         a.installTranslator(&qtTranslator);
 
     // try to load translation for current locale from resource file
-    if (translator.load(system, QStringLiteral("MarkdownEdit"),
+    if (translator.load(QLocale::system(), QStringLiteral("MarkdownEdit"),
                         QString::fromRawData(underscore, 1),
                         QStringLiteral(":/translations")))
         a.installTranslator(&translator);

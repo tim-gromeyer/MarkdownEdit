@@ -61,91 +61,12 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
 {
     ui->setupUi(this);
 
-    toolbutton = new QToolButton(this);
-    toolbutton->setMenu(ui->menuRecentlyOpened);
-    toolbutton->setPopupMode(QToolButton::InstantPopup);
+    setupThings(); // Setup things
 
-    shortcutNew = new QShortcut(this);
-    shortcutClose = new QShortcut(this);
+    // // settings was set up in setupThings()
+    loadSettings(); // Load settings
 
-    loadIcons();
-    setupThings();
-
-    watcher = new QFileSystemWatcher(this);
-    connect(watcher, &QFileSystemWatcher::fileChanged,
-            this, &MainWindow::onFileChanged);
-
-    connect(ui->tabWidget_2, &QTabWidget::tabCloseRequested,
-            this, &MainWindow::closeEditor);
-
-    settings = new QSettings(QStringLiteral("SME"),
-                             QStringLiteral("MarkdownEdit"), this);
-
-    loadSettings();
-
-    mode = new QComboBox(ui->Edit);
-    mode->addItems(QStringList() << QStringLiteral("Commonmark") << QStringLiteral("GitHub"));
-    mode->setCurrentIndex(1);
-
-    widgetBox = new QComboBox(this);
-    widgetBox->addItems(QStringList() << tr("Preview") << tr("HTML"));
-    widgetBox->setCurrentIndex(0);
-
-    htmlHighliter = new Highliter(ui->raw->document());
-
-    connect(ui->actionNew, &QAction::triggered, this, &MainWindow::onFileNew);
-    connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::onFileOpen);
-    connect(ui->actionSave, &QAction::triggered, this, &MainWindow::onFileSave);
-    connect(ui->actionSaveAs, &QAction::triggered, this, &MainWindow::onFileSaveAs);
-    connect(ui->actionExit, &QAction::triggered, this, &QWidget::close);
-    connect(ui->actionAbout, &QAction::triggered, this, &MainWindow::onHelpAbout);
-    connect(ui->actionAboutQt, &QAction::triggered, qApp, &QApplication::aboutQt);
-    connect(ui->actionExportHtml, &QAction::triggered, this, &MainWindow::exportHtml);
-    connect(ui->actionExportPdf, &QAction::triggered, this, &MainWindow::exportPdf);
-    connect(ui->actionPrint, &QAction::triggered, this, &MainWindow::filePrint);
-    connect(ui->actionPrintPreview, &QAction::triggered, this, &MainWindow::filePrintPreview);
-    connect(ui->actionCut, &QAction::triggered, this, &MainWindow::cut);
-    connect(ui->actionCopy, &QAction::triggered, this, &MainWindow::copy);
-    connect(ui->actionPaste, &QAction::triggered, this, &MainWindow::paste);
-
-    connect(ui->actionHighlighting_activated, &QAction::triggered,
-            this, &MainWindow::changeHighlighting);
-    connect(ui->actionAuto_add_file_path_to_icon_path, &QAction::triggered,
-            this, &MainWindow::changeAddtoIconPath);
-    connect(ui->actionDisable_preview, &QAction::triggered,
-            this, &MainWindow::disablePreview);
-    connect(ui->actionPause_preview, &QAction::triggered,
-            this, &MainWindow::pausePreview);
-    connect(ui->actionSpell_checking, &QAction::triggered,
-            this, &MainWindow::changeSpelling);
-    connect(ui->tabWidget, &QStackedWidget::currentChanged,
-            this, &MainWindow::setText);
-    connect(ui->actionWord_wrap, &QAction::triggered,
-            this, &MainWindow::changeWordWrap);
-    connect(ui->actionReload, &QAction::triggered,
-            this, &MainWindow::onFileReload);
-    connect(ui->actionOpen_in_web_browser, &QAction::triggered,
-            this, &MainWindow::openInWebBrowser);
-    connect(mode, qOverload<int>(&QComboBox::currentIndexChanged),
-            this, &MainWindow::changeMode);
-    connect(widgetBox, qOverload<int>(&QComboBox::currentIndexChanged),
-            ui->tabWidget, &QStackedWidget::setCurrentIndex);
-    connect(ui->tabWidget_2, &QTabWidget::currentChanged,
-            this, &MainWindow::onEditorChanged);
-    connect(ui->actionSelectAll, &QAction::triggered,
-            this, &MainWindow::selectAll);
-    connect(ui->actionUndo, &QAction::triggered,
-            this, &MainWindow::undo);
-    connect(ui->actionRedo, &QAction::triggered,
-            this, &MainWindow::redo);
-    connect(ui->actionMarkdown_Syntax, &QAction::triggered,
-            this, &MainWindow::onHelpSyntax);
-    connect(ui->tabWidget_2->tabBar(), &QTabBar::tabMoved,
-            this, &MainWindow::editorMoved);
-
-    ui->actionSave->setEnabled(false);
-    ui->actionUndo->setEnabled(false);
-    ui->actionRedo->setEnabled(false);
+    setupConnections(); // Connect everything
 
     ui->File->addAction(ui->actionNew);
     ui->File->addAction(ui->actionOpen);
@@ -154,17 +75,15 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
     ui->File->addWidget(toolbutton);
     ui->Edit->addAction(ui->actionUndo);
     ui->Edit->addAction(ui->actionRedo);
+#ifndef Q_OS_ANDROID // Save space
     ui->Edit->addSeparator();
     ui->Edit->addAction(ui->actionCut);
     ui->Edit->addAction(ui->actionCopy);
     ui->Edit->addAction(ui->actionPaste);
     ui->toolBarPreview->addWidget(mode);
     ui->toolBarPreview->addSeparator();
+#endif
     ui->toolBarPreview->addWidget(widgetBox);
-
-    QMetaObject::invokeMethod(this, [files, this]{
-        loadFiles(files);
-    }, Qt::QueuedConnection);
 
 #ifdef NO_SPELLCHECK
     ui->menuExtras->removeAction(ui->actionSpell_checking);
@@ -183,6 +102,13 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
     ui->menu_View->removeAction(ui->actionOpen_in_web_browser);
     ui->menu_View->removeAction(ui->actionAuto_add_file_path_to_icon_path);
 #endif
+
+    QMetaObject::invokeMethod(this, [files, this]{
+        loadFiles(files);
+
+        // Moved here for faster startup times
+        loadIcons(); // Load all icons
+    }, Qt::QueuedConnection);
 }
 
 void MainWindow::onHelpSyntax()
@@ -254,6 +180,9 @@ void MainWindow::onFileReload()
     }
 
     for (MarkdownEditor* editor : qAsConst(editorList)) {
+        if (!editor)
+            return;
+
         if (editor->getPath() == file) {
             editor->setText(f.readAll(), QLatin1String(), false);
             break;
@@ -268,11 +197,49 @@ void MainWindow::onFileReload()
 
 void MainWindow::setupThings()
 {
+    // Setup a toolbutton to acces the
+    // recently opened menu from the toolbar
+    toolbutton = new QToolButton(this);
+    toolbutton->setMenu(ui->menuRecentlyOpened);
+    toolbutton->setPopupMode(QToolButton::InstantPopup);
+
+    // Setup shortcuts to open and close tabs
+    shortcutNew = new QShortcut(this);
+    shortcutClose = new QShortcut(this);
+
+    // Setup a file watcher
+    watcher = new QFileSystemWatcher(this);
+
+    // Setup settings to load settings
+    settings = new QSettings(QStringLiteral("SME"),
+                             QStringLiteral("MarkdownEdit"), this);
+
+    // Setup ComboBox to choose between Commonmark and GitHub
+    mode = new QComboBox(ui->Edit);
+    mode->addItems(QStringList() << QStringLiteral("Commonmark") << QStringLiteral("GitHub"));
+    mode->setCurrentIndex(1);
+
+    // Setup ComboBox to choose between Preview and Raw HTML
+    widgetBox = new QComboBox(this);
+    widgetBox->addItems(QStringList() << tr("Preview") << tr("HTML"));
+    widgetBox->setCurrentIndex(0);
+
+    // Setup the HTML Highliter
+    htmlHighliter = new Highliter(ui->raw->document());
+
+    // Disable preview when Portrait mode is active
     QScreen *screen = qApp->primaryScreen();
     onOrientationChanged(screen->primaryOrientation());
     connect(screen, &QScreen::primaryOrientationChanged,
             this, &MainWindow::onOrientationChanged);
 
+    // Disable actions which doesnt work yet
+    ui->actionSave->setEnabled(false);
+    ui->actionUndo->setEnabled(false);
+    ui->actionRedo->setEnabled(false);
+
+    // Add shortcuts
+#ifndef Q_OS_ANDROID
     shortcutNew->setKey(QKeySequence::AddTab);
     connect(shortcutNew, &QShortcut::activated,
             this, &MainWindow::onFileNew);
@@ -304,6 +271,64 @@ void MainWindow::setupThings()
 
     if (ui->actionSaveAs->shortcuts().isEmpty())
         ui->actionSaveAs->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
+#endif
+}
+
+void MainWindow::setupConnections()
+{
+    connect(ui->actionNew, &QAction::triggered, this, &MainWindow::onFileNew);
+    connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::onFileOpen);
+    connect(ui->actionSave, &QAction::triggered, this, &MainWindow::onFileSave);
+    connect(ui->actionSaveAs, &QAction::triggered, this, &MainWindow::onFileSaveAs);
+    connect(ui->actionExit, &QAction::triggered, this, &QWidget::close);
+    connect(ui->actionAbout, &QAction::triggered, this, &MainWindow::onHelpAbout);
+    connect(ui->actionAboutQt, &QAction::triggered, qApp, &QApplication::aboutQt);
+    connect(ui->actionExportHtml, &QAction::triggered, this, &MainWindow::exportHtml);
+    connect(ui->actionExportPdf, &QAction::triggered, this, &MainWindow::exportPdf);
+    connect(ui->actionPrint, &QAction::triggered, this, &MainWindow::filePrint);
+    connect(ui->actionPrintPreview, &QAction::triggered, this, &MainWindow::filePrintPreview);
+    connect(ui->actionCut, &QAction::triggered, this, &MainWindow::cut);
+    connect(ui->actionCopy, &QAction::triggered, this, &MainWindow::copy);
+    connect(ui->actionPaste, &QAction::triggered, this, &MainWindow::paste);
+
+    connect(ui->actionHighlighting_activated, &QAction::triggered,
+            this, &MainWindow::changeHighlighting);
+    connect(ui->actionAuto_add_file_path_to_icon_path, &QAction::triggered,
+            this, &MainWindow::changeAddtoIconPath);
+    connect(ui->actionDisable_preview, &QAction::triggered,
+            this, &MainWindow::disablePreview);
+    connect(ui->actionPause_preview, &QAction::triggered,
+            this, &MainWindow::pausePreview);
+    connect(ui->actionSpell_checking, &QAction::triggered,
+            this, &MainWindow::changeSpelling);
+    connect(ui->tabWidget, &QStackedWidget::currentChanged,
+            this, &MainWindow::setText);
+    connect(ui->actionWord_wrap, &QAction::triggered,
+            this, &MainWindow::changeWordWrap);
+    connect(ui->actionReload, &QAction::triggered,
+            this, &MainWindow::onFileReload);
+    connect(ui->actionOpen_in_web_browser, &QAction::triggered,
+            this, &MainWindow::openInWebBrowser);
+    connect(mode, qOverload<int>(&QComboBox::currentIndexChanged),
+            this, &MainWindow::changeMode);
+    connect(widgetBox, qOverload<int>(&QComboBox::currentIndexChanged),
+            ui->tabWidget, &QStackedWidget::setCurrentIndex);
+    connect(ui->tabWidget_2, &QTabWidget::currentChanged,
+            this, &MainWindow::onEditorChanged);
+    connect(ui->actionSelectAll, &QAction::triggered,
+            this, &MainWindow::selectAll);
+    connect(ui->actionUndo, &QAction::triggered,
+            this, &MainWindow::undo);
+    connect(ui->actionRedo, &QAction::triggered,
+            this, &MainWindow::redo);
+    connect(ui->actionMarkdown_Syntax, &QAction::triggered,
+            this, &MainWindow::onHelpSyntax);
+    connect(ui->tabWidget_2->tabBar(), &QTabBar::tabMoved,
+            this, &MainWindow::editorMoved);
+    connect(watcher, &QFileSystemWatcher::fileChanged,
+            this, &MainWindow::onFileChanged);
+    connect(ui->tabWidget_2, &QTabWidget::tabCloseRequested,
+            this, &MainWindow::closeEditor);
 }
 
 void MainWindow::closeCurrEditor()
@@ -368,12 +393,13 @@ void MainWindow::closeEditor(const int index)
         html.clear(); // Clear html
         setText(ui->tabWidget->currentIndex()); // apply the empty html to the preview widget
         ui->actionReload->setText(tr("Reload \"%1\"").arg('\0'));
+        ui->actionReload->setEnabled(false);
     }
 }
 
 void MainWindow::onEditorChanged(const int index)
 {
-    MarkdownEditor* editor = currentEditor();
+    MarkdownEditor* editor = editorList[index];
     if (!editor) return;
 
     const bool modified = editor->document()->isModified();
@@ -535,16 +561,13 @@ void MainWindow::loadIcons()
 
     toolbutton->setIcon(ui->menuRecentlyOpened->icon());
 
-    if (settings::isDarkMode())
-        setWindowIcon(QIcon(S(":/Icon_dark.svg")));
-    else
-        setWindowIcon(QIcon(S(":/Icon.svg")));
+    setWindowIcon(QIcon(S(":/Icon.png")));
 #undef S
 }
 
 void MainWindow::loadIcon(const QString &name, QAction* a)
 {
-    a->setIcon(QIcon::fromTheme(name, QIcon(QStringLiteral(":/icons/%1.svg").arg(name))));
+    a->setIcon(QIcon::fromTheme(name, QIcon(QLatin1String(":/icons/") + name + QLatin1String(".svg"))));
 }
 
 void MainWindow::onOrientationChanged(const Qt::ScreenOrientation t)
@@ -552,16 +575,13 @@ void MainWindow::onOrientationChanged(const Qt::ScreenOrientation t)
     disablePreview(t == Qt::PortraitOrientation);
 }
 
-// WARNING: Here is the spot where performance issues are getting real
+// FIXME: Performance problems occur at this point.
 void MainWindow::setText(const int index)
 {
-    if (index == -1)
-        setText(ui->tabWidget->currentIndex());
-
     if (index == 0) {
         ui->textBrowser->setHtml(html);
     }
-    else if (index == 1) {
+    else {
         const int v = ui->raw->verticalScrollBar()->value();
         ui->raw->document()->setPlainText(html);
         ui->raw->verticalScrollBar()->setValue(v);
@@ -883,7 +903,6 @@ void MainWindow::changeMode(const int i)
 
 void MainWindow::onTextChanged()
 {
-    qDebug() << __func__;
     // Don't continue if the preview is paused or the current editor is invalid.
     if (dontUpdate || !currentEditor())
         return;
@@ -1004,11 +1023,11 @@ void MainWindow::onFileNew()
                                editor, editor->getFileName());
     ui->tabWidget_2->setCurrentIndex(editorList.length() -1);
 
-    if (!editor->setLanguage(QLatin1String("en_US")))
-        editor->setLanguage(QLocale::system().name());
+    if (!editor->setLanguage(QLocale::system().name()))
+        editor->setLanguage(QLatin1String("en_US"));
 
     statusBar()->show();
-    statusBar()->showMessage(tr("New document created"), 10000);
+    statusBar()->showMessage(tr("New document created"), 0);
     QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
 }
 
