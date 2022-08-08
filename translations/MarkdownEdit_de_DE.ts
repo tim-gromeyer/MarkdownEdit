@@ -5,31 +5,19 @@
     <name>About</name>
     <message>
         <source>About</source>
-        <translation>Über</translation>
+        <translation type="vanished">Über</translation>
     </message>
     <message>
         <source>Description:</source>
-        <translation>Beschreibung:</translation>
+        <translation type="vanished">Beschreibung:</translation>
     </message>
     <message>
         <source>Homepage:</source>
-        <translation>Startseite:</translation>
+        <translation type="vanished">Startseite:</translation>
     </message>
     <message>
         <source>License</source>
-        <translation>Lizenz</translation>
-    </message>
-    <message>
-        <source>Version:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Qt Version:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Credits</source>
-        <translation></translation>
+        <translation type="vanished">Lizenz</translation>
     </message>
 </context>
 <context>
@@ -120,7 +108,7 @@
     </message>
     <message>
         <source>Search</source>
-        <translation>Suche</translation>
+        <translation type="vanished">Suche</translation>
     </message>
     <message>
         <source>Export HTML</source>
@@ -128,7 +116,7 @@
     </message>
     <message>
         <source>Replace</source>
-        <translation>Ersetzen</translation>
+        <translation type="vanished">Ersetzen</translation>
     </message>
     <message>
         <source>Highlighting enabled</source>
@@ -191,7 +179,7 @@
         <translation type="vanished">Du hast nicht gespeicherte Änderungen. Möchten Sie trotzdem ein neues Dokument öffnen?</translation>
     </message>
     <message>
-        <source>Open MarkDown File</source>
+        <source>Open Markdown File</source>
         <translation>Markdown-Datei öffnen</translation>
     </message>
     <message>
@@ -240,15 +228,15 @@
     </message>
     <message>
         <source>MarkdownEdit, as the name suggests, is a simple and easy program to create and edit Markdown files.</source>
-        <translation>MarkdownEdit ist, wie der Name schon sagt, ein einfaches Programm zum Erstellen und Bearbeiten von Markdown-Dateien.</translation>
+        <translation type="vanished">MarkdownEdit ist, wie der Name schon sagt, ein einfaches Programm zum Erstellen und Bearbeiten von Markdown-Dateien.</translation>
     </message>
     <message>
         <source>&lt;p&gt;The conversion from Markdown to HTML is done with the help of the &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt; library by &lt;em&gt;Martin Mitáš&lt;/em&gt;.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Die Konvertierung von Markdown nach HTML erfolgt mit Hilfe der &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt;-Bibliothek von &lt;em&gt;Martin Mitáš&lt;/ em&gt;.&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;Die Konvertierung von Markdown nach HTML erfolgt mit Hilfe der &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt;-Bibliothek von &lt;em&gt;Martin Mitáš&lt;/ em&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;The &lt;a href=&quot;https://github.com/pbek/qmarkdowntextedit&quot;&gt;widget&lt;/a&gt; used for writing was created by &lt;em&gt;Patrizio Bekerle&lt;/em&gt;.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Das zum Schreiben verwendete &lt;a href=&quot;https://github.com/pbek/qmarkdowntextedit&quot;&gt;Widget&lt;/a&gt; wurde von &lt;em&gt;Patrizio Bekerle&lt;/em&gt; erstellt.&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;Das zum Schreiben verwendete &lt;a href=&quot;https://github.com/pbek/qmarkdowntextedit&quot;&gt;Widget&lt;/a&gt; wurde von &lt;em&gt;Patrizio Bekerle&lt;/em&gt; erstellt.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Spell checking is done with the &lt;a href=&quot;https://github.com/software-made-easy/qtspell&quot;&gt;QtSpell&lt;/a&gt; library based on the &lt;a href=&quot;https://github.com/manisandro/qtspell&quot;&gt;QtSpell&lt;/a&gt; library by &lt;em&gt;Sandro Mani&lt;/em&gt;.&lt;/p&gt;</source>
@@ -304,10 +292,6 @@
     </message>
     <message>
         <source>Ctrl+Shift+P</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Show line numbers</source>
         <translation></translation>
     </message>
     <message>
@@ -368,7 +352,7 @@ Willst du trotzdem verlassen?</translation>
     </message>
     <message>
         <source>&lt;p&gt;Thanks to &lt;a href=&quot;https://github.com/Waqar144&quot;&gt;Waqar Ahmed&lt;/a&gt; for helping with development&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Danke an &lt;a href=&quot;https://github.com/Waqar144&quot;&gt;Waqar Ahmed&lt;/a&gt; für die Unterstützung bei der Entwicklung&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;Danke an &lt;a href=&quot;https://github.com/Waqar144&quot;&gt;Waqar Ahmed&lt;/a&gt; für die Unterstützung bei der Entwicklung&lt;/p&gt;</translation>
     </message>
     <message>
         <source>The document has been edited, do you want to save it?</source>
@@ -378,16 +362,64 @@ Willst du trotzdem verlassen?</translation>
         <source>New document created</source>
         <translation>Neues Dokument erstellt</translation>
     </message>
+    <message>
+        <source>&lt;h2&gt;MarkdownEdit&lt;/h2&gt;
+&lt;p&gt;MarkdownEdit, as the name suggests, is a simple and easy program to create and edit Markdown files.&lt;/p&gt;
+&lt;h2&gt;About&lt;/h2&gt;
+&lt;table class=&quot;table&quot;&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Version:&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;%1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&amp;nbsp;Qt Version:&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;%2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&amp;nbsp;Homepage:&lt;/td&gt;
+&lt;td&gt;&lt;span style=&quot;font-size: medium; white-space: pre-wrap; background-color: transparent; font-style: italic; color: #a8abb0;&quot;&gt;&lt;a href=&quot;https://software-made-easy.github.io/MarkdownEdit/&quot;&gt;https://software-made-easy.github.io/MarkdownEdit/&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2&gt;Credits&lt;/h2&gt;
+&lt;p&gt;Thanks to &lt;a href=&quot;https://github.com/Waqar144&quot;&gt;Waqar Ahmed&lt;/a&gt; for help with development.&lt;/p&gt;
+&lt;p&gt;The conversion from Markdown to HTML is done using the &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt; library by &lt;em&gt;Martin Mitáš&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;The &lt;a href=&quot;https://github.com/pbek/qmarkdowntextedit&quot;&gt;widget&lt;/a&gt; used for writing was created by &lt;em&gt;Patrizio Bekerle&lt;/em&gt;.&lt;/p&gt;</source>
+        <translation type="unfinished">&lt;h2&gt;MarkdownEdit&lt;/h2&gt;
+&lt;p&gt;MarkdownEdit ist, wie der Name schon sagt, ein einfaches Programm zum Erstellen und Bearbeiten von Markdown-Dateien.&lt;/p&gt;
+&lt;h2&gt;Über&lt;/h2&gt;
+&lt;table class=&quot;table&quot;&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Version:&amp;nbsp;&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;%1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&amp;nbsp;Qt-Version:&lt;/td&gt;
+&lt;td&gt;&amp;nbsp;%2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&amp;nbsp;Homepage:&lt;/td&gt;
+&lt;td&gt;&lt;span style=&quot;font-size: medium; white-space: pre-wrap; background-color: transparent; font-style: italic; color: #a8abb0;&quot;&gt;&lt;a href=&quot;https:// software-made-easy.github.io/MarkdownEdit/&quot;&gt;https://software-made-easy.github.io/MarkdownEdit/&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2&gt;Credits&lt;/h2&gt;
+&lt;p&gt;Dank an &lt;a href=&quot;https://github.com/Waqar144&quot;&gt;Waqar Ahmed&lt;/a&gt; für die Hilfe bei der Entwicklung.&lt;/p&gt;
+&lt;p&gt;Die Konvertierung von Markdown in HTML erfolgt mithilfe der &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt;-Bibliothek von &lt;em&gt;Martin Mitáš&lt;/em&gt;.&lt;/em&gt; &lt;p&gt;
+&lt;p&gt;Das zum Schreiben verwendete &lt;a href=&quot;https://github.com/pbek/qmarkdowntextedit&quot;&gt;Widget&lt;/a&gt; wurde von &lt;em&gt;Patrizio Bekerle&lt;/em&gt; erstellt.&lt;/p&gt;</translation>
+    </message>
 </context>
 <context>
     <name>MarkdownEditor</name>
     <message>
         <source>Couldn&apos;t open file</source>
-        <translation>Datei konnte nicht geöffnet werden</translation>
+        <translation type="vanished">Datei konnte nicht geöffnet werden</translation>
     </message>
     <message>
         <source>Could not open file %1: %2</source>
-        <translation>Datei %1 konnte nicht geöffnet werden: %2</translation>
+        <translation type="vanished">Datei %1 konnte nicht geöffnet werden: %2</translation>
     </message>
 </context>
 <context>

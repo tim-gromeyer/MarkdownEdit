@@ -52,7 +52,7 @@ protected:
     void closeEvent(QCloseEvent *e) override;
 
 public slots:
-    void receivedMessage(const qint32 &, const QByteArray &);
+    void receivedMessage(const qint32, const QByteArray &);
 
     void toForeground();
 
@@ -66,6 +66,8 @@ private slots:
     void onFileReload();
 
     void onFileChanged(const QString &);
+
+    void onModificationChanged(const bool);
 
     void setupThings();
     void setupConnections();

@@ -28,6 +28,7 @@
 #include <enchant++.h>
 #endif
 
+
 // Needed for wasm
 #ifndef QStringViewLiteral
 # define QStringViewLiteral(str) QStringView(QT_UNICODE_LITERAL(str))
@@ -114,7 +115,7 @@ void SpellChecker::checkSpelling(const QString &text)
             continue;
 
         if (c == QLatin1Char('h')) {
-            if (textLength -i >= 10) { // http 4; :// 7; * >1; .de 10
+            if (textLength -i >= 11) { // http 4; :// 7; * >1; .de 11
                 if (SUBSTR(text, i, 4) == QStringViewLiteral("http")) {
                     const int last = i;
 
@@ -252,11 +253,13 @@ const QStringList SpellChecker::getLanguageList()
     enchant::Broker *broker = get_enchant_broker();
     QStringList languages;
     broker->list_dicts(dict_describe_cb, &languages);
-    std::sort(languages.begin(), languages.end());
+
     if (languages.isEmpty())
         qWarning() << "No language dict found";
 
     languages.removeDuplicates();
+    languages.sort();
+
 
     return languages;
 #endif

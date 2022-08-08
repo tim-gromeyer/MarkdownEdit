@@ -1,3 +1,4 @@
+# Find Qt for QmarkdownTextEdit and SingleApplication
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
@@ -41,6 +42,7 @@ endif()
 
 # include(${CMAKE_CURRENT_LIST_DIR}/hunspell.cmake)
 
+
 include_directories(${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit)
 include_directories(${CMAKE_CURRENT_LIST_DIR}/md4c/src)
 
@@ -48,6 +50,5 @@ include_directories(${CMAKE_CURRENT_LIST_DIR}/md4c/src)
 set(3rdparty
     md4c-html
     qmarkdowntextedit
-    # hunspell
     ${singleapp}
 )

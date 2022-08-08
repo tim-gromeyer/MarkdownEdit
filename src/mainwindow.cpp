@@ -20,7 +20,6 @@
 // imports
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "about.h"
 #include "markdownparser.h"
 #include "highlighter.h"
 #include "spellchecker.h"
@@ -101,6 +100,9 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
 
     ui->menu_View->removeAction(ui->actionOpen_in_web_browser);
     ui->menu_View->removeAction(ui->actionAuto_add_file_path_to_icon_path);
+#endif
+#ifdef Q_OS_ANDROID
+    mode->deleteLater();
 #endif
 
     QMetaObject::invokeMethod(this, [files, this]{
@@ -430,7 +432,7 @@ void MainWindow::onEditorChanged(const int index)
 
     setCurrDir(editor->getDir());
 
-    // editor->setFocus(Qt::TabFocusReason);
+    editor->setFocus(Qt::TabFocusReason);
 
     onTextChanged();
 }
@@ -453,30 +455,44 @@ MarkdownEditor *MainWindow::createEditor()
     connect(editor->document(), &QTextDocument::modificationChanged,
             ui->actionSave, &QAction::setEnabled);
     connect(editor->document(), &QTextDocument::modificationChanged,
-            this, &QMainWindow::setWindowModified);
+            this, &MainWindow::onModificationChanged);
     connect(editor->document(), &QTextDocument::undoAvailable,
             ui->actionUndo, &QAction::setEnabled);
     connect(editor->document(), &QTextDocument::redoAvailable,
             ui->actionRedo, &QAction::setEnabled);
-    connect(editor, &QMarkdownTextEdit::zoomIn, this,
-            [editor]{ static_cast<QPlainTextEdit*>(editor)->zoomOut(-1); });
-    connect(editor, &QMarkdownTextEdit::zoomOut, this,
-            [editor]{ static_cast<QPlainTextEdit*>(editor)->zoomIn(-1); });
     connect(editor->horizontalScrollBar(), &QScrollBar::valueChanged,
             ui->textBrowser->horizontalScrollBar(), &QScrollBar::setValue);
 
     return editor;
 }
 
-void MainWindow::receivedMessage(const qint32 &id, const QByteArray &msg)
+void MainWindow::receivedMessage(const qint32 id, const QByteArray &msg)
 {
     QString f = QString::fromLatin1(msg); // is a bit faster
-    f.remove(0, 7);
+    f.remove(0, 7); // remove "file://" which is added programaticly
 
-    if (f.isEmpty())
+    qInfo() << "markdownedit: instance" << id << "started and send folowing message:" << f;
+
+    if (f.isEmpty()) // it's the case when you start a new app
         onFileNew();
     else
-        openFiles(f.split(QChar(QChar::Space)));
+        openFiles(f.split(QChar(QChar::Space))); // if you selected files
+}
+
+void MainWindow::onModificationChanged(const bool m)
+{
+    setWindowModified(m);
+
+    const int curr = ui->tabWidget_2->currentIndex();
+
+    QString old = ui->tabWidget_2->tabBar()->tabText(curr);
+
+    if (m && !old.endsWith(QChar('*')))
+        old.append(QChar('*'));
+    else if (!m && old.endsWith(QChar('*')))
+        old.remove(old.length() -1, 1);
+
+    ui->tabWidget_2->tabBar()->setTabText(curr, old);
 }
 
 MarkdownEditor* MainWindow::currentEditor()
@@ -626,8 +642,6 @@ void MainWindow::changeSpelling(const bool checked)
 
 void MainWindow::disablePreview(const bool checked)
 {
-    if (ui->actionDisable_preview->isChecked() != checked) return;
-
     ui->tabWidget->setHidden(checked);
 
     dontUpdate = checked;
@@ -814,12 +828,12 @@ void MainWindow::exportPdf()
 
     if (file.isEmpty()) return;
 
-    QPrinter printer;
+    QPrinter printer(QPrinter::HighResolution);
     printer.setOutputFormat(QPrinter::PdfFormat);
     printer.setOutputFileName(file);
-    printer.setResolution(QPrinter::HighResolution);
 
-    printPreview(&printer);
+    ui->textBrowser->setHtml(html);
+    ui->textBrowser->print(&printer);
 
     statusBar()->show();
     statusBar()->showMessage(tr("Pdf exported to %1").arg(
@@ -1066,12 +1080,12 @@ void MainWindow::onFileOpen()
     };
     QFileDialog::getOpenFileContent("Markdown (*.md *.markdown *.mkd)", fileContentReady);
 #else
-    QFileDialog dialog(this, tr("Open MarkDown File"));
+    QFileDialog dialog(this, tr("Open Markdown File"));
     dialog.setMimeTypeFilters({"text/markdown"});
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
     if (dialog.exec() == QDialog::Accepted) {
         const QString file = dialog.selectedFiles().at(0);
-        if (file == path) return;
+        if (file == path || file.isEmpty()) return;
         openFile(file);
     }
 #endif
@@ -1173,15 +1187,30 @@ bool MainWindow::onFileSaveAs()
 
 void MainWindow::onHelpAbout()
 {
-    About dialog(tr("About MarkdownEdit"), this);
-    dialog.setAppUrl(QStringLiteral("https://software-made-easy.github.io/MarkdownEdit/"));
-    dialog.setDescription(tr("MarkdownEdit, as the name suggests, is a simple and easy program to create and edit Markdown files."));
-
-    dialog.addCredit(tr("<p>Thanks to <a href=\"https://github.com/Waqar144\">Waqar Ahmed</a> for helping with development</p>"));
-    dialog.addCredit(tr("<p>The conversion from Markdown to HTML is done with the help of the <a href=\"https://github.com/mity/md4c\">md4c</a> library by <em>Martin Mitáš</em>.</p>"));
-    dialog.addCredit(tr("<p>The <a href=\"https://github.com/pbek/qmarkdowntextedit\">widget</a> used for writing was created by <em>Patrizio Bekerle</em>.</p>"));
-
-    dialog.exec();
+    QMessageBox::about(this, tr("About MarkdownEdit"), tr("<h2>MarkdownEdit</h2>\n"
+                                                          "<p>MarkdownEdit, as the name suggests, is a simple and easy program to create and edit Markdown files.</p>\n"
+                                                          "<h2>About</h2>\n"
+                                                          "<table class=\"table\">\n"
+                                                          "<tbody>\n"
+                                                          "<tr>\n"
+                                                          "<td>Version:&nbsp;</td>\n"
+                                                          "<td>&nbsp;%1</td>\n"
+                                                          "</tr>\n"
+                                                          "<tr>\n"
+                                                          "<td>&nbsp;Qt Version:</td>\n"
+                                                          "<td>&nbsp;%2</td>\n"
+                                                          "</tr>\n"
+                                                          "<tr>\n"
+                                                          "<td>&nbsp;Homepage:</td>\n"
+                                                          "<td><span style=\"font-size: medium; white-space: pre-wrap; background-color: transparent; font-style: italic; color: #a8abb0;\"><a href=\"https://software-made-easy.github.io/MarkdownEdit/\">https://software-made-easy.github.io/MarkdownEdit/</a></span></td>\n"
+                                                          "</tr>\n"
+                                                          "</tbody>\n"
+                                                          "</table>\n"
+                                                          "<h2>Credits</h2>\n"
+                                                          "<p>Thanks to <a href=\"https://github.com/Waqar144\">Waqar Ahmed</a> for help with development.</p>\n"
+                                                          "<p>The conversion from Markdown to HTML is done using the <a href=\"https://github.com/mity/md4c\">md4c</a> library by <em>Martin Mitáš</em>.</p>\n"
+                                                          "<p>The <a href=\"https://github.com/pbek/qmarkdowntextedit\">widget</a> used for writing was created by <em>Patrizio Bekerle</em>.</p>"
+                                                          ).arg(QStringLiteral(APP_VERSION), qVersion()));
 }
 
 void MainWindow::openRecent() {
@@ -1265,10 +1294,8 @@ void MainWindow::loadSettings() {
 
     highlighting = settings->value(QStringLiteral("highlighting"), true).toBool();
     ui->actionHighlighting_activated->setChecked(highlighting);
-    // changeHighlighting(highlighting); not loaded yet
 
     setPath = settings->value(QStringLiteral("setPath"), true).toBool();
-     // changeAddtoIconPath(setPath); files aren't loaded yet
 
     recentOpened = settings->value(QStringLiteral("recent"), QStringList()).toStringList();
     if (!recentOpened.isEmpty()) {

@@ -78,9 +78,11 @@ int main(int argc, char *argv[])
     parser.process(a);
 
 #ifndef NOT_SUPPORTET
-    if(a.sendMessage(QByteArrayLiteral("file://") +
-                  parser.positionalArguments().join(QLatin1Char(' ')).toLatin1()))
+    if (a.isSecondary()) {
+        a.sendMessage(QByteArrayLiteral("file://") +
+                          parser.positionalArguments().join(QLatin1Char(' ')).toLatin1());
         return 0;
+    }
 #endif
 
     MainWindow w(parser.positionalArguments());
