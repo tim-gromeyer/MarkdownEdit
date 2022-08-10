@@ -103,6 +103,7 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
 #endif
 #ifdef Q_OS_ANDROID
     mode->deleteLater();
+    setStatusBar(nullptr);
 #endif
 
     QMetaObject::invokeMethod(this, [files, this]{
@@ -835,10 +836,12 @@ void MainWindow::exportPdf()
     ui->textBrowser->setHtml(html);
     ui->textBrowser->print(&printer);
 
-    statusBar()->show();
-    statusBar()->showMessage(tr("Pdf exported to %1").arg(
-                                 QDir::toNativeSeparators(file)), 0);
-    QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
+    if (statusBar()) {
+        statusBar()->show();
+        statusBar()->showMessage(tr("Pdf exported to %1").arg(
+                                     QDir::toNativeSeparators(file)), 0);
+        QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
+    }
 }
 
 void MainWindow::openInWebBrowser()
@@ -901,9 +904,11 @@ void MainWindow::exportHtml()
     QTextStream str(&f);
     str << html;
 
-    statusBar()->show();
-    statusBar()->showMessage(tr("HTML exported to %1").arg(QDir::toNativeSeparators(file)), 0);
-    QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
+    if (statusBar()) {
+        statusBar()->show();
+        statusBar()->showMessage(tr("HTML exported to %1").arg(QDir::toNativeSeparators(file)), 0);
+        QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
+    }
 
     QGuiApplication::restoreOverrideCursor();
 #endif
@@ -1016,9 +1021,11 @@ void MainWindow::openFile(const QString &newFile, const QString &lang)
 
     updateOpened();
 
-    statusBar()->show();
-    statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 0);
-    QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
+    if (statusBar()) {
+        statusBar()->show();
+        statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 0);
+        QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
+    }
 
     blockSignals(false);
 
@@ -1040,9 +1047,11 @@ void MainWindow::onFileNew()
     if (!editor->setLanguage(QLocale::system().name()))
         editor->setLanguage(QLatin1String("en_US"));
 
-    statusBar()->show();
-    statusBar()->showMessage(tr("New document created"), 0);
-    QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
+    if (statusBar()) {
+        statusBar()->show();
+        statusBar()->showMessage(tr("New document created"), 0);
+        QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
+    }
 }
 
 void MainWindow::onFileOpen()
@@ -1069,9 +1078,11 @@ void MainWindow::onFileOpen()
 
             fileList.append(newFile);
 
-            statusBar()->show();
-            statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 0);
-            QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
+            if (statusBar()) {
+                statusBar()->show();
+                statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 0);
+                QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
+            }
 
             updateOpened();
 
@@ -1083,11 +1094,11 @@ void MainWindow::onFileOpen()
     QFileDialog dialog(this, tr("Open Markdown File"));
     dialog.setMimeTypeFilters({"text/markdown"});
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
-    if (dialog.exec() == QDialog::Accepted) {
-        const QString file = dialog.selectedFiles().at(0);
-        if (file == path || file.isEmpty()) return;
-        openFile(file);
-    }
+    if (dialog.exec() == QDialog::Rejected) return;
+
+    const QString file = dialog.selectedFiles().at(0);
+    if (file == path || file.isEmpty()) return;
+    openFile(file);
 #endif
 }
 
@@ -1131,9 +1142,11 @@ bool MainWindow::onFileSave()
     watcher->addPath(path);
 #endif
 
-    statusBar()->show();
-    statusBar()->showMessage(tr("Wrote %1").arg(QDir::toNativeSeparators(path)), 0);
-    QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
+    if (statusBar()) {
+        statusBar()->show();
+        statusBar()->showMessage(tr("Wrote %1").arg(QDir::toNativeSeparators(path)), 0);
+        QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
+    }
 
     updateOpened();
 
@@ -1190,25 +1203,25 @@ void MainWindow::onHelpAbout()
     QMessageBox::about(this, tr("About MarkdownEdit"), tr("<h2>MarkdownEdit</h2>\n"
                                                           "<p>MarkdownEdit, as the name suggests, is a simple and easy program to create and edit Markdown files.</p>\n"
                                                           "<h2>About</h2>\n"
-                                                          "<table class=\"table\">\n"
+                                                          "<table class=\"table\" style=\"border-style: none;\">\n"
                                                           "<tbody>\n"
                                                           "<tr>\n"
-                                                          "<td>Version:&nbsp;</td>\n"
-                                                          "<td>&nbsp;%1</td>\n"
+                                                          "<td>Version:</td>\n"
+                                                          "<td>%1</td>\n"
                                                           "</tr>\n"
                                                           "<tr>\n"
-                                                          "<td>&nbsp;Qt Version:</td>\n"
-                                                          "<td>&nbsp;%2</td>\n"
+                                                          "<td>Qt Version:</td>\n"
+                                                          "<td>%2</td>\n"
                                                           "</tr>\n"
                                                           "<tr>\n"
-                                                          "<td>&nbsp;Homepage:</td>\n"
+                                                          "<td>Homepage:</td>\n"
                                                           "<td><span style=\"font-size: medium; white-space: pre-wrap; background-color: transparent; font-style: italic; color: #a8abb0;\"><a href=\"https://software-made-easy.github.io/MarkdownEdit/\">https://software-made-easy.github.io/MarkdownEdit/</a></span></td>\n"
                                                           "</tr>\n"
                                                           "</tbody>\n"
                                                           "</table>\n"
                                                           "<h2>Credits</h2>\n"
                                                           "<p>Thanks to <a href=\"https://github.com/Waqar144\">Waqar Ahmed</a> for help with development.</p>\n"
-                                                          "<p>The conversion from Markdown to HTML is done using the <a href=\"https://github.com/mity/md4c\">md4c</a> library by <em>Martin Mitáš</em>.</p>\n"
+                                                          "<p>The conversion from Markdown to HTML is done using the <a href=\"https://github.com/mity/md4c\">md4c</a> library by <em>Martin Mit&aacute;&scaron;</em>.</p>\n"
                                                           "<p>The <a href=\"https://github.com/pbek/qmarkdowntextedit\">widget</a> used for writing was created by <em>Patrizio Bekerle</em>.</p>"
                                                           ).arg(QStringLiteral(APP_VERSION), qVersion()));
 }

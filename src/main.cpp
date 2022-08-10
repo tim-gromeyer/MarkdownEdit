@@ -105,5 +105,10 @@ int main(int argc, char *argv[])
 
     w.show();
 
+#ifdef Q_OS_ANDROID
+    // Prevent blank window
+    a.processEvents();
+#endif
+
     return a.exec();
 }

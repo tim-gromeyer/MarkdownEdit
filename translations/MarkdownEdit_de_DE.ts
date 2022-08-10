@@ -2,25 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="de_DE">
 <context>
-    <name>About</name>
-    <message>
-        <source>About</source>
-        <translation type="vanished">Über</translation>
-    </message>
-    <message>
-        <source>Description:</source>
-        <translation type="vanished">Beschreibung:</translation>
-    </message>
-    <message>
-        <source>Homepage:</source>
-        <translation type="vanished">Startseite:</translation>
-    </message>
-    <message>
-        <source>License</source>
-        <translation type="vanished">Lizenz</translation>
-    </message>
-</context>
-<context>
     <name>MainWindow</name>
     <message>
         <source>Preview</source>
@@ -107,16 +88,8 @@
         <translation>Alles markieren</translation>
     </message>
     <message>
-        <source>Search</source>
-        <translation type="vanished">Suche</translation>
-    </message>
-    <message>
         <source>Export HTML</source>
         <translation>HTML Exportieren</translation>
-    </message>
-    <message>
-        <source>Replace</source>
-        <translation type="vanished">Ersetzen</translation>
     </message>
     <message>
         <source>Highlighting enabled</source>
@@ -139,18 +112,6 @@
         <translation>Rechtschreibprüfung</translation>
     </message>
     <message>
-        <source>Search/Replace</source>
-        <translation type="vanished">Suchen/Ersetzen</translation>
-    </message>
-    <message>
-        <source>Export Html</source>
-        <translation type="vanished">Html exportieren</translation>
-    </message>
-    <message>
-        <source>Options</source>
-        <translation type="vanished">Einstellungen</translation>
-    </message>
-    <message>
         <source>About</source>
         <translation>Über</translation>
     </message>
@@ -167,28 +128,12 @@
         <translation>%1 geöffnet</translation>
     </message>
     <message>
-        <source>You have unsaved changes. Do you want to create a new document anyway?</source>
-        <translation type="vanished">Du hast nicht gespeicherte Änderungen. Möchten Sie trotzdem ein neues Dokument erstellen?</translation>
-    </message>
-    <message>
-        <source>## New document</source>
-        <translation type="vanished">## Neues Dokument</translation>
-    </message>
-    <message>
-        <source>You have unsaved changes. Do you want to open a new document anyway?</source>
-        <translation type="vanished">Du hast nicht gespeicherte Änderungen. Möchten Sie trotzdem ein neues Dokument öffnen?</translation>
-    </message>
-    <message>
         <source>Open Markdown File</source>
         <translation>Markdown-Datei öffnen</translation>
     </message>
     <message>
         <source>Could not write to file %1: %2</source>
         <translation>In Datei %1 konnte nicht geschrieben werden: %2</translation>
-    </message>
-    <message>
-        <source>new.md</source>
-        <translation type="vanished">neu.md</translation>
     </message>
     <message>
         <source>Print Document</source>
@@ -227,48 +172,10 @@
         <translation>Über MarkdownEdit</translation>
     </message>
     <message>
-        <source>MarkdownEdit, as the name suggests, is a simple and easy program to create and edit Markdown files.</source>
-        <translation type="vanished">MarkdownEdit ist, wie der Name schon sagt, ein einfaches Programm zum Erstellen und Bearbeiten von Markdown-Dateien.</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;The conversion from Markdown to HTML is done with the help of the &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt; library by &lt;em&gt;Martin Mitáš&lt;/em&gt;.&lt;/p&gt;</source>
-        <translation type="vanished">&lt;p&gt;Die Konvertierung von Markdown nach HTML erfolgt mit Hilfe der &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt;-Bibliothek von &lt;em&gt;Martin Mitáš&lt;/ em&gt;.&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;The &lt;a href=&quot;https://github.com/pbek/qmarkdowntextedit&quot;&gt;widget&lt;/a&gt; used for writing was created by &lt;em&gt;Patrizio Bekerle&lt;/em&gt;.&lt;/p&gt;</source>
-        <translation type="vanished">&lt;p&gt;Das zum Schreiben verwendete &lt;a href=&quot;https://github.com/pbek/qmarkdowntextedit&quot;&gt;Widget&lt;/a&gt; wurde von &lt;em&gt;Patrizio Bekerle&lt;/em&gt; erstellt.&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Spell checking is done with the &lt;a href=&quot;https://github.com/software-made-easy/qtspell&quot;&gt;QtSpell&lt;/a&gt; library based on the &lt;a href=&quot;https://github.com/manisandro/qtspell&quot;&gt;QtSpell&lt;/a&gt; library by &lt;em&gt;Sandro Mani&lt;/em&gt;.&lt;/p&gt;</source>
-        <translation type="vanished">&lt;p&gt;Die Rechtschreibprüfung erfolgt mit der &lt;a href=&quot;https://github.com/software-made-easy/qtspell&quot;&gt;QtSpell&lt;/a&gt;-Bibliothek basierend auf &lt;a href=&quot;https: //github.com/manisandro/qtspell&quot;&gt;QtSpell&lt;/a&gt;-Bibliothek von &lt;em&gt;Sandro Mani&lt;/em&gt;.&lt;/p&gt;</translation>
-    </message>
-    <message>
         <source>This file could not be found:
 %1.</source>
         <translation>Diese Datei wurde nicht gefunden:
 %1.</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Spell checking is done using the &lt;a href=&quot;https://github.com/manisandro/qtspell&quot;&gt;QtSpell&lt;/a&gt; library by &lt;em&gt;Sandro Mani&lt;/em&gt;.&lt;/p&gt;</source>
-        <translation type="vanished">&lt;p&gt;Die Rechtschreibprüfung erfolgt mithilfe der &lt;a href=&quot;https://github.com/manisandro/qtspell&quot;&gt;QtSpell&lt;/a&gt;-Bibliothek von &lt;em&gt;Sandro Mani&lt;/em&gt;.&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;The HTML syntax is highlighted using &lt;em&gt;Waqar Ahmed&lt;/em&gt;&apos;s &lt;a href=&quot;https://github.com/Waqar144/QSourceHighlite&quot;&gt;QSourceHighlite&lt;/a&gt; library.&lt;/p&gt;</source>
-        <translation type="vanished">&lt;p&gt;Die HTML-Syntax wird mithilfe der &lt;a href=&quot;https://github.com/Waqar144/QSourceHighlite&quot;&gt;QSourceHighlite&lt;/a&gt;-Bibliothek von &lt;em&gt;Waqar Ahmed&lt;/em&gt; hervorgehoben.&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>This file could not be found:
--%1.</source>
-        <translation type="vanished">Diese Datei konnte nicht gefunden werden:
--%1.</translation>
-    </message>
-    <message>
-        <source>You have unsaved changes. Do you want to exit anyway?</source>
-        <translation type="vanished">Du hast nicht gespeicherte Änderungen. Willst du trotzdem beenden?</translation>
-    </message>
-    <message>
-        <source>Auto add file path to icon path</source>
-        <translation type="vanished">Dateipfad automatisch zum Bilderpfad hinzufügen</translation>
     </message>
     <message>
         <source>Export</source>
@@ -323,10 +230,6 @@
         <translation>PDF nach %1 exportiert</translation>
     </message>
     <message>
-        <source>File changed</source>
-        <translation type="vanished">Datei geändert</translation>
-    </message>
-    <message>
         <source>File &lt;em&gt;%1&lt;/em&gt; has been modified.
 Would you like to reload them?</source>
         <translation>Datei &lt;em&gt;%1&lt;/em&gt; wurde geändert.
@@ -341,18 +244,10 @@ Möchten Sie sie neu laden?</translation>
         <translation>Bilder in der Vorschau laden</translation>
     </message>
     <message>
-        <source>The dockument has been edited, do you want to save it?</source>
-        <translation type="vanished">Das Dockument wurde bearbeitet, möchten Sie es speichern?</translation>
-    </message>
-    <message>
         <source>The file &lt;em&gt;%1&lt;/em&gt; has been changed.
 Do you want to leave anyway?</source>
         <translation>Die Datei &lt;em&gt;%1&lt;/em&gt; wurde geändert.
 Willst du trotzdem verlassen?</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Thanks to &lt;a href=&quot;https://github.com/Waqar144&quot;&gt;Waqar Ahmed&lt;/a&gt; for helping with development&lt;/p&gt;</source>
-        <translation type="vanished">&lt;p&gt;Danke an &lt;a href=&quot;https://github.com/Waqar144&quot;&gt;Waqar Ahmed&lt;/a&gt; für die Unterstützung bei der Entwicklung&lt;/p&gt;</translation>
     </message>
     <message>
         <source>The document has been edited, do you want to save it?</source>
@@ -366,156 +261,49 @@ Willst du trotzdem verlassen?</translation>
         <source>&lt;h2&gt;MarkdownEdit&lt;/h2&gt;
 &lt;p&gt;MarkdownEdit, as the name suggests, is a simple and easy program to create and edit Markdown files.&lt;/p&gt;
 &lt;h2&gt;About&lt;/h2&gt;
-&lt;table class=&quot;table&quot;&gt;
+&lt;table class=&quot;table&quot; style=&quot;border-style: none;&quot;&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
-&lt;td&gt;Version:&amp;nbsp;&lt;/td&gt;
-&lt;td&gt;&amp;nbsp;%1&lt;/td&gt;
+&lt;td&gt;Version:&lt;/td&gt;
+&lt;td&gt;%1&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;&amp;nbsp;Qt Version:&lt;/td&gt;
-&lt;td&gt;&amp;nbsp;%2&lt;/td&gt;
+&lt;td&gt;Qt Version:&lt;/td&gt;
+&lt;td&gt;%2&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;&amp;nbsp;Homepage:&lt;/td&gt;
+&lt;td&gt;Homepage:&lt;/td&gt;
 &lt;td&gt;&lt;span style=&quot;font-size: medium; white-space: pre-wrap; background-color: transparent; font-style: italic; color: #a8abb0;&quot;&gt;&lt;a href=&quot;https://software-made-easy.github.io/MarkdownEdit/&quot;&gt;https://software-made-easy.github.io/MarkdownEdit/&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;h2&gt;Credits&lt;/h2&gt;
 &lt;p&gt;Thanks to &lt;a href=&quot;https://github.com/Waqar144&quot;&gt;Waqar Ahmed&lt;/a&gt; for help with development.&lt;/p&gt;
-&lt;p&gt;The conversion from Markdown to HTML is done using the &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt; library by &lt;em&gt;Martin Mitáš&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;The conversion from Markdown to HTML is done using the &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt; library by &lt;em&gt;Martin Mit&amp;aacute;&amp;scaron;&lt;/em&gt;.&lt;/p&gt;
 &lt;p&gt;The &lt;a href=&quot;https://github.com/pbek/qmarkdowntextedit&quot;&gt;widget&lt;/a&gt; used for writing was created by &lt;em&gt;Patrizio Bekerle&lt;/em&gt;.&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;h2&gt;MarkdownEdit&lt;/h2&gt;
+        <translation>&lt;h2&gt;MarkdownEdit&lt;/h2&gt;
 &lt;p&gt;MarkdownEdit ist, wie der Name schon sagt, ein einfaches Programm zum Erstellen und Bearbeiten von Markdown-Dateien.&lt;/p&gt;
 &lt;h2&gt;Über&lt;/h2&gt;
-&lt;table class=&quot;table&quot;&gt;
+&lt;table class=&quot;table&quot; style=&quot;border-style: none;&quot;&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
-&lt;td&gt;Version:&amp;nbsp;&lt;/td&gt;
-&lt;td&gt;&amp;nbsp;%1&lt;/td&gt;
+&lt;td&gt;Version:&lt;/td&gt;
+&lt;td&gt;%1&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;&amp;nbsp;Qt-Version:&lt;/td&gt;
-&lt;td&gt;&amp;nbsp;%2&lt;/td&gt;
+&lt;td&gt;Qt-Version:&lt;/td&gt;
+&lt;td&gt;%2&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;&amp;nbsp;Homepage:&lt;/td&gt;
+&lt;td&gt;Homepage:&lt;/td&gt;
 &lt;td&gt;&lt;span style=&quot;font-size: medium; white-space: pre-wrap; background-color: transparent; font-style: italic; color: #a8abb0;&quot;&gt;&lt;a href=&quot;https:// software-made-easy.github.io/MarkdownEdit/&quot;&gt;https://software-made-easy.github.io/MarkdownEdit/&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;h2&gt;Credits&lt;/h2&gt;
 &lt;p&gt;Dank an &lt;a href=&quot;https://github.com/Waqar144&quot;&gt;Waqar Ahmed&lt;/a&gt; für die Hilfe bei der Entwicklung.&lt;/p&gt;
-&lt;p&gt;Die Konvertierung von Markdown in HTML erfolgt mithilfe der &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt;-Bibliothek von &lt;em&gt;Martin Mitáš&lt;/em&gt;.&lt;/em&gt; &lt;p&gt;
+&lt;p&gt;Die Konvertierung von Markdown in HTML erfolgt mithilfe der &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt;-Bibliothek von &lt;em&gt;Martin Mit&amp;aacute;&amp;scaron;&lt;/em&gt; .&lt;/p&gt;
 &lt;p&gt;Das zum Schreiben verwendete &lt;a href=&quot;https://github.com/pbek/qmarkdowntextedit&quot;&gt;Widget&lt;/a&gt; wurde von &lt;em&gt;Patrizio Bekerle&lt;/em&gt; erstellt.&lt;/p&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>MarkdownEditor</name>
-    <message>
-        <source>Couldn&apos;t open file</source>
-        <translation type="vanished">Datei konnte nicht geöffnet werden</translation>
-    </message>
-    <message>
-        <source>Could not open file %1: %2</source>
-        <translation type="vanished">Datei %1 konnte nicht geöffnet werden: %2</translation>
-    </message>
-</context>
-<context>
-    <name>QApplication</name>
-    <message>
-        <source>Warning</source>
-        <translation type="vanished">Warnung</translation>
-    </message>
-</context>
-<context>
-    <name>QPlainTextEditSearchWidget</name>
-    <message>
-        <source>Find in text</source>
-        <translation type="vanished">Im Text finden</translation>
-    </message>
-    <message>
-        <source>Replace with</source>
-        <translation type="vanished">Replace with</translation>
-    </message>
-    <message>
-        <source>Find:</source>
-        <translation type="vanished">Finden:</translation>
-    </message>
-    <message>
-        <source>Search backward</source>
-        <translation type="vanished">Rückwärts suchen</translation>
-    </message>
-    <message>
-        <source>Replace:</source>
-        <translation type="vanished">Ersetzen:</translation>
-    </message>
-    <message>
-        <source>Close search</source>
-        <translation type="vanished">Suche schließen</translation>
-    </message>
-    <message>
-        <source>Advanced search / replace text</source>
-        <translation type="vanished">Erweiterte Suche / Text ersetzen</translation>
-    </message>
-    <message>
-        <source>Search forward</source>
-        <translation type="vanished">Vorwärts suchen</translation>
-    </message>
-    <message>
-        <source>Match case sensitive</source>
-        <translation type="vanished">Groß-/Kleinschreibung beachten</translation>
-    </message>
-    <message>
-        <source>Mode:</source>
-        <translation type="vanished">Modus:</translation>
-    </message>
-    <message>
-        <source>Plain text</source>
-        <translation type="vanished">Klartext</translation>
-    </message>
-    <message>
-        <source>Whole words</source>
-        <translation type="vanished">Ganze Wörter</translation>
-    </message>
-    <message>
-        <source>Regular expression</source>
-        <translation type="vanished">Regulären Ausdruck</translation>
-    </message>
-    <message>
-        <source>Replace one text occurrence</source>
-        <translation type="vanished">Ersetzen Sie ein Textvorkommen</translation>
-    </message>
-    <message>
-        <source>Replace</source>
-        <translation type="vanished">Ersetzen</translation>
-    </message>
-    <message>
-        <source>Replace all text occurrences</source>
-        <translation type="vanished">Ersetzen Sie alle Textvorkommen</translation>
-    </message>
-    <message>
-        <source>Replace all</source>
-        <translation type="vanished">Alles ersetzen</translation>
-    </message>
-</context>
-<context>
-    <name>QtSpell::Checker</name>
-    <message>
-        <source>Check spelling</source>
-        <translation type="obsolete">Rechtschreibprüfung</translation>
-    </message>
-</context>
-<context>
-    <name>Settings</name>
-    <message>
-        <source>Settings</source>
-        <translation type="vanished">Einstellungen</translation>
-    </message>
-    <message>
-        <source>Auto add file path to icon path</source>
-        <translation type="vanished">Dateipfad automatisch zum Bilderpfad hinzufügen</translation>
     </message>
 </context>
 <context>
@@ -542,10 +330,6 @@ Willst du trotzdem verlassen?</translation>
     <message>
         <source>Simple program for editing Markdown files</source>
         <translation>Einfaches Programm zum Bearbeiten von Markdown-Dateien</translation>
-    </message>
-    <message>
-        <source>File to open.</source>
-        <translation type="vanished">Datei zu öffnen.</translation>
     </message>
     <message>
         <source>Files to open.</source>
