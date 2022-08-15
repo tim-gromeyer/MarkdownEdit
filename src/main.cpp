@@ -103,11 +103,13 @@ int main(int argc, char *argv[])
     );
 #endif
 
-    w.show();
 
 #ifdef Q_OS_ANDROID
+    w.showFullScreen();
     // Prevent blank window
     a.processEvents();
+#else
+    w.show();
 #endif
 
     return a.exec();

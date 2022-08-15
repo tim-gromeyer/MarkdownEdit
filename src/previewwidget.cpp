@@ -78,12 +78,13 @@ void PreviewWidget::scrollToHeader(QString name)
         name.remove(0, 1);
 
     name.replace(QChar('_'), QChar(' '));
+    name.replace(QChar('-'), QChar(' '));
 
     QTextCursor c = textCursor();
 
     const QString text = toPlainText();
 
-    const int length = name.length();
+    const auto length = name.length();
 
     int i = 0;
 

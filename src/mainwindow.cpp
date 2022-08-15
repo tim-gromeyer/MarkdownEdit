@@ -59,6 +59,7 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->toolBarTools->hide();
 
     setupThings(); // Setup things
 
@@ -70,8 +71,10 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
     ui->File->addAction(ui->actionNew);
     ui->File->addAction(ui->actionOpen);
     ui->File->addAction(ui->actionSave);
+#ifndef Q_OS_WASM
     ui->File->addSeparator();
     ui->File->addWidget(toolbutton);
+#endif
     ui->Edit->addAction(ui->actionUndo);
     ui->Edit->addAction(ui->actionRedo);
 #ifndef Q_OS_ANDROID // Save space
@@ -93,8 +96,9 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
     ui->menuFile->removeAction(ui->actionPrintPreview);
 
     // Doesnt work on wasm
+    ui->menuFile->removeAction(ui->menuRecentlyOpened->menuAction());
     ui->menuRecentlyOpened->setDisabled(true);
-    toolbutton->setDisabled(true);
+    toolbutton->deleteLater();
 
     ui->menuExtras->removeAction(ui->actionOpen_last_document_on_start);
 
@@ -104,6 +108,13 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
 #ifdef Q_OS_ANDROID
     mode->deleteLater();
     setStatusBar(nullptr);
+    menuBar()->hide();
+    ui->File->setIconSize(QSize(32, 32));
+    ui->Edit->setIconSize(QSize(32, 32));
+    ui->toolBarPreview->setIconSize(QSize(32, 32));
+    ui->File->setMovable(false);
+    ui->Edit->setMovable(false);
+    ui->toolBarPreview->setMovable(false);
 #endif
 
     QMetaObject::invokeMethod(this, [files, this]{
@@ -205,6 +216,9 @@ void MainWindow::setupThings()
     toolbutton = new QToolButton(this);
     toolbutton->setMenu(ui->menuRecentlyOpened);
     toolbutton->setPopupMode(QToolButton::InstantPopup);
+
+    // Use native menu bar
+    menuBar()->setNativeMenuBar(true);
 
     // Setup shortcuts to open and close tabs
     shortcutNew = new QShortcut(this);
@@ -836,12 +850,12 @@ void MainWindow::exportPdf()
     ui->textBrowser->setHtml(html);
     ui->textBrowser->print(&printer);
 
-    if (statusBar()) {
-        statusBar()->show();
-        statusBar()->showMessage(tr("Pdf exported to %1").arg(
-                                     QDir::toNativeSeparators(file)), 0);
-        QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
-    }
+#ifndef Q_OS_ANDROID
+    statusBar()->show();
+    statusBar()->showMessage(tr("Pdf exported to %1").arg(
+                                 QDir::toNativeSeparators(file)), 0);
+    QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
+#endif
 }
 
 void MainWindow::openInWebBrowser()
@@ -904,11 +918,11 @@ void MainWindow::exportHtml()
     QTextStream str(&f);
     str << html;
 
-    if (statusBar()) {
-        statusBar()->show();
-        statusBar()->showMessage(tr("HTML exported to %1").arg(QDir::toNativeSeparators(file)), 0);
-        QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
-    }
+#ifndef Q_OS_ANDROID
+    statusBar()->show();
+    statusBar()->showMessage(tr("HTML exported to %1").arg(QDir::toNativeSeparators(file)), 0);
+    QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
+#endif
 
     QGuiApplication::restoreOverrideCursor();
 #endif
@@ -922,7 +936,7 @@ void MainWindow::changeMode(const int i)
 
 void MainWindow::onTextChanged()
 {
-    // Don't continue if the preview is paused or the current editor is invalid.
+    // Don't continue if the preview is paused or the current editor is null.
     if (dontUpdate || !currentEditor())
         return;
 
@@ -945,8 +959,10 @@ void MainWindow::loadFiles(const QStringList &files)
                                            QLatin1String()).toString();
         if (openLast && !last.isEmpty())
             openFile(last);
-        else
+        else {
             onFileNew();
+            updateOpened();
+        }
     }
     else
         openFiles(files);
@@ -963,7 +979,7 @@ void MainWindow::openFile(const QString &newFile, const QString &lang)
 {
     // Check of file is already open
     if (fileList.contains(newFile)) {
-        for (int i = 0; editorList.length() > i; i++) {
+        for (auto i = 0; editorList.length() > i; i++) {
             if (editorList.at(i)->getPath() == newFile) {
                 ui->tabWidget_2->setCurrentIndex(i);
                 return;
@@ -986,12 +1002,14 @@ void MainWindow::openFile(const QString &newFile, const QString &lang)
     }
     constexpr int limit = 500000; // 500KB
     if (f.size() > limit) {
-        const int out = QMessageBox::warning(this, tr("Large file"),
+        const auto out = QMessageBox::warning(this, tr("Large file"),
                                              tr("This is a large file that can potentially cause performance issues."),
                                              QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok);
 
         if (out == QMessageBox::Cancel)
             return;
+
+        pausePreview(true);
     }
 
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
@@ -1004,7 +1022,7 @@ void MainWindow::openFile(const QString &newFile, const QString &lang)
     if (setPath)
         ui->textBrowser->setSearchPaths(ui->textBrowser->searchPaths() << QFileInfo(newFile).path());
 
-    MarkdownEditor* editor = createEditor();
+    auto editor = createEditor();
     editor->setFile(newFile);
     ui->tabWidget_2->insertTab(editorList.length() -1,
                                editor, editor->getFileName());
@@ -1021,11 +1039,11 @@ void MainWindow::openFile(const QString &newFile, const QString &lang)
 
     updateOpened();
 
-    if (statusBar()) {
-        statusBar()->show();
-        statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 0);
-        QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
-    }
+#ifndef Q_OS_ANDROID
+    statusBar()->show();
+    statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 0);
+    QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
+#endif
 
     blockSignals(false);
 
@@ -1037,7 +1055,7 @@ void MainWindow::onFileNew()
     path.clear();
     const QString file = tr("Untitled.md");
 
-    MarkdownEditor* editor = createEditor();
+    auto editor = createEditor();
     editor->setFile(file);
 
     ui->tabWidget_2->insertTab(editorList.length() -1,
@@ -1047,11 +1065,11 @@ void MainWindow::onFileNew()
     if (!editor->setLanguage(QLocale::system().name()))
         editor->setLanguage(QLatin1String("en_US"));
 
-    if (statusBar()) {
-        statusBar()->show();
-        statusBar()->showMessage(tr("New document created"), 0);
-        QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
-    }
+#ifndef Q_OS_ANDROID
+    statusBar()->show();
+    statusBar()->showMessage(tr("New document created"), 0);
+    QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
+#endif
 }
 
 void MainWindow::onFileOpen()
@@ -1066,7 +1084,7 @@ void MainWindow::onFileOpen()
             if (setPath)
                 ui->textBrowser->setSearchPaths(ui->textBrowser->searchPaths() << QFileInfo(newFile).path());
 
-            MarkdownEditor* &&editor = createEditor();
+            auto editor = createEditor();
             editor->setFile(newFile);
             ui->tabWidget_2->insertTab(editorList.length() -1,
                                        editor, editor->getFileName());
@@ -1078,11 +1096,9 @@ void MainWindow::onFileOpen()
 
             fileList.append(newFile);
 
-            if (statusBar()) {
-                statusBar()->show();
-                statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 0);
-                QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
-            }
+            statusBar()->show();
+            statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 0);
+            QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
 
             updateOpened();
 
@@ -1098,6 +1114,7 @@ void MainWindow::onFileOpen()
 
     const QString file = dialog.selectedFiles().at(0);
     if (file == path || file.isEmpty()) return;
+
     openFile(file);
 #endif
 }
@@ -1108,7 +1125,7 @@ bool MainWindow::onFileSave()
         if (QFile::exists(path))
             return true;
 
-    if (path.isEmpty() || path == QLatin1String(":/default.md"))
+    if (path.isEmpty() || path.startsWith(QLatin1String(":/syntax_")))
         return onFileSaveAs();
 
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
@@ -1142,11 +1159,11 @@ bool MainWindow::onFileSave()
     watcher->addPath(path);
 #endif
 
-    if (statusBar()) {
-        statusBar()->show();
-        statusBar()->showMessage(tr("Wrote %1").arg(QDir::toNativeSeparators(path)), 0);
-        QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
-    }
+#ifndef Q_OS_ANDROID
+    statusBar()->show();
+    statusBar()->showMessage(tr("Wrote %1").arg(QDir::toNativeSeparators(path)), 0);
+    QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
+#endif
 
     updateOpened();
 
@@ -1275,7 +1292,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
 {
     for(MarkdownEditor* editor : qAsConst(editorList)) {
         if (editor->document()->isModified()) {
-            const int button = QMessageBox::question(this, tr("Save changes?"),
+            const auto button = QMessageBox::question(this, tr("Save changes?"),
                                                tr("The file <em>%1</em> has been changed.\n"
                                                   "Do you want to leave anyway?").arg(editor->getFileName()));
             if (button == QMessageBox::No) {

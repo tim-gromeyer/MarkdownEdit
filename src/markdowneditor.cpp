@@ -134,9 +134,6 @@ void MarkdownEditor::setText(const QString &t, const QString &newFile, const boo
     if (!newFile.isEmpty())
         fileName = newFile;
 
-    if (fileName == QLatin1String(":/default.md") && !mapContains(fileName))
-        setMapAttribute(fileName, QStringLiteral("en_US"));
-
     // Improve performance
     QMetaObject::invokeMethod(this, [this, t]{
         blockSignals(true);

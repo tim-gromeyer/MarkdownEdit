@@ -17,8 +17,7 @@
  **/
 
 
-#ifndef MARKDOWNPARSER_H
-#define MARKDOWNPARSER_H
+#pragma once
 
 #include <QObject>
 
@@ -35,5 +34,3 @@ public:
 
     Q_REQUIRED_RESULT static QString toMarkdown(QString in);
 };
-
-#endif // MARKDOWNPARSER_H

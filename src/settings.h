@@ -17,8 +17,7 @@
  **/
 
 
-#ifndef SETTINGS_HPP
-#define SETTINGS_HPP
+#pragma once
 
 #include "common.h"
 
@@ -49,5 +48,3 @@ const QStringList languages();
 #if !SPELLCHECK
 #define NO_SPELLCHECK
 #endif
-
-#endif // SETTINGS_HPP

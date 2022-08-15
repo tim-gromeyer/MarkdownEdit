@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>default.md</file>
         <file>syntax_de.md</file>
         <file>syntax_en.md</file>
         <file>Icon.png</file>

@@ -105,7 +105,7 @@ void SpellChecker::checkSpelling(const QString &text)
 
     if (isCodeBlock(currentBlockState())) return;
 
-    const int textLength = text.length();
+    const auto textLength = text.length();
 
     for (int i = 0; i < textLength; i++) {
         const QChar c = text[i];
@@ -294,7 +294,7 @@ QString SpellChecker::getWord(const QTextBlock &block, const int &pos)
 
     bool isLink = false;
 
-    const int textLength = text.length();
+    const auto textLength = text.length();
 
     for (int i = 0; i < textLength; i++) {
         const QChar c = text[i];
@@ -388,25 +388,29 @@ void SpellChecker::showContextMenu(const QPoint &pos)
             menu->insertAction(insertPos, ignoreAction);
             menu->insertSeparator(insertPos);
         }
-
-        QMenu *languagesMenu = new QMenu(tr("Languages"), menu);
-        QScopedPointer<QActionGroup> actionGroup(new QActionGroup(languagesMenu)); // Fix warning
-        for (const QString &lang : getLanguageList()) {
-            QAction* action = new QAction(encodeLanguageString(lang), languagesMenu);
-            action->setData(lang);
-            action->setCheckable(true);
-            action->setChecked(lang == language);
-            connect(action, &QAction::triggered, this, &SpellChecker::slotSetLanguage);
-            languagesMenu->addAction(action);
-            actionGroup->addAction(action);
-        }
-
-        menu->insertMenu(insertPos, languagesMenu);
-        menu->insertSeparator(insertPos);
     }
 
+    QMenu *languagesMenu = new QMenu(tr("Languages"), menu);
+    QActionGroup *actionGroup = new QActionGroup(languagesMenu); // Fix warning
+    for (const QString &lang : getLanguageList()) {
+        QAction* action = new QAction(encodeLanguageString(lang), languagesMenu);
+        action->setData(lang);
+        action->setCheckable(true);
+        action->setChecked(lang == language);
+        connect(action, &QAction::triggered, this, &SpellChecker::slotSetLanguage);
+        languagesMenu->addAction(action);
+        actionGroup->addAction(action);
+    }
+
+    menu->insertMenu(insertPos, languagesMenu);
+    menu->insertSeparator(insertPos);
+
     menu->exec(textEdit->mapToGlobal(pos));
+
     menu->deleteLater();
+
+    actionGroup->deleteLater();
+    delete actionGroup;
     delete menu;
 }
 

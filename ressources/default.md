@@ -18,8 +18,6 @@ content starts at 4-columns in.
 > They can span multiple paragraphs,
 > if you like.
 
-Use 3 dashes for an em-dash. Use 2 dashes for ranges (ex., "it's all
-in chapters 12--14"). Three dots ... will be converted to an ellipsis.
 Unicode is supported. ☺
 
 
@@ -36,6 +34,7 @@ from the left side). Here's a code sample:
 
     # Let me re-iterate ...
     for i in 1 .. 10 { do-something(i) }
+
 
 As you probably guessed, indented 4 spaces. By the way, instead of
 indenting the block, you can use delimited blocks, if you like:
@@ -89,44 +88,24 @@ Notice again how text always lines up on 4-space indents (including
 that last line which continues item 3 above).
 
 Here's a link to [a website](https://example.com), to a [local
-doc](:/default.md), and to a [section heading in the current
-doc](#an-h2-header). Here's a footnote [^1].
-
-[^1]: Some footnote text.
+doc](./default.md), and to a [section heading in the current
+doc](#an-h2-header).
 
 Tables can look like this:
 
-Name           Size  Material      Color
-------------- -----  ------------  ------------
-All Business      9  leather       brown
-Roundabout       10  hemp canvas   natural
-Cinderella       11  glass         transparent
-
-Table: Shoes sizes, materials, and colors.
-
-(The above is the caption for the table.) Pandoc also supports
-multi-line tables:
-
---------  -----------------------
-Keyword   Text
---------  -----------------------
-red       Sunsets, apples, and
-          other red or reddish
-          things.
-
-green     Leaves, grass, frogs
-          and other things it's
-          not easy being.
---------  -----------------------
+| Name         	| Size 	| Material 	| Color       	|
+|--------------	|------	|----------	|-------------	|
+| All Business 	|   9  	| leather  	| brown       	|
+| Roundabout   	|  10  	| hemp     	| natural     	|
+| Cinderella   	| 11   	| glass    	| transparent 	|
 
 A horizontal rule follows.
 
 ***
 
-
 Images can be specified like so:
 
-![example image](:/Icon.svg "An exemplary image")
+![example image](:/Icon.png "An exemplary image")
 
 And note that you can backslash-escape any punctuation characters
 which you wish to be displayed literally, ex.: \`foo\`, \*bar\*, etc.

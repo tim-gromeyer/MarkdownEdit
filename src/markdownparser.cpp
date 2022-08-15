@@ -55,7 +55,7 @@ QString Parser::toHtml(const QString &in, const int dia)
     const QByteArray array = in.toUtf8(); // Use UTF-8 for better support
     QByteArray out = templateArray;
 
-    md_html(array.data(), array.count(), &captureHtmlFragment, &out,
+    md_html(array.constData(), array.size(), &captureHtmlFragment, &out,
             parser_flags, MD_HTML_FLAG_SKIP_UTF8_BOM);
 
     out.append("</body>\n"

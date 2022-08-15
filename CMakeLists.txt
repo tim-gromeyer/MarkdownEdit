@@ -45,6 +45,8 @@ set(PROJECT_SOURCES
         src/previewwidget.h
         src/settings.h
         src/settings.cpp
+        src/tablewidget.h
+        src/tablewidget.cpp
         common.h
         ui/mainwindow.ui
         ${RC_FILES}
