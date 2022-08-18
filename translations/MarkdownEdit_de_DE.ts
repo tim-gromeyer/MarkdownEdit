@@ -120,20 +120,8 @@
         <translation>Über Qt</translation>
     </message>
     <message>
-        <source>Could not open file %1: %2</source>
-        <translation>Datei %1 konnte nicht geöffnet werden: %2</translation>
-    </message>
-    <message>
-        <source>Opened %1</source>
-        <translation>%1 geöffnet</translation>
-    </message>
-    <message>
         <source>Open Markdown File</source>
         <translation>Markdown-Datei öffnen</translation>
-    </message>
-    <message>
-        <source>Could not write to file %1: %2</source>
-        <translation>In Datei %1 konnte nicht geschrieben werden: %2</translation>
     </message>
     <message>
         <source>Print Document</source>
@@ -142,10 +130,6 @@
     <message>
         <source>Warning</source>
         <translation>Warnung</translation>
-    </message>
-    <message>
-        <source>HTML exported to %1</source>
-        <translation>HTML nach %1 exportiert</translation>
     </message>
     <message>
         <source>Large file</source>
@@ -160,22 +144,12 @@
         <translation>Datei konnte nicht geöffnet werden</translation>
     </message>
     <message>
-        <source>Wrote %1</source>
-        <translation>%1 geschrieben</translation>
-    </message>
-    <message>
         <source>Save MarkDown File</source>
         <translation>Markdown-Datei speichern</translation>
     </message>
     <message>
         <source>About MarkdownEdit</source>
         <translation>Über MarkdownEdit</translation>
-    </message>
-    <message>
-        <source>This file could not be found:
-%1.</source>
-        <translation>Diese Datei wurde nicht gefunden:
-%1.</translation>
     </message>
     <message>
         <source>Export</source>
@@ -224,10 +198,6 @@
     <message>
         <source>Export Pdf</source>
         <translation>Pdf exportieren</translation>
-    </message>
-    <message>
-        <source>Pdf exported to %1</source>
-        <translation>PDF nach %1 exportiert</translation>
     </message>
     <message>
         <source>File &lt;em&gt;%1&lt;/em&gt; has been modified.
@@ -304,6 +274,40 @@ Willst du trotzdem verlassen?</translation>
 &lt;p&gt;Dank an &lt;a href=&quot;https://github.com/Waqar144&quot;&gt;Waqar Ahmed&lt;/a&gt; für die Hilfe bei der Entwicklung.&lt;/p&gt;
 &lt;p&gt;Die Konvertierung von Markdown in HTML erfolgt mithilfe der &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt;-Bibliothek von &lt;em&gt;Martin Mit&amp;aacute;&amp;scaron;&lt;/em&gt; .&lt;/p&gt;
 &lt;p&gt;Das zum Schreiben verwendete &lt;a href=&quot;https://github.com/pbek/qmarkdowntextedit&quot;&gt;Widget&lt;/a&gt; wurde von &lt;em&gt;Patrizio Bekerle&lt;/em&gt; erstellt.&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>toolBar</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Could not open file &lt;em&gt;%1&lt;/em&gt;: %2</source>
+        <translation>Datei &lt;em&gt;%1&lt;/em&gt; konnte nicht geöffnet werden: %2</translation>
+    </message>
+    <message>
+        <source>Could not write to file &lt;em&gt;%1&lt;/em&gt;: %2</source>
+        <translation>Konnte nicht in die Datei &lt;em&gt;%1&lt;/em&gt; schreiben: %2</translation>
+    </message>
+    <message>
+        <source>Pdf exported to &lt;em&gt;%1&lt;/em&gt;</source>
+        <translation>Pdf nach &lt;em&gt;%1&lt;/em&gt; exportiert</translation>
+    </message>
+    <message>
+        <source>HTML exported to &lt;em&gt;%1&lt;/em&gt;</source>
+        <translation>HTML nach &lt;em&gt;%1&lt;/em&gt; exportiert</translation>
+    </message>
+    <message>
+        <source>Opened &lt;em&gt;%1&lt;/em&gt;</source>
+        <translation>&lt;em&gt;%1&lt;/em&gt; geöffnet</translation>
+    </message>
+    <message>
+        <source>Wrote &lt;em&gt;%1&lt;/em&gt;</source>
+        <translation>&lt;em&gt;%1&lt;/em&gt; geschrieben</translation>
+    </message>
+    <message>
+        <source>This file could not be found:
+&lt;em&gt;%1&lt;/em&gt;.</source>
+        <translation>Diese Datei konnte nicht gefunden werden:
+&lt;em&gt;%1&lt;/em&gt;.</translation>
     </message>
 </context>
 <context>

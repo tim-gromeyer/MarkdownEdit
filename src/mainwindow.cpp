@@ -118,10 +118,10 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
 #endif
 
     QMetaObject::invokeMethod(this, [files, this]{
-        loadFiles(files);
-
         // Moved here for faster startup times
         loadIcons(); // Load all icons
+
+        loadFiles(files);
     }, Qt::QueuedConnection);
 }
 
@@ -130,11 +130,13 @@ void MainWindow::onHelpSyntax()
     QString file = QStringLiteral(":/syntax_en.md");
     QString language = QStringLiteral("en_US");
 
-    const QStringList uiLanguages = common::languages();
-    const QStringList languages = SpellChecker::getLanguageList();
+    const QStringList uiLanguages = QLocale::system().uiLanguages(); // eg. de-DE
+    const QStringList languages = SpellChecker::getLanguageList(); // eg. de_DE
 
+    // loop thought the languages
     for (const QString &lang : uiLanguages) {
-        const QString lang2 = lang.split(QChar('-'))[0];
+        //  get first to characters
+        const QString lang2 = lang.right(2);
 
         if (QFile::exists(QStringLiteral(":/syntax_%1.md").arg(lang2))) {
             file = QStringLiteral(":/syntax_%1.md").arg(lang2);
@@ -143,24 +145,30 @@ void MainWindow::onHelpSyntax()
         }
     }
 
+    // Correct language format
     language.replace(QLatin1Char('-'), QLatin1Char('_'));
 
     if (!languages.contains(language)) {
         if (language.length() > 2)
-            language = language.mid(0, 2);
+            // Get the first 2 characters
+            language = language.right(2);
 
+        // Assuming language = de, try de_DE
         const QString newLang = QStringLiteral("%1_%2").arg(language, language.toUpper());
+        // If the languagedict exists
         if (languages.contains(newLang)) {
             language = newLang;
         }
 
+        // Loop thought the languages
         for (const QString &lang : languages) {
-            if (language.length() == 2)
-                if (lang.contains(language)) {
-                    language = lang;
-                    break;
-                }
+            // If lang contains language, then break out of the loop
+            Q_UNUSED(lang); // Prevent cppcheck info
 
+            if (lang.contains(language)) {
+                language = lang;
+                break;
+            }
         }
     }
 
@@ -186,7 +194,7 @@ void MainWindow::onFileReload()
 
     if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QMessageBox::warning(this, tr("Couldn't open file"),
-                             tr("Could not open file %1: %2").arg(
+                             tr("Could not open file <em>%1</em>: %2").arg(
                                  QDir::toNativeSeparators(file), f.errorString()));
         recentOpened.removeOne(file);
         updateOpened();
@@ -852,7 +860,7 @@ void MainWindow::exportPdf()
 
 #ifndef Q_OS_ANDROID
     statusBar()->show();
-    statusBar()->showMessage(tr("Pdf exported to %1").arg(
+    statusBar()->showMessage(tr("Pdf exported to <em>%1</em>").arg(
                                  QDir::toNativeSeparators(file)), 0);
     QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
 #endif
@@ -908,7 +916,7 @@ void MainWindow::exportHtml()
     QFile f(file, this);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Text))  {
         QMessageBox::warning(this, tr("Warning"),
-                             tr("Could not write to file %1: %2").arg(
+                             tr("Could not write to file <em>%1</em>: %2").arg(
                                  QDir::toNativeSeparators(path), f.errorString()));
         return;
     }
@@ -920,7 +928,7 @@ void MainWindow::exportHtml()
 
 #ifndef Q_OS_ANDROID
     statusBar()->show();
-    statusBar()->showMessage(tr("HTML exported to %1").arg(QDir::toNativeSeparators(file)), 0);
+    statusBar()->showMessage(tr("HTML exported to <em>%1</em>").arg(QDir::toNativeSeparators(file)), 0);
     QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
 #endif
 
@@ -994,7 +1002,7 @@ void MainWindow::openFile(const QString &newFile, const QString &lang)
 
     if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QMessageBox::warning(this, tr("Couldn't open file"),
-                             tr("Could not open file %1: %2").arg(
+                             tr("Could not open file <em>%1</em>: %2").arg(
                                  QDir::toNativeSeparators(newFile), f.errorString()));
         recentOpened.removeOne(newFile);
         updateOpened();
@@ -1041,7 +1049,7 @@ void MainWindow::openFile(const QString &newFile, const QString &lang)
 
 #ifndef Q_OS_ANDROID
     statusBar()->show();
-    statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 0);
+    statusBar()->showMessage(tr("Opened <em>%1</em>").arg(QDir::toNativeSeparators(path)), 0);
     QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
 #endif
 
@@ -1097,7 +1105,7 @@ void MainWindow::onFileOpen()
             fileList.append(newFile);
 
             statusBar()->show();
-            statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 0);
+            statusBar()->showMessage(tr("Opened <em>%1</em>").arg(QDir::toNativeSeparators(path)), 0);
             QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
 
             updateOpened();
@@ -1137,10 +1145,11 @@ bool MainWindow::onFileSave()
     watcher->removePath(path);
 
     QSaveFile f(path, this);
+    f.setDirectWriteFallback(true);
     if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
         QGuiApplication::restoreOverrideCursor();
         QMessageBox::warning(this, tr("Warning"),
-                             tr("Could not write to file %1: %2").arg(
+                             tr("Could not write to file <em>%1</em>: %2").arg(
                                  QDir::toNativeSeparators(path), f.errorString()));
         return false;
     }
@@ -1151,7 +1160,7 @@ bool MainWindow::onFileSave()
     if (!f.commit()) {
         QGuiApplication::restoreOverrideCursor();
         QMessageBox::warning(this, tr("Warning"),
-                             tr("Could not write to file %1: %2").arg(
+                             tr("Could not write to file <em>%1</em>: %2").arg(
                                  QDir::toNativeSeparators(path), f.errorString()));
         return false;
     }
@@ -1161,7 +1170,7 @@ bool MainWindow::onFileSave()
 
 #ifndef Q_OS_ANDROID
     statusBar()->show();
-    statusBar()->showMessage(tr("Wrote %1").arg(QDir::toNativeSeparators(path)), 0);
+    statusBar()->showMessage(tr("Wrote <em>%1</em>").arg(QDir::toNativeSeparators(path)), 0);
     QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
 #endif
 
@@ -1249,7 +1258,7 @@ void MainWindow::openRecent() {
 
     if (!QFile::exists(filename)) {
         QMessageBox::warning(this, tr("Warning"),
-                             tr("This file could not be found:\n%1.").arg(
+                             tr("This file could not be found:\n<em>%1</em>.").arg(
                                  QDir::toNativeSeparators(filename)));
         recentOpened.removeOne(filename);
         updateOpened();
