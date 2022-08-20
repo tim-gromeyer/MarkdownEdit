@@ -93,7 +93,7 @@ void SpellChecker::highlightBlock(const QString &text)
         checkSpelling(text);
 }
 
-void SpellChecker::checkSpelling(const QStringView &text)
+void SpellChecker::checkSpelling(const STRING &text)
 {
     if (!speller || !spellingEnabled) return;
 
@@ -152,7 +152,7 @@ void SpellChecker::checkSpelling(const QStringView &text)
     int index = 0;
 
     for (const QString &word_ : qAsConst(wordList)) {
-        index = QStringView(text).indexOf(word_, index); // is still faster
+        index = text.indexOf(word_, index); // is still faster
 
         if (!isCorrect(word_)) {
             QTextCharFormat fmt = QSyntaxHighlighter::format(index);
@@ -288,7 +288,7 @@ QString SpellChecker::getWord(const QTextBlock &block, const int &pos)
         return QLatin1String();
 
     QString word;
-    const QStringView text = block.text();
+    const STRING text = block.text();
 
     bool isLink = false;
 

@@ -35,6 +35,13 @@ class QMenu;
 template <typename Key, typename T> class QHash;
 QT_END_NAMESPACE
 
+// We use sliced QStringView 5.14 (it's faster)
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+    #define STRING QString
+#else
+    #define STRING QStringView
+#endif
+
 
 class TextEditProxy : public QObject {
     Q_OBJECT
@@ -110,7 +117,7 @@ public slots:
 
     bool setLanguage(const QString &);
 
-    void checkSpelling(const QStringView &);
+    void checkSpelling(const STRING &);
 
 signals:
     void languageChanged(const QString &lang = QLatin1String());
