@@ -108,6 +108,9 @@ private slots:
     void undo();
     void redo();
 
+    // Android specific
+    void androidPreview(const bool);
+
 private:
     void loadSettings();
     void loadFiles(const QStringList &);

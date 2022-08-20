@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="container">
    <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1">
     <property name="leftMargin">

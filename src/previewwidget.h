@@ -30,11 +30,23 @@ public:
 
     void scrollToHeader(QString name);
 
+    inline void setSearchPaths(const QStringList &searchPaths) { QTextBrowser::setSearchPaths(searchPaths); };
+    inline QStringList searchPaths() { return QTextBrowser::searchPaths(); };
+    inline void appenSearchPath(const QString &path) { QTextBrowser::setSearchPaths(QTextBrowser::searchPaths() << path); };
+
+    inline void setLoadImages(const bool ok) { load = ok; };
+    inline bool loadImages() { return load; };
+
+    QVariant loadResource(int type, const QUrl &name) override;
+
 public slots:
     void setHtml(const QString &);
 
 private slots:
     void openUrl(const QUrl &);
+
+private:
+    bool load = true;
 };
 
 #endif // PREVIEWWIDGET_H

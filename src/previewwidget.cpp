@@ -24,6 +24,7 @@
 #include <QDesktopServices>
 #include <QFile>
 #include <QScrollBar>
+#include <QFileInfo>
 
 
 PreviewWidget::PreviewWidget(QWidget *parent)
@@ -110,4 +111,12 @@ void PreviewWidget::scrollToHeader(QString name)
         // Prevent invinity loop
         i += length;
     }
+}
+
+QVariant PreviewWidget::loadResource(int type, const QUrl &name)
+{
+    if (!load)
+        return QVariant();
+
+    return QTextBrowser::loadResource(type, name);
 }

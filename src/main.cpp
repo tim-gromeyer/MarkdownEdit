@@ -36,6 +36,8 @@
 #error You must use Qt 5.10 or newer // Because of QGuiApplication::screenAt
 #endif
 
+#define S(str) QStringLiteral(str)
+
 
 int main(int argc, char *argv[])
 {
@@ -47,23 +49,18 @@ int main(int argc, char *argv[])
 #endif
     a.setApplicationVersion(QStringLiteral(APP_VERSION));
 
-    static constexpr QChar underscore[1] = {
-        QLatin1Char('_')
-    };
-
     QTranslator translator, qtTranslator;
 
     // load translation for Qt
-    if (qtTranslator.load(QLocale::system(), QStringLiteral("qtbase"),
-                          QString::fromRawData(underscore, 1),
-                          QStringLiteral(
-                              ":/qtTranslations/")))
+    if (qtTranslator.load(QLocale::system(), S("qtbase"),
+                          S("_"),
+                          S(":/qtTranslations/")))
         a.installTranslator(&qtTranslator);
 
     // try to load translation for current locale from resource file
-    if (translator.load(QLocale::system(), QStringLiteral("MarkdownEdit"),
-                        QString::fromRawData(underscore, 1),
-                        QStringLiteral(":/translations")))
+    if (translator.load(QLocale::system(), S("MarkdownEdit"),
+                        S("_"),
+                        S(":/translations")))
         a.installTranslator(&translator);
 
     QCommandLineParser parser;

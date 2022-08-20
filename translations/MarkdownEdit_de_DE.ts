@@ -288,26 +288,26 @@ Willst du trotzdem verlassen?</translation>
         <translation>Konnte nicht in die Datei &lt;em&gt;%1&lt;/em&gt; schreiben: %2</translation>
     </message>
     <message>
-        <source>Pdf exported to &lt;em&gt;%1&lt;/em&gt;</source>
-        <translation>Pdf nach &lt;em&gt;%1&lt;/em&gt; exportiert</translation>
-    </message>
-    <message>
-        <source>HTML exported to &lt;em&gt;%1&lt;/em&gt;</source>
-        <translation>HTML nach &lt;em&gt;%1&lt;/em&gt; exportiert</translation>
-    </message>
-    <message>
-        <source>Opened &lt;em&gt;%1&lt;/em&gt;</source>
-        <translation>&lt;em&gt;%1&lt;/em&gt; geöffnet</translation>
-    </message>
-    <message>
-        <source>Wrote &lt;em&gt;%1&lt;/em&gt;</source>
-        <translation>&lt;em&gt;%1&lt;/em&gt; geschrieben</translation>
-    </message>
-    <message>
         <source>This file could not be found:
 &lt;em&gt;%1&lt;/em&gt;.</source>
         <translation>Diese Datei konnte nicht gefunden werden:
 &lt;em&gt;%1&lt;/em&gt;.</translation>
+    </message>
+    <message>
+        <source>Pdf exported to %1</source>
+        <translation>Pdf nach %1 exportiert</translation>
+    </message>
+    <message>
+        <source>HTML exported to %1</source>
+        <translation>Html nach %1 exportiert</translation>
+    </message>
+    <message>
+        <source>Opened %1</source>
+        <translation>%1 geöffnet</translation>
+    </message>
+    <message>
+        <source>Wrote %1</source>
+        <translation>%1 geschrieben</translation>
     </message>
 </context>
 <context>

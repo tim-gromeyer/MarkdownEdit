@@ -63,7 +63,7 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
 
     setupThings(); // Setup things
 
-    // // settings was set up in setupThings()
+    // settings was set up in setupThings()
     loadSettings(); // Load settings
 
     setupConnections(); // Connect everything
@@ -84,8 +84,8 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
     ui->Edit->addAction(ui->actionPaste);
     ui->toolBarPreview->addWidget(mode);
     ui->toolBarPreview->addSeparator();
-#endif
     ui->toolBarPreview->addWidget(widgetBox);
+#endif
 
 #ifdef NO_SPELLCHECK
     ui->menuExtras->removeAction(ui->actionSpell_checking);
@@ -107,14 +107,23 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
 #endif
 #ifdef Q_OS_ANDROID
     mode->deleteLater();
+    widgetBox->deleteLater();
     setStatusBar(nullptr);
     menuBar()->hide();
-    ui->File->setIconSize(QSize(32, 32));
-    ui->Edit->setIconSize(QSize(32, 32));
-    ui->toolBarPreview->setIconSize(QSize(32, 32));
+    ui->File->setIconSize(QSize(36, 36));
+    ui->Edit->setIconSize(QSize(36, 36));
+    ui->toolBarPreview->setIconSize(QSize(36, 36));
     ui->File->setMovable(false);
     ui->Edit->setMovable(false);
     ui->toolBarPreview->setMovable(false);
+
+    QAction *a = new QAction(QIcon(QStringLiteral(":/icons/view-preview.svg")), tr("Preview"), this);
+    a->setCheckable(true);
+    connect(a, &QAction::triggered, this, &MainWindow::androidPreview);
+    ui->toolBarPreview->addSeparator();
+    ui->toolBarPreview->addAction(a);
+
+    setStyleSheet(QStringLiteral("QSplitter { border: none; } QToolBar { border: none; }"));
 #endif
 
     QMetaObject::invokeMethod(this, [files, this]{
@@ -123,6 +132,24 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
 
         loadFiles(files);
     }, Qt::QueuedConnection);
+}
+
+void MainWindow::androidPreview(const bool c)
+{
+    if (c) {
+        ui->tabWidget->show();
+        ui->tabWidget_2->hide();
+
+        dontUpdate = !dontUpdate;
+        onTextChanged();
+        dontUpdate = !dontUpdate;
+    }
+    else {
+        ui->tabWidget->hide();
+        ui->tabWidget_2->show();
+        if (currentEditor())
+            currentEditor()->setFocus(Qt::TabFocusReason);
+    }
 }
 
 void MainWindow::onHelpSyntax()
@@ -768,7 +795,7 @@ void MainWindow::changeAddtoIconPath(const bool c)
     ui->actionAuto_add_file_path_to_icon_path->setChecked(c);
 
     if (!c) {
-        ui->textBrowser->setSearchPaths(QStringList());
+        ui->textBrowser->setLoadImages(false);
         return setText(0);
     }
 
@@ -778,6 +805,7 @@ void MainWindow::changeAddtoIconPath(const bool c)
         searchPaths << QFileInfo(file).absolutePath();
     }
 
+    ui->textBrowser->setLoadImages(true);
     ui->textBrowser->setSearchPaths(searchPaths);
     setText(0);
 }
@@ -831,7 +859,8 @@ void MainWindow::printPreview(QPrinter *printer)
 #else
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
-    ui->textBrowser->setHtml(html);
+    if (ui->tabWidget->currentIndex() == 1)
+        ui->textBrowser->setHtml(html);
     ui->textBrowser->print(printer);
 
     QGuiApplication::restoreOverrideCursor();
@@ -844,7 +873,7 @@ void MainWindow::exportPdf()
     dialog.setMimeTypeFilters({"application/pdf"});
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setDefaultSuffix("pdf");
-    if (dialog.exec() != QDialog::Accepted)
+    if (dialog.exec() == QDialog::Rejected)
         return;
 
     const QString file = dialog.selectedFiles().at(0);
@@ -855,12 +884,13 @@ void MainWindow::exportPdf()
     printer.setOutputFormat(QPrinter::PdfFormat);
     printer.setOutputFileName(file);
 
-    ui->textBrowser->setHtml(html);
+    if (ui->tabWidget->currentIndex() == 1)
+        ui->textBrowser->setHtml(html);
     ui->textBrowser->print(&printer);
 
 #ifndef Q_OS_ANDROID
     statusBar()->show();
-    statusBar()->showMessage(tr("Pdf exported to <em>%1</em>").arg(
+    statusBar()->showMessage(tr("Pdf exported to %1").arg(
                                  QDir::toNativeSeparators(file)), 0);
     QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
 #endif
@@ -870,7 +900,7 @@ void MainWindow::openInWebBrowser()
 {
     QTemporaryFile f(this);
 
-    const QString name = f.fileTemplate() + QStringLiteral(".html");
+    const QString name = f.fileTemplate().append(QLatin1String(".html"));
 
     f.setFileTemplate(name);
     f.setAutoRemove(false);
@@ -928,7 +958,7 @@ void MainWindow::exportHtml()
 
 #ifndef Q_OS_ANDROID
     statusBar()->show();
-    statusBar()->showMessage(tr("HTML exported to <em>%1</em>").arg(QDir::toNativeSeparators(file)), 0);
+    statusBar()->showMessage(tr("HTML exported to %1").arg(QDir::toNativeSeparators(file)), 0);
     QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
 #endif
 
@@ -958,9 +988,9 @@ void MainWindow::onTextChanged()
 void MainWindow::loadFiles(const QStringList &files)
 {
     // Ensure settings are set up
+    Q_ASSERT(settings);
     const bool openLast = settings->value(QStringLiteral("openLast"), true).toBool();
     ui->actionOpen_last_document_on_start->setChecked(openLast);
-
 
     if (files.isEmpty()) {
         const QString last = settings->value(QStringLiteral("last"),
@@ -1028,7 +1058,7 @@ void MainWindow::openFile(const QString &newFile, const QString &lang)
     watcher->addPath(path);
 
     if (setPath)
-        ui->textBrowser->setSearchPaths(ui->textBrowser->searchPaths() << QFileInfo(newFile).path());
+        ui->textBrowser->appenSearchPath(QFileInfo(newFile).path());
 
     auto editor = createEditor();
     editor->setFile(newFile);
@@ -1049,7 +1079,7 @@ void MainWindow::openFile(const QString &newFile, const QString &lang)
 
 #ifndef Q_OS_ANDROID
     statusBar()->show();
-    statusBar()->showMessage(tr("Opened <em>%1</em>").arg(QDir::toNativeSeparators(path)), 0);
+    statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 0);
     QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
 #endif
 
@@ -1090,7 +1120,7 @@ void MainWindow::onFileOpen()
             path = newFile;
 
             if (setPath)
-                ui->textBrowser->setSearchPaths(ui->textBrowser->searchPaths() << QFileInfo(newFile).path());
+                ui->textBrowser->appenSearchPath(QFileInfo(newFile).path());
 
             auto editor = createEditor();
             editor->setFile(newFile);
@@ -1105,7 +1135,7 @@ void MainWindow::onFileOpen()
             fileList.append(newFile);
 
             statusBar()->show();
-            statusBar()->showMessage(tr("Opened <em>%1</em>").arg(QDir::toNativeSeparators(path)), 0);
+            statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 0);
             QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
 
             updateOpened();
@@ -1170,7 +1200,7 @@ bool MainWindow::onFileSave()
 
 #ifndef Q_OS_ANDROID
     statusBar()->show();
-    statusBar()->showMessage(tr("Wrote <em>%1</em>").arg(QDir::toNativeSeparators(path)), 0);
+    statusBar()->showMessage(tr("Wrote %1").arg(QDir::toNativeSeparators(path)), 0);
     QTimer::singleShot(5000, statusBar(), &QStatusBar::hide);
 #endif
 

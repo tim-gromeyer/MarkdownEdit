@@ -36,9 +36,9 @@
 
 // We use sliced with Qt 6 (it's faster)
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    #define SUBSTR(text, pos, len) QStringView(text).mid(pos, len)
+    #define SUBSTR(text, pos, len) text.mid(pos, len)
 #else
-    #define SUBSTR(text, pos, len) QStringView(text).sliced(pos, len)
+    #define SUBSTR(text, pos, len) text.sliced(pos, len)
 #endif
 
 static const QColor red() {
@@ -93,7 +93,7 @@ void SpellChecker::highlightBlock(const QString &text)
         checkSpelling(text);
 }
 
-void SpellChecker::checkSpelling(const QString &text)
+void SpellChecker::checkSpelling(const QStringView &text)
 {
     if (!speller || !spellingEnabled) return;
 
@@ -114,30 +114,28 @@ void SpellChecker::checkSpelling(const QString &text)
         if (isPosInACodeSpan(currentBlockNumber, i))
             continue;
 
+        // Check for link
         if (c == QLatin1Char('h')) {
             if (textLength -i >= 11) { // http 4; :// 7; * >1; .de 11
                 if (SUBSTR(text, i, 4) == QStringViewLiteral("http")) {
-                    const int last = i;
-
                     i = text.indexOf(QChar(')'), i);
 
-                    if (i == -1) {
-                        i = text.indexOf(QChar(' '), last);
-
-                        if (i == -1)
-                            break;
-                    }
+                    if (i == -1)
+                        break;
                 }
             }
         }
 
+        // If last character and letter or number
         if (i == textLength -1 && isLetterOrNumber) {
             word.append(c);
             wordList.append(word);
             word.clear();
         }
+        // If is letter or number append
         else if (isLetterOrNumber)
-                word.append(c);
+            word.append(c);
+        // Else append the word and reset it.
         else {
             wordList.append(word);
             word.clear();
@@ -154,7 +152,7 @@ void SpellChecker::checkSpelling(const QString &text)
     int index = 0;
 
     for (const QString &word_ : qAsConst(wordList)) {
-        index = text.indexOf(word_, index); // is still faster
+        index = QStringView(text).indexOf(word_, index); // is still faster
 
         if (!isCorrect(word_)) {
             QTextCharFormat fmt = QSyntaxHighlighter::format(index);
@@ -290,7 +288,7 @@ QString SpellChecker::getWord(const QTextBlock &block, const int &pos)
         return QLatin1String();
 
     QString word;
-    const QString text = block.text();
+    const QStringView text = block.text();
 
     bool isLink = false;
 
