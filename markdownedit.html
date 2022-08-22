@@ -8,17 +8,17 @@
         witch results in a scale of 1 and a 1:1 mapping between CSS pixels
         and Qt device independent pixels. -->
     <meta name="viewport" content="width=device-width, height=device-height, user-scalable=0"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
 
     <title>markdownedit</title>
     <style>
       /* Make the html body cover the entire (visual) viewport with no scroll bars. */
-      html, body { padding: 0; margin: 0; overflow:hidden; height: 100vh }
-      /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
-      canvas { border: 0px none; background-color: white; height:100%; width:100%;  }
-      /* The contenteditable property is set to true for the canvas in order to support
-         clipboard events. Hide the resulting focus frame and set the cursor back to
-         the default cursor. */
-      canvas { outline: 0px solid transparent; caret-color: transparent; cursor:default }
+      html, body { padding: 0; margin: 0; overflow:hidden; height: 100% }
+      /* Make the canvas cover the entire body */
+      canvas { height:100%; width:100%; }
     </style>
   </head>
   <body onload="init()">
@@ -30,15 +30,16 @@
         <noscript>JavaScript is disabled. Please enable JavaScript to use this application.</noscript>
       </center>
     </figure>
-    <canvas id="qtcanvas" oncontextmenu="event.preventDefault()" contenteditable="true"></canvas>
+    <canvas id="qtcanvas"></canvas>
 
     <script type='text/javascript'>
+        let qtLoader = undefined;
         function init() {
           var spinner = document.querySelector('#qtspinner');
           var canvas = document.querySelector('#qtcanvas');
           var status = document.querySelector('#qtstatus')
 
-          var qtLoader = QtLoader({
+          qtLoader = QtLoader({
               canvasElements : [canvas],
               showLoader: function(loaderStatus) {
                   spinner.style.display = 'block';
