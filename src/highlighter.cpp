@@ -57,31 +57,31 @@ void Highliter::highlightBlock(const QString &text)
     setFormat(0, textLen, _formats[CodeBlock]);
 
     for (int i = 0; i < textLen; ++i) {
-        if (text[i] == QLatin1Char('<') && text[i+1] != QLatin1Char('!')) {
-            const int found = text.indexOf(QLatin1Char('>'), i);
+        if (text[i] == u'<' && text[i+1] != u'!') {
+            const auto found = text.indexOf(u'>', i);
             if (found > 0) {
                 ++i;
-                if (text[i] == QLatin1Char('/')) ++i;
+                if (text[i] == u'/') ++i;
                 setFormat(i, found - i, _formats[CodeKeyWord]);
             }
         }
 
-        if (text[i] == QLatin1Char('=')) {
-            int lastSpace = text.lastIndexOf(QLatin1Char(' '), i);
-            if (lastSpace == i-1) lastSpace = text.lastIndexOf(QLatin1Char(' '), i-2);
+        if (text[i] == u'=') {
+            int lastSpace = text.lastIndexOf(u' ', i);
+            if (lastSpace == i-1) lastSpace = text.lastIndexOf(u' ', i-2);
             if (lastSpace > 0) {
                 setFormat(lastSpace, i - lastSpace, _formats[CodeBuiltIn]);
             }
         }
 
-        if (text[i] == QLatin1Char('\"')) {
+        if (text[i] == u'\"') {
             const int pos = i;
             int cnt = 1;
             ++i;
             //bound check
             if ( (i+1) >= textLen) return;
             while (i < textLen) {
-                if (text[i] == QLatin1Char('\"')) {
+                if (text[i] == u'\"') {
                     ++cnt;
                     ++i;
                     break;

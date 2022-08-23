@@ -18,22 +18,20 @@
 
 
 #include "markdowneditor.h"
-#include "spellchecker.h"
 #include "settings.h"
+#include "spellchecker.h"
 
+#include <QDir>
 #include <QFileInfo>
 #include <QMimeData>
-#include <QImageReader>
+#include <QMimeDatabase>
 #include <QSignalBlocker>
-#include <QDir>
 
 
 MarkdownEditor::MarkdownEditor(QWidget *parent)
     : QMarkdownTextEdit(parent, false)
 {
-    TextEditProxy *proxy = new TextEditProxyT<QPlainTextEdit>(this, this);
-
-    checker = new SpellChecker(proxy);
+    checker = new SpellChecker(this);
     connect(checker, &SpellChecker::languageChanged,
             this, &MarkdownEditor::onLanguageChanged);
 
@@ -56,30 +54,40 @@ void MarkdownEditor::dropEvent(QDropEvent *event)
 {
     const QMimeData *data = event->mimeData();
 
-    if (!data->hasUrls())
-        return event->ignore();
+    if (!data->hasUrls()) {
+        event->ignore();
+        return;
+    }
 
     const QList<QUrl> files = data->urls();
 
-    QDir dir;
+    QDir dir(getDir());
 
     QTextCursor c = cursorForPosition(event->pos());
+
+    QMimeDatabase base;
 
     for (const QUrl &file : files) {
         const QString path = dir.relativeFilePath(file.toLocalFile());
 
-        if (QImageReader::imageFormat(file.toLocalFile()).isEmpty()) {
-            c.insertText(path + QLatin1Char('\n'));
+        const QString mime = base.mimeTypeForFile(path).name();
+
+        if (mime == QLatin1String("text/markdown"))
+            Q_EMIT openFile(QFileInfo(file.toLocalFile()).absoluteFilePath());
+
+        if (mime.startsWith(QLatin1String("image/"))) {
+            c.insertText(QStringLiteral("![%1](%2)\n").arg(file.fileName(),
+                                                        path));
             continue;
         }
 
-        c.insertText(QStringLiteral("![%1](%2)\n").arg(file.fileName(),
+        c.insertText(QStringLiteral("[%1](%2)\n").arg(file.fileName(),
                                                     path));
     }
     event->accept();
 }
 
-bool MarkdownEditor::setLanguage(const QString &lang)
+auto MarkdownEditor::setLanguage(const QString &lang) -> bool
 {
     if (SpellChecker::getLanguageList().contains(lang))
         return checker->setLanguage(lang);
@@ -87,64 +95,66 @@ bool MarkdownEditor::setLanguage(const QString &lang)
         return false;
 }
 
-QString MarkdownEditor::filePath()
+auto MarkdownEditor::filePath() -> QString
 {
-    if (getDir() == QLatin1Char('.'))
-        return getFileName() + QLatin1String("[*]");
+    if (getDir() == u'.')
+        return getFileName() + QStringLiteral("[*]");
     else {
-        const QFileInfo info(fileName);
         return QStringLiteral("%1[*] (%2)").arg(info.fileName(),
                                                 info.path()).replace(common::homeDict(),
                                                                      QChar('~'));
     }
 }
 
-QString MarkdownEditor::getFileName()
+auto MarkdownEditor::getFileName() -> QString
 {
-    return QFileInfo(fileName).fileName();
+    return info.fileName();
 }
 
-QString MarkdownEditor::getDir()
+auto MarkdownEditor::getDir() -> QString
 {
-    return QFileInfo(fileName).path();
+    return info.path();
 }
 
-void MarkdownEditor::changeSpelling(const bool &c)
+void MarkdownEditor::changeSpelling(const bool c)
 {
     checker->setSpellCheckingEnabled(c);
 }
 
 void MarkdownEditor::onLanguageChanged(const QString &l)
 {
+    const QString fileName = info.filePath();
+
     if (!fileName.isEmpty()) {
         setMapAttribute(fileName, l);
     }
 }
 
-void MarkdownEditor::setText(const QString &t, const QString &newFile, const bool setLangugae)
+void MarkdownEditor::setText(const QByteArray &t, const QString &newFile, const bool setLangugae)
 {
     if (!setLangugae) {
         if (checker)
             checker->clearDirtyBlocks();
 
-        document()->setPlainText(t);
-        return document()->setModified(false);
+        document()->setPlainText(QString::fromLocal8Bit(t));
+        document()->setModified(false);
+        return;
     }
 
     if (!newFile.isEmpty())
-        fileName = newFile;
+        info.setFile(newFile);
 
     // Improve performance
-    QMetaObject::invokeMethod(this, [this, t]{
+    QMetaObject::invokeMethod(this, [this, t, newFile]{
         blockSignals(true);
 
         checker->clearDirtyBlocks();
         checker->setDocument(nullptr);
 
-        if (mapContains(fileName))
-            setLanguage(mapAttribute(fileName));
+        if (mapContains(newFile))
+            setLanguage(mapAttribute(newFile));
 
-        document()->setPlainText(t);
+        document()->setPlainText(QString::fromLocal8Bit(t));
         document()->setModified(false);
         checker->setDocument(document());
 

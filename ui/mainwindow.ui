@@ -239,7 +239,7 @@
   </widget>
   <widget class="QToolBar" name="toolBarTools">
    <property name="windowTitle">
-    <string>toolBar</string>
+    <string>Templates</string>
    </property>
    <attribute name="toolBarArea">
     <enum>BottomToolBarArea</enum>

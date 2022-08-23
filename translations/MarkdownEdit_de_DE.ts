@@ -251,7 +251,7 @@ Willst du trotzdem verlassen?</translation>
 &lt;p&gt;Thanks to &lt;a href=&quot;https://github.com/Waqar144&quot;&gt;Waqar Ahmed&lt;/a&gt; for help with development.&lt;/p&gt;
 &lt;p&gt;The conversion from Markdown to HTML is done using the &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt; library by &lt;em&gt;Martin Mit&amp;aacute;&amp;scaron;&lt;/em&gt;.&lt;/p&gt;
 &lt;p&gt;The &lt;a href=&quot;https://github.com/pbek/qmarkdowntextedit&quot;&gt;widget&lt;/a&gt; used for writing was created by &lt;em&gt;Patrizio Bekerle&lt;/em&gt;.&lt;/p&gt;</source>
-        <translation>&lt;h2&gt;MarkdownEdit&lt;/h2&gt;
+        <translation type="unfinished">&lt;h2&gt;MarkdownEdit&lt;/h2&gt;
 &lt;p&gt;MarkdownEdit ist, wie der Name schon sagt, ein einfaches Programm zum Erstellen und Bearbeiten von Markdown-Dateien.&lt;/p&gt;
 &lt;h2&gt;Über&lt;/h2&gt;
 &lt;table class=&quot;table&quot; style=&quot;border-style: none;&quot;&gt;
@@ -272,7 +272,7 @@ Willst du trotzdem verlassen?</translation>
 &lt;/table&gt;
 &lt;h2&gt;Credits&lt;/h2&gt;
 &lt;p&gt;Dank an &lt;a href=&quot;https://github.com/Waqar144&quot;&gt;Waqar Ahmed&lt;/a&gt; für die Hilfe bei der Entwicklung.&lt;/p&gt;
-&lt;p&gt;Die Konvertierung von Markdown in HTML erfolgt mithilfe der &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt;-Bibliothek von &lt;em&gt;Martin Mit&amp;aacute;&amp;scaron;&lt;/em&gt; .&lt;/p&gt;
+&lt;p&gt;Die Konvertierung von Markdown in HTML erfolgt mithilfe der &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt;-Bibliothek von &lt;em&gt;Martin Mit&amp;aacute;&amp;scaron;&lt;/em&gt;.&lt;/p&gt;
 &lt;p&gt;Das zum Schreiben verwendete &lt;a href=&quot;https://github.com/pbek/qmarkdowntextedit&quot;&gt;Widget&lt;/a&gt; wurde von &lt;em&gt;Patrizio Bekerle&lt;/em&gt; erstellt.&lt;/p&gt;</translation>
     </message>
     <message>

@@ -25,24 +25,26 @@
 
 class PreviewWidget : public QTextBrowser
 {
+    Q_OBJECT
 public:
     PreviewWidget(QWidget *parent = nullptr);
+    ~PreviewWidget() {};
 
     void scrollToHeader(QString name);
 
     inline void setSearchPaths(const QStringList &searchPaths) { QTextBrowser::setSearchPaths(searchPaths); };
-    inline QStringList searchPaths() { return QTextBrowser::searchPaths(); };
+    inline auto searchPaths() -> QStringList { return QTextBrowser::searchPaths(); };
     inline void appenSearchPath(const QString &path) { QTextBrowser::setSearchPaths(QTextBrowser::searchPaths() << path); };
 
     inline void setLoadImages(const bool ok) { load = ok; };
-    inline bool loadImages() { return load; };
+    inline auto loadImages() -> bool { return load; };
 
-    QVariant loadResource(int type, const QUrl &name) override;
+    auto loadResource(int type, const QUrl &name) -> QVariant override;
 
-public slots:
+public Q_SLOTS:
     void setHtml(const QString &);
 
-private slots:
+private Q_SLOTS:
     void openUrl(const QUrl &);
 
 private:

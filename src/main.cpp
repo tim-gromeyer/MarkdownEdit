@@ -20,9 +20,9 @@
 #include "mainwindow.h"
 
 #include <QApplication>
+#include <QCommandLineParser>
 #include <QLocale>
 #include <QTranslator>
-#include <QCommandLineParser>
 
 
 #ifndef NOT_SUPPORTET
@@ -31,7 +31,7 @@
 
 
 #if defined(Q_OS_WASM) && QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-#error You must use Qt 5.14 or newer // Becouse of the file dialogs
+#error You must use Qt 5.14 or newer // Because of the file dialog
 #elif QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
 #error You must use Qt 5.10 or newer // Because of QGuiApplication::screenAt
 #endif
@@ -39,7 +39,7 @@
 #define S(str) QStringLiteral(str)
 
 
-int main(int argc, char *argv[])
+auto main(int argc, char *argv[]) -> int
 {
 #ifndef NOT_SUPPORTET
     SingleApplication a(argc, argv, true,
@@ -47,21 +47,21 @@ int main(int argc, char *argv[])
 #else
     QApplication a(argc, argv);
 #endif
-    a.setApplicationVersion(QStringLiteral(APP_VERSION));
+    QApplication::setApplicationVersion(QStringLiteral(APP_VERSION));
 
     QTranslator translator, qtTranslator;
 
     // load translation for Qt
     if (qtTranslator.load(QLocale::system(), S("qtbase"),
-                          S("_"),
-                          S(":/qtTranslations/")))
-        a.installTranslator(&qtTranslator);
+                          S("_"), S(":/qtTranslations/"))) {
+        QApplication::installTranslator(&qtTranslator);
+    }
 
     // try to load translation for current locale from resource file
     if (translator.load(QLocale::system(), S("MarkdownEdit"),
-                        S("_"),
-                        S(":/translations")))
-        a.installTranslator(&translator);
+                        S("_"), S(":/translations"))) {
+        QApplication::installTranslator(&translator);
+    }
 
     QCommandLineParser parser;
     parser.addHelpOption();
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
 #ifndef NOT_SUPPORTET
     if (a.isSecondary()) {
         a.sendMessage(QByteArrayLiteral("file://") +
-                          parser.positionalArguments().join(QLatin1Char(' ')).toLatin1());
+                          parser.positionalArguments().join(u' ').toLatin1());
         return 0;
     }
 #endif
@@ -86,17 +86,12 @@ int main(int argc, char *argv[])
 
 #ifndef NOT_SUPPORTET
     QObject::connect(
-        &a,
-        &SingleApplication::instanceStarted,
-        &w,
-        &MainWindow::toForeground
+        &a, &SingleApplication::instanceStarted,
+        &w, &MainWindow::toForeground
     );
 
-    QObject::connect(
-        &a,
-        &SingleApplication::receivedMessage,
-        &w,
-        &MainWindow::receivedMessage
+    QObject::connect(&a, &SingleApplication::receivedMessage,
+        &w, &MainWindow::receivedMessage
     );
 #endif
 
@@ -109,5 +104,5 @@ int main(int argc, char *argv[])
     w.show();
 #endif
 
-    return a.exec();
+    return QApplication::exec();
 }

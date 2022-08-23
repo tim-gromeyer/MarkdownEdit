@@ -20,29 +20,25 @@
 #pragma once
 
 #include "common.h"
-
-#include <QString>
+#include <QtCore/qcontainerfwd.h>
 
 // Namespace
-template <typename Key, typename T> class QHash;
 class QVariant;
+class QString;
 
-QHash<QString, QVariant> getLanguageMap();
+auto getLanguageMap() -> QHash<QString, QVariant>;
 void setLanguageMap(const QHash<QString, QVariant> &m);
 void setMapAttribute(const QString &, const QVariant &);
-const QString mapAttribute(const QString &);
-bool mapContains(const QString &);
-
-QString currDir();
-void setCurrDir(const QString &);
+auto mapAttribute(const QString &) -> const QString;
+auto mapContains(const QString &) -> bool;
 
 namespace settings {
-    const bool isDarkMode();
+    auto isDarkMode() -> const bool;
 }
 
 namespace common {
-const QString homeDict();
-const QStringList languages();
+auto homeDict() -> const QString;
+auto languages() -> const QStringList;
 }; // namespace common
 
 #if !SPELLCHECK

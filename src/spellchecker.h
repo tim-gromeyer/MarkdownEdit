@@ -33,101 +33,58 @@ QT_BEGIN_NAMESPACE
 namespace enchant { class Dict; };
 class QMenu;
 template <typename Key, typename T> class QHash;
+class QPlainTextEdit;
 QT_END_NAMESPACE
 
 // We use sliced QStringView 5.14 (it's faster)
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-    #define STRING QString
+    #define STRINGVIEW QString
 #else
-    #define STRING QStringView
+    #define STRINGVIEW QStringView
 #endif
-
-
-class TextEditProxy : public QObject {
-    Q_OBJECT
-public:
-    TextEditProxy(QObject* parent) : QObject(parent) {}
-    virtual QTextCursor textCursor() const = 0;
-    virtual QTextDocument* document() const = 0;
-    virtual QPoint mapToGlobal(const QPoint& pos) const = 0;
-    virtual QMenu* createStandardContextMenu() = 0;
-    virtual QTextCursor cursorForPosition(const QPoint& pos) const = 0;
-    virtual void setContextMenuPolicy(Qt::ContextMenuPolicy policy) = 0;
-
-signals:
-    void customContextMenuRequested(const QPoint& pos);
-};
-
-template<class T>
-class TextEditProxyT : public TextEditProxy {
-public:
-    explicit TextEditProxyT(T* textEdit, QObject* parent = nullptr) : TextEditProxy(parent), m_textEdit(textEdit) {
-        connect(textEdit, &T::customContextMenuRequested, this, &TextEditProxy::customContextMenuRequested);
-    }
-    ~TextEditProxyT() {}; // app will crash if u delete m_textEdit;
-
-    // static TextEditProxyT* createTextEditProxy(QPlainTextEdit *textEdit) { return new TextEditProxyT(textEdit, textEdit); };
-    QTextCursor textCursor() const override { return m_textEdit->textCursor(); }
-    QTextDocument* document() const override { return m_textEdit->document(); }
-    QPoint mapToGlobal(const QPoint& pos) const override { return m_textEdit->mapToGlobal(pos); }
-    QMenu* createStandardContextMenu() override { return m_textEdit->createStandardContextMenu(); }
-    QTextCursor cursorForPosition(const QPoint& pos) const override { return m_textEdit->cursorForPosition(pos); }
-    void setContextMenuPolicy(Qt::ContextMenuPolicy policy) override { m_textEdit->setContextMenuPolicy(policy); }
-
-private:
-    T* m_textEdit;
-};
 
 class SpellChecker : public SpellCheckerBaseClass
 {
     Q_OBJECT
 public:
-    explicit SpellChecker(TextEditProxy *parent, const QString &lang = QLatin1String());
+    explicit SpellChecker(QPlainTextEdit *parent, const QString &lang = QLatin1String());
     ~SpellChecker();
 
-    QHash<QString, QString> langMap;
+    auto setLanguage(const QString &) -> bool;
+    auto getLanguage() -> QString;
+
+#ifdef CHECK_MARKDOWN
+    void setMarkdownHighlightingEnabled(const bool);
+    inline auto isMarkdownHighlightingEnabled() -> bool { return markdownhig; };
+#endif
+
+    void setSpellCheckingEnabled(const bool);
+    inline auto isSpellCheckingEnabled() -> bool { return spellingEnabled && speller; };
+
+    Q_REQUIRED_RESULT static auto getLanguageList() -> const QStringList;
 
     void highlightBlock(const QString &text) override;
 
+    Q_REQUIRED_RESULT auto isCorrect(const QString &word) -> bool;
 
-    Q_REQUIRED_RESULT static const QStringList getLanguageList();
-
-    QString getLanguage();
-
-    Q_REQUIRED_RESULT bool isCorrect(const QString &word);
-
-    Q_REQUIRED_RESULT QStringList getSuggestion(const QString &);
+    Q_REQUIRED_RESULT auto getSuggestion(const QString &) -> QStringList;
 
     void addWort(const QString &);
 
     void ignoreWord(const QString &);
 
-#ifdef CHECK_MARKDOWN
-    inline bool isMarkdownHighlightingEnabled() { return markdownhig; };
-#endif
+public Q_SLOTS:
+    void checkSpelling(const STRINGVIEW &);
 
-    inline bool isSpellCheckingEnabled() { return spellingEnabled; };
-
-public slots:
-#ifdef CHECK_MARKDOWN
-    void setMarkdownHighlightingEnabled(const bool &enabled);
-#endif
-
-    void setSpellCheckingEnabled(const bool &enabled);
-
-    bool setLanguage(const QString &);
-
-    void checkSpelling(const STRING &);
-
-signals:
+Q_SIGNALS:
     void languageChanged(const QString &lang = QLatin1String());
 
-private slots:
+private Q_SLOTS:
     void slotAddWord();
 
     void slotIgnoreWord();
 
-    void slotSetLanguage(const bool &);
+    void slotSetLanguage(const bool);
 
     void slotReplaceWord();
 
@@ -135,27 +92,21 @@ private:
     bool spellingEnabled = true;
 #ifdef CHECK_MARKDOWN
     bool markdownhig = true;
+    auto getWord(const QTextBlock &, const int) -> QString;
 #endif
 
-    void showContextMenu(const QPoint &);
+    void showContextMenu(const QPoint);
 
     QString language;
-    void replaceWord(const int &wordPos, const QString &newWord);
+    void replaceWord(const int wordPos, const QString &newWord);
 
-    TextEditProxy *textEdit = nullptr; // Fix warning
+    QPlainTextEdit *textEdit = nullptr; // Fix warning
 
-    QString encodeLanguageString(const QString &langString);
+    auto encodeLanguageString(const QString &langString) -> QString;
 
-#ifndef NO_SPELLCHECK
-    QScopedPointer<enchant::Dict> speller;
-#else
     enchant::Dict *speller = nullptr;
-#endif
 
-#ifdef CHECK_MARKDOWN
-    QString getWord(const QTextBlock &, const int &);
-#endif
+    QHash<QString, QString> langMap;
 };
-
 
 #endif // SPELLCHECKER_H

@@ -18,13 +18,12 @@
 
 
 #include "previewwidget.h"
-#include "settings.h"
 
-#include <QUrl>
 #include <QDesktopServices>
 #include <QFile>
-#include <QScrollBar>
 #include <QFileInfo>
+#include <QScrollBar>
+#include <QUrl>
 
 
 PreviewWidget::PreviewWidget(QWidget *parent)
@@ -59,7 +58,7 @@ void PreviewWidget::setHtml(const QString &html)
 void PreviewWidget::openUrl(const QUrl &url)
 {
     const QString s = url.toString();
-    const QString filePath = currDir() + QChar('/') + s;
+    const QString filePath = property("dir").toString() + u'/' + s;
 
     if (s.startsWith(QLatin1String("http")))
         QDesktopServices::openUrl(url);
@@ -69,13 +68,13 @@ void PreviewWidget::openUrl(const QUrl &url)
         QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
 
     else
-    if (s.startsWith(QLatin1Char('#')))
+    if (s.startsWith(u'#'))
         scrollToHeader(s);
 }
 
 void PreviewWidget::scrollToHeader(QString name)
 {
-    if (name.startsWith(QLatin1Char('#')))
+    if (name.startsWith(u'#'))
         name.remove(0, 1);
 
     name.replace(QChar('_'), QChar(' '));
@@ -108,15 +107,15 @@ void PreviewWidget::scrollToHeader(QString name)
             return;
         }
 
-        // Prevent invinity loop
+        // Prevent infinity loop
         i += length;
     }
 }
 
-QVariant PreviewWidget::loadResource(int type, const QUrl &name)
+auto PreviewWidget::loadResource(int type, const QUrl &name) -> QVariant
 {
     if (!load)
-        return QVariant();
+        return {};
 
     return QTextBrowser::loadResource(type, name);
 }

@@ -20,6 +20,8 @@
 #ifndef MARKDOWNEDITOR_H
 #define MARKDOWNEDITOR_H
 
+#include "QFileInfo"
+
 #include "qmarkdowntextedit.h"
 
 QT_BEGIN_NAMESPACE
@@ -34,33 +36,37 @@ public:
     explicit MarkdownEditor(QWidget *parent = nullptr);
     ~MarkdownEditor() {};
 
-    void setText(const QString &, const QString &newFile = QLatin1String(), const bool setLangugae = true);
+    void setText(const QByteArray &, const QString &newFile = QLatin1String(), const bool setLangugae = true);
 
-    bool setLanguage(const QString & = QLatin1String());
+    auto setLanguage(const QString & = QLatin1String()) -> bool;
 
-    inline SpellChecker* getChecker() { return checker; };
+    inline auto getChecker() -> SpellChecker* { return checker; };
 
-    void changeSpelling(const bool &);
+    void changeSpelling(const bool);
 
-    inline void setFile(const QString &file) { fileName = file; };
-    QString getDir();
-    QString getFileName();
-    inline QString getPath() { return fileName; };
+    inline void setFile(const QString &file) { info.setFile(file); };
+    inline auto getPath() -> QString { return info.filePath(); };
 
-    QString filePath();
+    auto getDir() -> QString;
+    auto getFileName() -> QString;
+
+    auto filePath() -> QString; // aka window title
+
+Q_SIGNALS:
+    void openFile(const QString);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *) override;
     void dragMoveEvent(QDragMoveEvent *) override;
     void dropEvent(QDropEvent *) override;
 
-private slots:
+private Q_SLOTS:
     void onLanguageChanged(const QString &);
 
 private:
     SpellChecker *checker = nullptr;
 
-    QString fileName;
+    QFileInfo info;
 };
 
 #endif // MARKDOWNEDITOR_H

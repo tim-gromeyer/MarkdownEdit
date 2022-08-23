@@ -19,18 +19,18 @@
 
 #include "settings.h"
 
+#include <QDir>
+#include <QHash>
+#include <QLocale>
+#include <QPalette>
 #include <QString>
 #include <QVariant>
-#include <QPalette>
-#include <QDir>
-#include <QLocale>
-#include <QHash>
 
 
 QHash<QString, QVariant> languages_map;
 QString currentDir;
 
-QHash<QString, QVariant> getLanguageMap()
+auto getLanguageMap() -> QHash<QString, QVariant>
 {
     return languages_map;
 }
@@ -45,18 +45,17 @@ void setMapAttribute(const QString &name, const QVariant &value)
     languages_map[name] = value;
 }
 
-const QString mapAttribute(const QString &s)
+auto mapAttribute(const QString &s) -> const QString
 {
     return languages_map[s].toString();
 }
 
-bool mapContains(const QString &s)
+auto mapContains(const QString &s) -> bool
 {
     return languages_map.contains(s);
 }
 
-
-QString currDir() {
+auto currDir() -> QString {
     return currentDir;
 }
 
@@ -66,7 +65,7 @@ void setCurrDir(const QString &newDir)
 }
 
 namespace settings {
-const bool isDarkMode()
+auto isDarkMode() -> const bool
 {
     static const QColor back = QPalette().base().color();
     static int r, g, b, a;
@@ -79,13 +78,13 @@ const bool isDarkMode()
 }
 
 namespace common {
-const QString homeDict()
+auto homeDict() -> const QString
 {
     static const QString homeDirectory = QDir::homePath();
     return homeDirectory;
 }
 
-const QStringList languages()
+auto languages() -> const QStringList
 {
     return QLocale::system().uiLanguages();
 }

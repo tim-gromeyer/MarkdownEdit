@@ -21,10 +21,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QtCore/qcontainerfwd.h>
 
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
+namespace Ui { class MainWindow; };
 class QPrinter;
 class QSettings;
 class QToolButton;
@@ -33,7 +34,7 @@ class QComboBox;
 class QFileSystemWatcher;
 class MarkdownEditor;
 class QShortcut;
-template <typename Key, typename T> class QHash;
+class QWidgetAction;
 QT_END_NAMESPACE
 
 
@@ -50,24 +51,31 @@ public:
 
 protected:
     void closeEvent(QCloseEvent *e) override;
+    void resizeEvent(QResizeEvent *e) override;
 
-public slots:
+public Q_SLOTS:
     void receivedMessage(const qint32, const QByteArray &);
 
     void toForeground();
 
     void onHelpSyntax();
 
-private slots:
+    inline void onOpenFile(const QString &file) { openFile(file); };
+
+private Q_SLOTS:
     void onFileNew();
     void onFileOpen();
     bool onFileSave();
     bool onFileSaveAs();
     void onFileReload();
 
+    void loadIcons();
+
     void onFileChanged(const QString &);
 
     void onModificationChanged(const bool);
+
+    void loadSettings();
 
     void setupThings();
     void setupConnections();
@@ -112,18 +120,16 @@ private slots:
     void androidPreview(const bool);
 
 private:
-    void loadSettings();
     void loadFiles(const QStringList &);
     void saveSettings();
     void updateOpened();
     void openRecent();
-    void setText(const int = -1);
+    void setText(const int);
 
-    void loadIcon(const QString &name, QAction* a);
-    void loadIcons();
+    static void loadIcon(const QString &name, QAction* a);
 
-    MarkdownEditor *createEditor();
-    MarkdownEditor *currentEditor();
+    auto createEditor() -> MarkdownEditor *;
+    auto currentEditor() -> MarkdownEditor *;
     QList<MarkdownEditor*> editorList;
     QStringList fileList;
 
@@ -133,7 +139,7 @@ private:
     Ui::MainWindow *ui;
 
     QString path;
-    int _mode = 1;
+    int _mode = 1; // 0 = Commonmark, 1 = GitHub
 
     QSettings *settings;
 
@@ -153,6 +159,8 @@ private:
 
     QToolButton *toolbutton;
     QComboBox *widgetBox;
+    QAction *actionWidgetBox;
+    QAction *actionPreview;
 
     QComboBox *mode;
 

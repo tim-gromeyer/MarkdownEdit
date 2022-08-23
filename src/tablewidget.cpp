@@ -1,7 +1,7 @@
 #include "tablewidget.h"
 
-#include <QTableWidget>
 #include <QDialogButtonBox>
+#include <QTableWidget>
 #include <QVBoxLayout>
 
 
@@ -10,11 +10,11 @@ TableWidget::TableWidget(QWidget *parent)
 {
     table = new QTableWidget(3, 2, this);
 
-    QVBoxLayout *l = new QVBoxLayout(this);
+    auto *l = new QVBoxLayout(this);
     l->addWidget(table, 1);
     setLayout(l);
 
-    QDialogButtonBox *box = new
+    auto *box = new
             QDialogButtonBox(QDialogButtonBox::Apply | QDialogButtonBox::Abort,
                              Qt::Vertical, this);
     connect(box, &QDialogButtonBox::accepted, this, &QDialog::accept);
@@ -23,7 +23,10 @@ TableWidget::TableWidget(QWidget *parent)
     l->addWidget(box);
 }
 
-QString TableWidget::markdownTable()
+auto TableWidget::markdownTable() -> QString
 {
     return QLatin1String();
+}
+TableWidget::~TableWidget()
+{
 }

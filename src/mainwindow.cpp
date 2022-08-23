@@ -19,39 +19,48 @@
 
 // imports
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include "markdownparser.h"
 #include "highlighter.h"
-#include "spellchecker.h"
-#include "settings.h"
 #include "markdowneditor.h"
+#include "markdownparser.h"
+#include "settings.h"
+#include "spellchecker.h"
+#include "ui_mainwindow.h"
 
-// qt imports
-#include <QMessageBox>
+// Qt imports
+#include <QComboBox>
+#include <QDebug>
+#include <QDesktopServices>
+#include <QDialogButtonBox>
 #include <QFileDialog>
 #include <QFileInfo>
-#include <QTextStream>
-#include <QtPrintSupport/QPrinter>
+#include <QFileSystemWatcher>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QMessageBox>
+#include <QSaveFile>
 #include <QScreen>
-#include <QComboBox>
 #include <QScrollBar>
 #include <QSettings>
-#include <QToolButton>
-#include <QSaveFile>
-#include <QDebug>
-#include <QTimer>
-#include <QTemporaryFile>
-#include <QDesktopServices>
-#include <QFileSystemWatcher>
 #include <QShortcut>
-#include <QLabel>
-#include <QDialogButtonBox>
-#include <QHBoxLayout>
+#include <QTemporaryFile>
+#include <QTextStream>
+#include <QTimer>
+#include <QToolButton>
+#include <QWidgetAction>
+#include <QtPrintSupport/QPrinter>
+#include <chrono>
+
+#include <QElapsedTimer>
 
 #ifdef QT_PRINTSUPPORT_LIB
 #include <QtPrintSupport/QPrintDialog>
 #include <QtPrintSupport/QPrintPreviewDialog>
 #endif
+
+using namespace std::chrono_literals;
+
+QT_REQUIRE_CONFIG(mainwindow);
+QT_REQUIRE_CONFIG(filedialog);
 
 
 MainWindow::MainWindow(const QStringList &files, QWidget *parent)
@@ -64,9 +73,10 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
     setupThings(); // Setup things
 
     // settings was set up in setupThings()
-    loadSettings(); // Load settings
+    QMetaObject::invokeMethod(this, "loadSettings", Qt::QueuedConnection); // It's faster
 
-    setupConnections(); // Connect everything
+    // setupConnections(); // Connect everything
+    QMetaObject::invokeMethod(this, "setupConnections", Qt::QueuedConnection); // It's faster
 
     ui->File->addAction(ui->actionNew);
     ui->File->addAction(ui->actionOpen);
@@ -84,8 +94,9 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
     ui->Edit->addAction(ui->actionPaste);
     ui->toolBarPreview->addWidget(mode);
     ui->toolBarPreview->addSeparator();
-    ui->toolBarPreview->addWidget(widgetBox);
 #endif
+    actionWidgetBox = ui->toolBarPreview->addWidget(widgetBox);
+    ui->toolBarPreview->addAction(actionPreview);
 
 #ifdef NO_SPELLCHECK
     ui->menuExtras->removeAction(ui->actionSpell_checking);
@@ -95,7 +106,7 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
     ui->menuFile->removeAction(ui->actionPrint);
     ui->menuFile->removeAction(ui->actionPrintPreview);
 
-    // Doesnt work on wasm
+    // Doesn't work on wasm
     ui->menuFile->removeAction(ui->menuRecentlyOpened->menuAction());
     ui->menuRecentlyOpened->setDisabled(true);
     toolbutton->deleteLater();
@@ -107,7 +118,6 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
 #endif
 #ifdef Q_OS_ANDROID
     mode->deleteLater();
-    widgetBox->deleteLater();
     setStatusBar(nullptr);
     menuBar()->hide();
     ui->File->setIconSize(QSize(36, 36));
@@ -117,19 +127,12 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
     ui->Edit->setMovable(false);
     ui->toolBarPreview->setMovable(false);
 
-    QAction *a = new QAction(QIcon(QStringLiteral(":/icons/view-preview.svg")), tr("Preview"), this);
-    a->setCheckable(true);
-    connect(a, &QAction::triggered, this, &MainWindow::androidPreview);
-    ui->toolBarPreview->addSeparator();
-    ui->toolBarPreview->addAction(a);
-
     setStyleSheet(QStringLiteral("QSplitter { border: none; } QToolBar { border: none; }"));
 #endif
 
-    QMetaObject::invokeMethod(this, [files, this]{
-        // Moved here for faster startup times
-        loadIcons(); // Load all icons
+    QMetaObject::invokeMethod(this, "loadIcons", Qt::QueuedConnection);
 
+    QMetaObject::invokeMethod(this, [files, this] {
         loadFiles(files);
     }, Qt::QueuedConnection);
 }
@@ -140,9 +143,9 @@ void MainWindow::androidPreview(const bool c)
         ui->tabWidget->show();
         ui->tabWidget_2->hide();
 
-        dontUpdate = !dontUpdate;
+        dontUpdate = true;
         onTextChanged();
-        dontUpdate = !dontUpdate;
+        dontUpdate = false;
     }
     else {
         ui->tabWidget->hide();
@@ -157,8 +160,8 @@ void MainWindow::onHelpSyntax()
     QString file = QStringLiteral(":/syntax_en.md");
     QString language = QStringLiteral("en_US");
 
-    const QStringList uiLanguages = QLocale::system().uiLanguages(); // eg. de-DE
-    const QStringList languages = SpellChecker::getLanguageList(); // eg. de_DE
+    const QStringList uiLanguages = QLocale::system().uiLanguages(); // ex. de-DE
+    const QStringList languages = SpellChecker::getLanguageList(); // ex. de_DE
 
     // loop thought the languages
     for (const QString &lang : uiLanguages) {
@@ -173,7 +176,7 @@ void MainWindow::onHelpSyntax()
     }
 
     // Correct language format
-    language.replace(QLatin1Char('-'), QLatin1Char('_'));
+    language.replace(u'-', u'_');
 
     if (!languages.contains(language)) {
         if (language.length() > 2)
@@ -182,7 +185,7 @@ void MainWindow::onHelpSyntax()
 
         // Assuming language = de, try de_DE
         const QString newLang = QStringLiteral("%1_%2").arg(language, language.toUpper());
-        // If the languagedict exists
+        // If the language dict exists
         if (languages.contains(newLang)) {
             language = newLang;
         }
@@ -246,7 +249,7 @@ void MainWindow::onFileReload()
 
 void MainWindow::setupThings()
 {
-    // Setup a toolbutton to acces the
+    // Setup a QToolButton to access the
     // recently opened menu from the toolbar
     toolbutton = new QToolButton(this);
     toolbutton->setMenu(ui->menuRecentlyOpened);
@@ -276,16 +279,15 @@ void MainWindow::setupThings()
     widgetBox->addItems(QStringList() << tr("Preview") << tr("HTML"));
     widgetBox->setCurrentIndex(0);
 
-    // Setup the HTML Highliter
+    // Setup the HTML Highlighter
     htmlHighliter = new Highliter(ui->raw->document());
 
-    // Disable preview when Portrait mode is active
-    QScreen *screen = qApp->primaryScreen();
-    onOrientationChanged(screen->primaryOrientation());
-    connect(screen, &QScreen::primaryOrientationChanged,
-            this, &MainWindow::onOrientationChanged);
+    actionPreview = new QAction(QIcon::fromTheme(QStringLiteral("view-preview"), QIcon(QStringLiteral(":/icons/view-preview.svg"))),
+                                tr("Preview"), this);
+    actionPreview->setCheckable(true);
+    connect(actionPreview, &QAction::triggered, this, &MainWindow::androidPreview);
 
-    // Disable actions which doesnt work yet
+    // Disable actions which doesn't work yet
     ui->actionSave->setEnabled(false);
     ui->actionUndo->setEnabled(false);
     ui->actionRedo->setEnabled(false);
@@ -401,32 +403,34 @@ void MainWindow::closeEditor(const int index)
     overrideEditor = true;
     overrideVal = index;
 
-    path = currentEditor()->getPath();
+    auto *editor = editorList.at(index);
+
+    path = editor->getPath();
 
     if (path == tr("Untitled.md")) {
         path.clear();
-        if (currentEditor()->document()->isModified()) {
+        if (editor->document()->isModified()) {
             QMessageBox d(this);
             d.setText(tr("The document has been edited, do you want to save it?"));
             d.setStandardButtons(QMessageBox::Yes | QMessageBox::No | QMessageBox::Abort);
             d.setDefaultButton(QMessageBox::Yes);
             d.setIcon(QMessageBox::Question);
 
-            const int retVal = d.exec();
+            const auto retVal = d.exec();
 
             if (retVal == QMessageBox::Abort) {
                 overrideEditor = false;
                 return;
             }
             if (retVal == QMessageBox::Yes) {
-                if (!onFileSave()) {
+                if (!onFileSaveAs()) {
                     overrideEditor = false;
                     return;
                 }
             }
         }
     }
-    else if (currentEditor()->document()->isModified()) {
+    else if (editor->document()->isModified()) {
         if (!onFileSave())
             return;
     }
@@ -440,10 +444,12 @@ void MainWindow::closeEditor(const int index)
 
     editorList.removeAt(index);
     ui->tabWidget_2->removeTab(index);
+    editor->deleteLater();
+    delete editor;
 
     if (editorList.isEmpty()) { // If all editors are closed
-        html.clear(); // Clear html
-        setText(ui->tabWidget->currentIndex()); // apply the empty html to the preview widget
+        html.clear(); // Clear HTML
+        setText(ui->tabWidget->currentIndex()); // apply the empty HTML to the preview widget
         ui->actionReload->setText(tr("Reload \"%1\"").arg('\0'));
         ui->actionReload->setEnabled(false);
     }
@@ -451,7 +457,7 @@ void MainWindow::closeEditor(const int index)
 
 void MainWindow::onEditorChanged(const int index)
 {
-    MarkdownEditor* editor = editorList[index];
+    MarkdownEditor* editor = editorList.at(index);
     if (!editor) return;
 
     const bool modified = editor->document()->isModified();
@@ -480,16 +486,16 @@ void MainWindow::onEditorChanged(const int index)
     ui->actionReload->setEnabled(false);
 #endif
 
-    setCurrDir(editor->getDir());
+    ui->textBrowser->setProperty("dir", editor->getDir());
 
     editor->setFocus(Qt::TabFocusReason);
 
     onTextChanged();
 }
 
-MarkdownEditor *MainWindow::createEditor()
+auto MainWindow::createEditor() -> MarkdownEditor *
 {
-    MarkdownEditor *editor = new MarkdownEditor(this);
+    auto *editor = new MarkdownEditor(this);
     editor->changeSpelling(spelling);
     editor->getChecker()->setMarkdownHighlightingEnabled(highlighting);
 
@@ -512,6 +518,7 @@ MarkdownEditor *MainWindow::createEditor()
             ui->actionRedo, &QAction::setEnabled);
     connect(editor->horizontalScrollBar(), &QScrollBar::valueChanged,
             ui->textBrowser->horizontalScrollBar(), &QScrollBar::setValue);
+    connect(editor, &MarkdownEditor::openFile, this, &MainWindow::onOpenFile);
 
     return editor;
 }
@@ -519,9 +526,9 @@ MarkdownEditor *MainWindow::createEditor()
 void MainWindow::receivedMessage(const qint32 id, const QByteArray &msg)
 {
     QString f = QString::fromLatin1(msg); // is a bit faster
-    f.remove(0, 7); // remove "file://" which is added programaticly
+    f.remove(0, 7); // Removing "file://", which is added programmatically
 
-    qInfo() << "markdownedit: instance" << id << "started and send folowing message:" << f;
+    qInfo() << "MarkdownEdit: instance" << id << "started and send following message:" << f;
 
     if (f.isEmpty()) // it's the case when you start a new app
         onFileNew();
@@ -545,7 +552,7 @@ void MainWindow::onModificationChanged(const bool m)
     ui->tabWidget_2->tabBar()->setTabText(curr, old);
 }
 
-MarkdownEditor* MainWindow::currentEditor()
+auto MainWindow::currentEditor() -> MarkdownEditor*
 {
     if (overrideEditor)
         return editorList.at(overrideVal);
@@ -558,18 +565,18 @@ MarkdownEditor* MainWindow::currentEditor()
 
 void MainWindow::onFileChanged(const QString &f)
 {
-    QWidget *widgetReloadFile = new QWidget(this);
+    auto *widgetReloadFile = new QWidget(this);
     widgetReloadFile->setStyleSheet(QStringLiteral("background: orange"));
     widgetReloadFile->setObjectName(QStringLiteral("widgetReloadFile"));
 
-    QHBoxLayout* horizontalLayout = new QHBoxLayout(widgetReloadFile);
+    auto *horizontalLayout = new QHBoxLayout(widgetReloadFile);
 
-    QLabel *labelReloadFile = new QLabel(widgetReloadFile);
+    auto *labelReloadFile = new QLabel(widgetReloadFile);
     labelReloadFile->setStyleSheet(QStringLiteral("color: black"));
 
     horizontalLayout->addWidget(labelReloadFile);
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(widgetReloadFile);
+    auto *buttonBox = new QDialogButtonBox(widgetReloadFile);
     buttonBox->setStandardButtons(QDialogButtonBox::No | QDialogButtonBox::Yes);
     buttonBox->setProperty("file", f);
 
@@ -625,7 +632,11 @@ void MainWindow::loadIcons()
     ui->menuRecentlyOpened->setIcon(QIcon::fromTheme(S("document-open-recent"),
                                                      QIcon(S(":/icons/document-open-recent.svg"))));
 
+    ui->actionAboutQt->setIcon(QIcon(QStringLiteral(":/qmessagebox/images/qtlogo_64.png")));
+
+#ifndef Q_OS_WASM
     toolbutton->setIcon(ui->menuRecentlyOpened->icon());
+#endif
 
     setWindowIcon(QIcon(S(":/Icon.png")));
 #undef S
@@ -638,6 +649,15 @@ void MainWindow::loadIcon(const QString &name, QAction* a)
 
 void MainWindow::onOrientationChanged(const Qt::ScreenOrientation t)
 {
+    if (t == Qt::PortraitOrientation) {
+        actionWidgetBox->setVisible(false);
+        actionPreview->setVisible(true);
+    }
+    else {
+        actionPreview->setVisible(false);
+        actionWidgetBox->setVisible(true);
+    }
+
     disablePreview(t == Qt::PortraitOrientation);
 }
 
@@ -796,10 +816,12 @@ void MainWindow::changeAddtoIconPath(const bool c)
 
     if (!c) {
         ui->textBrowser->setLoadImages(false);
-        return setText(0);
+        setText(0);
+        return;
     }
 
     QStringList searchPaths;
+    searchPaths.reserve(editorList.size());
 
     for (const QString &file : qAsConst(fileList)) {
         searchPaths << QFileInfo(file).absolutePath();
@@ -869,10 +891,10 @@ void MainWindow::printPreview(QPrinter *printer)
 
 void MainWindow::exportPdf()
 {
-    QFileDialog dialog(this, tr("Export Pdf"));
+    QFileDialog dialog(this, tr("Export PDF"));
     dialog.setMimeTypeFilters({"application/pdf"});
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.setDefaultSuffix("pdf");
+    dialog.setDefaultSuffix(QStringLiteral("pdf"));
     if (dialog.exec() == QDialog::Rejected)
         return;
 
@@ -906,7 +928,7 @@ void MainWindow::openInWebBrowser()
     f.setAutoRemove(false);
 
     if (!f.open()) {
-        qWarning() << "Could not create temporyry file: " << f.errorString();
+        qWarning() << "Could not create temporary file: " << f.errorString();
 
         QMessageBox::warning(this, tr("Warning"),
                              tr("Could not create temporary file: %1").arg(
@@ -922,7 +944,7 @@ void MainWindow::openInWebBrowser()
     const QString file = f.fileName();
 
     // Delete the file file after 5s
-    QTimer::singleShot(5000, this, [file]{
+    QTimer::singleShot(5s, this, [file]{
         QFile::remove(file);
     });
 }
@@ -935,7 +957,7 @@ void MainWindow::exportHtml()
     QFileDialog dialog(this, tr("Export HTML"));
     dialog.setMimeTypeFilters({"text/html"});
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.setDefaultSuffix("html");
+    dialog.setDefaultSuffix(QStringLiteral("html"));
     if (dialog.exec() != QDialog::Accepted)
         return;
 
@@ -978,7 +1000,7 @@ void MainWindow::onTextChanged()
     if (dontUpdate || !currentEditor())
         return;
 
-    // Genarate HTML from Markdown
+    // Generate HTML from Markdown
     html = Parser::toHtml(currentEditor()->document()->toPlainText(), _mode);
 
     // Apply the HTML to the visible widget
@@ -1009,7 +1031,7 @@ void MainWindow::loadFiles(const QStringList &files)
 void MainWindow::openFiles(const QStringList &files)
 {
     for (const QString &file : files) {
-        openFile(QFileInfo(file).absoluteFilePath()); // ensure filepath is absolute
+        openFile(QFileInfo(file).absoluteFilePath()); // ensure file path is absolute
     }
 }
 
@@ -1060,7 +1082,7 @@ void MainWindow::openFile(const QString &newFile, const QString &lang)
     if (setPath)
         ui->textBrowser->appenSearchPath(QFileInfo(newFile).path());
 
-    auto editor = createEditor();
+    auto *editor = createEditor();
     editor->setFile(newFile);
     ui->tabWidget_2->insertTab(editorList.length() -1,
                                editor, editor->getFileName());
@@ -1093,7 +1115,7 @@ void MainWindow::onFileNew()
     path.clear();
     const QString file = tr("Untitled.md");
 
-    auto editor = createEditor();
+    auto *editor = createEditor();
     editor->setFile(file);
 
     ui->tabWidget_2->insertTab(editorList.length() -1,
@@ -1101,7 +1123,7 @@ void MainWindow::onFileNew()
     ui->tabWidget_2->setCurrentIndex(editorList.length() -1);
 
     if (!editor->setLanguage(QLocale::system().name()))
-        editor->setLanguage(QLatin1String("en_US"));
+        editor->setLanguage(QStringLiteral("en_US"));
 
 #ifndef Q_OS_ANDROID
     statusBar()->show();
@@ -1157,7 +1179,7 @@ void MainWindow::onFileOpen()
 #endif
 }
 
-bool MainWindow::onFileSave()
+auto MainWindow::onFileSave() -> bool
 {
     if (!currentEditor()->document()->isModified())
         if (QFile::exists(path))
@@ -1213,17 +1235,17 @@ bool MainWindow::onFileSave()
     return true;
 }
 
-bool MainWindow::onFileSaveAs()
+auto MainWindow::onFileSaveAs() -> bool
 {
 #ifdef Q_OS_WASM
     path = QLatin1String("Markdown.md");
     return onFileSave();
 #else
 
-    QFileDialog dialog(this, tr("Save MarkDown File"));
+    QFileDialog dialog(this, tr("Save Markdown File"));
     dialog.setMimeTypeFilters({"text/markdown"});
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.setDefaultSuffix("md");
+    dialog.setDefaultSuffix(QStringLiteral("md"));
     if (dialog.exec() == QDialog::Rejected)
         return false;
 
@@ -1318,8 +1340,8 @@ void MainWindow::updateOpened() {
 
     for (int i = 0; i < recentOpened.count(); i++) {
         const QString document = recentOpened.at(i);
-        QAction *action = new QAction(QStringLiteral("&%1 | %2").arg(QString::number(i + 1),
-                                                                     document), this);
+        auto *action = new QAction(QStringLiteral("&%1 | %2").arg(QString::number(i + 1),
+                                                                  document), this);
         connect(action, &QAction::triggered, this, &MainWindow::openRecent);
 
         action->setData(document);
@@ -1346,6 +1368,20 @@ void MainWindow::closeEvent(QCloseEvent *e)
     QMainWindow::closeEvent(e);
 }
 
+void MainWindow::resizeEvent(QResizeEvent *e)
+{
+    const QSize size = e->size();
+    const QSize old = e->oldSize();
+
+    if (size.height() > size.width() && (old.isEmpty() || old.height() < old.width()))
+        onOrientationChanged(Qt::PortraitOrientation);
+    else if (size.height() < size.width() && (old.isEmpty() || old.height() > old.width()))
+        onOrientationChanged(Qt::LandscapeOrientation);
+
+    e->accept();
+    QMainWindow::resizeEvent(e);
+}
+
 void MainWindow::loadSettings() {
     const QByteArray geo = settings->value(QStringLiteral("geometry"),
                                            QByteArrayLiteral("")).toByteArray();
@@ -1365,10 +1401,11 @@ void MainWindow::loadSettings() {
     ui->actionHighlighting_activated->setChecked(highlighting);
 
     setPath = settings->value(QStringLiteral("setPath"), true).toBool();
+    ui->actionAuto_add_file_path_to_icon_path->setChecked(setPath);
 
     recentOpened = settings->value(QStringLiteral("recent"), QStringList()).toStringList();
     if (!recentOpened.isEmpty()) {
-        if (recentOpened.first().isEmpty()) {
+        if (recentOpened.at(0).isEmpty()) {
             recentOpened.removeFirst();
         }
     }

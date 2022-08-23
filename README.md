@@ -41,7 +41,8 @@ A preview is available [here](https://software-made-easy.github.io/MarkdownEdit/
 
 Important:
 - Performance might be bad
-- Some functions like spell check are not available
+- Spell check is not available
+- Drag and Drop does not work
 
 ## Dependencies:
 

@@ -17,8 +17,7 @@
  **/
 
 
-#ifndef HIGHLITER_H
-#define HIGHLITER_H
+#pragma once
 
 #include <QSyntaxHighlighter>
 
@@ -34,7 +33,6 @@ public:
         CodeString,
         CodeBuiltIn,
     };
-    Q_ENUM(Token)
 
 protected:
     void highlightBlock(const QString &text) override;
@@ -42,5 +40,3 @@ protected:
 private:
     QHash<Token, QTextCharFormat> _formats;
 };
-
-#endif // HIGHLITER_H

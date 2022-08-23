@@ -13,7 +13,7 @@ class TableWidget : public QDialog
     Q_OBJECT
 public:
     TableWidget(QWidget *parent = nullptr);
-    virtual ~TableWidget() = 0;
+    ~TableWidget();
 
     auto markdownTable() -> QString;
 
