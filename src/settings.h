@@ -20,7 +20,7 @@
 #pragma once
 
 #include "common.h"
-#include <QtCore/qcontainerfwd.h>
+#include <QString>
 
 // Namespace
 class QVariant;
