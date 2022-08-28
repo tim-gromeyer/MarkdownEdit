@@ -34,7 +34,7 @@ class MarkdownEditor : public QMarkdownTextEdit
     Q_OBJECT
 public:
     explicit MarkdownEditor(QWidget *parent = nullptr);
-    ~MarkdownEditor() {};
+    ~MarkdownEditor() override = default;
 
     void setText(const QByteArray &, const QString &newFile = QLatin1String(), const bool setLangugae = true);
 
@@ -51,6 +51,8 @@ public:
     auto getFileName() -> QString;
 
     auto filePath() -> QString; // aka window title
+
+    bool bigFile = false;
 
 Q_SIGNALS:
     void openFile(const QString);

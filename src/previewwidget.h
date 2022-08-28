@@ -28,7 +28,7 @@ class PreviewWidget : public QTextBrowser
     Q_OBJECT
 public:
     PreviewWidget(QWidget *parent = nullptr);
-    ~PreviewWidget() {};
+    ~PreviewWidget() override = default;
 
     void scrollToHeader(QString name);
 

@@ -144,10 +144,6 @@
         <translation>Datei konnte nicht geöffnet werden</translation>
     </message>
     <message>
-        <source>Save MarkDown File</source>
-        <translation>Markdown-Datei speichern</translation>
-    </message>
-    <message>
         <source>About MarkdownEdit</source>
         <translation>Über MarkdownEdit</translation>
     </message>
@@ -194,10 +190,6 @@
     <message>
         <source>Open HTML in web browser</source>
         <translation>Html im Webbrowser öffnen</translation>
-    </message>
-    <message>
-        <source>Export Pdf</source>
-        <translation>Pdf exportieren</translation>
     </message>
     <message>
         <source>File &lt;em&gt;%1&lt;/em&gt; has been modified.
@@ -251,7 +243,7 @@ Willst du trotzdem verlassen?</translation>
 &lt;p&gt;Thanks to &lt;a href=&quot;https://github.com/Waqar144&quot;&gt;Waqar Ahmed&lt;/a&gt; for help with development.&lt;/p&gt;
 &lt;p&gt;The conversion from Markdown to HTML is done using the &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt; library by &lt;em&gt;Martin Mit&amp;aacute;&amp;scaron;&lt;/em&gt;.&lt;/p&gt;
 &lt;p&gt;The &lt;a href=&quot;https://github.com/pbek/qmarkdowntextedit&quot;&gt;widget&lt;/a&gt; used for writing was created by &lt;em&gt;Patrizio Bekerle&lt;/em&gt;.&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;h2&gt;MarkdownEdit&lt;/h2&gt;
+        <translation>&lt;h2&gt;MarkdownEdit&lt;/h2&gt;
 &lt;p&gt;MarkdownEdit ist, wie der Name schon sagt, ein einfaches Programm zum Erstellen und Bearbeiten von Markdown-Dateien.&lt;/p&gt;
 &lt;h2&gt;Über&lt;/h2&gt;
 &lt;table class=&quot;table&quot; style=&quot;border-style: none;&quot;&gt;
@@ -274,10 +266,6 @@ Willst du trotzdem verlassen?</translation>
 &lt;p&gt;Dank an &lt;a href=&quot;https://github.com/Waqar144&quot;&gt;Waqar Ahmed&lt;/a&gt; für die Hilfe bei der Entwicklung.&lt;/p&gt;
 &lt;p&gt;Die Konvertierung von Markdown in HTML erfolgt mithilfe der &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt;-Bibliothek von &lt;em&gt;Martin Mit&amp;aacute;&amp;scaron;&lt;/em&gt;.&lt;/p&gt;
 &lt;p&gt;Das zum Schreiben verwendete &lt;a href=&quot;https://github.com/pbek/qmarkdowntextedit&quot;&gt;Widget&lt;/a&gt; wurde von &lt;em&gt;Patrizio Bekerle&lt;/em&gt; erstellt.&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>toolBar</source>
-        <translation></translation>
     </message>
     <message>
         <source>Could not open file &lt;em&gt;%1&lt;/em&gt;: %2</source>
@@ -309,6 +297,50 @@ Willst du trotzdem verlassen?</translation>
         <source>Wrote %1</source>
         <translation>%1 geschrieben</translation>
     </message>
+    <message>
+        <source>Templates</source>
+        <translation>Vorlagen</translation>
+    </message>
+    <message>
+        <source>Bold</source>
+        <translation>Fett</translation>
+    </message>
+    <message>
+        <source>Italic</source>
+        <translation>Kursiv</translation>
+    </message>
+    <message>
+        <source>Underline</source>
+        <translation>Unterstrichen</translation>
+    </message>
+    <message>
+        <source>Insert table</source>
+        <translation>Tabelle einfügen</translation>
+    </message>
+    <message>
+        <source>Insert Table of Contents</source>
+        <translation>Inhaltsverzeichnis einfügen</translation>
+    </message>
+    <message>
+        <source>Insert link</source>
+        <translation>Link einfügen</translation>
+    </message>
+    <message>
+        <source>Insert image</source>
+        <translation>Bild einfügen</translation>
+    </message>
+    <message>
+        <source>Export PDF</source>
+        <translation>PDF exportieren</translation>
+    </message>
+    <message>
+        <source>Markdown (*.md *.markdown *.mkd)</source>
+        <translation>Markdown (*.md *.markdown *.mkd)</translation>
+    </message>
+    <message>
+        <source>Save Markdown File</source>
+        <translation>Markdown-Datei speichern</translation>
+    </message>
 </context>
 <context>
     <name>SpellChecker</name>
@@ -327,6 +359,37 @@ Willst du trotzdem verlassen?</translation>
     <message>
         <source>Languages</source>
         <translation>Sprachen</translation>
+    </message>
+</context>
+<context>
+    <name>TableDialog</name>
+    <message>
+        <source>Insert table</source>
+        <translation>Tabelle einfügen</translation>
+    </message>
+    <message>
+        <source>Add row above</source>
+        <translation>Zeile oben einfügen</translation>
+    </message>
+    <message>
+        <source>Add row below</source>
+        <translation>Zeile unten einfügen</translation>
+    </message>
+    <message>
+        <source>Remove row</source>
+        <translation>Zeile entfernen</translation>
+    </message>
+    <message>
+        <source>Add column to the left</source>
+        <translation>Spalte auf der linken Seite hinzufügen</translation>
+    </message>
+    <message>
+        <source>Add column to the right</source>
+        <translation>Spalte auf der rechten Seite hinzufügen</translation>
+    </message>
+    <message>
+        <source>Remove column</source>
+        <translation>Spalte entfernen</translation>
     </message>
 </context>
 <context>

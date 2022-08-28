@@ -156,6 +156,7 @@ void MarkdownEditor::setText(const QByteArray &t, const QString &newFile, const 
 
         document()->setPlainText(QString::fromLocal8Bit(t));
         document()->setModified(false);
+
         checker->setDocument(document());
 
         blockSignals(false);

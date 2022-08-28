@@ -8,14 +8,20 @@ class QTableWidget;
 QT_END_NAMESPACE
 
 
-class TableWidget : public QDialog
+class TableDialog : public QDialog
 {
     Q_OBJECT
 public:
-    TableWidget(QWidget *parent = nullptr);
-    ~TableWidget();
+    TableDialog(QWidget *parent = nullptr);
+    ~TableDialog() override;
 
     auto markdownTable() -> QString;
+
+private Q_SLOTS:
+    void onContextMenuRequest(const QPoint p);
+
+    void handleRow();
+    void handleColumn();
 
 private:
     QTableWidget *table;

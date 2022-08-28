@@ -44,7 +44,7 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(const QStringList &, QWidget *parent = nullptr);
-    ~MainWindow();
+    ~MainWindow() override;
 
     void openFile(const QString &, const QString & = QLatin1String());
     void openFiles(const QStringList &);
@@ -54,7 +54,7 @@ protected:
     void resizeEvent(QResizeEvent *e) override;
 
 public Q_SLOTS:
-    void receivedMessage(const qint32, const QByteArray &);
+    void receivedMessage(const quint32, const QByteArray &);
 
     void toForeground();
 
@@ -79,6 +79,8 @@ private Q_SLOTS:
 
     void setupThings();
     void setupConnections();
+
+    void setupToolbar();
 
     void onEditorChanged(const int);
     void closeEditor(const int);
@@ -116,6 +118,16 @@ private Q_SLOTS:
     void undo();
     void redo();
 
+    void insertTable();
+    void insertTableOfContents();
+    void insertLink();
+    void insertImage();
+
+    void bold();
+    void italic();
+    void underline();
+    void strikethrough();
+
     // Android specific
     void androidPreview(const bool);
 
@@ -139,7 +151,7 @@ private:
     Ui::MainWindow *ui;
 
     QString path;
-    int _mode = 1; // 0 = Commonmark, 1 = GitHub
+    short _mode = 1; // 0 = Commonmark, 1 = GitHub
 
     QSettings *settings;
 
@@ -153,7 +165,9 @@ private:
     bool highlighting = true;
 
     bool overrideEditor = false;
-    int overrideVal = 0;
+    short overrideVal = 0;
+
+    bool bigFile = false;
 
     Highliter *htmlHighliter;
 
@@ -163,6 +177,7 @@ private:
     QAction *actionPreview;
 
     QComboBox *mode;
+    QTimer *timer;
 
     QFileSystemWatcher *watcher;
 };

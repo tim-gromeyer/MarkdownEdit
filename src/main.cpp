@@ -24,11 +24,9 @@
 #include <QLocale>
 #include <QTranslator>
 
-
 #ifndef NOT_SUPPORTET
 #include "singleapplication.h"
 #endif
-
 
 #if defined(Q_OS_WASM) && QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
 #error You must use Qt 5.14 or newer // Because of the file dialog
@@ -42,8 +40,7 @@
 auto main(int argc, char *argv[]) -> int
 {
 #ifndef NOT_SUPPORTET
-    SingleApplication a(argc, argv, true,
-                        SingleApplication::Mode::SecondaryNotification);
+    SingleApplication a(argc, argv, true, SingleApplication::Mode::SecondaryNotification);
 #else
     QApplication a(argc, argv);
 #endif

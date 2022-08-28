@@ -27,8 +27,8 @@
 #include <QVariant>
 
 
-QHash<QString, QVariant> languages_map;
-QString currentDir;
+static QHash<QString, QVariant> languages_map;
+static QString currentDir;
 
 auto getLanguageMap() -> QHash<QString, QVariant>
 {

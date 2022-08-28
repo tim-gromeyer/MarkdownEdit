@@ -26,5 +26,19 @@
         <file>icons/media-playback-start.svg</file>
         <file>icons/media-playback-stop.svg</file>
         <file>icons/view-preview.svg</file>
+        <file>icons/edit-table-delete-column.svg</file>
+        <file>icons/edit-table-delete-row.svg</file>
+        <file>icons/edit-table-insert-column-left.svg</file>
+        <file>icons/edit-table-insert-column-right.svg</file>
+        <file>icons/edit-table-insert-row-above.svg</file>
+        <file>icons/edit-table-insert-row-below.svg</file>
+        <file>icons/insert-image.svg</file>
+        <file>icons/insert-link.svg</file>
+        <file>icons/insert-table.svg</file>
+        <file>icons/insert-table-of-contents.svg</file>
+        <file>icons/format-text-bold.svg</file>
+        <file>icons/format-text-italic.svg</file>
+        <file>icons/format-text-strikethrough.svg</file>
+        <file>icons/format-text-underline.svg</file>
     </qresource>
 </RCC>

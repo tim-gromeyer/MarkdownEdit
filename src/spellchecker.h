@@ -48,7 +48,7 @@ class SpellChecker : public SpellCheckerBaseClass
     Q_OBJECT
 public:
     explicit SpellChecker(QPlainTextEdit *parent, const QString &lang = QLatin1String());
-    ~SpellChecker();
+    ~SpellChecker() override;
 
     auto setLanguage(const QString &) -> bool;
     auto getLanguage() -> QString;
@@ -100,7 +100,7 @@ private:
     QString language;
     void replaceWord(const int wordPos, const QString &newWord);
 
-    QPlainTextEdit *textEdit = nullptr; // Fix warning
+    QPlainTextEdit *textEdit = nullptr;
 
     auto encodeLanguageString(const QString &langString) -> QString;
 

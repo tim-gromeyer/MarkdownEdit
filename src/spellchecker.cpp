@@ -29,7 +29,6 @@
 #include <enchant++.h>
 #endif
 
-
 // Needed for wasm
 #ifndef QStringViewLiteral
 # define QStringViewLiteral(str) QStringView(QT_UNICODE_LITERAL(str))
@@ -121,7 +120,7 @@ void SpellChecker::checkSpelling(const STRINGVIEW &text)
         if (c == u'h') {
             if (textLength -i >= 11) { // http 4; :// 7; * >1; .de 11
                 if (SUBSTR(text, i, 4) == QStringViewLiteral("http")) {
-                    i = text.indexOf(QChar(')'), i);
+                    i = text.indexOf(u')', i);
 
                     if (i == -1)
                         break;
@@ -199,7 +198,7 @@ auto SpellChecker::setLanguage(const QString &lang) -> bool
     if(lang.isEmpty())
         return setLanguage(QLocale::system().name());
 
-    std::string newLang = lang.toStdString();
+    const std::string newLang = lang.toStdString();
 
     enchant::Broker *broker = get_enchant_broker();
     if (!broker->dict_exists(newLang))
@@ -225,14 +224,7 @@ auto SpellChecker::setLanguage(const QString &lang) -> bool
 
 auto SpellChecker::getLanguage() -> QString
 {
-#ifndef NO_SPELLCHECK
-    if (speller)
-        return QString::fromStdString(speller->get_lang());
-    else
-        return QLatin1String();
-#else
-    return QLatin1String();
-#endif
+    return language;
 }
 
 void SpellChecker::addWort(const QString &word)
@@ -310,7 +302,7 @@ auto SpellChecker::getWord(const QTextBlock &block, const int pos) -> QString
             if (SUBSTR(text, i, 4) == QStringViewLiteral("http")) {
                 if (text.indexOf(QChar(QChar::Space), i) > pos)
                     return QLatin1String();
-                else if (text.indexOf(QChar(')'), i) > pos)
+                else if (text.indexOf(u')', i) > pos)
                     return QLatin1String();
 
                 isLink = true;

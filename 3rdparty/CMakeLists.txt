@@ -36,10 +36,8 @@ if(NOT ANDROID AND NOT EMSCRIPTEN)
     add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/SingleApplication)
     set(singleapp SingleApplication::SingleApplication)
 else()
-    set(singleapp "")
     add_compile_definitions(NOT_SUPPORTET)
 endif()
-
 # include(${CMAKE_CURRENT_LIST_DIR}/hunspell.cmake)
 
 

@@ -112,7 +112,16 @@ endif()
 target_include_directories(markdownedit PRIVATE ${CMAKE_SOURCE_DIR}/src)
 target_link_libraries(markdownedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport ${ENCHANT_LDFLAGS} ${INTL_LDFLAGS} ${3rdparty})
 
-target_compile_definitions(markdownedit PUBLIC APP_VERSION="${PROJECT_VERSION}" QT_DISABLE_DEPRECATED_BEFORE=0x051208 CHECK_MARKDOWN)
+target_compile_definitions(markdownedit PUBLIC
+    APP_VERSION="${PROJECT_VERSION}"
+    QT_DISABLE_DEPRECATED_BEFORE=0x051208
+    CHECK_MARKDOWN
+    QT_NO_CAST_TO_ASCII
+    QT_NO_URL_CAST_FROM_STRING
+    QT_NO_CAST_FROM_BYTEARRAY
+    QT_NO_NARROWING_CONVERSIONS_IN_CONNECT
+    QT_NO_FOREACH
+)
 
 set_target_properties(markdownedit PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER org.qtproject.markdownedit
@@ -130,5 +139,5 @@ if (LINUX)
     include(GNUInstallDirs)
     install(TARGETS markdownedit DESTINATION ${CMAKE_INSTALL_BINDIR})
     install(FILES packaging/MarkdownEdit/usr/share/applications/MarkdownEdit.desktop
-        DESTINATION "/usr/share/applications")
+        DESTINATION "/usr/share/applications/MarkdownEdit.desktop")
 endif()
