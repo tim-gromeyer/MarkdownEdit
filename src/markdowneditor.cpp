@@ -162,3 +162,5 @@ void MarkdownEditor::setText(const QByteArray &t, const QString &newFile, const 
         blockSignals(false);
     }, Qt::QueuedConnection);
 }
+
+MarkdownEditor::~MarkdownEditor() = default;

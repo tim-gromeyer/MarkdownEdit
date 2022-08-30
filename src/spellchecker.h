@@ -51,23 +51,23 @@ public:
     ~SpellChecker() override;
 
     auto setLanguage(const QString &) -> bool;
-    auto getLanguage() -> QString;
+    [[nodiscard]] auto getLanguage() const -> QString;
 
 #ifdef CHECK_MARKDOWN
     void setMarkdownHighlightingEnabled(const bool);
-    inline auto isMarkdownHighlightingEnabled() -> bool { return markdownhig; };
+    [[nodiscard]] inline auto isMarkdownHighlightingEnabled() const -> bool { return markdownhig; };
 #endif
 
     void setSpellCheckingEnabled(const bool);
-    inline auto isSpellCheckingEnabled() -> bool { return spellingEnabled && speller; };
+    [[nodiscard]] inline auto isSpellCheckingEnabled() const -> bool { return spellingEnabled && speller; };
 
     Q_REQUIRED_RESULT static auto getLanguageList() -> const QStringList;
 
     void highlightBlock(const QString &text) override;
 
-    Q_REQUIRED_RESULT auto isCorrect(const QString &word) -> bool;
+    Q_REQUIRED_RESULT auto isCorrect(const QString &word) const -> bool;
 
-    Q_REQUIRED_RESULT auto getSuggestion(const QString &) -> QStringList;
+    Q_REQUIRED_RESULT auto getSuggestion(const QString &) const -> QStringList;
 
     void addWort(const QString &);
 

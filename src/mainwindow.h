@@ -163,6 +163,7 @@ private:
     bool setPath = false;
     bool spelling = true;
     bool highlighting = true;
+    bool preview = true;
 
     bool overrideEditor = false;
     short overrideVal = 0;

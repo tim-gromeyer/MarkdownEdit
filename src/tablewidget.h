@@ -15,7 +15,7 @@ public:
     TableDialog(QWidget *parent = nullptr);
     ~TableDialog() override;
 
-    auto markdownTable() -> QString;
+    auto markdownTable() const -> QString;
 
 private Q_SLOTS:
     void onContextMenuRequest(const QPoint p);

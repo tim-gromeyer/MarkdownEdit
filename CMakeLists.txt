@@ -15,7 +15,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools PrintSupport)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools PrintSupport)
 
-if(UNIX AND NOT APPLE AND NOT ANDROID)
+if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" AND NOT CMAKE_CROSSCOMPILING)
     set(LINUX TRUE)
 endif()
 
@@ -89,28 +89,31 @@ IF(WIN32)
     SET(INTL_LDFLAGS -lintl)
 ENDIF(WIN32)
 
-if(ANDROID OR EMSCRIPTEN)
+if(CMAKE_CROSSCOMPILING)
+    message(STATUS "Cross-compiling, disable spell check")
     target_compile_definitions(markdownedit PUBLIC NO_SPELLCHECK)
 else()
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(ENCHANT enchant-2)
-endif()
 
-if(ENCHANT_FOUND)
-    target_include_directories(markdownedit PUBLIC ${ENCHANT_INCLUDE_DIRS})
-else()
-    target_compile_definitions(markdownedit PUBLIC NO_SPELLCHECK)
-    message(STATUS "enchant-2 not found. Disable spell check.")
+    if(ENCHANT_FOUND)
+        message(STATUS "enchant-2 found. Enable spell check")
+        target_include_directories(markdownedit PUBLIC ${ENCHANT_INCLUDE_DIRS})
+        set(ENCHANT ${ENCHANT_LDFLAGS})
+    else()
+        target_compile_definitions(markdownedit PUBLIC NO_SPELLCHECK)
+        message(STATUS "enchant-2 not found. Disable spell check.")
+    endif()
 endif()
 
 # Svg package needed for android
-if(ANDROID)
+if(ANDROID OR WIN32)
     find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Svg)
     list(APPEND 3rdparty Qt${QT_VERSION_MAJOR}::Svg)
 endif()
 
 target_include_directories(markdownedit PRIVATE ${CMAKE_SOURCE_DIR}/src)
-target_link_libraries(markdownedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport ${ENCHANT_LDFLAGS} ${INTL_LDFLAGS} ${3rdparty})
+target_link_libraries(markdownedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport ${ENCHANT} ${INTL_LDFLAGS} ${3rdparty})
 
 target_compile_definitions(markdownedit PUBLIC
     APP_VERSION="${PROJECT_VERSION}"
@@ -135,7 +138,7 @@ if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(markdownedit)
 endif()
 
-if (LINUX)
+if(LINUX)
     include(GNUInstallDirs)
     install(TARGETS markdownedit DESTINATION ${CMAKE_INSTALL_BINDIR})
     install(FILES packaging/MarkdownEdit/usr/share/applications/MarkdownEdit.desktop

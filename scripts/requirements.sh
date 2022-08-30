@@ -33,6 +33,6 @@ fi
 
 for dependency in $(ldd $1 | awk '{print $3}')
 do
-    dlocate $dependency | awk -F '[: ]' '{print $1}' | head -n 1 >> "$out"
+    apt-file search $dependency | awk -F '[: ]' '{print $1}' | head -n 1 >> "$out"
 done
 sort "$out" | uniq | tee "$out" >> /dev/null

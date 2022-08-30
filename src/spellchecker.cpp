@@ -167,7 +167,7 @@ void SpellChecker::checkSpelling(const STRINGVIEW &text)
     }
 }
 
-auto SpellChecker::isCorrect(const QString &word) -> bool
+auto SpellChecker::isCorrect(const QString &word) const -> bool
 {
 #ifdef NO_SPELLCHECK
     Q_UNUSED(word);
@@ -222,7 +222,7 @@ auto SpellChecker::setLanguage(const QString &lang) -> bool
 #endif
 }
 
-auto SpellChecker::getLanguage() -> QString
+auto SpellChecker::getLanguage() const -> QString
 {
     return language;
 }
@@ -260,7 +260,7 @@ auto SpellChecker::getLanguageList() -> const QStringList
 #endif
 }
 
-auto SpellChecker::getSuggestion(const QString &word) -> QStringList
+auto SpellChecker::getSuggestion(const QString &word) const -> QStringList
 {
     QStringList list = {}; // Fix warning
 #ifdef NO_SPELLCHECK

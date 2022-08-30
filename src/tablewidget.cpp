@@ -29,7 +29,7 @@ TableDialog::TableDialog(QWidget *parent)
     l->addWidget(box);
 }
 
-auto TableDialog::markdownTable() -> QString
+auto TableDialog::markdownTable() const -> QString
 {
 #define L(str) QLatin1String(str)
 #define S(str) QStringLiteral(str)

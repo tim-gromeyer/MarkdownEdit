@@ -34,7 +34,7 @@ class MarkdownEditor : public QMarkdownTextEdit
     Q_OBJECT
 public:
     explicit MarkdownEditor(QWidget *parent = nullptr);
-    ~MarkdownEditor() override = default;
+    ~MarkdownEditor() override;
 
     void setText(const QByteArray &, const QString &newFile = QLatin1String(), const bool setLangugae = true);
 

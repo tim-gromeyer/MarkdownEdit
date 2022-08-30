@@ -67,6 +67,7 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->toolBarTools->setVisible(false);
 
     setupThings(); // Setup things
 
@@ -190,10 +191,11 @@ void MainWindow::onHelpSyntax()
         if (languages.contains(newLang)) {
             language = newLang;
         }
-
-        language = *std::find_if(languages.begin(), languages.end(), [language](const QString &lang){
-            return lang.contains(language);
-        });
+        else {
+            language = *std::find_if(languages.begin(), languages.end(), [language](const QString &lang){
+                return lang.contains(language);
+            });
+        }
     }
 
     openFile(file, language);
@@ -352,7 +354,7 @@ void MainWindow::setupConnections()
     connect(ui->actionAuto_add_file_path_to_icon_path, &QAction::triggered,
             this, &MainWindow::changeAddtoIconPath);
     connect(ui->actionDisable_preview, &QAction::triggered,
-            this, &MainWindow::disablePreview);
+            this, [this](const bool c){ disablePreview(c);  preview = !c; });
     connect(ui->actionPause_preview, &QAction::triggered,
             this, &MainWindow::pausePreview);
     connect(ui->actionSpell_checking, &QAction::triggered,
@@ -733,9 +735,7 @@ auto MainWindow::currentEditor() -> MarkdownEditor*
     if (overrideEditor)
         return editorList.at(overrideVal);
     else {
-        if (editorList.isEmpty()) return nullptr;
-        else
-            return editorList.at(ui->tabWidget_2->currentIndex());
+        return editorList.value(ui->tabWidget_2->currentIndex(), nullptr);
     }
 }
 
@@ -834,7 +834,8 @@ void MainWindow::onOrientationChanged(const Qt::ScreenOrientation t)
     androidPreview(false);
     actionPreview->setChecked(false);
 
-    disablePreview(t == Qt::PortraitOrientation || bigFile);
+    if (preview)
+        disablePreview(t == Qt::PortraitOrientation || bigFile);
 }
 
 // FIXME: Performance problems occur at this point.
@@ -885,7 +886,8 @@ void MainWindow::changeSpelling(const bool checked)
 
 void MainWindow::disablePreview(const bool checked)
 {
-    ui->tabWidget->setVisible(!checked);
+    if (!bigFile)
+        ui->tabWidget->setVisible(!checked);
 
     dontUpdate = checked;
 
@@ -1597,6 +1599,8 @@ void MainWindow::loadSettings() {
     const bool lineWrap = settings->value(QStringLiteral("lineWrap"), false).toBool();
     changeWordWrap(lineWrap);
 
+    preview = settings->value(QStringLiteral("preview"), true).toBool();
+
     setLanguageMap(settings->value(QStringLiteral("languagesMap"),
                                    QHash<QString, QVariant>()).toHash());
 
@@ -1618,9 +1622,21 @@ void MainWindow::saveSettings() {
     settings->setValue(QStringLiteral("spelling"), spelling);
     settings->setValue(QStringLiteral("lineWrap"), ui->actionWord_wrap->isChecked());
     settings->setValue(QStringLiteral("languagesMap"), getLanguageMap());
+    settings->setValue(QStringLiteral("preview"), preview);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete htmlHighliter;
+    delete toolbutton;
+    delete widgetBox;
+    delete actionWidgetBox;
+    delete actionPreview;
+    delete mode;
+    delete timer;
+    delete watcher;
+    delete settings;
+    delete shortcutNew;
+    delete shortcutClose;
 }
