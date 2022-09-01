@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(MarkdownEdit VERSION 1.4.3.5 LANGUAGES CXX C)
+project(MarkdownEdit VERSION 1.4.3 LANGUAGES CXX C)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -17,6 +17,13 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools Pri
 
 if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" AND NOT CMAKE_CROSSCOMPILING)
     set(LINUX TRUE)
+endif()
+
+if(CMAKE_CROSSCOMPILING)
+    message(STATUS "Cross compilation. The spell checker is not available!")
+    option(DISABLE_SPELLCHECK "Turn off spell checker" ON)
+else()
+    option(DISABLE_SPELLCHECK "Turn off spell checker" OFF)
 endif()
 
 set(TS_FILES translations/MarkdownEdit_de_DE.ts)
@@ -89,8 +96,8 @@ IF(WIN32)
     SET(INTL_LDFLAGS -lintl)
 ENDIF(WIN32)
 
-if(CMAKE_CROSSCOMPILING)
-    message(STATUS "Cross-compiling, disable spell check")
+if(DISABLE_SPELLCHECK)
+    message(STATUS "Sell check disabled")
     target_compile_definitions(markdownedit PUBLIC NO_SPELLCHECK)
 else()
     find_package(PkgConfig REQUIRED)
@@ -138,7 +145,7 @@ if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(markdownedit)
 endif()
 
-if(LINUX)
+if(LINUX AND NOT WIN32)
     include(GNUInstallDirs)
     install(TARGETS markdownedit DESTINATION ${CMAKE_INSTALL_BINDIR})
     install(FILES packaging/MarkdownEdit/usr/share/applications/MarkdownEdit.desktop

@@ -341,6 +341,14 @@ Willst du trotzdem verlassen?</translation>
         <source>Save Markdown File</source>
         <translation>Markdown-Datei speichern</translation>
     </message>
+    <message>
+        <source>Strikethrough</source>
+        <translation>Durchgestrichen</translation>
+    </message>
+    <message>
+        <source>If you disable highlighting, the spell checker will not work properly.</source>
+        <translation>Wenn Sie die Hervorhebung deaktivieren, funktioniert die Rechtschreibprüfung nicht richtig.</translation>
+    </message>
 </context>
 <context>
     <name>SpellChecker</name>

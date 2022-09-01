@@ -165,6 +165,8 @@ private:
     bool highlighting = true;
     bool preview = true;
 
+    Qt::ScreenOrientation orientation = Qt::LandscapeOrientation;
+
     bool overrideEditor = false;
     short overrideVal = 0;
 

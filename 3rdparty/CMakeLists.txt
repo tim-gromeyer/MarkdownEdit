@@ -12,6 +12,8 @@ set(MD4C_FILES
 )
 
 add_library(md4c-html STATIC ${MD4C_FILES})
+target_include_directories(md4c-html PUBLIC ${CMAKE_CURRENT_LIST_DIR}/md4c/src)
+
 
 set(QMARKDOWNTEXTEDIT_FILES
     ${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit/markdownhighlighter.h
@@ -29,6 +31,7 @@ set(QMARKDOWNTEXTEDIT_FILES
 
 add_library(qmarkdowntextedit STATIC ${QMARKDOWNTEXTEDIT_FILES})
 target_link_libraries(qmarkdowntextedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_include_directories(qmarkdowntextedit PUBLIC ${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit)
 
 if(NOT ANDROID AND NOT EMSCRIPTEN)
     set(QT_DEFAULT_MAJOR_VERSION ${QT_VERSION_MAJOR})
@@ -39,11 +42,6 @@ else()
     add_compile_definitions(NOT_SUPPORTET)
 endif()
 # include(${CMAKE_CURRENT_LIST_DIR}/hunspell.cmake)
-
-
-include_directories(${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit)
-include_directories(${CMAKE_CURRENT_LIST_DIR}/md4c/src)
-
 
 set(3rdparty
     md4c-html

@@ -492,7 +492,6 @@ void SpellChecker::setMarkdownHighlightingEnabled(const bool enabled)
 }
 #endif
 
-// FIXME: Code is spell checked when the markdown highlighter is disabled
 void SpellChecker::setSpellCheckingEnabled(const bool enabled)
 {
     if ((enabled && !spellingEnabled) || (!enabled && spellingEnabled)) {

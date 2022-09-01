@@ -579,7 +579,7 @@ void MainWindow::closeEditor(const int index)
 
     path = editor->getPath();
 
-    onOrientationChanged(Qt::LandscapeOrientation);
+    onOrientationChanged(orientation);
 
     if (path == tr("Untitled.md")) {
         path.clear();
@@ -647,7 +647,7 @@ void MainWindow::onEditorChanged(const int index)
 
     path = editor->getPath();
     bigFile = editor->bigFile;
-    onOrientationChanged(Qt::LandscapeOrientation);
+    onOrientationChanged(orientation);
 
     if (path == tr("Untitled.md")) {
         path.clear();
@@ -838,7 +838,6 @@ void MainWindow::onOrientationChanged(const Qt::ScreenOrientation t)
         disablePreview(t == Qt::PortraitOrientation || bigFile);
 }
 
-// FIXME: Performance problems occur at this point.
 void MainWindow::setText(const int index)
 {
     if (index == 0) {
@@ -1010,6 +1009,17 @@ void MainWindow::changeAddtoIconPath(const bool c)
 void MainWindow::changeHighlighting(const bool enabled)
 {
     dontUpdate = true;
+
+    // When disabled show warning
+    if (!enabled && isVisible()) {
+        auto ret = QMessageBox::warning(this, tr("Warning"), tr("If you disable highlighting, the spell checker will not work properly."),
+                                        QMessageBox::Ok | QMessageBox::Abort, QMessageBox::Ok);
+
+        if (ret == QMessageBox::Abort) {
+            ui->actionHighlighting_activated->setChecked(true);
+            return;
+        }
+    }
 
     for (MarkdownEditor* editor : qAsConst(editorList)) {
         editor->getChecker()->setMarkdownHighlightingEnabled(enabled);
@@ -1559,16 +1569,21 @@ void MainWindow::resizeEvent(QResizeEvent *e)
     const QSize size = e->size();
     const QSize old = e->oldSize();
 
-    if (size.height() > size.width() && (!old.isValid() || old.height() <= old.width()))
+    if (size.height() > size.width() && (!old.isValid() || old.height() <= old.width())) {
         onOrientationChanged(Qt::PortraitOrientation);
-    else if (size.height() < size.width() && (!old.isValid() || old.height() >= old.width()))
+        orientation = Qt::PortraitOrientation;
+    }
+    else if (size.height() < size.width() && (!old.isValid() || old.height() >= old.width())) {
         onOrientationChanged(Qt::LandscapeOrientation);
+        orientation = Qt::LandscapeOrientation;
+    }
 
     e->accept();
     QMainWindow::resizeEvent(e);
 }
 
 void MainWindow::loadSettings() {
+#ifndef Q_OS_WASM
     const QByteArray geo = settings->value(QStringLiteral("geometry"),
                                            QByteArrayLiteral("")).toByteArray();
     if (geo.isEmpty()) {
@@ -1582,6 +1597,7 @@ void MainWindow::loadSettings() {
     }
 
     restoreState(settings->value(QStringLiteral("state"), QByteArrayLiteral("")).toByteArray());
+#endif
 
     highlighting = settings->value(QStringLiteral("highlighting"), true).toBool();
     ui->actionHighlighting_activated->setChecked(highlighting);
@@ -1596,7 +1612,11 @@ void MainWindow::loadSettings() {
         }
     }
 
+#ifndef Q_OS_ANDROID
     const bool lineWrap = settings->value(QStringLiteral("lineWrap"), false).toBool();
+#else
+    constexpr bool lineWrap = true;
+#endif
     changeWordWrap(lineWrap);
 
     preview = settings->value(QStringLiteral("preview"), true).toBool();
