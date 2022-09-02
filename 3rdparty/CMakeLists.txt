@@ -33,7 +33,7 @@ add_library(qmarkdowntextedit STATIC ${QMARKDOWNTEXTEDIT_FILES})
 target_link_libraries(qmarkdowntextedit PUBLIC Qt${QT_VERSION_MAJOR}::Widgets)
 target_include_directories(qmarkdowntextedit PUBLIC ${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit)
 target_compile_definitions(qmarkdowntextedit PUBLIC
-    QT_NO_CAST_FROM_ASCII
+    # QT_NO_CAST_FROM_ASCII
     QT_NO_CAST_FROM_BYTEARRAY
     QT_NO_CAST_TO_ASCII
     QT_NO_FOREACH
