@@ -1,0 +1,23 @@
+app-id: org.flatpak.MarkdownEdit
+runtime: org.kde.Platform
+runtime-version: '6.3'
+sdk: org.kde.Sdk
+command: markdownedit
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=wayland
+  - --filesystem=host
+  - --device=dri
+modules:
+  - name: markdownedit
+    buildsystem: cmake-ninja
+    config-opts:
+      - DFLATPAK=ON
+    sources:
+      - type: git
+        url: https://github.com/software-made-easy/MarkdownEdit.git
+        branch: main
+finish-args:
+  - --filesystem=home:rw
+

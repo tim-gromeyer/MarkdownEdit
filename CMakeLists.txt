@@ -25,6 +25,13 @@ if(CMAKE_CROSSCOMPILING)
 else()
     option(DISABLE_SPELLCHECK "Turn off spell checker" OFF)
 endif()
+option(FLATPAK "Build for flatpak" OFF)
+
+if(FLATPAK)
+    include(KDEInstallDirs)
+    include(KDECMakeSettings)
+    include(KDECompilerSettings NO_POLICY_SCOPE)
+endif()
 
 set(TS_FILES translations/MarkdownEdit_de_DE.ts)
 set(RC_FILES
@@ -145,9 +152,16 @@ if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(markdownedit)
 endif()
 
-if(LINUX AND NOT WIN32)
+if(FLATPAK)
+    install(TARGETS markdownedit ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+    configure_file(packaging/MarkdownEdit/usr/share/applications/MarkdownEdit.desktop org.flatpak.markdownedit COPYONLY)
+    install(PROGRAMS org.flatpak.qtdemo.desktop DESTINATION ${KDE_INSTALL_APPDIR})
+elseif(LINUX AND NOT WIN32)
     include(GNUInstallDirs)
     install(TARGETS markdownedit DESTINATION ${CMAKE_INSTALL_BINDIR})
-    install(FILES packaging/MarkdownEdit/usr/share/applications/MarkdownEdit.desktop
-        DESTINATION "/usr/share/applications/MarkdownEdit.desktop")
+    if(EXISTS "/usr/share/applications/")
+        install(FILES packaging/MarkdownEdit/usr/share/applications/MarkdownEdit.desktop
+                DESTINATION "/usr/share/applications/MarkdownEdit.desktop")
+    endif()
 endif()
