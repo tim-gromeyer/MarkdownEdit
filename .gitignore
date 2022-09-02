@@ -4,3 +4,5 @@ android/*
 packaging/*.deb
 packaging/MarkdownEdit/usr/bin/*
 wasm/*
+packaging/flatpak/build/*
+packaging/flatpak/.flatpak-builder/*

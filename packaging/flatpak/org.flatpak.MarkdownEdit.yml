@@ -13,7 +13,7 @@ modules:
   - name: markdownedit
     buildsystem: cmake-ninja
     config-opts:
-      - DFLATPAK=ON
+      - -DFLATPAK=ON
     sources:
       - type: git
         url: https://github.com/software-made-easy/MarkdownEdit.git

@@ -1077,7 +1077,7 @@ void MainWindow::printPreview(QPrinter *printer)
 void MainWindow::exportPdf()
 {
     QFileDialog dialog(this, tr("Export PDF"));
-    dialog.setMimeTypeFilters({"application/pdf"});
+    dialog.setMimeTypeFilters({QStringLiteral("application/pdf")});
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setDefaultSuffix(QStringLiteral("pdf"));
     if (dialog.exec() == QDialog::Rejected)
@@ -1140,7 +1140,7 @@ void MainWindow::exportHtml()
     QFileDialog::saveFileContent(html.toUtf8(), QStringLiteral("Exported HTML.html"));
 #else
     QFileDialog dialog(this, tr("Export HTML"));
-    dialog.setMimeTypeFilters({"text/html"});
+    dialog.setMimeTypeFilters({QStringLiteral("text/html")});
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setDefaultSuffix(QStringLiteral("html"));
     if (dialog.exec() != QDialog::Accepted)
@@ -1364,7 +1364,7 @@ void MainWindow::onFileOpen()
     QFileDialog::getOpenFileContent(tr("Markdown (*.md *.markdown *.mkd)"), fileContentReady);
 #else
     QFileDialog dialog(this, tr("Open Markdown File"));
-    dialog.setMimeTypeFilters({"text/markdown"});
+    dialog.setMimeTypeFilters({QStringLiteral("text/markdown")});
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
     if (dialog.exec() == QDialog::Rejected) return;
 
@@ -1439,7 +1439,7 @@ auto MainWindow::onFileSaveAs() -> bool
 #else
 
     QFileDialog dialog(this, tr("Save Markdown File"));
-    dialog.setMimeTypeFilters({"text/markdown"});
+    dialog.setMimeTypeFilters({QStringLiteral("text/markdown")});
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setDefaultSuffix(QStringLiteral("md"));
     if (dialog.exec() == QDialog::Rejected)
@@ -1497,7 +1497,7 @@ void MainWindow::onHelpAbout()
                                                           "<p>Thanks to <a href=\"https://github.com/Waqar144\">Waqar Ahmed</a> for help with development.</p>\n"
                                                           "<p>The conversion from Markdown to HTML is done using the <a href=\"https://github.com/mity/md4c\">md4c</a> library by <em>Martin Mit&aacute;&scaron;</em>.</p>\n"
                                                           "<p>The <a href=\"https://github.com/pbek/qmarkdowntextedit\">widget</a> used for writing was created by <em>Patrizio Bekerle</em>.</p>"
-                                                          ).arg(QStringLiteral(APP_VERSION), qVersion()));
+                                                          ).arg(QStringLiteral(APP_VERSION), QLatin1String(qVersion())));
 }
 
 void MainWindow::openRecent() {

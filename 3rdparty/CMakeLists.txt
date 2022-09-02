@@ -30,8 +30,18 @@ set(QMARKDOWNTEXTEDIT_FILES
 )
 
 add_library(qmarkdowntextedit STATIC ${QMARKDOWNTEXTEDIT_FILES})
-target_link_libraries(qmarkdowntextedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(qmarkdowntextedit PUBLIC Qt${QT_VERSION_MAJOR}::Widgets)
 target_include_directories(qmarkdowntextedit PUBLIC ${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit)
+target_compile_definitions(qmarkdowntextedit PUBLIC
+    QT_NO_CAST_FROM_BYTEARRAY
+    QT_NO_CAST_TO_ASCII
+    QT_NO_FOREACH
+    QT_NO_KEYWORDS
+    QT_NO_NARROWING_CONVERSIONS_IN_CONNECT
+    QT_NO_URL_CAST_FROM_STRING
+    QT_STRICT_ITERATORS
+    QT_USE_QSTRINGBUILDER
+)
 
 if(NOT ANDROID AND NOT EMSCRIPTEN)
     set(QT_DEFAULT_MAJOR_VERSION ${QT_VERSION_MAJOR})

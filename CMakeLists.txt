@@ -28,9 +28,12 @@ endif()
 option(FLATPAK "Build for flatpak" OFF)
 
 if(FLATPAK)
+    find_package(ECM 5.86.0 REQUIRED NO_MODULE)
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+
     include(KDEInstallDirs)
     include(KDECMakeSettings)
-    include(KDECompilerSettings NO_POLICY_SCOPE)
+    # include(KDECompilerSettings NO_POLICY_SCOPE)
 endif()
 
 set(TS_FILES translations/MarkdownEdit_de_DE.ts)
@@ -133,11 +136,15 @@ target_compile_definitions(markdownedit PUBLIC
     APP_VERSION="${PROJECT_VERSION}"
     QT_DISABLE_DEPRECATED_BEFORE=0x051208
     CHECK_MARKDOWN
-    QT_NO_CAST_TO_ASCII
-    QT_NO_URL_CAST_FROM_STRING
+    # QT_NO_CAST_FROM_ASCII
     QT_NO_CAST_FROM_BYTEARRAY
-    QT_NO_NARROWING_CONVERSIONS_IN_CONNECT
+    QT_NO_CAST_TO_ASCII
     QT_NO_FOREACH
+    QT_NO_KEYWORDS
+    QT_NO_NARROWING_CONVERSIONS_IN_CONNECT
+    QT_NO_URL_CAST_FROM_STRING
+    QT_STRICT_ITERATORS
+    QT_USE_QSTRINGBUILDER
 )
 
 set_target_properties(markdownedit PROPERTIES
@@ -155,8 +162,8 @@ endif()
 if(FLATPAK)
     install(TARGETS markdownedit ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-    configure_file(packaging/MarkdownEdit/usr/share/applications/MarkdownEdit.desktop org.flatpak.markdownedit COPYONLY)
-    install(PROGRAMS org.flatpak.qtdemo.desktop DESTINATION ${KDE_INSTALL_APPDIR})
+    configure_file(packaging/MarkdownEdit/usr/share/applications/MarkdownEdit.desktop org.flatpak.markdownedit.desktop COPYONLY)
+    install(PROGRAMS org.flatpak.markdownedit.desktop DESTINATION ${KDE_INSTALL_APPDIR})
 elseif(LINUX AND NOT WIN32)
     include(GNUInstallDirs)
     install(TARGETS markdownedit DESTINATION ${CMAKE_INSTALL_BINDIR})
