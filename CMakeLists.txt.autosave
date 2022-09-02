@@ -34,6 +34,8 @@ if(FLATPAK)
     include(KDEInstallDirs)
     include(KDECMakeSettings)
     include(KDECompilerSettings NO_POLICY_SCOPE)
+    
+    include(ECMInstallIcons)    
 endif()
 
 set(TS_FILES translations/MarkdownEdit_de_DE.ts)
@@ -164,7 +166,13 @@ if(FLATPAK)
 
     configure_file(packaging/MarkdownEdit/usr/share/applications/MarkdownEdit.desktop org.flatpak.markdownedit.desktop COPYONLY)
     install(PROGRAMS org.flatpak.markdownedit.desktop DESTINATION ${KDE_INSTALL_APPDIR})
-    install(FILES packaging/flatpak/org.flatpak.markdownedit.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
+    
+    ecm_install_icons(
+        ICONS
+            ressources/Icon.png
+        DESTINATION ${ICON_INSTALL_DIR}
+        THEME hicolor
+    )
 elseif(LINUX AND NOT WIN32)
     include(GNUInstallDirs)
     install(TARGETS markdownedit DESTINATION ${CMAKE_INSTALL_BINDIR})

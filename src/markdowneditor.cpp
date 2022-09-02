@@ -102,7 +102,7 @@ auto MarkdownEditor::filePath() -> QString
     else {
         return QStringLiteral("%1[*] (%2)").arg(info.fileName(),
                                                 info.path()).replace(common::homeDict(),
-                                                                     QChar('~'));
+                                                                     QChar(u'~'));
     }
 }
 

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop">
+  <id>org.flatpak.markdownedit</id>
+  <developer_name>Flathub</developer_name>
+  <launchable type="desktop-id">org.flatpak.markdownedit.desktop</launchable>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3+</project_license>
+  <name>MarkdownEdit</name>
+  <summary>Simple program for editing Markdown files</summary>
+  <description>
+    <p>MarkdownEdit is, as the name suggests, a simple and lightweight program for creating and editing Markdown files.</p>
+    <p xml:lang="de-DE">MarkdownEdit ist, wie der Name schon sagt, ein einfaches und leichtgewichtiges Programm zum Erstellen und Bearbeiten von Markdown-Dateien.</p>
+  </description>
+  <categories>
+    <category>Qt</category>
+  </categories>
+  <url type="homepage">https://software-made-easy.github.io/MarkdownEdit/</url>
+  <url type="bugtracker">https://github.com/software-made-easy/MarkdownEdit/issues</url>
+  <project_group>Editor</project_group>
+  <provides>
+    <binary>markdownedit</binary>
+  </provides>
+  <content_rating type="oars-1.1"/>
+</component>

@@ -1,8 +1,10 @@
-app-id: org.flatpak.MarkdownEdit
+app-id: org.flatpak.markdownEdit
 runtime: org.kde.Platform
 runtime-version: '6.3'
 sdk: org.kde.Sdk
 command: markdownedit
+rename-desktop-file: org.flatpak.markdownedit.desktop
+rename-icon: Icon.png
 finish-args:
   - --share=ipc
   - --socket=x11
@@ -14,6 +16,7 @@ modules:
     buildsystem: cmake-ninja
     config-opts:
       - -DFLATPAK=ON
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
     sources:
       - type: git
         url: https://github.com/software-made-easy/MarkdownEdit.git

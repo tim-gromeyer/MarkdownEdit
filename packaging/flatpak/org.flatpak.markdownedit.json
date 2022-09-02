@@ -15,7 +15,7 @@
         {
             "name": "markdownedit",
             "buildsystem": "cmake-ninja",
-            "config-opts": [""],
+            "config-opts": ["-DFLATPAK", "-DCMAKE_BUILD_TYPE=RelWithDebInfo"],
             "sources": [
                 {
                     "type": "git",
