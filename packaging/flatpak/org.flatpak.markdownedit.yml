@@ -1,16 +1,18 @@
-app-id: org.flatpak.markdownEdit
+app-id: org.flatpak.markdownedit
 runtime: org.kde.Platform
 runtime-version: '6.3'
 sdk: org.kde.Sdk
 command: markdownedit
-rename-desktop-file: org.flatpak.markdownedit.desktop
-rename-icon: Icon.png
+rename-desktop-file: MarkdownEdit.desktop
+# rename-icon: text-markdown.png
 finish-args:
   - --share=ipc
-  - --socket=x11
+  - --share=network
   - --socket=wayland
+  - --socket=fallback-x11
   - --filesystem=host
   - --device=dri
+  - --allow=devel
 modules:
   - name: markdownedit
     buildsystem: cmake-ninja

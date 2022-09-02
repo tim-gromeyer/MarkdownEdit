@@ -164,13 +164,14 @@ endif()
 if(FLATPAK)
     install(TARGETS markdownedit ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-    configure_file(packaging/MarkdownEdit/usr/share/applications/MarkdownEdit.desktop org.flatpak.markdownedit.desktop COPYONLY)
-    install(PROGRAMS org.flatpak.markdownedit.desktop DESTINATION ${KDE_INSTALL_APPDIR})
+    # configure_file(packaging/MarkdownEdit/usr/share/applications/MarkdownEdit.desktop org.flatpak.markdownedit.desktop COPYONLY)
+    install(PROGRAMS packaging/MarkdownEdit/usr/share/applications/MarkdownEdit.desktop DESTINATION ${KDE_INSTALL_APPDIR})
 
+    configure_file(ressources/Icon.png 256-apps-text-markdown.png COPYONLY)
     ecm_install_icons(
         ICONS
-            ressources/Icon.png
-        DESTINATION ${ICON_INSTALL_DIR}
+            256-apps-text-markdown.png
+        DESTINATION ${KDE_INSTALL_ICONDIR}
         THEME hicolor
     )
 elseif(LINUX AND NOT WIN32)
