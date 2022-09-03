@@ -159,12 +159,8 @@ void MainWindow::androidPreview(const bool c)
 
 void MainWindow::onHelpSyntax()
 {
-    qDebug() << __func__;
-
     QString file = QStringLiteral(":/syntax_en.md");
-    qDebug() << file;
     QString language = QStringLiteral("en_US");
-    qDebug() << language;
 
     const QStringList uiLanguages = QLocale::system().uiLanguages(); // ex. de-DE
     const QStringList languages = SpellChecker::getLanguageList(); // ex. de_DE
@@ -187,7 +183,7 @@ void MainWindow::onHelpSyntax()
     // Correct language format
     language.replace(u'-', u'_');
 
-    if (!languages.contains(language)) {
+    if (!language.isEmpty() && !languages.contains(language)) {
         if (language.length() > 2)
             // Get the first 2 characters
             language = language.mid(0, 2);
@@ -204,6 +200,8 @@ void MainWindow::onHelpSyntax()
             });
         }
     }
+    else
+        language.clear();
 
     openFile(file, language);
 }
