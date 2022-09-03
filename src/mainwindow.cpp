@@ -183,7 +183,7 @@ void MainWindow::onHelpSyntax()
     // Correct language format
     language.replace(u'-', u'_');
 
-    if (!language.isEmpty() && !languages.contains(language)) {
+    if (!languages.isEmpty() && !languages.contains(language)) {
         if (language.length() > 2)
             // Get the first 2 characters
             language = language.mid(0, 2);
