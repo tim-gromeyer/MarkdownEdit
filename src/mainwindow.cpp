@@ -183,7 +183,7 @@ void MainWindow::onHelpSyntax()
     if (!languages.contains(language)) {
         if (language.length() > 2)
             // Get the first 2 characters
-            language = language.right(2);
+            language = language.mid(0, 2);
 
         // Assuming language = de, try de_DE
         const QString newLang = QStringLiteral("%1_%2").arg(language, language.toUpper());
@@ -818,7 +818,11 @@ void MainWindow::loadIcons()
 
 void MainWindow::loadIcon(const QString &name, QAction* a)
 {
+#ifndef FLATPAK
     a->setIcon(QIcon::fromTheme(name, QIcon(QLatin1String(":/icons/") + name + QLatin1String(".svg"))));
+#else
+    a->setIcon(QIcon(QStringLiteral(":/icons/%1.svg").arg(name)));
+#endif
 }
 
 void MainWindow::onOrientationChanged(const Qt::ScreenOrientation t)

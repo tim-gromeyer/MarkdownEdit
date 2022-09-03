@@ -9,10 +9,9 @@ finish-args:
   - --share=ipc
   - --share=network
   - --socket=wayland
-  - --socket=fallback-x11
+  - --socket=x11
   - --filesystem=host
   - --device=dri
-  - --allow=devel
 modules:
   - name: markdownedit
     buildsystem: cmake-ninja
@@ -23,6 +22,4 @@ modules:
       - type: git
         url: https://github.com/software-made-easy/MarkdownEdit.git
         branch: main
-finish-args:
-  - --filesystem=home:rw
 

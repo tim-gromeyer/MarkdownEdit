@@ -33,9 +33,13 @@ if(FLATPAK)
 
     include(KDEInstallDirs)
     include(KDECMakeSettings)
-    include(KDECompilerSettings NO_POLICY_SCOPE)
+    # include(KDECompilerSettings NO_POLICY_SCOPE) # enchant wont compile
 
     include(ECMInstallIcons)
+
+    compile_definitions(
+        FLATPAK
+    )
 endif()
 
 set(TS_FILES translations/MarkdownEdit_de_DE.ts)
@@ -180,6 +184,6 @@ elseif(LINUX AND NOT WIN32)
     install(TARGETS markdownedit DESTINATION ${CMAKE_INSTALL_BINDIR})
     if(EXISTS "/usr/share/applications/")
         install(FILES packaging/MarkdownEdit/usr/share/applications/MarkdownEdit.desktop
-                DESTINATION "/usr/share/applications/MarkdownEdit.desktop")
+                DESTINATION "/usr/share/applications/")
     endif()
 endif()

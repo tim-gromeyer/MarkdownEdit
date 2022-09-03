@@ -65,7 +65,7 @@ void setCurrDir(const QString &newDir)
 }
 
 namespace settings {
-auto isDarkMode() -> const bool
+auto isDarkMode() -> bool
 {
     static const QColor back = QPalette().base().color();
     static int r, g, b, a;

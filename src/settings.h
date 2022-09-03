@@ -28,12 +28,13 @@ class QString;
 
 auto getLanguageMap() -> QHash<QString, QVariant>;
 void setLanguageMap(const QHash<QString, QVariant> &m);
+
 void setMapAttribute(const QString &, const QVariant &);
 auto mapAttribute(const QString &) -> const QString;
 auto mapContains(const QString &) -> bool;
 
 namespace settings {
-    auto isDarkMode() -> const bool;
+    auto isDarkMode() -> bool;
 }
 
 namespace common {
