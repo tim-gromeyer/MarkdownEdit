@@ -798,6 +798,7 @@ void MainWindow::loadIcons()
     loadIcon(S("text-wrap"), ui->actionWord_wrap);
     loadIcon(S("media-playback-pause"), ui->actionPause_preview);
 
+#ifndef FLATPAK
     ui->actionExportHtml->setIcon(QIcon::fromTheme(S("text-html"),
                                              QIcon(S(":/icons/text-html_16.png"))));
     ui->actionExportPdf->setIcon(QIcon::fromTheme(S("application-pdf"),
@@ -807,6 +808,13 @@ void MainWindow::loadIcons()
                                              QIcon(S(":/icons/document-export.svg"))));
     ui->menuRecentlyOpened->setIcon(QIcon::fromTheme(S("document-open-recent"),
                                                      QIcon(S(":/icons/document-open-recent.svg"))));
+#else
+    ui->actionExportHtml->setIcon(QIcon(S(":/icons/text-html_16.png")));
+    ui->actionExportPdf->setIcon(QIcon(S(":/icons/application-pdf_16.png")));
+
+    ui->menuExport->setIcon(QIcon(S(":/icons/document-export.svg")));
+    ui->menuRecentlyOpened->setIcon(QIcon(S(":/icons/document-open-recent.svg")));
+#endif
 
 #ifndef Q_OS_WASM
     toolbutton->setIcon(ui->menuRecentlyOpened->icon());
