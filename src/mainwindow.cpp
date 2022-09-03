@@ -165,6 +165,9 @@ void MainWindow::onHelpSyntax()
     const QStringList uiLanguages = QLocale::system().uiLanguages(); // ex. de-DE
     const QStringList languages = SpellChecker::getLanguageList(); // ex. de_DE
 
+    qInfo() << "System languages:" << uiLanguages;
+    qInfo() << "Languages available for spell check:" << languages;
+
     // loop thought the languages
     for (const QString &lang : uiLanguages) {
         //  get first to characters
@@ -633,7 +636,7 @@ void MainWindow::closeEditor(const int index)
 
 void MainWindow::onEditorChanged(const int index)
 {
-    MarkdownEditor* editor = editorList.at(index);
+    MarkdownEditor* editor = editorList.value(index, nullptr);
     if (!editor) return;
 
     const bool modified = editor->document()->isModified();
