@@ -166,7 +166,7 @@ if(FLATPAK)
     install(TARGETS markdownedit ${INSTALL_TARGETS_DEFAULT_ARGS})
 
     # configure_file(packaging/MarkdownEdit/usr/share/applications/MarkdownEdit.desktop org.flatpak.markdownedit.desktop COPYONLY)
-    install(PROGRAMS packaging/MarkdownEdit/usr/share/applications/MarkdownEdit.desktop DESTINATION ${KDE_INSTALL_APPDIR})
+    install(PROGRAMS packaging/flatpak/MarkdownEdit.desktop DESTINATION ${KDE_INSTALL_APPDIR})
 
     configure_file(ressources/Icon.png 256-apps-text-markdown.png COPYONLY)
     ecm_install_icons(

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=MarkdownEdit
+GenericName=MarkdownEdit
+Comment=Start MarkdownEdit
+Comment[de]=Starte MarkdownEdit
+Exec=markdownedit %F
+Icon=text-markdown
+Terminal=false
+Type=Application
+Categories=Qt;Utility;TextEditor;
+Keywords=text;editor;tabs;highlighting;multiple;files;markdown;
+MimeType=text/markdown
