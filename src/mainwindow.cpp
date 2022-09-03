@@ -159,8 +159,12 @@ void MainWindow::androidPreview(const bool c)
 
 void MainWindow::onHelpSyntax()
 {
+    qDebug() << __func__;
+
     QString file = QStringLiteral(":/syntax_en.md");
+    qDebug() << file;
     QString language = QStringLiteral("en_US");
+    qDebug() << language;
 
     const QStringList uiLanguages = QLocale::system().uiLanguages(); // ex. de-DE
     const QStringList languages = SpellChecker::getLanguageList(); // ex. de_DE
