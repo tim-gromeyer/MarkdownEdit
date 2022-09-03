@@ -43,8 +43,6 @@ public:
 
 public Q_SLOTS:
     void setHtml(const QString &);
-
-private Q_SLOTS:
     void openUrl(const QUrl &);
 
 private:

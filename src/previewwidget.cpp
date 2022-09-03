@@ -63,12 +63,10 @@ void PreviewWidget::openUrl(const QUrl &url)
     if (s.startsWith(QLatin1String("http")))
         QDesktopServices::openUrl(url);
 
-    else
-    if (QFile::exists(filePath))
+    else if (QFile::exists(filePath))
         QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
 
-    else
-    if (s.startsWith(u'#'))
+    else if (s.startsWith(u'#'))
         scrollToHeader(s);
 }
 
@@ -100,6 +98,7 @@ void PreviewWidget::scrollToHeader(QString name)
             c.setPosition(i, QTextCursor::MoveAnchor);
             setTextCursor(c);
 
+            // Center the cursor
             // cursorRect().center().x() is always 4
             verticalScrollBar()->setValue(verticalScrollBar()->value() + (cursorRect().top() - rect().center().x())
                                           - (cursorRect().height() /2));

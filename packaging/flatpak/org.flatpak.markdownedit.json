@@ -5,7 +5,7 @@
     "sdk": "org.kde.Sdk",
     "command": "markdownedit",
     "rename-desktop-file": "MarkdownEdit.desktop",
-    "rename-icon": "text-markdown",
+    "rename-icon": "Icon",
     "finish-args": [
         "--share=ipc",
         "--socket=x11",

@@ -172,10 +172,15 @@ if(FLATPAK)
     # configure_file(packaging/MarkdownEdit/usr/share/applications/MarkdownEdit.desktop org.flatpak.markdownedit.desktop COPYONLY)
     install(PROGRAMS packaging/flatpak/MarkdownEdit.desktop DESTINATION ${KDE_INSTALL_APPDIR})
 
-    configure_file(ressources/Icon.png 256-apps-text-markdown.png COPYONLY)
     ecm_install_icons(
         ICONS
-            256-apps-text-markdown.png
+            ressources/16-apps-Icon.png
+            ressources/24-apps-Icon.png
+            ressources/32-apps-Icon.png
+            ressources/48-apps-Icon.png
+            ressources/64-apps-Icon.png
+            ressources/128-apps-Icon.png
+            ressources/256-apps-Icon.png
         DESTINATION ${KDE_INSTALL_ICONDIR}
         THEME hicolor
     )

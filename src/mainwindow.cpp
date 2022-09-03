@@ -702,6 +702,7 @@ auto MainWindow::createEditor() -> MarkdownEditor *
     connect(editor->horizontalScrollBar(), &QScrollBar::valueChanged,
             ui->textBrowser->horizontalScrollBar(), &QScrollBar::setValue);
     connect(editor, &MarkdownEditor::openFile, this, &MainWindow::onOpenFile);
+    connect(editor, &QMarkdownTextEdit::urlClicked, this, &MainWindow::onUrlClicked);
 
     return editor;
 }
@@ -717,6 +718,17 @@ void MainWindow::receivedMessage(const quint32 id, const QByteArray &msg)
         onFileNew();
     else
         openFiles(f.split(u' ')); // if you selected files
+}
+
+void MainWindow::onUrlClicked(const QString &url)
+{
+    const QUrl urlFromString = QUrl(url);
+    const bool isRelativeFileUrl =
+        url.startsWith(QLatin1String("file://"));
+
+    if (!urlFromString.isValid() || isRelativeFileUrl) return;
+
+    ui->textBrowser->openUrl(urlFromString);
 }
 
 void MainWindow::onModificationChanged(const bool m)
@@ -825,7 +837,7 @@ void MainWindow::loadIcons()
     toolbutton->setIcon(ui->menuRecentlyOpened->icon());
 #endif
 
-    setWindowIcon(QIcon(S(":/Icon.png")));
+    setWindowIcon(QIcon(S(":/256-apps-Icon.png")));
 #undef S
 }
 
@@ -914,12 +926,20 @@ void MainWindow::disablePreview(const bool checked)
 
     if (!checked) {
         onTextChanged();
+#ifndef FLATPAK
         ui->actionDisable_preview->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-stop"),
                                                           QIcon(QStringLiteral(":/icons/media-playback-stop.svg"))));
+#else
+        ui->actionDisable_preview->setIcon(QIcon(QStringLiteral(":/icons/media-playback-stop.svg")));
+#endif
     }
     else
+#ifndef FLATPAK
         ui->actionDisable_preview->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start"),
                                                           QIcon(QStringLiteral(":/icons/media-playback-start.svg"))));
+#else
+        ui->actionDisable_preview->setIcon(QIcon(QStringLiteral(":/icons/media-playback-start.svg")));
+#endif
 }
 
 void MainWindow::pausePreview(const bool checked)

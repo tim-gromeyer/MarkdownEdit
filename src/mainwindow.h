@@ -128,6 +128,8 @@ private Q_SLOTS:
     void underline();
     void strikethrough();
 
+    void onUrlClicked(const QString &);
+
     // Android specific
     void androidPreview(const bool);
 

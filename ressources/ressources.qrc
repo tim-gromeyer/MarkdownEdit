@@ -2,6 +2,12 @@
     <qresource prefix="/">
         <file>syntax_de.md</file>
         <file>syntax_en.md</file>
-        <file>Icon.png</file>
+        <file>16-apps-Icon.png</file>
+        <file>24-apps-Icon.png</file>
+        <file>32-apps-Icon.png</file>
+        <file>48-apps-Icon.png</file>
+        <file>64-apps-Icon.png</file>
+        <file>128-apps-Icon.png</file>
+        <file>256-apps-Icon.png</file>
     </qresource>
 </RCC>
