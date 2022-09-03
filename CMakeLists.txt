@@ -37,7 +37,7 @@ if(FLATPAK)
 
     include(ECMInstallIcons)
 
-    compile_definitions(
+    add_compile_definitions(
         FLATPAK
     )
 endif()
