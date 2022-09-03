@@ -33,7 +33,7 @@ if(FLATPAK)
 
     include(KDEInstallDirs)
     include(KDECMakeSettings)
-    # include(KDECompilerSettings NO_POLICY_SCOPE)
+    include(KDECompilerSettings NO_POLICY_SCOPE)
 
     include(ECMInstallIcons)
 endif()
@@ -147,6 +147,7 @@ target_compile_definitions(markdownedit PUBLIC
     QT_NO_URL_CAST_FROM_STRING
     QT_STRICT_ITERATORS
     QT_USE_QSTRINGBUILDER
+    QT_DEBUG_PLUGINS=1
 )
 
 set_target_properties(markdownedit PROPERTIES
