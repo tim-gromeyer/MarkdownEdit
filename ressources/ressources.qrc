@@ -9,5 +9,6 @@
         <file>64-apps-Icon.png</file>
         <file>128-apps-Icon.png</file>
         <file>256-apps-Icon.png</file>
+        <file>Icon.svg</file>
     </qresource>
 </RCC>

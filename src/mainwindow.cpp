@@ -837,14 +837,14 @@ void MainWindow::loadIcons()
     toolbutton->setIcon(ui->menuRecentlyOpened->icon());
 #endif
 
-    setWindowIcon(QIcon(S(":/256-apps-Icon.png")));
+    setWindowIcon(QIcon(S(":/Icon.svg")));
 #undef S
 }
 
 void MainWindow::loadIcon(const QString &name, QAction* a)
 {
 #ifndef FLATPAK
-    a->setIcon(QIcon::fromTheme(name, QIcon(QLatin1String(":/icons/") + name + QLatin1String(".svg"))));
+    a->setIcon(QIcon::fromTheme(name, QIcon(QStringLiteral(":/icons/%1.svg").arg(name))));
 #else
     a->setIcon(QIcon(QStringLiteral(":/icons/%1.svg").arg(name)));
 #endif

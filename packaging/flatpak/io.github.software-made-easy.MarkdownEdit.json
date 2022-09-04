@@ -1,5 +1,5 @@
 {
-    "app-id": "org.flatpak.markdownedit",
+    "app-id": "io.github.software_made_easy.MarkdownEdit",
     "runtime": "org.kde.Platform",
     "runtime-version": "6.3",
     "sdk": "org.kde.Sdk",
