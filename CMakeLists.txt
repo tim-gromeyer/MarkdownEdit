@@ -171,6 +171,7 @@ if(FLATPAK)
 
     # configure_file(packaging/MarkdownEdit/usr/share/applications/MarkdownEdit.desktop org.flatpak.markdownedit.desktop COPYONLY)
     install(PROGRAMS packaging/flatpak/MarkdownEdit.desktop DESTINATION ${KDE_INSTALL_APPDIR})
+    install(FILES packaging/flatpak/io.github.software-made-easy.MarkdownEdit.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 
     ecm_install_icons(
         ICONS
