@@ -61,6 +61,9 @@ using namespace std::chrono_literals;
 QT_REQUIRE_CONFIG(mainwindow);
 QT_REQUIRE_CONFIG(filedialog);
 
+#define L1(str) QLatin1String(str, sizeof(str))
+#define S(str) QStringLiteral(str)
+
 
 MainWindow::MainWindow(const QStringList &files, QWidget *parent)
     : QMainWindow(parent)
@@ -126,7 +129,7 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
     ui->Edit->setMovable(false);
     ui->toolBarPreview->setMovable(false);
 
-    qApp->setStyleSheet(QStringLiteral("QSplitter { border: none; } QToolBar { border: none; }"));
+    qApp->setStyleSheet(S("QSplitter { border: none; } QToolBar { border: none; }"));
 #endif
 
     QMetaObject::invokeMethod(this, "loadIcons", Qt::QueuedConnection);
@@ -159,8 +162,8 @@ void MainWindow::androidPreview(const bool c)
 
 void MainWindow::onHelpSyntax()
 {
-    QString file = QStringLiteral(":/syntax_en.md");
-    QString language = QStringLiteral("en_US");
+    QString file = S(":/syntax_en.md");
+    QString language = S("en_US");
 
     const QStringList uiLanguages = QLocale::system().uiLanguages(); // ex. de-DE
     const QStringList languages = SpellChecker::getLanguageList(); // ex. de_DE
@@ -173,8 +176,8 @@ void MainWindow::onHelpSyntax()
         //  get first to characters
         const QString lang2 = lang.right(2);
 
-        if (QFile::exists(QStringLiteral(":/syntax_%1.md").arg(lang2))) {
-            file = QStringLiteral(":/syntax_%1.md").arg(lang2);
+        if (QFile::exists(S(":/syntax_%1.md").arg(lang2))) {
+            file = S(":/syntax_%1.md").arg(lang2);
             language = lang;
             break;
         }
@@ -189,7 +192,7 @@ void MainWindow::onHelpSyntax()
             language = language.mid(0, 2);
 
         // Assuming language = de, try de_DE
-        const QString newLang = QStringLiteral("%1_%2").arg(language, language.toUpper());
+        const QString newLang = S("%1_%2").arg(language, language.toUpper());
         // If the language dict exists
         if (languages.contains(newLang)) {
             language = newLang;
@@ -243,7 +246,7 @@ void MainWindow::onFileReload()
         }
     }
 
-    if (widget->objectName() == QLatin1String("widgetReloadFile")) {
+    if (widget->objectName() == L1("widgetReloadFile")) {
         widget->deleteLater();
         delete widget;
     }
@@ -268,12 +271,12 @@ void MainWindow::setupThings()
     watcher = new QFileSystemWatcher(this);
 
     // Setup settings to load settings
-    settings = new QSettings(QStringLiteral("SME"),
-                             QStringLiteral("MarkdownEdit"), this);
+    settings = new QSettings(S("SME"),
+                             S("MarkdownEdit"), this);
 
     // Setup ComboBox to choose between Commonmark and GitHub
     mode = new QComboBox(ui->Edit);
-    mode->addItems(QStringList() << QStringLiteral("Commonmark") << QStringLiteral("GitHub"));
+    mode->addItems(QStringList() << S("Commonmark") << S("GitHub"));
     mode->setCurrentIndex(1);
 
     // Setup ComboBox to choose between Preview and Raw HTML
@@ -284,7 +287,7 @@ void MainWindow::setupThings()
     // Setup the HTML Highlighter
     htmlHighliter = new Highliter(ui->raw->document());
 
-    actionPreview = new QAction(QIcon::fromTheme(QStringLiteral("view-preview"), QIcon(QStringLiteral(":/icons/view-preview.svg"))),
+    actionPreview = new QAction(QIcon::fromTheme(S("view-preview"), QIcon(S(":/icons/view-preview.svg"))),
                                 tr("Preview"), this);
     actionPreview->setCheckable(true);
     connect(actionPreview, &QAction::triggered, this, &MainWindow::androidPreview);
@@ -396,12 +399,11 @@ void MainWindow::setupConnections()
 
 void MainWindow::setupToolbar()
 {
-#define S(str) QStringLiteral(str)
+    /*
     auto *aBold = new QAction(tr("Bold"));
     auto *aItalic = new QAction(tr("Italic"));
     auto *aUnderline = new QAction(tr("Underline"));
     auto *aStrikethrough = new QAction(tr("Strikethrough"));
-    auto *aInsertTable = new QAction(tr("Insert table"));
     auto *aInsertTableOfContents = new QAction(tr("Insert Table of Contents"));
     auto *aInsertLink = new QAction(tr("Insert link"));
     auto *aInsertImage = new QAction(tr("Insert image"));
@@ -410,7 +412,6 @@ void MainWindow::setupToolbar()
     aItalic->setIcon(QIcon::fromTheme(S("format-text-italic"), QIcon(S(":/icons/format-text-italic.svg"))));
     aUnderline->setIcon(QIcon::fromTheme(S("format-text-underline"), QIcon(S(":/icons/format-text-underline.svg"))));
     aStrikethrough->setIcon(QIcon::fromTheme(S("format-text-strikethrough"), QIcon(S(":/icons/format-text-strikethrough.svg"))));
-    aInsertTable->setIcon(QIcon::fromTheme(S("insert-table"), QIcon(S(":/icons/insert-table.svg"))));
     aInsertTableOfContents->setIcon(QIcon::fromTheme(S("insert-table-of-contents"), QIcon(S(":/icons/insert-table-of-contents.svg"))));
     aInsertLink->setIcon(QIcon::fromTheme(S("insert-link"), QIcon(S(":/icons/insert-link.svg"))));
     aInsertImage->setIcon(QIcon::fromTheme(S("insert-image"), QIcon(S(":/icons/insert-image.svg"))));
@@ -419,22 +420,29 @@ void MainWindow::setupToolbar()
     connect(aItalic, &QAction::triggered, this, &MainWindow::italic);
     connect(aUnderline, &QAction::triggered, this, &MainWindow::underline);
     connect(aStrikethrough, &QAction::triggered, this, &MainWindow::strikethrough);
-    connect(aInsertTable, &QAction::triggered, this, &MainWindow::insertTable);
     connect(aInsertTableOfContents, &QAction::triggered, this, &MainWindow::insertTableOfContents);
     connect(aInsertImage, &QAction::triggered, this, &MainWindow::insertImage);
     connect(aInsertLink, &QAction::triggered, this, &MainWindow::insertLink);
+    */
 
+    auto *aInsertTable = new QAction(tr("Insert table"));
+    aInsertTable->setIcon(QIcon::fromTheme(S("insert-table"), QIcon(S(":/icons/insert-table.svg"))));
+    connect(aInsertTable, &QAction::triggered, this, &MainWindow::insertTable);
+
+    /*
     ui->toolBarTools->addAction(aBold);
     ui->toolBarTools->addAction(aItalic);
     ui->toolBarTools->addAction(aUnderline);
     ui->toolBarTools->addAction(aStrikethrough);
     ui->toolBarTools->addSeparator();
+    */
     ui->toolBarTools->addAction(aInsertTable);
+    /*
     ui->toolBarTools->addAction(aInsertTableOfContents);
     ui->toolBarTools->addSeparator();
     ui->toolBarTools->addAction(aInsertImage);
     ui->toolBarTools->addAction(aInsertLink);
-#undef S
+    */
 }
 
 void MainWindow::insertTable()
@@ -449,11 +457,12 @@ void MainWindow::insertTable()
     QTextCursor c = currentEditor()->textCursor();
     c.beginEditBlock();
     c.movePosition(QTextCursor::EndOfLine);
-    c.insertText(QStringLiteral("\n\n"));
+    c.insertText(S("\n\n"));
     c.insertText(dialog.markdownTable() + u'\n');
     c.endEditBlock();
 }
 
+/*
 void MainWindow::insertTableOfContents()
 {
 }
@@ -481,9 +490,9 @@ void MainWindow::bold()
     int end = c.selectionEnd();
 
     c.setPosition(start);
-    c.insertText(QStringLiteral("**"));
+    c.insertText(S("**"));
     c.setPosition(end +2);
-    c.insertText(QStringLiteral("**"));
+    c.insertText(S("**"));
 
     c.endEditBlock();
 
@@ -505,9 +514,9 @@ void MainWindow::italic()
     int end = c.selectionEnd();
 
     c.setPosition(start);
-    c.insertText(QStringLiteral("*"));
+    c.insertText(S("*"));
     c.setPosition(end +1);
-    c.insertText(QStringLiteral("*"));
+    c.insertText(S("*"));
 
     c.endEditBlock();
 
@@ -529,9 +538,9 @@ void MainWindow::underline()
     int end = c.selectionEnd();
 
     c.setPosition(start);
-    c.insertText(QStringLiteral("<u>"));
+    c.insertText(S("<u>"));
     c.setPosition(end +3);
-    c.insertText(QStringLiteral("</u>"));
+    c.insertText(S("</u>"));
 
     c.endEditBlock();
 
@@ -553,14 +562,15 @@ void MainWindow::strikethrough()
     int end = c.selectionEnd();
 
     c.setPosition(start);
-    c.insertText(QStringLiteral("~"));
+    c.insertText(S("~"));
     c.setPosition(end +1);
-    c.insertText(QStringLiteral("~"));
+    c.insertText(S("~"));
 
     c.endEditBlock();
 
     currentEditor()->setTextCursor(c);
 }
+*/
 
 void MainWindow::closeCurrEditor()
 {
@@ -629,10 +639,10 @@ void MainWindow::closeEditor(const int index)
     if (editorList.isEmpty()) { // If all editors are closed
         html.clear(); // Clear HTML
         setText(ui->tabWidget->currentIndex()); // apply the empty HTML to the preview widget
-        ui->actionReload->setText(tr("Reload \"%1\"").remove(QLatin1String("%1")));
+        ui->actionReload->setText(tr("Reload \"%1\"").remove(L1("%1")));
         ui->actionReload->setEnabled(false);
         setWindowModified(false);
-        setWindowTitle(QStringLiteral("MarkdownEdit"));
+        setWindowTitle(S("MarkdownEdit"));
     }
 }
 
@@ -724,7 +734,7 @@ void MainWindow::onUrlClicked(const QString &url)
 {
     const QUrl urlFromString = QUrl(url);
     const bool isRelativeFileUrl =
-        url.startsWith(QLatin1String("file://"));
+        url.startsWith(L1("file://"));
 
     if (!urlFromString.isValid() || isRelativeFileUrl) return;
 
@@ -740,7 +750,7 @@ void MainWindow::onModificationChanged(const bool m)
     QString old = ui->tabWidget_2->tabBar()->tabText(curr);
 
     if (m && !old.endsWith(u'*'))
-        old.append(u'*');
+        old + u'*';
     else if (!m && old.endsWith(u'*'))
         old.remove(old.length() -1, 1);
 
@@ -759,13 +769,13 @@ auto MainWindow::currentEditor() -> MarkdownEditor*
 void MainWindow::onFileChanged(const QString &f)
 {
     auto *widgetReloadFile = new QWidget(this);
-    widgetReloadFile->setStyleSheet(QStringLiteral("background: orange"));
-    widgetReloadFile->setObjectName(QStringLiteral("widgetReloadFile"));
+    widgetReloadFile->setStyleSheet(S("background: orange"));
+    widgetReloadFile->setObjectName(S("widgetReloadFile"));
 
     auto *horizontalLayout = new QHBoxLayout(widgetReloadFile);
 
     auto *labelReloadFile = new QLabel(widgetReloadFile);
-    labelReloadFile->setStyleSheet(QStringLiteral("color: black"));
+    labelReloadFile->setStyleSheet(S("color: black"));
 
     horizontalLayout->addWidget(labelReloadFile);
 
@@ -791,7 +801,6 @@ void MainWindow::onFileChanged(const QString &f)
 
 void MainWindow::loadIcons()
 {
-#define S(x) QStringLiteral(x)
     loadIcon(S("application-exit"), ui->actionExit);
     loadIcon(S("document-new"), ui->actionNew);
     loadIcon(S("document-open-recent"), ui->actionOpen_last_document_on_start);
@@ -838,15 +847,14 @@ void MainWindow::loadIcons()
 #endif
 
     setWindowIcon(QIcon(S(":/Icon.svg")));
-#undef S
 }
 
 void MainWindow::loadIcon(const QString &name, QAction* a)
 {
 #ifndef FLATPAK
-    a->setIcon(QIcon::fromTheme(name, QIcon(QStringLiteral(":/icons/%1.svg").arg(name))));
+    a->setIcon(QIcon::fromTheme(name, QIcon(S(":/icons/%1.svg").arg(name))));
 #else
-    a->setIcon(QIcon(QStringLiteral(":/icons/%1.svg").arg(name)));
+    a->setIcon(QIcon(S(":/icons/%1.svg").arg(name)));
 #endif
 }
 
@@ -927,18 +935,18 @@ void MainWindow::disablePreview(const bool checked)
     if (!checked) {
         onTextChanged();
 #ifndef FLATPAK
-        ui->actionDisable_preview->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-stop"),
-                                                          QIcon(QStringLiteral(":/icons/media-playback-stop.svg"))));
+        ui->actionDisable_preview->setIcon(QIcon::fromTheme(S("media-playback-stop"),
+                                                          QIcon(S(":/icons/media-playback-stop.svg"))));
 #else
-        ui->actionDisable_preview->setIcon(QIcon(QStringLiteral(":/icons/media-playback-stop.svg")));
+        ui->actionDisable_preview->setIcon(QIcon(S(":/icons/media-playback-stop.svg")));
 #endif
     }
     else
 #ifndef FLATPAK
-        ui->actionDisable_preview->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start"),
-                                                          QIcon(QStringLiteral(":/icons/media-playback-start.svg"))));
+        ui->actionDisable_preview->setIcon(QIcon::fromTheme(S("media-playback-start"),
+                                                          QIcon(S(":/icons/media-playback-start.svg"))));
 #else
-        ui->actionDisable_preview->setIcon(QIcon(QStringLiteral(":/icons/media-playback-start.svg")));
+        ui->actionDisable_preview->setIcon(QIcon(S(":/icons/media-playback-start.svg")));
 #endif
 }
 
@@ -949,12 +957,12 @@ void MainWindow::pausePreview(const bool checked)
 
     if (!checked) {
         onTextChanged();
-        ui->actionPause_preview->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-pause"),
-                                                          QIcon(QStringLiteral(":/icons/media-playback-pause.svg"))));
+        ui->actionPause_preview->setIcon(QIcon::fromTheme(S("media-playback-pause"),
+                                                          QIcon(S(":/icons/media-playback-pause.svg"))));
     }
     else
-        ui->actionPause_preview->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start"),
-                                                          QIcon(QStringLiteral(":/icons/media-playback-start.svg"))));
+        ui->actionPause_preview->setIcon(QIcon::fromTheme(S("media-playback-start"),
+                                                          QIcon(S(":/icons/media-playback-start.svg"))));
 }
 
 void MainWindow::cut()
@@ -1114,9 +1122,9 @@ void MainWindow::printPreview(QPrinter *printer)
 void MainWindow::exportPdf()
 {
     QFileDialog dialog(this, tr("Export PDF"));
-    dialog.setMimeTypeFilters({QStringLiteral("application/pdf")});
+    dialog.setMimeTypeFilters({S("application/pdf")});
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.setDefaultSuffix(QStringLiteral("pdf"));
+    dialog.setDefaultSuffix(S("pdf"));
     if (dialog.exec() == QDialog::Rejected)
         return;
 
@@ -1144,7 +1152,7 @@ void MainWindow::openInWebBrowser()
 {
     QTemporaryFile f(this);
 
-    const QString name = f.fileTemplate().append(QLatin1String(".html"));
+    const QString name = f.fileTemplate() + L1(".html");
 
     f.setFileTemplate(name);
     f.setAutoRemove(false);
@@ -1174,12 +1182,12 @@ void MainWindow::openInWebBrowser()
 void MainWindow::exportHtml()
 {
 #if defined(Q_OS_WASM)
-    QFileDialog::saveFileContent(html.toUtf8(), QStringLiteral("Exported HTML.html"));
+    QFileDialog::saveFileContent(html.toUtf8(), S("Exported HTML.html"));
 #else
     QFileDialog dialog(this, tr("Export HTML"));
-    dialog.setMimeTypeFilters({QStringLiteral("text/html")});
+    dialog.setMimeTypeFilters({S("text/html")});
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.setDefaultSuffix(QStringLiteral("html"));
+    dialog.setDefaultSuffix(S("html"));
     if (dialog.exec() != QDialog::Accepted)
         return;
 
@@ -1233,11 +1241,11 @@ void MainWindow::loadFiles(const QStringList &files)
 {
     // Ensure settings are set up
     Q_ASSERT(settings);
-    const bool openLast = settings->value(QStringLiteral("openLast"), true).toBool();
+    const bool openLast = settings->value(S("openLast"), true).toBool();
     ui->actionOpen_last_document_on_start->setChecked(openLast);
 
     if (files.isEmpty()) {
-        const QString last = settings->value(QStringLiteral("last"),
+        const QString last = settings->value(S("last"),
                                            QLatin1String()).toString();
         if (openLast && !last.isEmpty())
             openFile(last);
@@ -1282,7 +1290,7 @@ void MainWindow::openFile(const QString &newFile, const QString &lang)
         updateOpened();
         return;
     }
-    constexpr int limit = 500000; // 500KB
+    constexpr int limit = 400000; // 400KB
     if (f.size() > limit) {
         const auto out = QMessageBox::warning(this, tr("Large file"),
                                              tr("This is a large file that can potentially cause performance issues."),
@@ -1353,7 +1361,7 @@ void MainWindow::onFileNew()
     ui->tabWidget_2->setCurrentIndex(editorList.length() -1);
 
     if (!editor->setLanguage(QLocale::system().name()))
-        editor->setLanguage(QStringLiteral("en_US"));
+        editor->setLanguage(S("en_US"));
 
 #ifndef Q_OS_ANDROID
     statusBar()->show();
@@ -1401,7 +1409,7 @@ void MainWindow::onFileOpen()
     QFileDialog::getOpenFileContent(tr("Markdown (*.md *.markdown *.mkd)"), fileContentReady);
 #else
     QFileDialog dialog(this, tr("Open Markdown File"));
-    dialog.setMimeTypeFilters({QStringLiteral("text/markdown")});
+    dialog.setMimeTypeFilters({S("text/markdown")});
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
     if (dialog.exec() == QDialog::Rejected) return;
 
@@ -1418,7 +1426,7 @@ auto MainWindow::onFileSave() -> bool
         if (QFile::exists(path))
             return true;
 
-    if (path.isEmpty() || path.startsWith(QLatin1String(":/syntax_")))
+    if (path.isEmpty() || path.startsWith(L1(":/syntax_")))
         return onFileSaveAs();
 
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
@@ -1471,14 +1479,14 @@ auto MainWindow::onFileSave() -> bool
 auto MainWindow::onFileSaveAs() -> bool
 {
 #ifdef Q_OS_WASM
-    path = QLatin1String("Markdown.md");
+    path = L1("Markdown.md");
     return onFileSave();
 #else
 
     QFileDialog dialog(this, tr("Save Markdown File"));
-    dialog.setMimeTypeFilters({QStringLiteral("text/markdown")});
+    dialog.setMimeTypeFilters({S("text/markdown")});
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.setDefaultSuffix(QStringLiteral("md"));
+    dialog.setDefaultSuffix(S("md"));
     if (dialog.exec() == QDialog::Rejected)
         return false;
 
@@ -1489,8 +1497,8 @@ auto MainWindow::onFileSaveAs() -> bool
     else
         path = file;
 
-    if (!(path.endsWith(QLatin1String(".md")) || path.endsWith(QLatin1String(".markdown")) || path.endsWith(QLatin1String(".mkd"))))
-        path.append(QLatin1String(".md"));
+    if (!(path.endsWith(L1(".md")) || path.endsWith(L1(".markdown")) || path.endsWith(L1(".mkd"))))
+        path + L1(".md");
 
     watcher->addPath(file);
 
@@ -1573,7 +1581,7 @@ void MainWindow::updateOpened() {
 
     for (int i = 0; i < recentOpened.count(); i++) {
         const QString document = recentOpened.at(i);
-        auto *action = new QAction(QStringLiteral("&%1 | %2").arg(QString::number(i + 1),
+        auto *action = new QAction(S("&%1 | %2").arg(QString::number(i + 1),
                                                                   document), this);
         connect(action, &QAction::triggered, this, &MainWindow::openRecent);
 
@@ -1621,7 +1629,7 @@ void MainWindow::resizeEvent(QResizeEvent *e)
 
 void MainWindow::loadSettings() {
 #ifndef Q_OS_WASM
-    const QByteArray geo = settings->value(QStringLiteral("geometry"),
+    const QByteArray geo = settings->value(S("geometry"),
                                            QByteArrayLiteral("")).toByteArray();
     if (geo.isEmpty()) {
         const QRect availableGeometry = QGuiApplication::screenAt(pos())->availableGeometry();
@@ -1633,16 +1641,16 @@ void MainWindow::loadSettings() {
         restoreGeometry(geo);
     }
 
-    restoreState(settings->value(QStringLiteral("state"), QByteArrayLiteral("")).toByteArray());
+    restoreState(settings->value(S("state"), QByteArrayLiteral("")).toByteArray());
 #endif
 
-    highlighting = settings->value(QStringLiteral("highlighting"), true).toBool();
+    highlighting = settings->value(S("highlighting"), true).toBool();
     ui->actionHighlighting_activated->setChecked(highlighting);
 
-    setPath = settings->value(QStringLiteral("setPath"), true).toBool();
+    setPath = settings->value(S("setPath"), true).toBool();
     ui->actionAuto_add_file_path_to_icon_path->setChecked(setPath);
 
-    recentOpened = settings->value(QStringLiteral("recent"), QStringList()).toStringList();
+    recentOpened = settings->value(S("recent"), QStringList()).toStringList();
     if (!recentOpened.isEmpty()) {
         if (recentOpened.at(0).isEmpty()) {
             recentOpened.removeFirst();
@@ -1650,18 +1658,18 @@ void MainWindow::loadSettings() {
     }
 
 #ifndef Q_OS_ANDROID
-    const bool lineWrap = settings->value(QStringLiteral("lineWrap"), false).toBool();
+    const bool lineWrap = settings->value(S("lineWrap"), false).toBool();
 #else
     constexpr bool lineWrap = true;
 #endif
     changeWordWrap(lineWrap);
 
-    preview = settings->value(QStringLiteral("preview"), true).toBool();
+    preview = settings->value(S("preview"), true).toBool();
 
-    setLanguageMap(settings->value(QStringLiteral("languagesMap"),
+    setLanguageMap(settings->value(S("languagesMap"),
                                    QHash<QString, QVariant>()).toHash());
 
-    spelling = settings->value(QStringLiteral("spelling"), true).toBool();
+    spelling = settings->value(S("spelling"), true).toBool();
     ui->actionSpell_checking->setChecked(spelling);
     // changeSpelling(spelling); not loaded yet
 
@@ -1669,17 +1677,17 @@ void MainWindow::loadSettings() {
 }
 
 void MainWindow::saveSettings() {
-    settings->setValue(QStringLiteral("geometry"), saveGeometry());
-    settings->setValue(QStringLiteral("state"), saveState());
-    settings->setValue(QStringLiteral("highlighting"), highlighting);
-    settings->setValue(QStringLiteral("recent"), recentOpened);
-    settings->setValue(QStringLiteral("openLast"), ui->actionOpen_last_document_on_start->isChecked());
-    settings->setValue(QStringLiteral("last"), path);
-    settings->setValue(QStringLiteral("setPath"), setPath);
-    settings->setValue(QStringLiteral("spelling"), spelling);
-    settings->setValue(QStringLiteral("lineWrap"), ui->actionWord_wrap->isChecked());
-    settings->setValue(QStringLiteral("languagesMap"), getLanguageMap());
-    settings->setValue(QStringLiteral("preview"), preview);
+    settings->setValue(S("geometry"), saveGeometry());
+    settings->setValue(S("state"), saveState());
+    settings->setValue(S("highlighting"), highlighting);
+    settings->setValue(S("recent"), recentOpened);
+    settings->setValue(S("openLast"), ui->actionOpen_last_document_on_start->isChecked());
+    settings->setValue(S("last"), path);
+    settings->setValue(S("setPath"), setPath);
+    settings->setValue(S("spelling"), spelling);
+    settings->setValue(S("lineWrap"), ui->actionWord_wrap->isChecked());
+    settings->setValue(S("languagesMap"), getLanguageMap());
+    settings->setValue(S("preview"), preview);
 }
 
 MainWindow::~MainWindow()

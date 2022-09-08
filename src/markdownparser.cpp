@@ -59,8 +59,8 @@ auto Parser::toHtml(const QString &in, const int dia) -> QString
     md_html(array.constData(), array.size(), &captureHtmlFragment, &out,
             parser_flags, MD_HTML_FLAG_SKIP_UTF8_BOM);
 
-    out.append("</body>\n"
-               "</html>\n");
+    out % "</body>\n"
+          "</html>\n";
     out.squeeze();
 
     return QString::fromUtf8(out);

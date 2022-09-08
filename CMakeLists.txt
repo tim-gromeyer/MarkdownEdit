@@ -33,7 +33,6 @@ if(FLATPAK)
 
     include(KDEInstallDirs)
     include(KDECMakeSettings)
-    # include(KDECompilerSettings NO_POLICY_SCOPE) # enchant wont compile
 
     include(ECMInstallIcons)
 

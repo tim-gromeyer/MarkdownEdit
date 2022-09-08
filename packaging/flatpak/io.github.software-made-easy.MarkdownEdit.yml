@@ -5,7 +5,7 @@ sdk: org.kde.Sdk
 command: markdownedit
 rename-desktop-file: MarkdownEdit.desktop
 rename-icon: Icon
-rename-appdata-file: appdata
+rename-appdata-file: appdata.xml
 finish-args:
   - --share=ipc
   - --share=network

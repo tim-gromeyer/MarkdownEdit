@@ -119,6 +119,7 @@ private Q_SLOTS:
     void redo();
 
     void insertTable();
+    /*
     void insertTableOfContents();
     void insertLink();
     void insertImage();
@@ -127,6 +128,7 @@ private Q_SLOTS:
     void italic();
     void underline();
     void strikethrough();
+    */
 
     void onUrlClicked(const QString &);
 

@@ -130,13 +130,13 @@ void SpellChecker::checkSpelling(const STRINGVIEW &text)
 
         // If last character and letter or number
         if (i == textLength -1 && isLetterOrNumber) {
-            word.append(c);
+            word + c;
             wordList.append(word);
             word.clear();
         }
         // If is letter or number append
         else if (isLetterOrNumber)
-            word.append(c);
+            word + c;
         // Else append the word and reset it.
         else {
             wordList.append(word);
@@ -315,11 +315,11 @@ auto SpellChecker::getWord(const QTextBlock &block, const int pos) -> QString
             }
         }
         else if (i == textLength -1 && isLetterOrNumber) {
-            word.append(c);
+            word + c;
             return word;
         }
         else if (isLetterOrNumber)
-            word.append(c);
+            word + c;
         else {
             if (pos <= i)
                 return word;

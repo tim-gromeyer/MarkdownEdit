@@ -73,7 +73,7 @@ auto main(int argc, char *argv[]) -> int
 
 #ifndef NOT_SUPPORTET
     if (a.isSecondary()) {
-        a.sendMessage(QByteArrayLiteral("file://") +
+        a.sendMessage(QByteArrayLiteral("file://") %
                           parser.positionalArguments().join(u' ').toLatin1());
         return 0;
     }
