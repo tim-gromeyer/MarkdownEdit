@@ -69,77 +69,20 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    // we keep it here so the startup looks better
     ui->setupUi(this);
-    ui->toolBarTools->setVisible(false);
 
-    setupThings(); // Setup things
+    QMetaObject::invokeMethod(this, [this, files]{
+        ui->toolBarTools->setVisible(false);
 
-    // settings was set up in setupThings()
-    QMetaObject::invokeMethod(this, "loadSettings", Qt::QueuedConnection); // It's faster
+        loadSettings(); // load the settings
 
-    // setupConnections(); // Connect everything
-    QMetaObject::invokeMethod(this, "setupConnections", Qt::QueuedConnection); // It's faster
-
-    ui->File->addAction(ui->actionNew);
-    ui->File->addAction(ui->actionOpen);
-    ui->File->addAction(ui->actionSave);
-#ifndef Q_OS_WASM
-    ui->File->addSeparator();
-    ui->File->addWidget(toolbutton);
-#endif
-    ui->Edit->addAction(ui->actionUndo);
-    ui->Edit->addAction(ui->actionRedo);
-#ifndef Q_OS_ANDROID // Save space
-    ui->Edit->addSeparator();
-    ui->Edit->addAction(ui->actionCut);
-    ui->Edit->addAction(ui->actionCopy);
-    ui->Edit->addAction(ui->actionPaste);
-    ui->toolBarPreview->addWidget(mode);
-    ui->toolBarPreview->addSeparator();
-#endif
-    actionWidgetBox = ui->toolBarPreview->addWidget(widgetBox);
-    ui->toolBarPreview->addAction(actionPreview);
-
-#ifdef NO_SPELLCHECK
-    ui->menuExtras->removeAction(ui->actionSpell_checking);
-#endif
-#ifdef Q_OS_WASM
-    ui->menuExport->removeAction(ui->actionExportPdf);
-    ui->menuFile->removeAction(ui->actionPrint);
-    ui->menuFile->removeAction(ui->actionPrintPreview);
-
-    // Doesn't work on wasm
-    ui->menuFile->removeAction(ui->menuRecentlyOpened->menuAction());
-    ui->menuRecentlyOpened->setDisabled(true);
-    toolbutton->deleteLater();
-
-    ui->menuExtras->removeAction(ui->actionOpen_last_document_on_start);
-
-    ui->menu_View->removeAction(ui->actionOpen_in_web_browser);
-    ui->menu_View->removeAction(ui->actionAuto_add_file_path_to_icon_path);
-#endif
-#ifdef Q_OS_ANDROID
-    mode->deleteLater();
-    setStatusBar(nullptr);
-    menuBar()->hide();
-    ui->File->setIconSize(QSize(36, 36));
-    ui->Edit->setIconSize(QSize(36, 36));
-    ui->toolBarPreview->setIconSize(QSize(36, 36));
-    ui->File->setMovable(false);
-    ui->Edit->setMovable(false);
-    ui->toolBarPreview->setMovable(false);
-
-    qApp->setStyleSheet(S("QSplitter { border: none; } QToolBar { border: none; }"));
-#endif
-
-    QMetaObject::invokeMethod(this, "loadIcons", Qt::QueuedConnection);
-
-    QMetaObject::invokeMethod(this, [files, this] {
-        loadFiles(files);
+        setupThings(); // Setup things
+        loadIcons(); // load icons
+        setupToolbar(); // setup toolbars
+        setupConnections(); // connect everything before we load the files
+        loadFiles(files); // load the files or create an new document
     }, Qt::QueuedConnection);
-
-    // TODO: finish code
-    // QTimer::singleShot(1s, this, &MainWindow::setupToolbar);
 }
 
 void MainWindow::androidPreview(const bool c)
@@ -218,9 +161,10 @@ void MainWindow::toForeground()
 
 void MainWindow::onFileReload()
 {
-    QObject *widget = sender()->parent();
+    QObject *sende = sender();
+    QWidget *widget = qobject_cast<QWidget*>(sende->parent());
 
-    const QString file = sender()->property("file").toString();
+    const QString file = sende->property("file").toString();
 
     if (file.isEmpty())
         return;
@@ -236,7 +180,7 @@ void MainWindow::onFileReload()
         return;
     }
 
-    for (MarkdownEditor* editor : qAsConst(editorList)) {
+    for (MarkdownEditor *editor : qAsConst(editorList)) {
         if (!editor)
             return;
 
@@ -246,7 +190,7 @@ void MainWindow::onFileReload()
         }
     }
 
-    if (widget->objectName() == L1("widgetReloadFile")) {
+    if (widget->objectName() == S("widgetReloadFile")) {
         widget->deleteLater();
         delete widget;
     }
@@ -263,16 +207,8 @@ void MainWindow::setupThings()
     // Use native menu bar
     menuBar()->setNativeMenuBar(true);
 
-    // Setup shortcuts to open and close tabs
-    shortcutNew = new QShortcut(this);
-    shortcutClose = new QShortcut(this);
-
     // Setup a file watcher
     watcher = new QFileSystemWatcher(this);
-
-    // Setup settings to load settings
-    settings = new QSettings(S("SME"),
-                             S("MarkdownEdit"), this);
 
     // Setup ComboBox to choose between Commonmark and GitHub
     mode = new QComboBox(ui->Edit);
@@ -287,6 +223,7 @@ void MainWindow::setupThings()
     // Setup the HTML Highlighter
     htmlHighliter = new Highliter(ui->raw->document());
 
+    // Setup a action used to hide the editor and show the preview
     actionPreview = new QAction(QIcon::fromTheme(S("view-preview"), QIcon(S(":/icons/view-preview.svg"))),
                                 tr("Preview"), this);
     actionPreview->setCheckable(true);
@@ -306,6 +243,10 @@ void MainWindow::setupThings()
 
     // Add shortcuts
 #ifndef Q_OS_ANDROID
+    // Setup shortcuts to open and close tabs
+    shortcutNew = new QShortcut(this);
+    shortcutClose = new QShortcut(this);
+
     shortcutNew->setKey(QKeySequence::AddTab);
     connect(shortcutNew, &QShortcut::activated,
             this, &MainWindow::onFileNew);
@@ -399,6 +340,57 @@ void MainWindow::setupConnections()
 
 void MainWindow::setupToolbar()
 {
+    ui->File->addAction(ui->actionNew);
+    ui->File->addAction(ui->actionOpen);
+    ui->File->addAction(ui->actionSave);
+#ifndef Q_OS_WASM
+    ui->File->addSeparator();
+    ui->File->addWidget(toolbutton);
+#endif
+    ui->Edit->addAction(ui->actionUndo);
+    ui->Edit->addAction(ui->actionRedo);
+#ifndef Q_OS_ANDROID // Save space
+    ui->Edit->addSeparator();
+    ui->Edit->addAction(ui->actionCut);
+    ui->Edit->addAction(ui->actionCopy);
+    ui->Edit->addAction(ui->actionPaste);
+    ui->toolBarPreview->addWidget(mode);
+    ui->toolBarPreview->addSeparator();
+#endif
+    actionWidgetBox = ui->toolBarPreview->addWidget(widgetBox);
+    ui->toolBarPreview->addAction(actionPreview);
+
+#ifdef NO_SPELLCHECK
+    ui->menuExtras->removeAction(ui->actionSpell_checking);
+#endif
+#ifdef Q_OS_WASM
+    ui->menuExport->removeAction(ui->actionExportPdf);
+    ui->menuFile->removeAction(ui->actionPrint);
+    ui->menuFile->removeAction(ui->actionPrintPreview);
+
+    // Doesn't work on wasm
+    ui->menuFile->removeAction(ui->menuRecentlyOpened->menuAction());
+    ui->menuRecentlyOpened->setDisabled(true);
+    toolbutton->deleteLater();
+
+    ui->menuExtras->removeAction(ui->actionOpen_last_document_on_start);
+
+    ui->menu_View->removeAction(ui->actionOpen_in_web_browser);
+    ui->menu_View->removeAction(ui->actionAuto_add_file_path_to_icon_path);
+#endif
+#ifdef Q_OS_ANDROID
+    mode->deleteLater();
+    setStatusBar(nullptr);
+    menuBar()->hide();
+    ui->File->setIconSize(QSize(36, 36));
+    ui->Edit->setIconSize(QSize(36, 36));
+    ui->toolBarPreview->setIconSize(QSize(36, 36));
+    ui->File->setMovable(false);
+    ui->Edit->setMovable(false);
+    ui->toolBarPreview->setMovable(false);
+
+    qApp->setStyleSheet(S("QSplitter { border: none; } QToolBar { border: none; }"));
+#endif
     /*
     auto *aBold = new QAction(tr("Bold"));
     auto *aItalic = new QAction(tr("Italic"));
@@ -436,7 +428,9 @@ void MainWindow::setupToolbar()
     ui->toolBarTools->addAction(aStrikethrough);
     ui->toolBarTools->addSeparator();
     */
+
     ui->toolBarTools->addAction(aInsertTable);
+
     /*
     ui->toolBarTools->addAction(aInsertTableOfContents);
     ui->toolBarTools->addSeparator();
@@ -768,6 +762,9 @@ auto MainWindow::currentEditor() -> MarkdownEditor*
 
 void MainWindow::onFileChanged(const QString &f)
 {
+    // auto list = findChildren<QWidget*>(S("widgetReloadFile"), Qt::FindDirectChildrenOnly);
+    // return w->findChildren<QDialogButtonBox*>(S("buttonBox")).at(0)->property("file").toString() == f && w->isVisible();
+
     auto *widgetReloadFile = new QWidget(this);
     widgetReloadFile->setStyleSheet(S("background: orange"));
     widgetReloadFile->setObjectName(S("widgetReloadFile"));
@@ -781,12 +778,13 @@ void MainWindow::onFileChanged(const QString &f)
 
     auto *buttonBox = new QDialogButtonBox(widgetReloadFile);
     buttonBox->setStandardButtons(QDialogButtonBox::No | QDialogButtonBox::Yes);
+    buttonBox->setObjectName(S("buttonBox"));
     buttonBox->setProperty("file", f);
 
     connect(buttonBox, &QDialogButtonBox::accepted,
             this, &MainWindow::onFileReload);
     connect(buttonBox, &QDialogButtonBox::rejected,
-            widgetReloadFile, &QWidget::hide);
+            widgetReloadFile, &QWidget::deleteLater);
 
     horizontalLayout->addWidget(buttonBox);
 
@@ -860,6 +858,8 @@ void MainWindow::loadIcon(const QString &name, QAction* a)
 
 void MainWindow::onOrientationChanged(const Qt::ScreenOrientation t)
 {
+    if (!actionPreview || !actionWidgetBox) return;
+
     if (t == Qt::PortraitOrientation || bigFile) {
         actionWidgetBox->setVisible(false);
         actionPreview->setVisible(true);
@@ -1269,7 +1269,7 @@ void MainWindow::openFile(const QString &newFile, const QString &lang)
 {
     // Check of file is already open
     if (fileList.contains(newFile)) {
-        for (auto i = 0; editorList.length() > i; i++) {
+        for (auto i = 0; editorList.length() > i; ++i) {
             if (editorList.at(i)->getPath() == newFile) {
                 ui->tabWidget_2->setCurrentIndex(i);
                 return;
@@ -1579,7 +1579,7 @@ void MainWindow::updateOpened() {
     if (recentOpened.count() > RECENT_OPENED_LIST_LENGTH)
         recentOpened.takeLast();
 
-    for (int i = 0; i < recentOpened.count(); i++) {
+    for (int i = 0; i < recentOpened.count(); ++i) {
         const QString document = recentOpened.at(i);
         auto *action = new QAction(S("&%1 | %2").arg(QString::number(i + 1),
                                                                   document), this);
@@ -1628,6 +1628,10 @@ void MainWindow::resizeEvent(QResizeEvent *e)
 }
 
 void MainWindow::loadSettings() {
+    // Setup settings to load settings
+    settings = new QSettings(S("SME"),
+                             S("MarkdownEdit"), this);
+
 #ifndef Q_OS_WASM
     const QByteArray geo = settings->value(S("geometry"),
                                            QByteArrayLiteral("")).toByteArray();

@@ -43,10 +43,10 @@ auto TableDialog::markdownTable() const -> QString
     biggest.reserve(columnCount);
 
     // Find the longest text in each column
-    for (int i = 0; i < columnCount; i++) {
+    for (int i = 0; i < columnCount; ++i) {
         int size = 0;
 
-        for (int row = 0; row < rowCount; row++) {
+        for (int row = 0; row < rowCount; ++row) {
 
             if (!table->item(row, i))
                 continue;
@@ -61,13 +61,13 @@ auto TableDialog::markdownTable() const -> QString
 
     int size = 0;
     // Calculate size for the output string
-    for (int i = 0; i < columnCount; i++) {
+    for (int i = 0; i < columnCount; ++i) {
         size += (biggest[i] +4) * (rowCount +1); // +1 because of the extra row which marks the headers
     }
     out.reserve(size);
 
-    for (int row = 0; row < rowCount; row++) {
-        for (int column = 0; column < columnCount; column++) {
+    for (int row = 0; row < rowCount; ++row) {
+        for (int column = 0; column < columnCount; ++column) {
             out.append(L("| "));
             if (!table->item(row, column)) {
                 out.append(S(" ").repeated(biggest[column] +1));
@@ -83,7 +83,7 @@ auto TableDialog::markdownTable() const -> QString
         out.append(u'\n');
         if (row != 0) continue;
 
-        for (int column = 0; column < columnCount; column++) {
+        for (int column = 0; column < columnCount; ++column) {
             out.append(u'|');
             out.append(S("-").repeated(biggest[column] +2));
             // out.append(u' ');
@@ -168,7 +168,7 @@ void TableDialog::handleRow()
 
     if (s == QLatin1String("above")) {
         int i = table->currentRow() -1;
-        if (i == -1) i++;
+        if (i == -1) ++i;
         table->insertRow(i);
     } else if (s == QLatin1String("below"))
         table->insertRow(table->currentRow() +1);
@@ -184,7 +184,7 @@ void TableDialog::handleColumn()
 
     if (s == QLatin1String("above")) {
         int i = table->currentColumn() -1;
-        if (i == -1) i++;
+        if (i == -1) ++i;
         table->insertColumn(i);
     } else if (s == QLatin1String("below"))
         table->insertColumn(table->currentColumn() +1);

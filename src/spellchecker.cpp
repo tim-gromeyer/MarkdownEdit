@@ -109,7 +109,7 @@ void SpellChecker::checkSpelling(const STRINGVIEW &text)
 
     const auto textLength = text.length();
 
-    for (int i = 0; i < textLength; i++) {
+    for (int i = 0; i < textLength; ++i) {
         const QChar c = text[i];
         const bool isLetterOrNumber = c.isLetterOrNumber();
 
@@ -294,7 +294,7 @@ auto SpellChecker::getWord(const QTextBlock &block, const int pos) -> QString
 
     const auto textLength = text.length();
 
-    for (int i = 0; i < textLength; i++) {
+    for (int i = 0; i < textLength; ++i) {
         const QChar c = text[i];
         const bool isLetterOrNumber = c.isLetterOrNumber();
 

@@ -176,16 +176,16 @@ private:
 
     bool bigFile = false;
 
-    Highliter *htmlHighliter;
+    Highliter *htmlHighliter = nullptr;
 
-    QToolButton *toolbutton;
-    QComboBox *widgetBox;
-    QAction *actionWidgetBox;
-    QAction *actionPreview;
+    QToolButton *toolbutton = nullptr;
+    QComboBox *widgetBox = nullptr;
+    QAction *actionWidgetBox = nullptr;
+    QAction *actionPreview = nullptr;
 
-    QComboBox *mode;
-    QTimer *timer;
+    QComboBox *mode = nullptr;
+    QTimer *timer = nullptr;
 
-    QFileSystemWatcher *watcher;
+    QFileSystemWatcher *watcher = nullptr;
 };
 #endif // MAINWINDOW_H
