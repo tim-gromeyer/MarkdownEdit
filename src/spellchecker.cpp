@@ -29,16 +29,12 @@
 #include <enchant++.h>
 #endif
 
-// Needed for wasm
-#ifndef QStringViewLiteral
-# define QStringViewLiteral(str) QStringView(QT_UNICODE_LITERAL(str))
-#endif
 
 // We use sliced with Qt 6 (it's faster)
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    #define SUBSTR(text, pos, len) text.mid(pos, len)
+#define SUBSTR(text, pos, len) text.mid(pos, len)
 #else
-    #define SUBSTR(text, pos, len) text.sliced(pos, len)
+#define SUBSTR(text, pos, len) text.sliced(pos, len)
 #endif
 
 static auto red() -> const QColor
@@ -95,7 +91,11 @@ void SpellChecker::highlightBlock(const QString &text)
         checkSpelling(text);
 }
 
-void SpellChecker::checkSpelling(const STRINGVIEW &text)
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+void  SpellChecker::checkSpelling(const QString &text)
+#else
+void SpellChecker::checkSpelling(QStringView text)
+#endif
 {
     if (!speller || !spellingEnabled) return;
 
@@ -119,7 +119,7 @@ void SpellChecker::checkSpelling(const STRINGVIEW &text)
         // Check for link
         if (c == u'h') {
             if (textLength -i >= 11) { // http 4; :// 7; * >1; .de 11
-                if (SUBSTR(text, i, 4) == QStringViewLiteral("http")) {
+                if (SUBSTR(text, i, 4) == QStringView(u"http")) {
                     i = text.indexOf(u')', i);
 
                     if (i == -1)
@@ -288,7 +288,7 @@ auto SpellChecker::getWord(const QTextBlock &block, const int pos) -> QString
         return QLatin1String();
 
     QString word;
-    const STRINGVIEW text = block.text();
+    QStringView text = block.text();
 
     bool isLink = false;
 
@@ -299,7 +299,7 @@ auto SpellChecker::getWord(const QTextBlock &block, const int pos) -> QString
         const bool isLetterOrNumber = c.isLetterOrNumber();
 
         if (c == u'h') {
-            if (SUBSTR(text, i, 4) == QStringViewLiteral("http")) {
+            if (SUBSTR(text, i, 4) == QStringView(u"http")) {
                 if (text.indexOf(QChar(QChar::Space), i) > pos)
                     return QLatin1String();
                 else if (text.indexOf(u')', i) > pos)

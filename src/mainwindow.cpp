@@ -61,9 +61,6 @@ using namespace std::chrono_literals;
 QT_REQUIRE_CONFIG(mainwindow);
 QT_REQUIRE_CONFIG(filedialog);
 
-#define L1(str) QLatin1String(str, sizeof(str))
-#define S(str) QStringLiteral(str)
-
 
 MainWindow::MainWindow(const QStringList &files, QWidget *parent)
     : QMainWindow(parent)
@@ -226,6 +223,7 @@ void MainWindow::setupThings()
     // Setup a action used to hide the editor and show the preview
     actionPreview = new QAction(QIcon::fromTheme(S("view-preview"), QIcon(S(":/icons/view-preview.svg"))),
                                 tr("Preview"), this);
+    actionPreview->setPriority(QAction::HighPriority);
     actionPreview->setCheckable(true);
     connect(actionPreview, &QAction::triggered, this, &MainWindow::androidPreview);
 
@@ -762,9 +760,6 @@ auto MainWindow::currentEditor() -> MarkdownEditor*
 
 void MainWindow::onFileChanged(const QString &f)
 {
-    // auto list = findChildren<QWidget*>(S("widgetReloadFile"), Qt::FindDirectChildrenOnly);
-    // return w->findChildren<QDialogButtonBox*>(S("buttonBox")).at(0)->property("file").toString() == f && w->isVisible();
-
     auto *widgetReloadFile = new QWidget(this);
     widgetReloadFile->setStyleSheet(S("background: orange"));
     widgetReloadFile->setObjectName(S("widgetReloadFile"));

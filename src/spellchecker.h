@@ -36,12 +36,6 @@ template <typename Key, typename T> class QHash;
 class QPlainTextEdit;
 QT_END_NAMESPACE
 
-// We use sliced QStringView 5.14 (it's faster)
-#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-    #define STRINGVIEW QString
-#else
-    #define STRINGVIEW QStringView
-#endif
 
 class SpellChecker : public SpellCheckerBaseClass
 {
@@ -74,7 +68,11 @@ public:
     void ignoreWord(const QString &);
 
 public Q_SLOTS:
-    void checkSpelling(const STRINGVIEW &);
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+    void checkSpelling(const QString &);
+#else
+    void checkSpelling(QStringView);
+#endif
 
 Q_SIGNALS:
     void languageChanged(const QString &lang = QLatin1String());

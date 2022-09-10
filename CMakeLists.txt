@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(MarkdownEdit VERSION 1.4.3 LANGUAGES CXX C)
+project(MarkdownEdit VERSION 1.4.4 LANGUAGES CXX C)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -112,7 +112,7 @@ IF(WIN32)
 ENDIF(WIN32)
 
 if(DISABLE_SPELLCHECK)
-    message(STATUS "Sell check disabled")
+    message(STATUS "Spell check disabled")
     target_compile_definitions(markdownedit PUBLIC NO_SPELLCHECK)
 else()
     find_package(PkgConfig REQUIRED)

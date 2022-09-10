@@ -35,12 +35,32 @@ auto mapContains(const QString &) -> bool;
 
 namespace settings {
     auto isDarkMode() -> bool;
-}
+} // namespace settings
 
 namespace common {
 auto homeDict() -> const QString;
 auto languages() -> const QStringList;
 }; // namespace common
+
+namespace literals {
+constexpr std::size_t length(const char* str)
+{
+    return std::char_traits<char>::length(str);
+}
+
+constexpr QLatin1String make_latin1(const char* str)
+{
+    return QLatin1String{str, static_cast<int>(length(str))};
+}
+} // namespace literals
+
+#ifndef QStringViewLiteral
+# define QStringViewLiteral(str) QStringView(QT_UNICODE_LITERAL(str))
+#endif
+
+#define L1(str) literals::make_latin1(str)
+#define S(str) QStringLiteral(str)
+#define SVIEW(str) QStringViewLiteral(str)
 
 #if !SPELLCHECK
 #define NO_SPELLCHECK
