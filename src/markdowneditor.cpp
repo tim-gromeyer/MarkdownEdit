@@ -76,12 +76,12 @@ void MarkdownEditor::dropEvent(QDropEvent *event)
             Q_EMIT openFile(QFileInfo(file.toLocalFile()).absoluteFilePath());
 
         if (mime.startsWith(L1("image/"))) {
-            c.insertText(S("![%1](%2)\n").arg(file.fileName(),
+            c.insertText(STR("![%1](%2)\n").arg(file.fileName(),
                                                         path));
             continue;
         }
 
-        c.insertText(S("[%1](%2)\n").arg(file.fileName(),
+        c.insertText(STR("[%1](%2)\n").arg(file.fileName(),
                                                     path));
     }
     event->accept();
@@ -98,9 +98,9 @@ auto MarkdownEditor::setLanguage(const QString &lang) -> bool
 auto MarkdownEditor::filePath() -> QString
 {
     if (getDir() == u'.')
-        return getFileName() + S("[*]");
+        return getFileName() + STR("[*]");
     else {
-        return S("%1[*] (%2)").arg(info.fileName(),
+        return STR("%1[*] (%2)").arg(info.fileName(),
                                                 info.path()).replace(common::homeDict(),
                                                                      QChar(u'~'));
     }

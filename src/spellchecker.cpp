@@ -288,7 +288,11 @@ auto SpellChecker::getWord(const QTextBlock &block, const int pos) -> QString
         return QLatin1String();
 
     QString word;
+#if QT_VERSION > QT_VERSION_CHECK(5, 14, 0)
     QStringView text = block.text();
+#else
+    QString text = block.text();
+#endif
 
     bool isLink = false;
 

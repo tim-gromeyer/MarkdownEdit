@@ -102,8 +102,8 @@ void MainWindow::androidPreview(const bool c)
 
 void MainWindow::onHelpSyntax()
 {
-    QString file = S(":/syntax_en.md");
-    QString language = S("en_US");
+    QString file = STR(":/syntax_en.md");
+    QString language = STR("en_US");
 
     const QStringList uiLanguages = QLocale::system().uiLanguages(); // ex. de-DE
     const QStringList languages = SpellChecker::getLanguageList(); // ex. de_DE
@@ -116,8 +116,8 @@ void MainWindow::onHelpSyntax()
         //  get first to characters
         const QString lang2 = lang.right(2);
 
-        if (QFile::exists(S(":/syntax_%1.md").arg(lang2))) {
-            file = S(":/syntax_%1.md").arg(lang2);
+        if (QFile::exists(STR(":/syntax_%1.md").arg(lang2))) {
+            file = STR(":/syntax_%1.md").arg(lang2);
             language = lang;
             break;
         }
@@ -132,7 +132,7 @@ void MainWindow::onHelpSyntax()
             language = language.mid(0, 2);
 
         // Assuming language = de, try de_DE
-        const QString newLang = S("%1_%2").arg(language, language.toUpper());
+        const QString newLang = STR("%1_%2").arg(language, language.toUpper());
         // If the language dict exists
         if (languages.contains(newLang)) {
             language = newLang;
@@ -187,7 +187,7 @@ void MainWindow::onFileReload()
         }
     }
 
-    if (widget->objectName() == S("widgetReloadFile")) {
+    if (widget->objectName() == STR("widgetReloadFile")) {
         widget->deleteLater();
         delete widget;
     }
@@ -209,7 +209,7 @@ void MainWindow::setupThings()
 
     // Setup ComboBox to choose between Commonmark and GitHub
     mode = new QComboBox(ui->Edit);
-    mode->addItems(QStringList() << S("Commonmark") << S("GitHub"));
+    mode->addItems(QStringList() << STR("Commonmark") << STR("GitHub"));
     mode->setCurrentIndex(1);
 
     // Setup ComboBox to choose between Preview and Raw HTML
@@ -221,7 +221,7 @@ void MainWindow::setupThings()
     htmlHighliter = new Highliter(ui->raw->document());
 
     // Setup a action used to hide the editor and show the preview
-    actionPreview = new QAction(QIcon::fromTheme(S("view-preview"), QIcon(S(":/icons/view-preview.svg"))),
+    actionPreview = new QAction(QIcon::fromTheme(STR("view-preview"), QIcon(STR(":/icons/view-preview.svg"))),
                                 tr("Preview"), this);
     actionPreview->setPriority(QAction::HighPriority);
     actionPreview->setCheckable(true);
@@ -387,7 +387,7 @@ void MainWindow::setupToolbar()
     ui->Edit->setMovable(false);
     ui->toolBarPreview->setMovable(false);
 
-    qApp->setStyleSheet(S("QSplitter { border: none; } QToolBar { border: none; }"));
+    qApp->setStyleSheet(STR("QSplitter { border: none; } QToolBar { border: none; }"));
 #endif
     /*
     auto *aBold = new QAction(tr("Bold"));
@@ -398,13 +398,13 @@ void MainWindow::setupToolbar()
     auto *aInsertLink = new QAction(tr("Insert link"));
     auto *aInsertImage = new QAction(tr("Insert image"));
 
-    aBold->setIcon(QIcon::fromTheme(S("format-text-bold"), QIcon(S(":/icons/format-text-bold.svg"))));
-    aItalic->setIcon(QIcon::fromTheme(S("format-text-italic"), QIcon(S(":/icons/format-text-italic.svg"))));
-    aUnderline->setIcon(QIcon::fromTheme(S("format-text-underline"), QIcon(S(":/icons/format-text-underline.svg"))));
-    aStrikethrough->setIcon(QIcon::fromTheme(S("format-text-strikethrough"), QIcon(S(":/icons/format-text-strikethrough.svg"))));
-    aInsertTableOfContents->setIcon(QIcon::fromTheme(S("insert-table-of-contents"), QIcon(S(":/icons/insert-table-of-contents.svg"))));
-    aInsertLink->setIcon(QIcon::fromTheme(S("insert-link"), QIcon(S(":/icons/insert-link.svg"))));
-    aInsertImage->setIcon(QIcon::fromTheme(S("insert-image"), QIcon(S(":/icons/insert-image.svg"))));
+    aBold->setIcon(QIcon::fromTheme(STR("format-text-bold"), QIcon(STR(":/icons/format-text-bold.svg"))));
+    aItalic->setIcon(QIcon::fromTheme(STR("format-text-italic"), QIcon(STR(":/icons/format-text-italic.svg"))));
+    aUnderline->setIcon(QIcon::fromTheme(STR("format-text-underline"), QIcon(STR(":/icons/format-text-underline.svg"))));
+    aStrikethrough->setIcon(QIcon::fromTheme(STR("format-text-strikethrough"), QIcon(STR(":/icons/format-text-strikethrough.svg"))));
+    aInsertTableOfContents->setIcon(QIcon::fromTheme(STR("insert-table-of-contents"), QIcon(STR(":/icons/insert-table-of-contents.svg"))));
+    aInsertLink->setIcon(QIcon::fromTheme(STR("insert-link"), QIcon(STR(":/icons/insert-link.svg"))));
+    aInsertImage->setIcon(QIcon::fromTheme(STR("insert-image"), QIcon(STR(":/icons/insert-image.svg"))));
 
     connect(aBold, &QAction::triggered, this, &MainWindow::bold);
     connect(aItalic, &QAction::triggered, this, &MainWindow::italic);
@@ -416,7 +416,7 @@ void MainWindow::setupToolbar()
     */
 
     auto *aInsertTable = new QAction(tr("Insert table"));
-    aInsertTable->setIcon(QIcon::fromTheme(S("insert-table"), QIcon(S(":/icons/insert-table.svg"))));
+    aInsertTable->setIcon(QIcon::fromTheme(STR("insert-table"), QIcon(STR(":/icons/insert-table.svg"))));
     connect(aInsertTable, &QAction::triggered, this, &MainWindow::insertTable);
 
     /*
@@ -449,7 +449,7 @@ void MainWindow::insertTable()
     QTextCursor c = currentEditor()->textCursor();
     c.beginEditBlock();
     c.movePosition(QTextCursor::EndOfLine);
-    c.insertText(S("\n\n"));
+    c.insertText(STR("\n\n"));
     c.insertText(dialog.markdownTable() + u'\n');
     c.endEditBlock();
 }
@@ -482,9 +482,9 @@ void MainWindow::bold()
     int end = c.selectionEnd();
 
     c.setPosition(start);
-    c.insertText(S("**"));
+    c.insertText(STR("**"));
     c.setPosition(end +2);
-    c.insertText(S("**"));
+    c.insertText(STR("**"));
 
     c.endEditBlock();
 
@@ -506,9 +506,9 @@ void MainWindow::italic()
     int end = c.selectionEnd();
 
     c.setPosition(start);
-    c.insertText(S("*"));
+    c.insertText(STR("*"));
     c.setPosition(end +1);
-    c.insertText(S("*"));
+    c.insertText(STR("*"));
 
     c.endEditBlock();
 
@@ -530,9 +530,9 @@ void MainWindow::underline()
     int end = c.selectionEnd();
 
     c.setPosition(start);
-    c.insertText(S("<u>"));
+    c.insertText(STR("<u>"));
     c.setPosition(end +3);
-    c.insertText(S("</u>"));
+    c.insertText(STR("</u>"));
 
     c.endEditBlock();
 
@@ -554,9 +554,9 @@ void MainWindow::strikethrough()
     int end = c.selectionEnd();
 
     c.setPosition(start);
-    c.insertText(S("~"));
+    c.insertText(STR("~"));
     c.setPosition(end +1);
-    c.insertText(S("~"));
+    c.insertText(STR("~"));
 
     c.endEditBlock();
 
@@ -634,7 +634,7 @@ void MainWindow::closeEditor(const int index)
         ui->actionReload->setText(tr("Reload \"%1\"").remove(L1("%1")));
         ui->actionReload->setEnabled(false);
         setWindowModified(false);
-        setWindowTitle(S("MarkdownEdit"));
+        setWindowTitle(STR("MarkdownEdit"));
     }
 }
 
@@ -761,19 +761,19 @@ auto MainWindow::currentEditor() -> MarkdownEditor*
 void MainWindow::onFileChanged(const QString &f)
 {
     auto *widgetReloadFile = new QWidget(this);
-    widgetReloadFile->setStyleSheet(S("background: orange"));
-    widgetReloadFile->setObjectName(S("widgetReloadFile"));
+    widgetReloadFile->setStyleSheet(STR("background: orange"));
+    widgetReloadFile->setObjectName(STR("widgetReloadFile"));
 
     auto *horizontalLayout = new QHBoxLayout(widgetReloadFile);
 
     auto *labelReloadFile = new QLabel(widgetReloadFile);
-    labelReloadFile->setStyleSheet(S("color: black"));
+    labelReloadFile->setStyleSheet(STR("color: black"));
 
     horizontalLayout->addWidget(labelReloadFile);
 
     auto *buttonBox = new QDialogButtonBox(widgetReloadFile);
     buttonBox->setStandardButtons(QDialogButtonBox::No | QDialogButtonBox::Yes);
-    buttonBox->setObjectName(S("buttonBox"));
+    buttonBox->setObjectName(STR("buttonBox"));
     buttonBox->setProperty("file", f);
 
     connect(buttonBox, &QDialogButtonBox::accepted,
@@ -794,60 +794,60 @@ void MainWindow::onFileChanged(const QString &f)
 
 void MainWindow::loadIcons()
 {
-    loadIcon(S("application-exit"), ui->actionExit);
-    loadIcon(S("document-new"), ui->actionNew);
-    loadIcon(S("document-open-recent"), ui->actionOpen_last_document_on_start);
-    loadIcon(S("document-open"), ui->actionOpen);
-    loadIcon(S("document-print-preview"), ui->actionPrintPreview);
-    loadIcon(S("document-print"), ui->actionPrint);
-    loadIcon(S("document-save-as"), ui->actionSaveAs);
-    loadIcon(S("document-save"), ui->actionSave);
-    loadIcon(S("edit-copy"), ui->actionCopy);
-    loadIcon(S("edit-cut"), ui->actionCut);
-    loadIcon(S("edit-paste"), ui->actionPaste);
-    loadIcon(S("edit-redo"), ui->actionRedo);
-    loadIcon(S("edit-select-all"), ui->actionSelectAll);
-    loadIcon(S("edit-undo"), ui->actionUndo);
-    loadIcon(S("edit-copy"), ui->actionCopy);
-    loadIcon(S("help-about"), ui->actionAbout);
-    loadIcon(S("help-contents"), ui->actionMarkdown_Syntax);
-    loadIcon(S("text-wrap"), ui->actionWord_wrap);
-    loadIcon(S("tools-check-spelling"), ui->actionSpell_checking);
-    loadIcon(S("document-revert"), ui->actionReload);
-    loadIcon(S("text-wrap"), ui->actionWord_wrap);
-    loadIcon(S("media-playback-pause"), ui->actionPause_preview);
+    loadIcon(STR("application-exit"), ui->actionExit);
+    loadIcon(STR("document-new"), ui->actionNew);
+    loadIcon(STR("document-open-recent"), ui->actionOpen_last_document_on_start);
+    loadIcon(STR("document-open"), ui->actionOpen);
+    loadIcon(STR("document-print-preview"), ui->actionPrintPreview);
+    loadIcon(STR("document-print"), ui->actionPrint);
+    loadIcon(STR("document-save-as"), ui->actionSaveAs);
+    loadIcon(STR("document-save"), ui->actionSave);
+    loadIcon(STR("edit-copy"), ui->actionCopy);
+    loadIcon(STR("edit-cut"), ui->actionCut);
+    loadIcon(STR("edit-paste"), ui->actionPaste);
+    loadIcon(STR("edit-redo"), ui->actionRedo);
+    loadIcon(STR("edit-select-all"), ui->actionSelectAll);
+    loadIcon(STR("edit-undo"), ui->actionUndo);
+    loadIcon(STR("edit-copy"), ui->actionCopy);
+    loadIcon(STR("help-about"), ui->actionAbout);
+    loadIcon(STR("help-contents"), ui->actionMarkdown_Syntax);
+    loadIcon(STR("text-wrap"), ui->actionWord_wrap);
+    loadIcon(STR("tools-check-spelling"), ui->actionSpell_checking);
+    loadIcon(STR("document-revert"), ui->actionReload);
+    loadIcon(STR("text-wrap"), ui->actionWord_wrap);
+    loadIcon(STR("media-playback-pause"), ui->actionPause_preview);
 
 #ifndef FLATPAK
-    ui->actionExportHtml->setIcon(QIcon::fromTheme(S("text-html"),
-                                             QIcon(S(":/icons/text-html_16.png"))));
-    ui->actionExportPdf->setIcon(QIcon::fromTheme(S("application-pdf"),
-                                                   QIcon(S(":/icons/application-pdf_16.png"))));
+    ui->actionExportHtml->setIcon(QIcon::fromTheme(STR("text-html"),
+                                             QIcon(STR(":/icons/text-html_16.png"))));
+    ui->actionExportPdf->setIcon(QIcon::fromTheme(STR("application-pdf"),
+                                                   QIcon(STR(":/icons/application-pdf_16.png"))));
 
-    ui->menuExport->setIcon(QIcon::fromTheme(S("document-export"),
-                                             QIcon(S(":/icons/document-export.svg"))));
-    ui->menuRecentlyOpened->setIcon(QIcon::fromTheme(S("document-open-recent"),
-                                                     QIcon(S(":/icons/document-open-recent.svg"))));
+    ui->menuExport->setIcon(QIcon::fromTheme(STR("document-export"),
+                                             QIcon(STR(":/icons/document-export.svg"))));
+    ui->menuRecentlyOpened->setIcon(QIcon::fromTheme(STR("document-open-recent"),
+                                                     QIcon(STR(":/icons/document-open-recent.svg"))));
 #else
-    ui->actionExportHtml->setIcon(QIcon(S(":/icons/text-html_16.png")));
-    ui->actionExportPdf->setIcon(QIcon(S(":/icons/application-pdf_16.png")));
+    ui->actionExportHtml->setIcon(QIcon(STR(":/icons/text-html_16.png")));
+    ui->actionExportPdf->setIcon(QIcon(STR(":/icons/application-pdf_16.png")));
 
-    ui->menuExport->setIcon(QIcon(S(":/icons/document-export.svg")));
-    ui->menuRecentlyOpened->setIcon(QIcon(S(":/icons/document-open-recent.svg")));
+    ui->menuExport->setIcon(QIcon(STR(":/icons/document-export.svg")));
+    ui->menuRecentlyOpened->setIcon(QIcon(STR(":/icons/document-open-recent.svg")));
 #endif
 
 #ifndef Q_OS_WASM
     toolbutton->setIcon(ui->menuRecentlyOpened->icon());
 #endif
 
-    setWindowIcon(QIcon(S(":/Icon.svg")));
+    setWindowIcon(QIcon(STR(":/Icon.svg")));
 }
 
 void MainWindow::loadIcon(const QString &name, QAction* a)
 {
 #ifndef FLATPAK
-    a->setIcon(QIcon::fromTheme(name, QIcon(S(":/icons/%1.svg").arg(name))));
+    a->setIcon(QIcon::fromTheme(name, QIcon(STR(":/icons/%1.svg").arg(name))));
 #else
-    a->setIcon(QIcon(S(":/icons/%1.svg").arg(name)));
+    a->setIcon(QIcon(STR(":/icons/%1.svg").arg(name)));
 #endif
 }
 
@@ -930,18 +930,18 @@ void MainWindow::disablePreview(const bool checked)
     if (!checked) {
         onTextChanged();
 #ifndef FLATPAK
-        ui->actionDisable_preview->setIcon(QIcon::fromTheme(S("media-playback-stop"),
-                                                          QIcon(S(":/icons/media-playback-stop.svg"))));
+        ui->actionDisable_preview->setIcon(QIcon::fromTheme(STR("media-playback-stop"),
+                                                          QIcon(STR(":/icons/media-playback-stop.svg"))));
 #else
-        ui->actionDisable_preview->setIcon(QIcon(S(":/icons/media-playback-stop.svg")));
+        ui->actionDisable_preview->setIcon(QIcon(STR(":/icons/media-playback-stop.svg")));
 #endif
     }
     else
 #ifndef FLATPAK
-        ui->actionDisable_preview->setIcon(QIcon::fromTheme(S("media-playback-start"),
-                                                          QIcon(S(":/icons/media-playback-start.svg"))));
+        ui->actionDisable_preview->setIcon(QIcon::fromTheme(STR("media-playback-start"),
+                                                          QIcon(STR(":/icons/media-playback-start.svg"))));
 #else
-        ui->actionDisable_preview->setIcon(QIcon(S(":/icons/media-playback-start.svg")));
+        ui->actionDisable_preview->setIcon(QIcon(STR(":/icons/media-playback-start.svg")));
 #endif
 }
 
@@ -952,12 +952,12 @@ void MainWindow::pausePreview(const bool checked)
 
     if (!checked) {
         onTextChanged();
-        ui->actionPause_preview->setIcon(QIcon::fromTheme(S("media-playback-pause"),
-                                                          QIcon(S(":/icons/media-playback-pause.svg"))));
+        ui->actionPause_preview->setIcon(QIcon::fromTheme(STR("media-playback-pause"),
+                                                          QIcon(STR(":/icons/media-playback-pause.svg"))));
     }
     else
-        ui->actionPause_preview->setIcon(QIcon::fromTheme(S("media-playback-start"),
-                                                          QIcon(S(":/icons/media-playback-start.svg"))));
+        ui->actionPause_preview->setIcon(QIcon::fromTheme(STR("media-playback-start"),
+                                                          QIcon(STR(":/icons/media-playback-start.svg"))));
 }
 
 void MainWindow::cut()
@@ -1117,9 +1117,9 @@ void MainWindow::printPreview(QPrinter *printer)
 void MainWindow::exportPdf()
 {
     QFileDialog dialog(this, tr("Export PDF"));
-    dialog.setMimeTypeFilters({S("application/pdf")});
+    dialog.setMimeTypeFilters({STR("application/pdf")});
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.setDefaultSuffix(S("pdf"));
+    dialog.setDefaultSuffix(STR("pdf"));
     if (dialog.exec() == QDialog::Rejected)
         return;
 
@@ -1177,12 +1177,12 @@ void MainWindow::openInWebBrowser()
 void MainWindow::exportHtml()
 {
 #if defined(Q_OS_WASM)
-    QFileDialog::saveFileContent(html.toUtf8(), S("Exported HTML.html"));
+    QFileDialog::saveFileContent(html.toUtf8(), STR("Exported HTML.html"));
 #else
     QFileDialog dialog(this, tr("Export HTML"));
-    dialog.setMimeTypeFilters({S("text/html")});
+    dialog.setMimeTypeFilters({STR("text/html")});
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.setDefaultSuffix(S("html"));
+    dialog.setDefaultSuffix(STR("html"));
     if (dialog.exec() != QDialog::Accepted)
         return;
 
@@ -1236,11 +1236,11 @@ void MainWindow::loadFiles(const QStringList &files)
 {
     // Ensure settings are set up
     Q_ASSERT(settings);
-    const bool openLast = settings->value(S("openLast"), true).toBool();
+    const bool openLast = settings->value(STR("openLast"), true).toBool();
     ui->actionOpen_last_document_on_start->setChecked(openLast);
 
     if (files.isEmpty()) {
-        const QString last = settings->value(S("last"),
+        const QString last = settings->value(STR("last"),
                                            QLatin1String()).toString();
         if (openLast && !last.isEmpty())
             openFile(last);
@@ -1356,7 +1356,7 @@ void MainWindow::onFileNew()
     ui->tabWidget_2->setCurrentIndex(editorList.length() -1);
 
     if (!editor->setLanguage(QLocale::system().name()))
-        editor->setLanguage(S("en_US"));
+        editor->setLanguage(STR("en_US"));
 
 #ifndef Q_OS_ANDROID
     statusBar()->show();
@@ -1404,7 +1404,7 @@ void MainWindow::onFileOpen()
     QFileDialog::getOpenFileContent(tr("Markdown (*.md *.markdown *.mkd)"), fileContentReady);
 #else
     QFileDialog dialog(this, tr("Open Markdown File"));
-    dialog.setMimeTypeFilters({S("text/markdown")});
+    dialog.setMimeTypeFilters({STR("text/markdown")});
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
     if (dialog.exec() == QDialog::Rejected) return;
 
@@ -1479,9 +1479,9 @@ auto MainWindow::onFileSaveAs() -> bool
 #else
 
     QFileDialog dialog(this, tr("Save Markdown File"));
-    dialog.setMimeTypeFilters({S("text/markdown")});
+    dialog.setMimeTypeFilters({STR("text/markdown")});
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.setDefaultSuffix(S("md"));
+    dialog.setDefaultSuffix(STR("md"));
     if (dialog.exec() == QDialog::Rejected)
         return false;
 
@@ -1576,7 +1576,7 @@ void MainWindow::updateOpened() {
 
     for (int i = 0; i < recentOpened.count(); ++i) {
         const QString document = recentOpened.at(i);
-        auto *action = new QAction(S("&%1 | %2").arg(QString::number(i + 1),
+        auto *action = new QAction(STR("&%1 | %2").arg(QString::number(i + 1),
                                                                   document), this);
         connect(action, &QAction::triggered, this, &MainWindow::openRecent);
 
@@ -1624,11 +1624,11 @@ void MainWindow::resizeEvent(QResizeEvent *e)
 
 void MainWindow::loadSettings() {
     // Setup settings to load settings
-    settings = new QSettings(S("SME"),
-                             S("MarkdownEdit"), this);
+    settings = new QSettings(STR("SME"),
+                             STR("MarkdownEdit"), this);
 
 #ifndef Q_OS_WASM
-    const QByteArray geo = settings->value(S("geometry"),
+    const QByteArray geo = settings->value(STR("geometry"),
                                            QByteArrayLiteral("")).toByteArray();
     if (geo.isEmpty()) {
         const QRect availableGeometry = QGuiApplication::screenAt(pos())->availableGeometry();
@@ -1640,16 +1640,16 @@ void MainWindow::loadSettings() {
         restoreGeometry(geo);
     }
 
-    restoreState(settings->value(S("state"), QByteArrayLiteral("")).toByteArray());
+    restoreState(settings->value(STR("state"), QByteArrayLiteral("")).toByteArray());
 #endif
 
-    highlighting = settings->value(S("highlighting"), true).toBool();
+    highlighting = settings->value(STR("highlighting"), true).toBool();
     ui->actionHighlighting_activated->setChecked(highlighting);
 
-    setPath = settings->value(S("setPath"), true).toBool();
+    setPath = settings->value(STR("setPath"), true).toBool();
     ui->actionAuto_add_file_path_to_icon_path->setChecked(setPath);
 
-    recentOpened = settings->value(S("recent"), QStringList()).toStringList();
+    recentOpened = settings->value(STR("recent"), QStringList()).toStringList();
     if (!recentOpened.isEmpty()) {
         if (recentOpened.at(0).isEmpty()) {
             recentOpened.removeFirst();
@@ -1657,18 +1657,18 @@ void MainWindow::loadSettings() {
     }
 
 #ifndef Q_OS_ANDROID
-    const bool lineWrap = settings->value(S("lineWrap"), false).toBool();
+    const bool lineWrap = settings->value(STR("lineWrap"), false).toBool();
 #else
     constexpr bool lineWrap = true;
 #endif
     changeWordWrap(lineWrap);
 
-    preview = settings->value(S("preview"), true).toBool();
+    preview = settings->value(STR("preview"), true).toBool();
 
-    setLanguageMap(settings->value(S("languagesMap"),
+    setLanguageMap(settings->value(STR("languagesMap"),
                                    QHash<QString, QVariant>()).toHash());
 
-    spelling = settings->value(S("spelling"), true).toBool();
+    spelling = settings->value(STR("spelling"), true).toBool();
     ui->actionSpell_checking->setChecked(spelling);
     // changeSpelling(spelling); not loaded yet
 
@@ -1676,17 +1676,17 @@ void MainWindow::loadSettings() {
 }
 
 void MainWindow::saveSettings() {
-    settings->setValue(S("geometry"), saveGeometry());
-    settings->setValue(S("state"), saveState());
-    settings->setValue(S("highlighting"), highlighting);
-    settings->setValue(S("recent"), recentOpened);
-    settings->setValue(S("openLast"), ui->actionOpen_last_document_on_start->isChecked());
-    settings->setValue(S("last"), path);
-    settings->setValue(S("setPath"), setPath);
-    settings->setValue(S("spelling"), spelling);
-    settings->setValue(S("lineWrap"), ui->actionWord_wrap->isChecked());
-    settings->setValue(S("languagesMap"), getLanguageMap());
-    settings->setValue(S("preview"), preview);
+    settings->setValue(STR("geometry"), saveGeometry());
+    settings->setValue(STR("state"), saveState());
+    settings->setValue(STR("highlighting"), highlighting);
+    settings->setValue(STR("recent"), recentOpened);
+    settings->setValue(STR("openLast"), ui->actionOpen_last_document_on_start->isChecked());
+    settings->setValue(STR("last"), path);
+    settings->setValue(STR("setPath"), setPath);
+    settings->setValue(STR("spelling"), spelling);
+    settings->setValue(STR("lineWrap"), ui->actionWord_wrap->isChecked());
+    settings->setValue(STR("languagesMap"), getLanguageMap());
+    settings->setValue(STR("preview"), preview);
 }
 
 MainWindow::~MainWindow()

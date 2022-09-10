@@ -24,7 +24,6 @@
 
 // Namespace
 class QVariant;
-class QString;
 
 auto getLanguageMap() -> QHash<QString, QVariant>;
 void setLanguageMap(const QHash<QString, QVariant> &m);
@@ -58,9 +57,9 @@ constexpr QLatin1String make_latin1(const char* str)
 # define QStringViewLiteral(str) QStringView(QT_UNICODE_LITERAL(str))
 #endif
 
-#define L1(str) literals::make_latin1(str)
-#define S(str) QStringLiteral(str)
-#define SVIEW(str) QStringViewLiteral(str)
+# define L1(str) literals::make_latin1(str)
+# define STR(str) QStringLiteral(str)
+# define SVIEW(str) QStringViewLiteral(str)
 
 #if !SPELLCHECK
 #define NO_SPELLCHECK
