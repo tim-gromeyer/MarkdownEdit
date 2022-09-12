@@ -53,13 +53,8 @@ constexpr QLatin1String make_latin1(const char* str)
 }
 } // namespace literals
 
-#ifndef QStringViewLiteral
-# define QStringViewLiteral(str) QStringView(QT_UNICODE_LITERAL(str))
-#endif
-
 # define L1(str) literals::make_latin1(str)
 # define STR(str) QStringLiteral(str)
-# define SVIEW(str) QStringViewLiteral(str)
 
 #if !SPELLCHECK
 #define NO_SPELLCHECK

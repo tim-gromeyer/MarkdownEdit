@@ -119,7 +119,7 @@ void SpellChecker::checkSpelling(QStringView text)
         // Check for link
         if (c == u'h') {
             if (textLength -i >= 11) { // http 4; :// 7; * >1; .de 11
-                if (SUBSTR(text, i, 4) == QStringView(u"http")) {
+                if (SUBSTR(text, i, 4) == QStringView(u"http", 4)) {
                     i = text.indexOf(u')', i);
 
                     if (i == -1)
@@ -303,7 +303,7 @@ auto SpellChecker::getWord(const QTextBlock &block, const int pos) -> QString
         const bool isLetterOrNumber = c.isLetterOrNumber();
 
         if (c == u'h') {
-            if (SUBSTR(text, i, 4) == QStringView(u"http")) {
+            if (SUBSTR(text, i, 4) == QStringView(u"http", 4)) {
                 if (text.indexOf(QChar(QChar::Space), i) > pos)
                     return QLatin1String();
                 else if (text.indexOf(u')', i) > pos)
