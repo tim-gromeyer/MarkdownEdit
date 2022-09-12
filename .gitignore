@@ -1,9 +1,9 @@
-3rdparty/*
-android/*
+3rdparty/
+android/
 *.user
 packaging/*.deb
-packaging/MarkdownEdit/usr/*
-wasm/*
+packaging/MarkdownEdit/usr/
+wasm/
 packaging/flatpak/build/*
 packaging/flatpak/.flatpak-builder/*
 packaging/flatpak/repo/*
