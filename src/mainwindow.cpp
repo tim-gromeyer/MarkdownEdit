@@ -839,7 +839,7 @@ void MainWindow::loadIcons()
     toolbutton->setIcon(ui->menuRecentlyOpened->icon());
 #endif
 
-    setWindowIcon(QIcon(STR(":/Icon.svg")));
+    setWindowIcon(QIcon(STR(":/logo/Icon.svg")));
 }
 
 void MainWindow::loadIcon(const QString &name, QAction* a)

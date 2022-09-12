@@ -174,21 +174,38 @@ if(FLATPAK)
 
     ecm_install_icons(
         ICONS
-            ressources/16-apps-Icon.png
-            ressources/24-apps-Icon.png
-            ressources/32-apps-Icon.png
-            ressources/48-apps-Icon.png
-            ressources/64-apps-Icon.png
-            ressources/128-apps-Icon.png
-            ressources/256-apps-Icon.png
+            ressources/logo/16-apps-MarkdownEdit.png
+            ressources/logo/24-apps-MarkdownEdit.png
+            ressources/logo/32-apps-MarkdownEdit.png
+            ressources/logo/48-apps-MarkdownEdit.png
+            ressources/logo/64-apps-MarkdownEdit.png
+            ressources/logo/128-apps-MarkdownEdit.png
+            ressources/logo/256-apps-MarkdownEdit.png
         DESTINATION ${KDE_INSTALL_ICONDIR}
         THEME hicolor
     )
 elseif(LINUX AND NOT WIN32)
     include(GNUInstallDirs)
+
+    find_package(ECM 5.86.0 QUIET NO_MODULE)
+    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+    if(ECM_FOUND)
+        include(ECMInstallIcons)
+        ecm_install_icons(
+            ICONS
+                ressources/logo/16-apps-MarkdownEdit.png
+                ressources/logo/24-apps-MarkdownEdit.png
+                ressources/logo/32-apps-MarkdownEdit.png
+                ressources/logo/48-apps-MarkdownEdit.png
+                ressources/logo/64-apps-MarkdownEdit.png
+                ressources/logo/128-apps-MarkdownEdit.png
+                ressources/logo/256-apps-MarkdownEdit.png
+            DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons
+            THEME hicolor
+        )
+    endif(ECM_FOUND)
+
     install(TARGETS markdownedit DESTINATION ${CMAKE_INSTALL_BINDIR})
-    if(EXISTS "/usr/share/applications/")
-        install(FILES packaging/MarkdownEdit/usr/share/applications/MarkdownEdit.desktop
-                DESTINATION "/usr/share/applications/")
-    endif()
+    install(FILES packaging/MarkdownEdit.desktop
+            DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications)
 endif()
