@@ -2,7 +2,7 @@
 android/*
 *.user
 packaging/*.deb
-packaging/MarkdownEdit/usr/bin/*
+packaging/MarkdownEdit/usr/*
 wasm/*
 packaging/flatpak/build/*
 packaging/flatpak/.flatpak-builder/*
