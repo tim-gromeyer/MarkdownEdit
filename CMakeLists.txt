@@ -52,26 +52,26 @@ include(3rdparty/CMakeLists.txt)
 include(cmake/TranslationUtils.cmake)
 
 set(PROJECT_SOURCES
-        src/main.cpp
-        src/mainwindow.cpp
-        src/mainwindow.h
-        src/markdowneditor.cpp
-        src/markdowneditor.h
-        src/markdownparser.cpp
-        src/markdownparser.h
-        src/highlighter.cpp
-        src/highlighter.h
-        src/spellchecker.cpp
-        src/spellchecker.h
-        src/previewwidget.cpp
-        src/previewwidget.h
-        src/settings.h
-        src/settings.cpp
-        src/tablewidget.h
-        src/tablewidget.cpp
-        common.h
-        ui/mainwindow.ui
-        ${RC_FILES}
+    common.h
+    src/highlighter.cpp
+    src/highlighter.h
+    src/main.cpp
+    src/mainwindow.cpp
+    src/mainwindow.h
+    src/markdowneditor.cpp
+    src/markdowneditor.h
+    src/markdownparser.cpp
+    src/markdownparser.h
+    src/previewwidget.cpp
+    src/previewwidget.h
+    src/settings.cpp
+    src/settings.h
+    src/spellchecker.cpp
+    src/spellchecker.h
+    src/tablewidget.cpp
+    src/tablewidget.h
+    ui/mainwindow.ui
+    ${RC_FILES}
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -139,8 +139,8 @@ target_link_libraries(markdownedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT
 
 target_compile_definitions(markdownedit PUBLIC
     APP_VERSION="${PROJECT_VERSION}"
-    QT_DISABLE_DEPRECATED_BEFORE=0x051208
     CHECK_MARKDOWN
+    QT_DISABLE_DEPRECATED_BEFORE=0x051208
     QT_NO_CAST_FROM_ASCII
     QT_NO_CAST_FROM_BYTEARRAY
     QT_NO_CAST_TO_ASCII
@@ -150,7 +150,6 @@ target_compile_definitions(markdownedit PUBLIC
     QT_NO_URL_CAST_FROM_STRING
     QT_STRICT_ITERATORS
     QT_USE_QSTRINGBUILDER
-    QT_DEBUG_PLUGINS=1
 )
 
 set_target_properties(markdownedit PROPERTIES

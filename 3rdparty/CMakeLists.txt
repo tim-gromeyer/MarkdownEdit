@@ -3,12 +3,12 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(MD4C_FILES
-    ${CMAKE_CURRENT_LIST_DIR}/md4c/src/entity.h
     ${CMAKE_CURRENT_LIST_DIR}/md4c/src/entity.c
-    ${CMAKE_CURRENT_LIST_DIR}/md4c/src/md4c.h
-    ${CMAKE_CURRENT_LIST_DIR}/md4c/src/md4c.c
-    ${CMAKE_CURRENT_LIST_DIR}/md4c/src/md4c-html.h
+    ${CMAKE_CURRENT_LIST_DIR}/md4c/src/entity.h
     ${CMAKE_CURRENT_LIST_DIR}/md4c/src/md4c-html.c
+    ${CMAKE_CURRENT_LIST_DIR}/md4c/src/md4c-html.h
+    ${CMAKE_CURRENT_LIST_DIR}/md4c/src/md4c.c
+    ${CMAKE_CURRENT_LIST_DIR}/md4c/src/md4c.h
 )
 
 add_library(md4c-html STATIC ${MD4C_FILES})
@@ -16,17 +16,17 @@ target_include_directories(md4c-html PUBLIC ${CMAKE_CURRENT_LIST_DIR}/md4c/src)
 
 
 set(QMARKDOWNTEXTEDIT_FILES
-    ${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit/markdownhighlighter.h
-    ${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit/markdownhighlighter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit/linenumberarea.h
-    ${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit/qmarkdowntextedit.h
+    ${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit/markdownhighlighter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit/markdownhighlighter.h
+    ${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit/media.qrc
     ${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit/qmarkdowntextedit.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit/qownlanguagedata.h
+    ${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit/qmarkdowntextedit.h
     ${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit/qownlanguagedata.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit/qownlanguagedata.h
+    ${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit/qplaintexteditsearchwidget.cpp
     ${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit/qplaintexteditsearchwidget.h
     ${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit/qplaintexteditsearchwidget.ui
-    ${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit/qplaintexteditsearchwidget.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit/media.qrc
 )
 
 add_library(qmarkdowntextedit STATIC ${QMARKDOWNTEXTEDIT_FILES})

@@ -162,6 +162,7 @@ void MainWindow::onFileReload()
     QWidget *widget = qobject_cast<QWidget*>(sende->parent());
 
     const QString file = sende->property("file").toString();
+    QStringList files = property("reloadFiles").toStringList();
 
     if (file.isEmpty())
         return;
@@ -186,6 +187,8 @@ void MainWindow::onFileReload()
             break;
         }
     }
+    files.removeOne(file);
+    setProperty("reloadFiles", files);
 
     if (widget->objectName() == STR("widgetReloadFile")) {
         widget->deleteLater();
@@ -714,7 +717,7 @@ void MainWindow::receivedMessage(const quint32 id, const QByteArray &msg)
     QString f = QString::fromLatin1(msg); // is a bit faster
     f.remove(0, 7); // Removing "file://", which is added programmatically
 
-    qInfo() << "MarkdownEdit: instance" << id << "started and send following message:" << f;
+    qInfo() << "MarkdownEdit: instance" << id << "started and the following message was sent:" << f;
 
     if (f.isEmpty()) // it's the case when you start a new app
         onFileNew();
@@ -760,6 +763,9 @@ auto MainWindow::currentEditor() -> MarkdownEditor*
 
 void MainWindow::onFileChanged(const QString &f)
 {
+    QStringList files = property("reloadFiles").toStringList();
+    if (files.contains(f)) return;
+
     auto *widgetReloadFile = new QWidget(this);
     widgetReloadFile->setStyleSheet(STR("background: orange"));
     widgetReloadFile->setObjectName(STR("widgetReloadFile"));
@@ -790,6 +796,8 @@ void MainWindow::onFileChanged(const QString &f)
     widgetReloadFile->show();
 
     watcher->addPath(f);
+    files.append(f);
+    setProperty("reloadFiles", files);
 }
 
 void MainWindow::loadIcons()
@@ -825,15 +833,13 @@ void MainWindow::loadIcons()
 
     ui->menuExport->setIcon(QIcon::fromTheme(STR("document-export"),
                                              QIcon(STR(":/icons/document-export.svg"))));
-    ui->menuRecentlyOpened->setIcon(QIcon::fromTheme(STR("document-open-recent"),
-                                                     QIcon(STR(":/icons/document-open-recent.svg"))));
 #else
     ui->actionExportHtml->setIcon(QIcon(STR(":/icons/text-html_16.png")));
     ui->actionExportPdf->setIcon(QIcon(STR(":/icons/application-pdf_16.png")));
 
     ui->menuExport->setIcon(QIcon(STR(":/icons/document-export.svg")));
-    ui->menuRecentlyOpened->setIcon(QIcon(STR(":/icons/document-open-recent.svg")));
 #endif
+    ui->menuRecentlyOpened->setIcon(ui->actionOpen_last_document_on_start->icon());
 
 #ifndef Q_OS_WASM
     toolbutton->setIcon(ui->menuRecentlyOpened->icon());
