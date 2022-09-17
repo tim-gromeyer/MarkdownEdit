@@ -24,6 +24,7 @@
 #include "markdownparser.h"
 #include "settings.h"
 #include "spellchecker.h"
+#include "tableofcontents.h"
 #include "tablewidget.h"
 #include "ui_mainwindow.h"
 
@@ -69,7 +70,9 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
     // we keep it here so the startup looks better
     ui->setupUi(this);
 
+#ifndef MOBILE
     QMetaObject::invokeMethod(this, [this, files]{
+#endif
         ui->toolBarTools->setVisible(false);
 
         loadSettings(); // load the settings
@@ -79,7 +82,9 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
         setupToolbar(); // setup toolbars
         setupConnections(); // connect everything before we load the files
         loadFiles(files); // load the files or create an new document
+#ifndef MOBILE
     }, Qt::QueuedConnection);
+#endif
 }
 
 void MainWindow::androidPreview(const bool c)
@@ -397,7 +402,6 @@ void MainWindow::setupToolbar()
     auto *aItalic = new QAction(tr("Italic"));
     auto *aUnderline = new QAction(tr("Underline"));
     auto *aStrikethrough = new QAction(tr("Strikethrough"));
-    auto *aInsertTableOfContents = new QAction(tr("Insert Table of Contents"));
     auto *aInsertLink = new QAction(tr("Insert link"));
     auto *aInsertImage = new QAction(tr("Insert image"));
 
@@ -405,7 +409,6 @@ void MainWindow::setupToolbar()
     aItalic->setIcon(QIcon::fromTheme(STR("format-text-italic"), QIcon(STR(":/icons/format-text-italic.svg"))));
     aUnderline->setIcon(QIcon::fromTheme(STR("format-text-underline"), QIcon(STR(":/icons/format-text-underline.svg"))));
     aStrikethrough->setIcon(QIcon::fromTheme(STR("format-text-strikethrough"), QIcon(STR(":/icons/format-text-strikethrough.svg"))));
-    aInsertTableOfContents->setIcon(QIcon::fromTheme(STR("insert-table-of-contents"), QIcon(STR(":/icons/insert-table-of-contents.svg"))));
     aInsertLink->setIcon(QIcon::fromTheme(STR("insert-link"), QIcon(STR(":/icons/insert-link.svg"))));
     aInsertImage->setIcon(QIcon::fromTheme(STR("insert-image"), QIcon(STR(":/icons/insert-image.svg"))));
 
@@ -413,7 +416,6 @@ void MainWindow::setupToolbar()
     connect(aItalic, &QAction::triggered, this, &MainWindow::italic);
     connect(aUnderline, &QAction::triggered, this, &MainWindow::underline);
     connect(aStrikethrough, &QAction::triggered, this, &MainWindow::strikethrough);
-    connect(aInsertTableOfContents, &QAction::triggered, this, &MainWindow::insertTableOfContents);
     connect(aInsertImage, &QAction::triggered, this, &MainWindow::insertImage);
     connect(aInsertLink, &QAction::triggered, this, &MainWindow::insertLink);
     */
@@ -421,6 +423,10 @@ void MainWindow::setupToolbar()
     auto *aInsertTable = new QAction(tr("Insert table"));
     aInsertTable->setIcon(QIcon::fromTheme(STR("insert-table"), QIcon(STR(":/icons/insert-table.svg"))));
     connect(aInsertTable, &QAction::triggered, this, &MainWindow::insertTable);
+
+    auto *aInsertTableOfContents = new QAction(tr("Insert Table of Contents"));
+    aInsertTableOfContents->setIcon(QIcon::fromTheme(STR("insert-table-of-contents"), QIcon(STR(":/icons/insert-table-of-contents.svg"))));
+    connect(aInsertTableOfContents, &QAction::triggered, this, &MainWindow::insertTableOfContents);
 
     /*
     ui->toolBarTools->addAction(aBold);
@@ -432,8 +438,8 @@ void MainWindow::setupToolbar()
 
     ui->toolBarTools->addAction(aInsertTable);
 
-    /*
     ui->toolBarTools->addAction(aInsertTableOfContents);
+    /*
     ui->toolBarTools->addSeparator();
     ui->toolBarTools->addAction(aInsertImage);
     ui->toolBarTools->addAction(aInsertLink);
@@ -448,20 +454,64 @@ void MainWindow::insertTable()
     TableDialog dialog(this);
 
     if (dialog.exec() == QDialog::Rejected) return;
+    insertText(dialog.markdownTable(), true);
+}
+
+void MainWindow::insertTableOfContents()
+{
+    if (!currentEditor()) return;
+
+    TableOfContents dialog(currentEditor()->toPlainText(), this);
+
+    if (dialog.exec() == QDialog::Rejected) return;
+    insertText(dialog.markdownTOC(), true);
+}
+
+void MainWindow::insertText(const QString &text, const bool newLine)
+{
+    if (text.isEmpty() || !currentEditor()) return;
 
     QTextCursor c = currentEditor()->textCursor();
     c.beginEditBlock();
     c.movePosition(QTextCursor::EndOfLine);
-    c.insertText(STR("\n\n"));
-    c.insertText(dialog.markdownTable() + u'\n');
+
+    if (newLine)
+        c.insertText(STR("\n\n"));
+
+    c.insertText(text + u'\n');
+
+    if (newLine)
+        c.insertText(STR("\n"));
+
     c.endEditBlock();
 }
 
-/*
-void MainWindow::insertTableOfContents()
+void MainWindow::inserText(const QString &before, const QString &after)
 {
+    if (!currentEditor()) return;
+
+    QTextCursor c = currentEditor()->textCursor();
+    c.beginEditBlock();
+
+    if (!c.hasSelection()) {
+        c.select(QTextCursor::WordUnderCursor);
+    }
+
+    int start = c.selectionStart();
+    int end = c.selectionEnd();
+
+    c.setPosition(start);
+    c.insertText(before);
+    c.setPosition(end + before.size());
+    c.insertText(after);
+
+    c.endEditBlock();
+    c.select(QTextCursor::WordUnderCursor);
+
+    currentEditor()->setTextCursor(c);
 }
 
+/*
 void MainWindow::insertLink()
 {
 }
@@ -745,7 +795,7 @@ void MainWindow::onModificationChanged(const bool m)
     QString old = ui->tabWidget_2->tabBar()->tabText(curr);
 
     if (m && !old.endsWith(u'*'))
-        old + u'*';
+        old.append(u'*');
     else if (!m && old.endsWith(u'*'))
         old.remove(old.length() -1, 1);
 
@@ -1499,7 +1549,7 @@ auto MainWindow::onFileSaveAs() -> bool
         path = file;
 
     if (!(path.endsWith(L1(".md")) || path.endsWith(L1(".markdown")) || path.endsWith(L1(".mkd"))))
-        path + L1(".md");
+        path.append(L1(".md"));
 
     watcher->addPath(file);
 

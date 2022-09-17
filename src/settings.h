@@ -59,3 +59,7 @@ constexpr QLatin1String make_latin1(const char* str)
 #if !SPELLCHECK
 #define NO_SPELLCHECK
 #endif
+
+#ifdef Q_OS_ANDROID
+#define MOBILE
+#endif

@@ -95,8 +95,9 @@ auto main(int argc, char *argv[]) -> int
 
 #ifdef Q_OS_ANDROID
     w.showFullScreen();
+
     // Prevent blank window
-    a.processEvents();
+    QApplication::processEvents();
 #else
     w.show();
 #endif

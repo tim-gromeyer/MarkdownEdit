@@ -302,32 +302,12 @@ Willst du trotzdem verlassen?</translation>
         <translation>Vorlagen</translation>
     </message>
     <message>
-        <source>Bold</source>
-        <translation>Fett</translation>
-    </message>
-    <message>
-        <source>Italic</source>
-        <translation>Kursiv</translation>
-    </message>
-    <message>
-        <source>Underline</source>
-        <translation>Unterstrichen</translation>
-    </message>
-    <message>
         <source>Insert table</source>
         <translation>Tabelle einfügen</translation>
     </message>
     <message>
         <source>Insert Table of Contents</source>
         <translation>Inhaltsverzeichnis einfügen</translation>
-    </message>
-    <message>
-        <source>Insert link</source>
-        <translation>Link einfügen</translation>
-    </message>
-    <message>
-        <source>Insert image</source>
-        <translation>Bild einfügen</translation>
     </message>
     <message>
         <source>Export PDF</source>
@@ -340,10 +320,6 @@ Willst du trotzdem verlassen?</translation>
     <message>
         <source>Save Markdown File</source>
         <translation>Markdown-Datei speichern</translation>
-    </message>
-    <message>
-        <source>Strikethrough</source>
-        <translation>Durchgestrichen</translation>
     </message>
     <message>
         <source>If you disable highlighting, the spell checker will not work properly.</source>
@@ -398,6 +374,17 @@ Willst du trotzdem verlassen?</translation>
     <message>
         <source>Remove column</source>
         <translation>Spalte entfernen</translation>
+    </message>
+</context>
+<context>
+    <name>TableOfContents</name>
+    <message>
+        <source>Insert table of contents</source>
+        <translation>Inhaltsverzeichnis einfügen</translation>
+    </message>
+    <message>
+        <source>Number list</source>
+        <translation>Nummernliste</translation>
     </message>
 </context>
 <context>

@@ -21,7 +21,7 @@ TableDialog::TableDialog(QWidget *parent)
     l->addWidget(table, 1);
     setLayout(l);
 
-    auto *box = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Abort,
+    auto *box = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
                                      Qt::Horizontal, this);
     connect(box, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(box, &QDialogButtonBox::rejected, this, &QDialog::reject);

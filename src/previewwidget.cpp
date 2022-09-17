@@ -75,7 +75,7 @@ void PreviewWidget::scrollToHeader(QString name)
     if (name.startsWith(u'#'))
         name.remove(0, 1);
 
-    name.replace(u'_', u' ');
+    // name.replace(u'_', u' ');
     name.replace(u'-', u' ');
 
     QTextCursor c = textCursor();

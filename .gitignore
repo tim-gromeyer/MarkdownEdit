@@ -1,6 +1,6 @@
 3rdparty/
 android/
-*.user
+*.user*
 packaging/*.deb
 packaging/MarkdownEdit/usr/
 wasm/

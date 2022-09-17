@@ -70,6 +70,8 @@ set(PROJECT_SOURCES
     src/spellchecker.h
     src/tablewidget.cpp
     src/tablewidget.h
+    src/tableofcontents.h
+    src/tableofcontents.cpp
     ui/mainwindow.ui
     ${RC_FILES}
 )
