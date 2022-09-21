@@ -57,7 +57,7 @@ auto TableOfContents::markdownTOC() -> QString
     for (int i = 0; i < selected.size(); ++i) {
         QString heading = selected[i];
         if (heading.startsWith(u'[')) {
-            static QRegularExpression text(STR("\\[(.*)\\]"));
+            static QRegularExpression text(STR(R"(\[(.*)\])"));
             QRegularExpressionMatch match = text.match(heading);
 
             const QStringList matches = match.capturedTexts();

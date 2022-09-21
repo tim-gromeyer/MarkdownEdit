@@ -57,6 +57,7 @@
 #include <QtPrintSupport/QPrintPreviewDialog>
 #endif
 
+
 using namespace std::chrono_literals;
 
 QT_REQUIRE_CONFIG(mainwindow);
@@ -73,8 +74,6 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
 #ifndef MOBILE
     QMetaObject::invokeMethod(this, [this, files]{
 #endif
-        ui->toolBarTools->setVisible(false);
-
         loadSettings(); // load the settings
 
         setupThings(); // Setup things
@@ -143,7 +142,8 @@ void MainWindow::onHelpSyntax()
             language = newLang;
         }
         else {
-            language = *std::find_if(languages.begin(), languages.end(), [language](const QString &lang){
+            language = *std::find_if(languages.begin(), languages.end(),
+                                     [language](const QString &lang){
                 return lang.contains(language);
             });
         }
@@ -397,59 +397,61 @@ void MainWindow::setupToolbar()
 
     qApp->setStyleSheet(STR("QSplitter { border: none; } QToolBar { border: none; }"));
 #endif
-    /*
     auto *aBold = new QAction(tr("Bold"));
     auto *aItalic = new QAction(tr("Italic"));
     auto *aUnderline = new QAction(tr("Underline"));
     auto *aStrikethrough = new QAction(tr("Strikethrough"));
-    auto *aInsertLink = new QAction(tr("Insert link"));
-    auto *aInsertImage = new QAction(tr("Insert image"));
+
+    auto *aInsertTable = new QAction(tr("Insert table"));
+    auto *aInsertTableOfContents = new QAction(tr("Insert Table of Contents"));
+
+    // auto *aInsertLink = new QAction(tr("Insert link"));
+    // auto *aInsertImage = new QAction(tr("Insert image"));
 
     aBold->setIcon(QIcon::fromTheme(STR("format-text-bold"), QIcon(STR(":/icons/format-text-bold.svg"))));
     aItalic->setIcon(QIcon::fromTheme(STR("format-text-italic"), QIcon(STR(":/icons/format-text-italic.svg"))));
     aUnderline->setIcon(QIcon::fromTheme(STR("format-text-underline"), QIcon(STR(":/icons/format-text-underline.svg"))));
     aStrikethrough->setIcon(QIcon::fromTheme(STR("format-text-strikethrough"), QIcon(STR(":/icons/format-text-strikethrough.svg"))));
-    aInsertLink->setIcon(QIcon::fromTheme(STR("insert-link"), QIcon(STR(":/icons/insert-link.svg"))));
-    aInsertImage->setIcon(QIcon::fromTheme(STR("insert-image"), QIcon(STR(":/icons/insert-image.svg"))));
+
+    aInsertTable->setIcon(QIcon::fromTheme(STR("insert-table"), QIcon(STR(":/icons/insert-table.svg"))));
+    aInsertTableOfContents->setIcon(QIcon::fromTheme(STR("insert-table-of-contents"), QIcon(STR(":/icons/insert-table-of-contents.svg"))));
+
+    // aInsertLink->setIcon(QIcon::fromTheme(STR("insert-link"), QIcon(STR(":/icons/insert-link.svg"))));
+    // aInsertImage->setIcon(QIcon::fromTheme(STR("insert-image"), QIcon(STR(":/icons/insert-image.svg"))));
 
     connect(aBold, &QAction::triggered, this, &MainWindow::bold);
     connect(aItalic, &QAction::triggered, this, &MainWindow::italic);
     connect(aUnderline, &QAction::triggered, this, &MainWindow::underline);
     connect(aStrikethrough, &QAction::triggered, this, &MainWindow::strikethrough);
-    connect(aInsertImage, &QAction::triggered, this, &MainWindow::insertImage);
-    connect(aInsertLink, &QAction::triggered, this, &MainWindow::insertLink);
-    */
 
-    auto *aInsertTable = new QAction(tr("Insert table"));
-    aInsertTable->setIcon(QIcon::fromTheme(STR("insert-table"), QIcon(STR(":/icons/insert-table.svg"))));
     connect(aInsertTable, &QAction::triggered, this, &MainWindow::insertTable);
-
-    auto *aInsertTableOfContents = new QAction(tr("Insert Table of Contents"));
-    aInsertTableOfContents->setIcon(QIcon::fromTheme(STR("insert-table-of-contents"), QIcon(STR(":/icons/insert-table-of-contents.svg"))));
     connect(aInsertTableOfContents, &QAction::triggered, this, &MainWindow::insertTableOfContents);
 
-    /*
+    // connect(aInsertImage, &QAction::triggered, this, &MainWindow::insertImage);
+    // connect(aInsertLink, &QAction::triggered, this, &MainWindow::insertLink);
+
+
+
     ui->toolBarTools->addAction(aBold);
     ui->toolBarTools->addAction(aItalic);
     ui->toolBarTools->addAction(aUnderline);
     ui->toolBarTools->addAction(aStrikethrough);
-    ui->toolBarTools->addSeparator();
-    */
 
-    ui->toolBarTools->addAction(aInsertTable);
-
-    ui->toolBarTools->addAction(aInsertTableOfContents);
     /*
     ui->toolBarTools->addSeparator();
     ui->toolBarTools->addAction(aInsertImage);
     ui->toolBarTools->addAction(aInsertLink);
     */
+
+    ui->toolBarTools->addSeparator();
+    ui->toolBarTools->addAction(aInsertTable);
+    ui->toolBarTools->addAction(aInsertTableOfContents);
+
 }
 
 void MainWindow::insertTable()
 {
-    if (!currentEditor())
-        return;
+    if (!currentEditor()) return;
 
     TableDialog dialog(this);
 
@@ -475,13 +477,10 @@ void MainWindow::insertText(const QString &text, const bool newLine)
     c.beginEditBlock();
     c.movePosition(QTextCursor::EndOfLine);
 
-    if (newLine)
-        c.insertText(STR("\n\n"));
+    if (newLine && !c.block().text().isEmpty())
+        c.insertText(QChar(u'\n'));
 
     c.insertText(text + u'\n');
-
-    if (newLine)
-        c.insertText(STR("\n"));
 
     c.endEditBlock();
 }
@@ -497,8 +496,8 @@ void MainWindow::inserText(const QString &before, const QString &after)
         c.select(QTextCursor::WordUnderCursor);
     }
 
-    int start = c.selectionStart();
-    int end = c.selectionEnd();
+    const int start = c.selectionStart();
+    const int end = c.selectionEnd();
 
     c.setPosition(start);
     c.insertText(before);
@@ -506,7 +505,10 @@ void MainWindow::inserText(const QString &before, const QString &after)
     c.insertText(after);
 
     c.endEditBlock();
-    c.select(QTextCursor::WordUnderCursor);
+
+    // Reselect the text
+    c.setPosition(start + before.size());
+    c.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, end - start);
 
     currentEditor()->setTextCursor(c);
 }
@@ -519,103 +521,27 @@ void MainWindow::insertLink()
 void MainWindow::insertImage()
 {
 }
+*/
 
 void MainWindow::bold()
 {
-    if (!currentEditor()) return;
-
-    QTextCursor c = currentEditor()->textCursor();
-    c.beginEditBlock();
-
-    if (!c.hasSelection()) {
-        c.select(QTextCursor::WordUnderCursor);
-    }
-
-    int start = c.selectionStart();
-    int end = c.selectionEnd();
-
-    c.setPosition(start);
-    c.insertText(STR("**"));
-    c.setPosition(end +2);
-    c.insertText(STR("**"));
-
-    c.endEditBlock();
-
-    currentEditor()->setTextCursor(c);
+    inserText(STR("**"), STR("**"));
 }
 
 void MainWindow::italic()
 {
-    if (!currentEditor()) return;
-
-    QTextCursor c = currentEditor()->textCursor();
-    c.beginEditBlock();
-
-    if (!c.hasSelection()) {
-        c.select(QTextCursor::WordUnderCursor);
-    }
-
-    int start = c.selectionStart();
-    int end = c.selectionEnd();
-
-    c.setPosition(start);
-    c.insertText(STR("*"));
-    c.setPosition(end +1);
-    c.insertText(STR("*"));
-
-    c.endEditBlock();
-
-    currentEditor()->setTextCursor(c);
+    inserText(QChar(u'*'), QChar(u'*'));
 }
 
 void MainWindow::underline()
 {
-    if (!currentEditor()) return;
-
-    QTextCursor c = currentEditor()->textCursor();
-    c.beginEditBlock();
-
-    if (!c.hasSelection()) {
-        c.select(QTextCursor::WordUnderCursor);
-    }
-
-    int start = c.selectionStart();
-    int end = c.selectionEnd();
-
-    c.setPosition(start);
-    c.insertText(STR("<u>"));
-    c.setPosition(end +3);
-    c.insertText(STR("</u>"));
-
-    c.endEditBlock();
-
-    currentEditor()->setTextCursor(c);
+    inserText(STR("<u>"), STR("</u>"));
 }
 
 void MainWindow::strikethrough()
 {
-    if (!currentEditor()) return;
-
-    QTextCursor c = currentEditor()->textCursor();
-    c.beginEditBlock();
-
-    if (!c.hasSelection()) {
-        c.select(QTextCursor::WordUnderCursor);
-    }
-
-    int start = c.selectionStart();
-    int end = c.selectionEnd();
-
-    c.setPosition(start);
-    c.insertText(STR("~"));
-    c.setPosition(end +1);
-    c.insertText(STR("~"));
-
-    c.endEditBlock();
-
-    currentEditor()->setTextCursor(c);
+    inserText(QChar(u'~'), QChar(u'~'));
 }
-*/
 
 void MainWindow::closeCurrEditor()
 {

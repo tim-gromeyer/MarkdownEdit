@@ -39,6 +39,8 @@
 
 auto main(int argc, char *argv[]) -> int
 {
+    Q_INIT_RESOURCE(media);
+
 #ifndef NOT_SUPPORTET
     SingleApplication a(argc, argv, true, SingleApplication::Mode::SecondaryNotification);
 #else

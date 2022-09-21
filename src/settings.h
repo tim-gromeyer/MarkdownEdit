@@ -53,6 +53,7 @@ constexpr QLatin1String make_latin1(const char* str)
 }
 } // namespace literals
 
+// QLatin1String literal
 # define L1(str) literals::make_latin1(str)
 # define STR(str) QStringLiteral(str)
 

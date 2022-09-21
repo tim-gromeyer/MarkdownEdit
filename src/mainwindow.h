@@ -123,12 +123,13 @@ private Q_SLOTS:
     /*
     void insertLink();
     void insertImage();
+    */
 
     void bold();
     void italic();
     void underline();
     void strikethrough();
-    */
+
     void insertText(const QString &, const bool = false);
     void inserText(const QString &before, const QString &after);
 

@@ -18,6 +18,10 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools Pri
 if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" AND NOT CMAKE_CROSSCOMPILING)
     set(LINUX TRUE)
 endif()
+if(NOT ANDROID)
+    set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} "-O3")
+    set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-O3")
+endif()
 
 if(CMAKE_CROSSCOMPILING)
     message(STATUS "Cross compilation. The spell checker is not available!")
