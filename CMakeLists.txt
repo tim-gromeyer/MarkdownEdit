@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.20)
 
-project(MarkdownEdit VERSION 1.4.4 LANGUAGES CXX C)
+project(MarkdownEdit VERSION 1.4.5 LANGUAGES CXX C HOMEPAGE_URL "https://software-made-easy.github.io/MarkdownEdit/")
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -18,7 +18,7 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools Pri
 if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" AND NOT CMAKE_CROSSCOMPILING)
     set(LINUX TRUE)
 endif()
-if(NOT ANDROID)
+if(NOT ANDROID AND CMAKE_BUILD_TYPE STREQUAL "Release")
     set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} "-O3")
     set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-O3")
 endif()
@@ -173,7 +173,6 @@ endif()
 if(FLATPAK)
     install(TARGETS markdownedit ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-    # configure_file(packaging/MarkdownEdit/usr/share/applications/MarkdownEdit.desktop org.flatpak.markdownedit.desktop COPYONLY)
     install(PROGRAMS packaging/flatpak/MarkdownEdit.desktop DESTINATION ${KDE_INSTALL_APPDIR})
     install(FILES packaging/flatpak/appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 
@@ -210,7 +209,9 @@ elseif(LINUX AND NOT WIN32)
         )
     endif(ECM_FOUND)
 
-    install(TARGETS markdownedit DESTINATION ${CMAKE_INSTALL_BINDIR})
+    install(TARGETS markdownedit RUNTIME)
     install(FILES packaging/MarkdownEdit.desktop
             DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications)
+
+    include(cmake/Packaging.cmake)
 endif()

@@ -1,0 +1,2027 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="315.031mm" height="248.003mm"
+ viewBox="0 0 893 703"
+ xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  version="1.2" baseProfile="tiny">
+<title>MarkdownEdit</title>
+<desc>MarkdownEdit example</desc>
+<defs>
+</defs>
+<g fill="none" stroke="black" stroke-width="1" fill-rule="evenodd" stroke-linecap="square" stroke-linejoin="bevel" >
+
+<g fill="#383838" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="0" y="0" width="893" height="63"/>
+</g>
+
+<g fill="#383838" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="0" y="63" width="1" height="564"/>
+</g>
+
+<g fill="#383838" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="443" y="63" width="8" height="564"/>
+</g>
+
+<g fill="#383838" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="892" y="63" width="1" height="564"/>
+</g>
+
+<g fill="#383838" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="0" y="627" width="1" height="13"/>
+</g>
+
+<g fill="#383838" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="430" y="627" width="21" height="13"/>
+</g>
+
+<g fill="#383838" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="879" y="627" width="14" height="13"/>
+</g>
+
+<g fill="#383838" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="0" y="640" width="893" height="63"/>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#383838" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,450,62)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="429" y="565" width="13" height="13"/>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,450,62)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="1" y="0" width="441" height="1" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAo0lEQVR4nO3QMRHAMBDAsKZQsjyW8AeUwtBQC4HPa2bu82d/HnDOua+O0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ABtzczde+sO5gM1DwcZ96LqIAAAAABJRU5ErkJggg==" />
+<image x="1" y="578" width="441" height="1" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAo0lEQVR4nO3QMRHAMBDAsKZQsjyW8AeUwtBQC4HPa2bu82d/HnDOua+O0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ABtzczde+sO5gM1DwcZ96LqIAAAAABJRU5ErkJggg==" />
+<image x="0" y="1" width="1" height="577" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAo0lEQVR4nO3QMRHAMBDAsKZQsjyW8AeUwtBQC4HPa2bu82d/HnDOua+O0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ABtzczde+sO5gM1DwcZ96LqIAAAAABJRU5ErkJggg==" />
+<image x="442" y="1" width="1" height="577" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAo0lEQVR4nO3QMRHAMBDAsKZQsjyW8AeUwtBQC4HPa2bu82d/HnDOua+O0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ABtzczde+sO5gM1DwcZ96LqIAAAAABJRU5ErkJggg==" />
+<image x="0" y="0" width="1" height="1" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAo0lEQVR4nO3QMRHAMBDAsKZQsjyW8AeUwtBQC4HPa2bu82d/HnDOua+O0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ABtzczde+sO5gM1DwcZ96LqIAAAAABJRU5ErkJggg==" />
+<image x="442" y="0" width="1" height="1" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAo0lEQVR4nO3QMRHAMBDAsKZQsjyW8AeUwtBQC4HPa2bu82d/HnDOua+O0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ABtzczde+sO5gM1DwcZ96LqIAAAAABJRU5ErkJggg==" />
+<image x="0" y="578" width="1" height="1" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAo0lEQVR4nO3QMRHAMBDAsKZQsjyW8AeUwtBQC4HPa2bu82d/HnDOua+O0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ABtzczde+sO5gM1DwcZ96LqIAAAAABJRU5ErkJggg==" />
+<image x="442" y="578" width="1" height="1" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAo0lEQVR4nO3QMRHAMBDAsKZQsjyW8AeUwtBQC4HPa2bu82d/HnDOua+O0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ABtzczde+sO5gM1DwcZ96LqIAAAAABJRU5ErkJggg==" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#404040" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="0" y="0" width="428" height="564"/>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="4" y="4" width="16" height="16" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABOUlEQVQ4jZWTTU7CUBhFz/daHMEG/EnUCW7BARPDAgybhJDuwcREZ2zBuAAZ0pLS966D/kBpi/EmL02bd0/P15caZR6AO8Cq+/MrgAc+gYKevOiPpGmqdbJ+B6JBwG63036/V57nOhwOKopCIQQVRaHNZqM8z7Var1oQd6oqQFKLLAnnHGmaEscxi9fFbLlavtXd+Gx3nx0AWZaRJAk/2y1P0+kMeAY+WgBJzTrPfD7He0+WZUwmE4Cr0xFagBBCByCJKIoYj8et5x2DIGEVxLkWv4nZ8XRbgCBhIRDKXdiFb9IPCKE8DjOoxnBmQyYaHKEuI4FzSMLMmjVo4L0/paG67FxZppx/NBr1G3gfGhM5hwNkhqsMqCB9BuoYVCBnhmr1CwAAbm+u+UcEx9/1EbiHzgsulb+A71/mmM829lDrRQAAAABJRU5ErkJggg==" />
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="20" y="20" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ > </text>
+</g>
+
+<g fill="none" stroke="#0000ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="23" y="4" width="16" height="16" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABOUlEQVQ4jZWTTU7CUBhFz/daHMEG/EnUCW7BARPDAgybhJDuwcREZ2zBuAAZ0pLS966D/kBpi/EmL02bd0/P15caZR6AO8Cq+/MrgAc+gYKevOiPpGmqdbJ+B6JBwG63036/V57nOhwOKopCIQQVRaHNZqM8z7Var1oQd6oqQFKLLAnnHGmaEscxi9fFbLlavtXd+Gx3nx0AWZaRJAk/2y1P0+kMeAY+WgBJzTrPfD7He0+WZUwmE4Cr0xFagBBCByCJKIoYj8et5x2DIGEVxLkWv4nZ8XRbgCBhIRDKXdiFb9IPCKE8DjOoxnBmQyYaHKEuI4FzSMLMmjVo4L0/paG67FxZppx/NBr1G3gfGhM5hwNkhqsMqCB9BuoYVCBnhmr1CwAAbm+u+UcEx9/1EbiHzgsulb+A71/mmM829lDrRQAAAABJRU5ErkJggg==" />
+</g>
+
+<g fill="none" stroke="#0000ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="39" y="20" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ > </text>
+</g>
+
+<g fill="none" stroke="#0000ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="42" y="4" width="16" height="16" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABOUlEQVQ4jZWTTU7CUBhFz/daHMEG/EnUCW7BARPDAgybhJDuwcREZ2zBuAAZ0pLS966D/kBpi/EmL02bd0/P15caZR6AO8Cq+/MrgAc+gYKevOiPpGmqdbJ+B6JBwG63036/V57nOhwOKopCIQQVRaHNZqM8z7Var1oQd6oqQFKLLAnnHGmaEscxi9fFbLlavtXd+Gx3nx0AWZaRJAk/2y1P0+kMeAY+WgBJzTrPfD7He0+WZUwmE4Cr0xFagBBCByCJKIoYj8et5x2DIGEVxLkWv4nZ8XRbgCBhIRDKXdiFb9IPCKE8DjOoxnBmQyYaHKEuI4FzSMLMmjVo4L0/paG67FxZppx/NBr1G3gfGhM5hwNkhqsMqCB9BuoYVCBnhmr1CwAAbm+u+UcEx9/1EbiHzgsulb+A71/mmM829lDrRQAAAABJRU5ErkJggg==" />
+</g>
+
+<g fill="none" stroke="#0000ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="58" y="20" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ > </text>
+</g>
+
+<g fill="none" stroke="#0000ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="61" y="4" width="16" height="16" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABOUlEQVQ4jZWTTU7CUBhFz/daHMEG/EnUCW7BARPDAgybhJDuwcREZ2zBuAAZ0pLS966D/kBpi/EmL02bd0/P15caZR6AO8Cq+/MrgAc+gYKevOiPpGmqdbJ+B6JBwG63036/V57nOhwOKopCIQQVRaHNZqM8z7Var1oQd6oqQFKLLAnnHGmaEscxi9fFbLlavtXd+Gx3nx0AWZaRJAk/2y1P0+kMeAY+WgBJzTrPfD7He0+WZUwmE4Cr0xFagBBCByCJKIoYj8et5x2DIGEVxLkWv4nZ8XRbgCBhIRDKXdiFb9IPCKE8DjOoxnBmQyYaHKEuI4FzSMLMmjVo4L0/paG67FxZppx/NBr1G3gfGhM5hwNkhqsMqCB9BuoYVCBnhmr1CwAAbm+u+UcEx9/1EbiHzgsulb+A71/mmM829lDrRQAAAABJRU5ErkJggg==" />
+</g>
+
+<g fill="none" stroke="#0000ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="77" y="20" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ > </text>
+</g>
+
+<g fill="none" stroke="#0000ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="80" y="4" width="16" height="16" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABOUlEQVQ4jZWTTU7CUBhFz/daHMEG/EnUCW7BARPDAgybhJDuwcREZ2zBuAAZ0pLS966D/kBpi/EmL02bd0/P15caZR6AO8Cq+/MrgAc+gYKevOiPpGmqdbJ+B6JBwG63036/V57nOhwOKopCIQQVRaHNZqM8z7Var1oQd6oqQFKLLAnnHGmaEscxi9fFbLlavtXd+Gx3nx0AWZaRJAk/2y1P0+kMeAY+WgBJzTrPfD7He0+WZUwmE4Cr0xFagBBCByCJKIoYj8et5x2DIGEVxLkWv4nZ8XRbgCBhIRDKXdiFb9IPCKE8DjOoxnBmQyYaHKEuI4FzSMLMmjVo4L0/paG67FxZppx/NBr1G3gfGhM5hwNkhqsMqCB9BuoYVCBnhmr1CwAAbm+u+UcEx9/1EbiHzgsulb+A71/mmM829lDrRQAAAABJRU5ErkJggg==" />
+</g>
+
+<g fill="none" stroke="#0000ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#0000ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#0000ff" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="67" font-family="Ubuntu" font-size="20" font-weight="700" font-style="normal" 
+ >M</text>
+</g>
+
+<g fill="none" stroke="#0000ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#0000ff" fill-opacity="1" stroke="none" xml:space="preserve" x="28.2188" y="67" font-family="Ubuntu" font-size="20" font-weight="700" font-style="normal" 
+ >arkdownEdit</text>
+</g>
+
+<g fill="none" stroke="#0000ff" stroke-opacity="1" stroke-width="3.23438" stroke-linecap="butt" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="4,72.5 28,72.5 " />
+<polyline fill="none" vector-effect="none" points="28,72.5 190,72.5 " />
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="98" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >MarkdownEdit is, as the name suggests, a simple and lightweight program for creating and editing Markdown files.</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="136" font-family="Ubuntu" font-size="15" font-weight="700" font-style="normal" 
+ >T</text>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="16.2656" y="136" font-family="Ubuntu" font-size="15" font-weight="700" font-style="normal" 
+ >able of Contents</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#0000ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#0000ff" fill-opacity="1" stroke="none" xml:space="preserve" x="30" y="165" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >1.</text>
+</g>
+
+<g fill="none" stroke="#0000ff" stroke-opacity="1" stroke-width="1.03125" stroke-linecap="butt" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="30,167.5 40,167.5 " />
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#0000ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#0000ff" fill-opacity="1" stroke="none" xml:space="preserve" x="44" y="165" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >Features</text>
+</g>
+
+<g fill="none" stroke="#0000ff" stroke-opacity="1" stroke-width="1.03125" stroke-linecap="butt" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="44,167.5 95,167.5 " />
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#0000ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#0000ff" fill-opacity="1" stroke="none" xml:space="preserve" x="30" y="181" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >2.</text>
+</g>
+
+<g fill="none" stroke="#0000ff" stroke-opacity="1" stroke-width="1.03125" stroke-linecap="butt" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="30,183.5 40,183.5 " />
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#0000ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#0000ff" fill-opacity="1" stroke="none" xml:space="preserve" x="44" y="181" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >Preview</text>
+</g>
+
+<g fill="none" stroke="#0000ff" stroke-opacity="1" stroke-width="1.03125" stroke-linecap="butt" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="44,183.5 91,183.5 " />
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#0000ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#0000ff" fill-opacity="1" stroke="none" xml:space="preserve" x="30" y="197" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >3.</text>
+</g>
+
+<g fill="none" stroke="#0000ff" stroke-opacity="1" stroke-width="1.03125" stroke-linecap="butt" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="30,199.5 40,199.5 " />
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#0000ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#0000ff" fill-opacity="1" stroke="none" xml:space="preserve" x="44" y="197" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >Dependencies</text>
+</g>
+
+<g fill="none" stroke="#0000ff" stroke-opacity="1" stroke-width="1.03125" stroke-linecap="butt" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="44,199.5 127,199.5 " />
+</g>
+
+<g fill="none" stroke="#2f2f2f" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#2f2f2f" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="3.5" y="219.5" width="1" height="1"/>
+</g>
+
+<g fill="none" stroke="#2f2f2f" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="263" font-family="Ubuntu" font-size="15" font-weight="700" font-style="normal" 
+ >F</text>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="15.4688" y="263" font-family="Ubuntu" font-size="15" font-weight="700" font-style="normal" 
+ >eatures:</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#d3d3d3" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<circle cx="38.5" cy="287" r="2.5"/>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="44" y="292" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >Spell checker</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#d3d3d3" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<circle cx="38.5" cy="303" r="2.5"/>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="44" y="308" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >Save and load Markdown files</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#d3d3d3" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<circle cx="38.5" cy="319" r="2.5"/>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="44" y="324" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >Undo/Redo</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#d3d3d3" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<circle cx="38.5" cy="335" r="2.5"/>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="44" y="340" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >Preview Markdown files in real time (&lt;1 ms)</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#d3d3d3" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<circle cx="38.5" cy="351" r="2.5"/>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="44" y="356" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >Editor with syntax highlighting</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#d3d3d3" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<circle cx="38.5" cy="367" r="2.5"/>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="44" y="372" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >Auto-completion ( close brackets, list, ...)</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#d3d3d3" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<circle cx="38.5" cy="383" r="2.5"/>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="44" y="388" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >Find/Replace (Ctrl+F/Ctrl+R)</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#d3d3d3" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<circle cx="38.5" cy="399" r="2.5"/>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="44" y="404" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >Export to HTML and PDF</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#d3d3d3" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<circle cx="38.5" cy="415" r="2.5"/>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="44" y="420" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >Poor in resources</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#d3d3d3" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<circle cx="38.5" cy="431" r="2.5"/>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="44" y="436" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >Quick opening of recent files (toolbar button or file menu)</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#d3d3d3" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<circle cx="38.5" cy="447" r="2.5"/>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="44" y="452" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >Open source</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#d3d3d3" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<circle cx="38.5" cy="463" r="2.5"/>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="44" y="468" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >Native look and feel</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#d3d3d3" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<circle cx="38.5" cy="479" r="2.5"/>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="44" y="484" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >Reminds spelling language for each document</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="4" y="499" width="16" height="16" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABOUlEQVQ4jZWTTU7CUBhFz/daHMEG/EnUCW7BARPDAgybhJDuwcREZ2zBuAAZ0pLS966D/kBpi/EmL02bd0/P15caZR6AO8Cq+/MrgAc+gYKevOiPpGmqdbJ+B6JBwG63036/V57nOhwOKopCIQQVRaHNZqM8z7Var1oQd6oqQFKLLAnnHGmaEscxi9fFbLlavtXd+Gx3nx0AWZaRJAk/2y1P0+kMeAY+WgBJzTrPfD7He0+WZUwmE4Cr0xFagBBCByCJKIoYj8et5x2DIGEVxLkWv4nZ8XRbgCBhIRDKXdiFb9IPCKE8DjOoxnBmQyYaHKEuI4FzSMLMmjVo4L0/paG67FxZppx/NBr1G3gfGhM5hwNkhqsMqCB9BuoYVCBnhmr1CwAAbm+u+UcEx9/1EbiHzgsulb+A71/mmM829lDrRQAAAABJRU5ErkJggg==" />
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="550" font-family="Ubuntu" font-size="15" font-weight="700" font-style="normal" 
+ >P</text>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="16.875" y="550" font-family="Ubuntu" font-size="15" font-weight="700" font-style="normal" 
+ >review</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#383838" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,451,627)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="0" y="0" width="428" height="13"/>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,451,627)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="0" y="0" width="428" height="13" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAawAAAANCAIAAAB6nc0EAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAT0lEQVR4nO3UQRHAMAzAsG1XBoFR/vwGIw9LCPzye+99AKrOzGw3AKz5tgMANpkgkGaCQJoJAmkmCKSZIJBmgkCaCQJpJgikmSCQZoJA2g9WnQDWQhEMlQAAAABJRU5ErkJggg==" />
+<image x="13" y="0" width="189" height="13" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAL0AAAANCAYAAAD8HW9FAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAqUlEQVRoge3WMQrCQBRF0fdFMGFWENcWcQUpFRs14FKyN91BCIL5Ns6QBSQZhHuqD9Pc4hUjAQAAAPhnFo+maXZlWT4k1ZKqfEnArF7u3oUQrm3bviVpG19+gz9lSwOWUZnZue97l3SRpM3k8ZCnCVjFMR7T0XuGEGAVZvaJdxq9u3d5coDljeOY9p3+9MMw3IqikJnVkvZZyoD5PSV1IYR77hAAAICFfAFozCAmQEVV/wAAAABJRU5ErkJggg==" />
+<image x="415" y="0" width="13" height="13" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAD0lEQVQokWNgGAWjYAgBAAKxAAGE+C5xAAAAAElFTkSuQmCC" />
+<image x="419" y="4" width="5" height="5" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAADElEQVQImWNgoBMAAABpAAFEI8ARAAAAAElFTkSuQmCC" />
+<image x="0" y="0" width="13" height="13" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAD0lEQVQokWNgGAWjYAgBAAKxAAGE+C5xAAAAAElFTkSuQmCC" />
+<image x="4" y="4" width="5" height="5" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAADElEQVQImWNgoBMAAABpAAFEI8ARAAAAAElFTkSuQmCC" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#383838" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,879,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="0" y="0" width="13" height="564"/>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,879,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="0" y="0" width="13" height="564" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAI0CAIAAABJYzRnAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAZElEQVR4nO3KMQEAIAwDMMBCZdS/PyRsApI7t22SM3nj8DzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zxv+z6S3wUiMmKyjAAAAABJRU5ErkJggg==" />
+<image x="0" y="13" width="13" height="244" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAD0CAYAAABAdqytAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAuUlEQVRoge3bQQrCMBBG4X9EsCUX8HAVT9Cl4kYteJSeTbxBCS46btqiMdiVgvBml0e+JBeI9KuxNNR1vSrL8iKpkiR3b0MIx6Zp7uOeZYoGsJtONdt3XeeSDmNbZG7fZNr2eZFD67mWQ7MDAoFAIBAIBAKBQCAQCAQCgUAgEAgEAoFAIBAIBAKBQCAQCAQCgUAgEOi/0S0NZnb9iNy9TVvf9y/t7RdFjPFUFIXMrBpSG0I4zz35O/MAX7Af4ZSfaS0AAAAASUVORK5CYII=" />
+<image x="0" y="551" width="13" height="13" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAD0lEQVQokWNgGAWjYAgBAAKxAAGE+C5xAAAAAElFTkSuQmCC" />
+<image x="4" y="555" width="5" height="5" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAADElEQVQImWNgoBMAAABpAAFEI8ARAAAAAElFTkSuQmCC" />
+<image x="0" y="0" width="13" height="13" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAD0lEQVQokWNgGAWjYAgBAAKxAAGE+C5xAAAAAElFTkSuQmCC" />
+<image x="4" y="4" width="5" height="5" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAADElEQVQImWNgoBMAAABpAAFEI8ARAAAAAElFTkSuQmCC" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#383838" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,62)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="430" y="565" width="13" height="13"/>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,62)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="1" y="0" width="442" height="1" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAo0lEQVR4nO3QMRHAMBDAsKZQsjyW8AeUwtBQC4HPa2bu82d/HnDOua+O0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ABtzczde+sO5gM1DwcZ96LqIAAAAABJRU5ErkJggg==" />
+<image x="1" y="578" width="442" height="1" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAo0lEQVR4nO3QMRHAMBDAsKZQsjyW8AeUwtBQC4HPa2bu82d/HnDOua+O0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ABtzczde+sO5gM1DwcZ96LqIAAAAABJRU5ErkJggg==" />
+<image x="0" y="1" width="1" height="577" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAo0lEQVR4nO3QMRHAMBDAsKZQsjyW8AeUwtBQC4HPa2bu82d/HnDOua+O0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ABtzczde+sO5gM1DwcZ96LqIAAAAABJRU5ErkJggg==" />
+<image x="443" y="1" width="1" height="577" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAo0lEQVR4nO3QMRHAMBDAsKZQsjyW8AeUwtBQC4HPa2bu82d/HnDOua+O0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ABtzczde+sO5gM1DwcZ96LqIAAAAABJRU5ErkJggg==" />
+<image x="0" y="0" width="1" height="1" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAo0lEQVR4nO3QMRHAMBDAsKZQsjyW8AeUwtBQC4HPa2bu82d/HnDOua+O0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ABtzczde+sO5gM1DwcZ96LqIAAAAABJRU5ErkJggg==" />
+<image x="443" y="0" width="1" height="1" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAo0lEQVR4nO3QMRHAMBDAsKZQsjyW8AeUwtBQC4HPa2bu82d/HnDOua+O0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ABtzczde+sO5gM1DwcZ96LqIAAAAABJRU5ErkJggg==" />
+<image x="0" y="578" width="1" height="1" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAo0lEQVR4nO3QMRHAMBDAsKZQsjyW8AeUwtBQC4HPa2bu82d/HnDOua+O0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ABtzczde+sO5gM1DwcZ96LqIAAAAABJRU5ErkJggg==" />
+<image x="443" y="578" width="1" height="1" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAo0lEQVR4nO3QMRHAMBDAsKZQsjyW8AeUwtBQC4HPa2bu82d/HnDOua+O0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ACtATpAa4AO0BqgA7QG6ABtzczde+sO5gM1DwcZ96LqIAAAAABJRU5ErkJggg==" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#404040" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="0" y="0" width="429" height="564"/>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#cccccc" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#cccccc" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="17" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >![</text>
+</g>
+
+<g fill="#e4ffe4" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="11" y="4" width="89" height="16"/>
+</g>
+
+<g fill="none" stroke="#00bf00" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#00bf00" fill-opacity="1" stroke="none" xml:space="preserve" x="11.8438" y="17" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >Made with C++</text>
+</g>
+
+<g fill="none" stroke="#cccccc" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#cccccc" fill-opacity="1" stroke="none" xml:space="preserve" x="99.5781" y="17" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >](https://forthebadge.com/images/badges/made-with-c-plus-plus.svg)</text>
+</g>
+
+<g fill="none" stroke="#cccccc" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#cccccc" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="33" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >[![</text>
+</g>
+
+<g fill="none" stroke="#0080ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#0080ff" fill-opacity="1" stroke="none" xml:space="preserve" x="16.1094" y="33" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >Powered by Qt</text>
+</g>
+
+<g fill="none" stroke="#cccccc" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#cccccc" fill-opacity="1" stroke="none" xml:space="preserve" x="103.766" y="33" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >](https://forthebadge.com/images/badges/powered-by-qt.svg)](https://qt.io)</text>
+</g>
+
+<g fill="none" stroke="#0080ff" stroke-opacity="1" stroke-width="1.03125" stroke-linecap="butt" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="16,35.5 103,35.5 " />
+</g>
+
+<g fill="none" stroke="#cccccc" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#cccccc" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="49" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >[![</text>
+</g>
+
+<g fill="none" stroke="#0080ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#0080ff" fill-opacity="1" stroke="none" xml:space="preserve" x="16.1094" y="49" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >CodeFactor</text>
+</g>
+
+<g stroke="none" transform="matrix(1,0,0,1,1,113)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="16" y="0" width="68" height="2"/>
+</g>
+
+<g fill="none" stroke="#0080ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#cccccc" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#cccccc" fill-opacity="1" stroke="none" xml:space="preserve" x="83.3438" y="49" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >](https://www.codefactor.io/repository/github/software-made-easy/markdownedit/badge/main)](https://www.codefactor.io/repository/github/software-made-easy/markdownedit/overview/main)</text>
+</g>
+
+<g fill="none" stroke="#cccccc" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#cccccc" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="65" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >[![</text>
+</g>
+
+<g fill="none" stroke="#0080ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#0080ff" fill-opacity="1" stroke="none" xml:space="preserve" x="16.1094" y="65" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >License: </text>
+</g>
+
+<g fill="none" stroke="#0080ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#0080ff" fill-opacity="1" stroke="none" xml:space="preserve" x="66.125" y="65" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >GPL</text>
+</g>
+
+<g stroke="none" transform="matrix(1,0,0,1,1,129)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="66" y="0" width="24" height="2"/>
+</g>
+
+<g fill="none" stroke="#0080ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#0080ff" fill-opacity="1" stroke="none" xml:space="preserve" x="89.4844" y="65" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ > </text>
+</g>
+
+<g fill="none" stroke="#0080ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#0080ff" fill-opacity="1" stroke="none" xml:space="preserve" x="92.4844" y="65" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >v3</text>
+</g>
+
+<g stroke="none" transform="matrix(1,0,0,1,1,129)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="92" y="0" width="14" height="2"/>
+</g>
+
+<g fill="none" stroke="#0080ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#cccccc" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#cccccc" fill-opacity="1" stroke="none" xml:space="preserve" x="106.328" y="65" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)</text>
+</g>
+
+<g fill="none" stroke="#0080ff" stroke-opacity="1" stroke-width="1.03125" stroke-linecap="butt" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="16,67.5 66,67.5 " />
+<polyline fill="none" vector-effect="none" points="89,67.5 92,67.5 " />
+</g>
+
+<g fill="none" stroke="#cccccc" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#cccccc" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="81" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >[![</text>
+</g>
+
+<g fill="none" stroke="#0080ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#0080ff" fill-opacity="1" stroke="none" xml:space="preserve" x="16.1094" y="81" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >GitHub release</text>
+</g>
+
+<g fill="none" stroke="#cccccc" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#cccccc" fill-opacity="1" stroke="none" xml:space="preserve" x="103.547" y="81" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >](https://img.shields.io/github/release/software-made-easy/MarkdownEdit.svg)](https://github.com/software-made-easy/MarkdownEdit/releases/)</text>
+</g>
+
+<g fill="none" stroke="#0080ff" stroke-opacity="1" stroke-width="1.03125" stroke-linecap="butt" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="16,83.5 103,83.5 " />
+</g>
+
+<g fill="none" stroke="#cccccc" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#cccccc" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="141" font-family="Ubuntu" font-size="19.2" font-weight="400" font-style="normal" 
+ >#</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="21.3281" y="141" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ > </text>
+</g>
+
+<g fill="none" stroke="#024596" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#024596" fill-opacity="1" stroke="none" xml:space="preserve" x="24.3281" y="141" font-family="Ubuntu" font-size="19.2" font-weight="700" font-style="normal" 
+ >[MarkdownEdit](https://software-made-easy.github.io/MarkdownEdit/)</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="175" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >MarkdownEdit is, as the name suggests, a simple and lightweight program for creating and editing Markdown files.</text>
+</g>
+
+<g fill="none" stroke="#cccccc" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#cccccc" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="217" font-family="Ubuntu" font-size="18" font-weight="400" font-style="normal" 
+ >##</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="36" y="217" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ > </text>
+</g>
+
+<g fill="none" stroke="#024596" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#024596" fill-opacity="1" stroke="none" xml:space="preserve" x="39" y="217" font-family="Ubuntu" font-size="18" font-weight="700" font-style="normal" 
+ >Table of Contents</text>
+</g>
+
+<g fill="none" stroke="#a3007b" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#a3007b" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="251" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >1.</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="14.5156" y="251" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ > </text>
+</g>
+
+<g fill="none" stroke="#cccccc" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#cccccc" fill-opacity="1" stroke="none" xml:space="preserve" x="17.5156" y="251" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >[</text>
+</g>
+
+<g fill="none" stroke="#0080ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#0080ff" fill-opacity="1" stroke="none" xml:space="preserve" x="21.7813" y="251" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >Features</text>
+</g>
+
+<g fill="none" stroke="#cccccc" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#cccccc" fill-opacity="1" stroke="none" xml:space="preserve" x="73.3594" y="251" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >](#features)</text>
+</g>
+
+<g fill="none" stroke="#0080ff" stroke-opacity="1" stroke-width="1.03125" stroke-linecap="butt" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="21,253.5 73,253.5 " />
+</g>
+
+<g fill="none" stroke="#a3007b" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#a3007b" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="267" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >2.</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="14.5156" y="267" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ > </text>
+</g>
+
+<g fill="none" stroke="#cccccc" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#cccccc" fill-opacity="1" stroke="none" xml:space="preserve" x="17.5156" y="267" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >[</text>
+</g>
+
+<g fill="none" stroke="#0080ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#0080ff" fill-opacity="1" stroke="none" xml:space="preserve" x="21.7813" y="267" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >Preview</text>
+</g>
+
+<g fill="none" stroke="#cccccc" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#cccccc" fill-opacity="1" stroke="none" xml:space="preserve" x="69.1094" y="267" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >](#preview)</text>
+</g>
+
+<g fill="none" stroke="#0080ff" stroke-opacity="1" stroke-width="1.03125" stroke-linecap="butt" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="21,269.5 69,269.5 " />
+</g>
+
+<g fill="none" stroke="#a3007b" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#a3007b" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="283" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >3.</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="14.5156" y="283" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ > </text>
+</g>
+
+<g fill="none" stroke="#cccccc" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#cccccc" fill-opacity="1" stroke="none" xml:space="preserve" x="17.5156" y="283" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >[</text>
+</g>
+
+<g fill="none" stroke="#0080ff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#0080ff" fill-opacity="1" stroke="none" xml:space="preserve" x="21.7813" y="283" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >Dependencies</text>
+</g>
+
+<g fill="none" stroke="#cccccc" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#cccccc" fill-opacity="1" stroke="none" xml:space="preserve" x="105.438" y="283" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >](#dependencies)</text>
+</g>
+
+<g fill="none" stroke="#0080ff" stroke-opacity="1" stroke-width="1.03125" stroke-linecap="butt" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="21,285.5 105,285.5 " />
+</g>
+
+<g fill="#c0c0c0" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="4" y="302" width="28" height="16"/>
+</g>
+
+<g fill="none" stroke="#808080" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#808080" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="315" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >-------</text>
+</g>
+
+<g fill="none" stroke="#cccccc" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#cccccc" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="357" font-family="Ubuntu" font-size="18" font-weight="400" font-style="normal" 
+ >##</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="36" y="357" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ > </text>
+</g>
+
+<g fill="none" stroke="#024596" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#024596" fill-opacity="1" stroke="none" xml:space="preserve" x="39" y="357" font-family="Ubuntu" font-size="18" font-weight="700" font-style="normal" 
+ >Features:</text>
+</g>
+
+<g fill="none" stroke="#a3007b" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#a3007b" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="391" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >-</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="7.875" y="391" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ > Spell checker</text>
+</g>
+
+<g fill="none" stroke="#a3007b" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#a3007b" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="407" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >-</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="7.875" y="407" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ > Save and load Markdown files</text>
+</g>
+
+<g fill="none" stroke="#a3007b" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#a3007b" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="423" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >-</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="7.875" y="423" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ > Undo/Redo</text>
+</g>
+
+<g fill="none" stroke="#a3007b" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#a3007b" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="439" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >-</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="7.875" y="439" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ > Preview Markdown files in real time (&lt;1 ms)</text>
+</g>
+
+<g fill="none" stroke="#a3007b" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#a3007b" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="455" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >-</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="7.875" y="455" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ > Editor with syntax highlighting</text>
+</g>
+
+<g fill="none" stroke="#a3007b" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#a3007b" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="471" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >-</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="7.875" y="471" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ > Auto-completion ( close brackets, list, ...)</text>
+</g>
+
+<g fill="none" stroke="#a3007b" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#a3007b" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="487" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >-</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="7.875" y="487" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ > Find/Replace (</text>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="95.1406" y="487" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >Ctrl</text>
+</g>
+
+<g stroke="none" transform="matrix(1,0,0,1,1,551)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="95" y="0" width="22" height="2"/>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="116.969" y="487" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >+F/</text>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="135.469" y="487" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >Ctrl</text>
+</g>
+
+<g stroke="none" transform="matrix(1,0,0,1,1,551)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="135" y="0" width="22" height="2"/>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="157.297" y="487" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >+R)</text>
+</g>
+
+<g fill="none" stroke="#a3007b" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#a3007b" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="503" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >-</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="7.875" y="503" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ > Export to HTML and PDF</text>
+</g>
+
+<g fill="none" stroke="#a3007b" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#a3007b" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="519" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >-</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="7.875" y="519" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ > Poor in resources</text>
+</g>
+
+<g fill="none" stroke="#a3007b" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#a3007b" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="535" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >-</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="7.875" y="535" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ > Quick opening of recent files (toolbar button or file menu)</text>
+</g>
+
+<g fill="none" stroke="#a3007b" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#a3007b" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="551" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >-</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="7.875" y="551" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ > Open source</text>
+</g>
+
+<g fill="none" stroke="#a3007b" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#a3007b" fill-opacity="1" stroke="none" xml:space="preserve" x="4" y="567" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >-</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="7.875" y="567" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ > Native look and feel</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#383838" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,1,627)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="0" y="0" width="429" height="13"/>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,1,627)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="0" y="0" width="429" height="13" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAa0AAAANCAIAAACVX6Y6AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAT0lEQVR4nO3UQRHAMAzAsG1XBoFR/vwGIw9LCPzye+99AMLOzGw3AGz6tgMAlvkgUOeDQJ0PAnU+CNT5IFDng0CdDwJ1PgjU+SBQ54NA3Q90sgDWfy+yRQAAAABJRU5ErkJggg==" />
+<image x="13" y="0" width="139" height="13" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIsAAAANCAYAAACZ8J06AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAoUlEQVRYhe3WMQrCQBCF4X9EMGFPEM8W8QQpFRs14FFyN71BCIKZNG7IDXaK91UD2/zFKxZERERE4rN8dF13qOv6BbRAUy5Jgvi4+5BSuvd9/wXY55f/UC7F0iSaxsyu4zg6cAPYbR5PZZokuHM+tmPxAiESnJn98r2Oxd2HMjkS2TzP6y7WP8s0TY+qqjCzFjgWKZNI3sCQUnqWDhEREQEW4HYgJsCgIdMAAAAASUVORK5CYII=" />
+<image x="416" y="0" width="13" height="13" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAD0lEQVQokWNgGAWjYAgBAAKxAAGE+C5xAAAAAElFTkSuQmCC" />
+<image x="420" y="4" width="5" height="5" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAADElEQVQImWNgoBMAAABpAAFEI8ARAAAAAElFTkSuQmCC" />
+<image x="0" y="0" width="13" height="13" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAD0lEQVQokWNgGAWjYAgBAAKxAAGE+C5xAAAAAElFTkSuQmCC" />
+<image x="4" y="4" width="5" height="5" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAADElEQVQImWNgoBMAAABpAAFEI8ARAAAAAElFTkSuQmCC" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#383838" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,430,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="0" y="0" width="13" height="564"/>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,430,63)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="0" y="0" width="13" height="564" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAI0CAIAAABJYzRnAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAZElEQVR4nO3KMQEAIAwDMMBCZdS/PyRsApI7t22SM3nj8DzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zzP8zxv+z6S3wUiMmKyjAAAAABJRU5ErkJggg==" />
+<image x="0" y="13" width="13" height="208" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAADQCAYAAADcS+uNAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAsklEQVRoge3asQ3CMBBG4f8QEom8AMMFMUFKEA0QiVEyG2KDyKLI0SQRGItUoXrX+cmf7QEs/WssDXVdb8qyvEmqJMnd2xDCuWma57hnnaIBHKZTzY5d17mk09hWmdt3mbZ/X+TQdq7l0OyAQCAQCAQCgUAgEAgEAoFAIBAIBAKBQCAQCAQCgUAgEAgEAi2FHmkws/tP5O5t2vq+/2hfPzpjjJeiKGRm1ZDaEMJ17snLzAtU8x+ZboX4rwAAAABJRU5ErkJggg==" />
+<image x="0" y="551" width="13" height="13" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAD0lEQVQokWNgGAWjYAgBAAKxAAGE+C5xAAAAAElFTkSuQmCC" />
+<image x="4" y="555" width="5" height="5" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAADElEQVQImWNgoBMAAABpAAFEI8ARAAAAAElFTkSuQmCC" />
+<image x="0" y="0" width="13" height="13" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAD0lEQVQokWNgGAWjYAgBAAKxAAGE+C5xAAAAAElFTkSuQmCC" />
+<image x="4" y="4" width="5" height="5" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAADElEQVQImWNgoBMAAABpAAFEI8ARAAAAAElFTkSuQmCC" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,444,62)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="0" y="0" width="6" height="579" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAJDCAIAAACnpPLpAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAV0lEQVRoge3LsQ2AQAwEQfMduJvvv6FrgcDSC4gJx8EFa8219673rarq7m9KMnV2zSfJWRAEQRAEQRAEQRAEQRAEQRAEQRAEQRAEQRAEQRAEQRD8FT7TDScQyIiw1WgFAAAAAElFTkSuQmCC" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#2b2b2b" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="6" y="0" width="44" height="22"/>
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="6" y="0" width="44" height="22" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA30AAAAWCAYAAAB0UfW9AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAoklEQVR4nO3XwQ2AMBDAMEBsc/tP1wdMUVWK7AnyzT0z3wUAAEDSczoAAACAfUwfAABAmOkDAAAIM30AAABhpg8AACDM9AEAAISZPgAAgDDTBwAAEGb6AAAAwkwfAABAmOkDAAAIM30AAABhpg8AACDM9AEAAISZPgAAgDDTBwAAEGb6AAAAwkwfAABAmOkDAAAIM30AAABh71rrdAMAAACb/GjwBJ9GTShfAAAAAElFTkSuQmCC" />
+<text fill="#dadada" fill-opacity="1" stroke="none" xml:space="preserve" x="12.1563" y="16" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >D</text>
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#dadada" fill-opacity="1" stroke="none" xml:space="preserve" x="21.4219" y="16" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >atei</text>
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1.03125" stroke-linecap="butt" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="12,18.5 21,18.5 " />
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#2b2b2b" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="56" y="0" width="78" height="22"/>
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="56" y="0" width="78" height="22" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA30AAAAWCAYAAAB0UfW9AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAoklEQVR4nO3XwQ2AMBDAMEBsc/tP1wdMUVWK7AnyzT0z3wUAAEDSczoAAACAfUwfAABAmOkDAAAIM30AAABhpg8AACDM9AEAAISZPgAAgDDTBwAAEGb6AAAAwkwfAABAmOkDAAAIM30AAABhpg8AACDM9AEAAISZPgAAgDDTBwAAEGb6AAAAwkwfAABAmOkDAAAIM30AAABh71rrdAMAAACb/GjwBJ9GTShfAAAAAElFTkSuQmCC" />
+<text fill="#dadada" fill-opacity="1" stroke="none" xml:space="preserve" x="62.2969" y="16" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >B</text>
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#dadada" fill-opacity="1" stroke="none" xml:space="preserve" x="70.6406" y="16" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >earbeiten</text>
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1.03125" stroke-linecap="butt" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="62,18.5 70,18.5 " />
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#2b2b2b" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="140" y="0" width="56" height="22"/>
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="140" y="0" width="56" height="22" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA30AAAAWCAYAAAB0UfW9AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAoklEQVR4nO3XwQ2AMBDAMEBsc/tP1wdMUVWK7AnyzT0z3wUAAEDSczoAAACAfUwfAABAmOkDAAAIM30AAABhpg8AACDM9AEAAISZPgAAgDDTBwAAEGb6AAAAwkwfAABAmOkDAAAIM30AAABhpg8AACDM9AEAAISZPgAAgDDTBwAAEGb6AAAAwkwfAABAmOkDAAAIM30AAABh71rrdAMAAACb/GjwBJ9GTShfAAAAAElFTkSuQmCC" />
+<text fill="#dadada" fill-opacity="1" stroke="none" xml:space="preserve" x="146.094" y="16" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >An</text>
+<text fill="#dadada" fill-opacity="1" stroke="none" xml:space="preserve" x="162.156" y="16" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >s</text>
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#dadada" fill-opacity="1" stroke="none" xml:space="preserve" x="167.953" y="16" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >icht</text>
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1.03125" stroke-linecap="butt" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="162,18.5 167,18.5 " />
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#2b2b2b" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="202" y="0" width="49" height="22"/>
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="202" y="0" width="49" height="22" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA30AAAAWCAYAAAB0UfW9AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAoklEQVR4nO3XwQ2AMBDAMEBsc/tP1wdMUVWK7AnyzT0z3wUAAEDSczoAAACAfUwfAABAmOkDAAAIM30AAABhpg8AACDM9AEAAISZPgAAgDDTBwAAEGb6AAAAwkwfAABAmOkDAAAIM30AAABhpg8AACDM9AEAAISZPgAAgDDTBwAAEGb6AAAAwkwfAABAmOkDAAAIM30AAABh71rrdAMAAACb/GjwBJ9GTShfAAAAAElFTkSuQmCC" />
+<text fill="#dadada" fill-opacity="1" stroke="none" xml:space="preserve" x="208.063" y="16" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >E</text>
+<text fill="#dadada" fill-opacity="1" stroke="none" xml:space="preserve" x="215.484" y="16" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >x</text>
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#dadada" fill-opacity="1" stroke="none" xml:space="preserve" x="222.125" y="16" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >tras</text>
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1.03125" stroke-linecap="butt" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="215,18.5 222,18.5 " />
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#2b2b2b" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="257" y="0" width="41" height="22"/>
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="257" y="0" width="41" height="22" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA30AAAAWCAYAAAB0UfW9AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAoklEQVR4nO3XwQ2AMBDAMEBsc/tP1wdMUVWK7AnyzT0z3wUAAEDSczoAAACAfUwfAABAmOkDAAAIM30AAABhpg8AACDM9AEAAISZPgAAgDDTBwAAEGb6AAAAwkwfAABAmOkDAAAIM30AAABhpg8AACDM9AEAAISZPgAAgDDTBwAAEGb6AAAAwkwfAABAmOkDAAAIM30AAABh71rrdAMAAACb/GjwBJ9GTShfAAAAAElFTkSuQmCC" />
+<text fill="#dadada" fill-opacity="1" stroke="none" xml:space="preserve" x="263.359" y="16" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >H</text>
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#dadada" fill-opacity="1" stroke="none" xml:space="preserve" x="272.516" y="16" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >ilfe</text>
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1.03125" stroke-linecap="butt" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="263,18.5 272,18.5 " />
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#2b2b2b" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<rect x="0" y="0" width="893" height="22"/>
+</g>
+
+<g fill="none" stroke="#dadada" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="0" y="0" width="893" height="22" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA30AAAAWCAYAAAB0UfW9AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAoklEQVR4nO3XwQ2AMBDAMEBsc/tP1wdMUVWK7AnyzT0z3wUAAEDSczoAAACAfUwfAABAmOkDAAAIM30AAABhpg8AACDM9AEAAISZPgAAgDDTBwAAEGb6AAAAwkwfAABAmOkDAAAIM30AAABhpg8AACDM9AEAAISZPgAAgDDTBwAAEGb6AAAAwkwfAABAmOkDAAAIM30AAABh71rrdAMAAACb/GjwBJ9GTShfAAAAAElFTkSuQmCC" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,681)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="0" y="0" width="893" height="22" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA30AAAAWCAYAAAB0UfW9AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAY0lEQVR4nO3BAQ0AAADCoPdPbQ43oAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACeDDMdAAGX4v0RAAAAAElFTkSuQmCC" />
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,681)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="6" y="16" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >/home/tim/qtprojegt/MarkdownEdit/README.md geöffnet</text>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,876,686)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="0" y="0" width="16" height="16" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAEklEQVQ4jWNgGAWjYBSMAggAAAQQAAF/TXiOAAAAAElFTkSuQmCC" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,22)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="0" y="0" width="175" height="40" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK8AAAAoCAIAAAAHRT1CAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAeklEQVR4nO3SMRHAMBDAsG+voMKfVNaOhpAMEgIPftZaAzMz854O4CJuIG4gbiBuIG4gbiBuIG4gbiBuIG4gbiBuIG4gbiBuIG4gbiBuIG4gbiBuIG4gbiBuIG4gbiBuIG4gbiBuIG4gbiBuIG4gbiBuIN/e+3QDt/gBDP8D39/PHH8AAAAASUVORK5CYII=" />
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,22)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="1" y="1" width="10" height="38" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAmCAYAAAD9XArwAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJklEQVQ4jWNgGAWjgBAICgr6HxQU9B9dnGkgHEMpGPXMKBgFeAEAwEALxX7MrKUAAAAASUVORK5CYII=" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,11,24)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="6" y="6" width="24" height="24" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABi0lEQVRIie2UsUoDQRCG/7m4NiEcGBRzXYrFwiAWAa0Cl8dQxN5WH8M3sLFQ7HwBBSVgFytjkQ14VRKRHJguOObGwkRCPC+rEW3yNXvM/Tvf3rAcMOO/obiiiDjGmD0AG0QUmxnJChHdaK2PiKhvJajX67tEdPytkxLtaK1PxutzcWHHcVZEBABaRHSW1FhEtgDkAKwDsBOISGrweKW1PkgSGGOWAWx/9T5WAMAZL1SrVZXJZEoiIu12u+L7/muSOFFARDQY0QfZbDbLzJdEBM/zFgF0fiwYpVarzafT6YVer7eYSr1PznGcpSAI5sIwDKcWKKVKzHwxbA4AInLPzHBd1x//0nE+zfq3mShg5opSKtfv99eGNSJaVUrlut3uzaT9E0dUKBReADwGQQBmBgBEUfSUz+c7AGCMmU4wJAzD0HVdH4A0m81n233WgmKxyACubfO2gnKj0ThMCohIebDGXqdYQRRFd4OfaE5E9i0OChG5tRa0Wq1Tz/MyRLRp0xzAAzOfW2Zn/DFvka2VY/XFvEEAAAAASUVORK5CYII=" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,47,24)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="6" y="6" width="24" height="24" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABvElEQVRIie2UPYsTURSGn3d2VdKIICyYm+mSzGojwrK1gq21gv9CUAsbWURY8E9sYbWFrSAaO1ErkV2cTLDKR2GxbKEraO6xmehkMsk1pN0XBuace87zzv0aOFVAqkpmWXbFzHaAC3nKm9nzJEn2VjZI03RT0h6wXRr6AbxYwPplZrtJknwpJtdnHKUY2M+f5b5W2gCmDKJi0Ol01oFzy4ILOp8z/moqcM49BJ6sYEC9Xn8EPK00AK5X9HwH3gHjBdwt4CKApBuLDMqbfiQpabVa37rd7mVKy+e996PR6LDRaKyZ2Xvgapkxs8klve73+0dZln00s63yYBRFOOeGkq6Z2X5uMF0TMPgdx/F2Fbyguvf+tqTKJQzNwJvZ2fz9uFarXYrj+ATAzNTr9T7k5nNPXmgGNh6PJzU/J3AASWZmx4H+oAGSgjXLGNgqsCpG2eDtynSzTjGe2uTBYLDrnPsEbObFh/8L9t6/kXRrOBy+LOYrf9dFpWl6U9IrwAOPgRMASWtmdg/YAO632+1nVf2hYwrwNYdHwM4kafZvqSV9ntccnAFAmqZ3JN0FzswApINms/lg3kU7VVB/AJdal9cqLf0AAAAAAElFTkSuQmCC" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#7f7f7f" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,83,24)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="6" y="6" width="24" height="24" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABJElEQVRIie2SsUoDQRRFzxtMo4Wl+AOmjTKb3t4fEAXrIGhjb6GljX6BnWBtb59ZgoWg9oK2IqSSdy20kEmyuwmoTW437765Z5a9MNd/y/JBSmld0gHQmiLnqSiKUzNTbizkA0mHwN73cQBc1YRvAzsppVVJ+zlkBJDNHrrd7lm+UJZlz92XQgjX7t4BNoBeSukFOKkD1Mrdj4EVd7/LrHa+G2YBTKOZvgC4B15DCO/uPjsghFCklNqS3jJrF0DScgihqIJUAtx9DXic5EtCGmlmM4CZ3ZrZVoxxWBVQluWipBtJm+P8iT/ZzAZ14QAxxqGZDSb5v96iOaBW41r0AeDusd/vHzUJcff4824lwMzO9VXuFtBp+NBn4NLMLhruz/WH+gQMkG1faeymAQAAAABJRU5ErkJggg==" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#333333" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,119,24)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="5" y="6" width="6" height="24" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAYCAYAAADZEIyjAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAGUlEQVQokWPQ1tb+z4AFMGETHJUYlSBOAgC3bwGvySekgwAAAABJRU5ErkJggg==" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,130,24)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="5" y="6" width="24" height="24" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAB80lEQVRIie2UP28TQRDFf7Onc0EoUqfij31nSyfFSWqEnSYp6KGiSpt8GfgGaUxBBZESGruhIygRlsytzyQVn8BuTvYOhdfCBFvnQJEmrxrt7ntvdjQzcI+7hqzyyFpbF5E9VX0MICJXqnoWRdHFfxlkWZY4594AjSVPOsaYw3K53L21gbX2BfAOeAAo8F1Vv4hICGwBkeePgFdRFH1cpGOWZQ60vHjmnHsWhuG2MeaTiJyEYVgXkV1gAKwBLc9ZzcA599YTB3meb1Wr1c/Auqoeq+oxsF6pVDp5nteBH8CaL2WxgbW2DjwHVEQOkiQZLiICJEkyNMYcMC1hI03TzUIDEdnzYVqpVDrLxGcol8ttwAIYY/YLDWatCHxdJjoejzduHJ177qNCg2UYjUZD4KcX+tDr9aJVeItKdOXD7fnzJEmGk8mk6U02giB4r6qzNt/x3OtCA1U982Hc7/cb83e1Ws1OJpOmiHwTkdciolmWNZnOBM65078SXvQta22b6fQO8jyv3+wkVRUR0W63+7BUKl0CT1S1HcfxbuEPAIwxh0wn9GmpVLrwWf7Oymc+EwdGQRAcLdIqWhUtpgOnTFvx3F/v8OeqeBlF0cmtDKB42alqOwiCo39advNI03TTGLM/63MRuXbOncZxfLkK/x53i1/Fcs+tnO0DSgAAAABJRU5ErkJggg==" />
+<image x="30" y="17" width="7" height="7" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAk0lEQVQImW2OIQoCQRhG3z9pwOABvITFaPIeYrJMmWDYJFgU3Db/yjDVS2wR9ARewGjyBAvLLmNRUNhXPx7fQ1UPDBBC2BmgUNXid1DVjYhsDVAD+6qq1h9jCRxF5CplWY6stRdgJiKnnLPLOd+bplkIQEpp3LbtDZgCj77v5977l3x/YoyTruvOxpiVc+45FPnHG9/JMj1YdOjBAAAAAElFTkSuQmCC" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,174,22)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="0" y="0" width="205" height="40" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAM0AAAAoCAIAAADSV+kPAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAi0lEQVR4nO3SQQ2AQBDAQCCIWv+m7osKegnMKOij58wc8LJrdwC/4DMKPqPgMwo+o+AzCj6j4DMKPqPgMwo+o+AzCj6j4DMKPqPgMwo+o+AzCj6j4DMKPqPgMwo+o+AzCj6j4DMKPqPgMwo+o+AzCj6j4DMKPqPgMwo+o+AzCj6j4DMK91prdwPf9wCN+QPfvv3EFgAAAABJRU5ErkJggg==" />
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,174,22)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="1" y="1" width="10" height="38" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAmCAYAAAD9XArwAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJklEQVQ4jWNgGAWjgBAICgr6HxQU9B9dnGkgHEMpGPXMKBgFeAEAwEALxX7MrKUAAAAASUVORK5CYII=" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#7f7f7f" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,185,24)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="6" y="6" width="24" height="24" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABhElEQVRIie2Tv0tbURTHP/fe94hGKC04tIuDQ5YitOT1JmSxWVz9A3Tp0EHI0qntWHCTDt1dunbq0iF0CC7Pl/tIt4K4dcogUZSAEvLudTDB9BHji2SSfKdzzzn3fM65P2CuuYYyxqw/ZJ+XofAq8A14AzyfFiDuCjQajYV8Pv9JCPERWADOlVK1Ybzf758ppf4EQdCeGhCG4ZrneT+B1QxNRlLKd0EQHE01QavV2k6SZI/bY+kDf0dSngErA/tKKVUtFotRZgBAFEVPpJRfgBrQ0Vr/dwfNZrMghPgOlKWUx71e71WlUrkczZGTAOVy+UJr/UEI8Ro4SMdLpdJxLpfbBE6ttQXf9zcm1XuwjDE/jDEujuPddGziBFklpbwEEEIszhwQhuGitfYtgHMunimgXq8veZ63z81rOrHW/k7nZPnJL4HPab8Q4qlzrgQsD9Y7WuvO1ADgBbCVdjrnhmbbOfdea/1r3OZ7Ab7v/0uS5OsYwCkQd7vdw2q12s3Q6FyPVdfqQ3U5ZSE0AQAAAABJRU5ErkJggg==" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#7f7f7f" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,221,24)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="6" y="6" width="24" height="24" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABhklEQVRIie2Tv0vDQBTHv5cL/UEDok5dHBxEcCgVcrWlIBnERVBwcfM/0UVQZ10UxFlwc6oU41TMJRRBXRQcXBQVlTpYaHLnEqWkadPW0X6nu/e+9/28Nxww0EBh4pzPdutV+mQccc5POOfjUUYSZXAcJ+153rSqqsM/Nc/zdgEMAahTSrdqtdq2YRj1ngCO40wKIQ4BzEQNAeDedd2lQqFwFWyoYe5qtZp3XfcMQMIvPQB4b7JMNb19pJSuMcZawkM3qFQqyVgsdimEmABwIaVczeVyt80ezvkTgFEp5U6j0VgvFouf7VZr2YBSOu+Hv8Xj8cVMJvPcMhUh5wA2GGPX7YLbAhRF0aWUAFAOCwcAXddXooJ/84IFIUTSP351G9ITQFEU2z8apmkmgv0/A4QQpwBeAIylUqmDUqmU+gsg9B/Ytr0spTz2r6+EEEtK+RFi3WSM3fQMAADLshYIIfsA0h3ezzHGyn0BAMA0TU3TtDwAnRAyEuxTSvey2exdp4yB/oG+Aa1tfozFlJpsAAAAAElFTkSuQmCC" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#333333" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,257,24)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="5" y="6" width="6" height="24" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAYCAYAAADZEIyjAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAGUlEQVQokWPQ1tb+z4AFMGETHJUYlSBOAgC3bwGvySekgwAAAABJRU5ErkJggg==" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,268,24)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="6" y="6" width="24" height="24" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAACHUlEQVRIie2SO2gUURSGvzMSzSRqUIsosqg4kwkKFrqt4jYhWGhjExEDghAExUZC8FWIEIhiYycqNumiSEBQsAgmjYKyKCHzYAUharDKIiiuO7+FGwjLDNnCQiR/d+7/updzYRX/PSyPKJfLne3t7Sccx9kMTPq+P/vXCsrlcqfruq+APY2jn5KOBEHwIksfhuF2MxuQNBsEwdPlnJNlcF33ZCP8gqSDwKKZXcvSxnG828ymgTEz62/mMwskbQFwHOd1EATTwGegkBG+V9JLYCfwzHXd4ZYKHMd5AtTSNH0URdEbYB+wI4qic0uaJEkOSJoCtgGTZnasUCh8b87KXXKSJP1pml4FNgAV4GiDumhmDyXFQBcwUa1WB4rFYi0rJ7egGXEcD0sabYxXJC2Y2eH5+fnBUqn0K8/XcgFAFEX3gNON8UZPT8/llTyZO8hCGIaDwOCyo0tRFI2t5Mt9QRzH+yWNSFpvZh+AIcAk3TazGWAcWGtmdzzPO29marlgbm5ul+M474F1wDf+LBNJo0EQjDQu0CfpMdBhZnc9zxsys7Q5K++bHgc6JJXa2tq2AiHwcSkcwPf952ma9gGLks4kSfJA0pqWCoAfAGbm1ev1jUA38KVZ1NvbO2NmJeCrpFNJklxvqaBer48Dn4D7aZouAF1mdjNL6/v+W0mHzOyWpHfNfO6SK5VKd61WO2tmm8xswvf9qTztKv5t/AbhsdLUQjQDfgAAAABJRU5ErkJggg==" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,304,24)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="6" y="6" width="24" height="24" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABKElEQVRIie2UMUoDQRSGvzdZEAzBwkJhy7hbBEvBC+hNxMbS2HoBxdLOVj2BiBewEGxlZ2NnK5hibTKZZxMhhtlsdgnY5Cvf/2a+mWFmYMV/I6HiYDDY8d6fAWsV44etVuu82+0OyxqiUHE8Hh+JyPEiK3TOPQP3tQTGmEhVAd5E5GGeQETsvDwomOI1SZK+tfZQRLZKenp5nve896Moih5nj6tKgLV2H3ia7KgUEcE5dw2c1BKoakdEAByQlbRtA5sisjEbVAqm+EzTdDcU5Hl+qaqnoczUEDRiJWgmUNWvZQmCt6jdbl8VRfGuqh9U/0f1BXEcfwN3AFmWHSxdUMK6tbYfClR1r7FAVf3kJXeAi6re2gLgBbgFyj6738lHxpibBeZb8ZcfVAdiAvWh3PoAAAAASUVORK5CYII=" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,340,24)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="6" y="6" width="24" height="24" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABHklEQVRIie2UrU7EQBSFz+mQ7ApQoHCQ9GftvgI8AeEB0CAJBhIUDrDI1Qh4hLVYbDOTgkOBQRBEOwdTNqTpbmezCapHzj3nfvcmMwP06hBDjUVRxGVZXpKkpKs0TfOQXBRics4NqqqakvwC8E7yXpIJybZukOf5tjHmBMAAACRtAjhMkmRDEp1znwAeSH7U9W/v/V2WZW/NXmuta0XRsaTz5rm19tE5BwDrAI4kzWrGGAK4CAKQHNbhVwAvAPbq0kHDOgWwC2Dnd9sgwB89kbyVdD1nkDNJpzWgVV0AxHH8DGB/Xt1auzAfdItWUQ/oAaur6x2MnXM3iwySxksDvPclSQAYSRp1DDHLLAOYRFG0RXIY0rz+TSch3l7/rx9XcG0K0ntfCAAAAABJRU5ErkJggg==" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,378,22)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="0" y="0" width="515" height="40" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgMAAAAoCAIAAADsTW7cAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAsElEQVR4nO3VMRHAMAzAwLYXUOZPKmtheNA/Am16Z+YBIOzbDgBgmRMA1DkBQJ0TANQ5AUCdEwDUOQFAnRMA1DkBQJ0TANQ5AUCdEwDUOQFAnRMA1DkBQJ0TANQ5AUCdEwDUOQFAnRMA1DkBQJ0TANQ5AUCdEwDUOQFAnRMA1DkBQJ0TANQ5AUCdEwDUOQFAnRMA1DkBQJ0TANQ5AUCdEwDUOQFAnRMA1J1773YDAJt+wwYD3+vD5hUAAAAASUVORK5CYII=" />
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,378,22)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="1" y="1" width="10" height="38" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAmCAYAAAD9XArwAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJklEQVQ4jWNgGAWjgBAICgr6HxQU9B9dnGkgHEMpGPXMKBgFeAEAwEALxX7MrKUAAAAASUVORK5CYII=" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,389,31)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="0" y="0" width="110" height="22" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAG4AAAAWCAYAAAAhKqlXAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABlklEQVRoge3awaraQBSA4X8adTU+gAtptQZjFr6A7bKlpYU+RNu3sg/TliCDC90JXXmhYGlTEJkoGpPpJuVSuJBbkBsD51tOnEPgJyNiFEAQBE88z5sCz4EW4hqdlFJfsiz7sFqtbhoAnud90lo/1Vq3lFJV36C4g3OuZa31kySZAi8axfoziXbdlFJorR9bazsAj4p1iVYDRaMW3IYTNSPhHshms7noPAlXUxKupiRcBV6/eUcYhndeC4KAl6/els6QcBX4+eM7vu/j+/4/64PBgOFwyO9f5d+HjdJPiItbLBY0m01GoxFpmrJer+l2u4RhSBzHLJfL0hkSrgJ5njOfz5lMJozHY9rtNr1ej+12izGGLMtKZ8hRWZEsy5jNZux2O/r9Pvv9HmMM5/P5XvslXIXSNMUYQxzHRFHE8Xi89145Kit2OByIoui/98kTV1MSrqYk3APpdDoXnSfhaupvuJNzrtIbEeWKRie4DffVWnsj8a6Xc46i0Wcofg7kef4+SZJp8be4vCx0nU7OuW/OuY8AfwDidJKmSdppQwAAAABJRU5ErkJggg==" />
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,389,31)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,389,31)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="5" y="16" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >GitHub</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,389,31)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#333333" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,499,24)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="5" y="6" width="6" height="24" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAYCAYAAADZEIyjAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAGUlEQVQokWPQ1tb+z4AFMGETHJUYlSBOAgC3bwGvySekgwAAAABJRU5ErkJggg==" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,510,31)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="0" y="0" width="82" height="22" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFIAAAAWCAYAAABT5cvhAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABkklEQVRYhe2ZwYrTQBjHf2PanqYP0EPR1oamOfQFqkdFUfAh1LeqD7MroQw9tLeCpy4IFY1QyqSlTSfjJbIqC8mugWXJ/I7f5Psz/JgvhIwACILgied5U+A50MJRhpMQ4tIY82G1Wl01ADzP+ySlfCqlbAkh7nuDDwJrbUtr7SdJMgVeNPL6MyfxdgghkFI+1lp3AB7ldSfxDuTOWnAt0vGf1FbkZrOpNK+2IqvGiawIJxJ4/eYdYRjeuBYEAS9fvS3McCKB79++4vs+vu//VR8MBgyHQ37+KH6fNgqfqAGLxYJms8loNCJNU9brNd1ulzAMieOY5XJZmOFEAlmWMZ/PmUwmjMdj2u02vV6P7XaLUgpjTGGGG+0cYwyz2Yzdbke/32e/36OU4nw+l+p3Iv8gTVOUUsRxTBRFHI/H0r1utP/hcDgQRdGt+9yJrAgnsiJqK7LT6VSaV1uRVfNb5Mlae68beYjkzk5wLfKz1vrKySyPtZbc2QXknz9Zlr1PkmSa/zZ3l1/lOFlrv1hrPwL8AqVKkqYGZGjNAAAAAElFTkSuQmCC" />
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,510,31)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,510,31)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<text fill="#d3d3d3" fill-opacity="1" stroke="none" xml:space="preserve" x="5" y="16" font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+ >Vorschau</text>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,510,31)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,641)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="0" y="0" width="894" height="40" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA34AAAAoCAIAAAAudL80AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAA40lEQVR4nO3WMRWAMBTAQOAh6vs31RUVpEPvFGTMPTMXAAD879kdAADAKawnAAAR6wkAQMR6AgAQsZ4AAESsJwAAEesJAEDEegIAELGeAABErCcAABHrCQBAxHoCABCxngAARKwnAAAR6wkAQMR6AgAQsZ4AAESsJwAAEesJAEDEegIAELGeAABErCcAABHrCQBAxHoCABCxngAARKwnAAAR6wkAQMR6AgAQsZ4AAESsJwAAEesJAEDEegIAELGeAABErCcAABHrCQBAxHoCABCxngAARKwnAACRd621uwEAgCN8umcD3+fQBL0AAAAASUVORK5CYII=" />
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,641)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="1" y="1" width="10" height="38" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAmCAYAAAD9XArwAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJklEQVQ4jWNgGAWjgBAICgr6HxQU9B9dnGkgHEMpGPXMKBgFeAEAwEALxX7MrKUAAAAASUVORK5CYII=" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,11,643)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="6" y="6" width="24" height="24" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABLklEQVRIie2UPUvEQBCG31lMpRfEwg8sze4iHFhYiNgIV1r7Y0TQQrHxB/hjrhKuURtTKMlESC1Wit3qjdVpiJsvbfPCFDvz7jzDsCzQq9d/RXVFZt4EcFBjeSOiidb6scowV0sn2haRyzqPiEyZ+dQYc+7tUXc5TdMRER15SkMAK0UOgF1jzE0nQJWSJBkopZ4ALH8TRI6ttRdlb+2KACCO4/kwDAflvHPupQhQSi357lcCmHkHwBWALeecahqkSl5AnuerzrkxgF+Td5V3MufcYan5OxHtB0GwNgsAD20AVSsKS+fXKIomRPQ5SzDzx58BIjImojP8vLL1LMvumfm5YNtoA/CuyFp7C+AEwLSQHgIYFWKhDaDxqxCRPSJabGxEdKe1vm4D7dWrm74ApSVXKdDJ1PEAAAAASUVORK5CYII=" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,47,643)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="6" y="6" width="24" height="24" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABTElEQVRIie2Sv0oDQRDGv+/cIpbiH8RYeV7SBK6xEwtj5wukE8TGUnwKCxs7H0HyAILdYWNjY5k5wpLaIo2G3B3n2MTCM3tHTHs/WFh2Zr5vZneBmpplYVXCYDA4I7n1p5DM8zx/a7fbEckvV72p7IC8BhAWz1UVnudBRPoAes76KgMRuQew7wgfAmiQPA6CIKrSWhgReRERFZFzV07lFanqirV2g+SvaZMkWQVwAAAkraveeUVxHO+q6h2AUwCNkh4+0jRd73Q66bzg3AlGo9FakiQRAL9E+IfIJe40mE6nVyR9AGOSl8aY52JOlmWvAJqq+lTm7nqDIwBQ1dtWq9UvBofDYQCgCQDGmH8ZvAMAyQsR6RaDeZ5vzrbW9/14YQPP825U9QTA3mzNheRjmThQ8oustdtZlnUB7DjEx5PJ5CEMw88qk5qa5fgGePVudKQoifkAAAAASUVORK5CYII=" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,83,643)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="6" y="6" width="24" height="24" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABSUlEQVRIie2TMUsDQRCF3wyphUTrNHKbO1AEG0GbgI2Fv0AsxcLW3sp/YSXiL9AyhbWQxsJLZhNRtNYuVrfPwhQacuddbETyYIvd93a+2V0WmOvfS4pM7/06gL1pXgjhFUCn1Wrd/gawT/KiIEIAJ86505kAg8FgM4RwlGOvAFgDEERkNYqi+6JalUVSvfd3ZkYzO8zL1coUGw6HzSzLGl/XvPcAMBpPF2YC9Hq9LVU9z7JsuUwjlQD9fn9JRK4A1GctXghQ1R2SdZJPIYR2kiSPkxkz6wDYLgJonkGyBgAiMorj+Ll8z9+VewIR6ZB8B5B47x/M7G1K7Me3yQVEUfRiZgcAzgA0x6OyCj8aAKRpuqiqG6rayMuQ7Drn0tIAM9sVkXbpNj8hN86568n1qVckIm2Sx1UAIgIA5QAkuwAuqwDGe+b6g/oA9Hp9oyXSPnAAAAAASUVORK5CYII=" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,119,643)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="6" y="6" width="24" height="24" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABKElEQVRIie2TsUrEQBCG/9lIwEpQsBEsTDaJ14j6ABaWgi/g4QsIYmFj4RPY2Aj3ApZi4QvcAyhcEYudNT6CYnXFsbO2B5esudjmK2f+/f8ZlgF6ev4LhZrMvAvgpPYh0ZeIjPM8/wx5rATTiQ6993d1Pe89iGjGzJdZlo0aPUIBxphjIrppaGsA2wBmSqlBmqYfSweEKMsyjuP4GcAWEd1qrV9aBVRVtaaUWu0SKiLTJEl+5msLf+Cce3DOnXUJAPAIYDhfUB2NWrOwQRRFF0qp6y5mIjJtLbbWnjLzhJmfmjTMPGLmiTHmvEkTuoN3AAMAe8z8BuC7RrMPYJ2INpcO0FpX1tor7/09gIPAIEH+vANjzA4RHQHYaNKIyLgoiteuQ/T0hPkFC7pdXiSYK3cAAAAASUVORK5CYII=" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#333333" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,155,643)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="5" y="6" width="6" height="24" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAYCAYAAADZEIyjAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAGUlEQVQokWPQ1tb+z4AFMGETHJUYlSBOAgC3bwGvySekgwAAAABJRU5ErkJggg==" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,166,643)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="6" y="6" width="24" height="24" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABj0lEQVRIie1UsWpbQRCcEcGFXNmNU7nSXVoZ3KUwBBX5AVVujUG9fsBVwHEvMKlTKKRLEXBSqHDn2nB7jXElcAqDQZXJuNAaHk/vPWRhSAoNHNzuLTO7e3cLrPGvwbIj5zyQ9H4lMvIyhDAq+t6Ug5z8cBUBSQDQLFDI5grARNIugD6AGcmREw0AtAF8I3kL4EDSfhVPqyGhSQhhKOnc7YcQwjCEMATw4ELnbk/qSGorkLSbUuqR3HPXRkqp97z3KvdSSvAqXyYAoE+yX7C3SF6UYk7JhXeytMAM81ZsANgC8BfAXRMZyfulBUiOQghDb9MFgLsY49vGdCvQdMmvgloBSQMzm5Ic18WY2djMpjnnQV1M0x20fTVhG8COpM1VBL63Wq0vkrqSPhUPzOyrk3fddWRmPQC/Y4yflxIgedPpdH6mlB4rnuIHADsF+52vPy+p4CDnfFb1iUieeFuOAQQAPzAfK9dLC/hsqZwvzxPTzD66wCTGeFYVuyBA8tKnYtm/8IlI/pI0rcp8jf8HT4QwmuK62MoZAAAAAElFTkSuQmCC" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="none" stroke="#d3d3d3" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,202,643)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+<image x="6" y="6" width="24" height="24" preserveAspectRatio="none" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABO0lEQVRIie2TsUoDQRRFz5vdCLKFIDY2NiG7wUa/wMYi4AdYGP/ANvkHQVLa2cbK2kZSxDaNxRLIwP6BFiIhLJvZZxuzRUZNuae8zNx75z0Gamr+i6wLs9nsQkSORWTSarXGWZYdOecufcxUdZokyfOqFlYSRa6ALjAAxsvlMhaRO6+2IkNgY0CqqiNVtQDGmA9VHXkGpD7ntkplB1mW7RljdvM8n7fb7a80TXeiKNr3MSvLctFsNj9XtcqInHP3zrluEAQDoNdoNM6KonjxLDwErlcF43nxz1ReEATBjTGml+f5HKAoitcoig59zMqyXGy74EYqS7bW9oFzVX1KkuTBWnsK3Hr6jeI4/vFnKiMCToCOMSYFUNUDEel4BryvC5UAVX0UkTdgAhCGoXXO9X3cVXXqWaSm5hd8A2B3bqFyMSIJAAAAAElFTkSuQmCC" />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Ubuntu" font-size="10" font-weight="400" font-style="normal" 
+>
+</g>
+</g>
+</svg>

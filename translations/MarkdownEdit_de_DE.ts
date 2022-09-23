@@ -168,10 +168,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>Ctrl+Shift+P</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>HTML</source>
         <translation></translation>
     </message>
@@ -324,6 +320,22 @@ Willst du trotzdem verlassen?</translation>
     <message>
         <source>If you disable highlighting, the spell checker will not work properly.</source>
         <translation>Wenn Sie die Hervorhebung deaktivieren, funktioniert die Rechtschreibprüfung nicht richtig.</translation>
+    </message>
+    <message>
+        <source>Bold</source>
+        <translation>Fett</translation>
+    </message>
+    <message>
+        <source>Italic</source>
+        <translation>Kursiv</translation>
+    </message>
+    <message>
+        <source>Underline</source>
+        <translation>Unterstreichen</translation>
+    </message>
+    <message>
+        <source>Strikethrough</source>
+        <translation>Durchgestrichen</translation>
     </message>
 </context>
 <context>

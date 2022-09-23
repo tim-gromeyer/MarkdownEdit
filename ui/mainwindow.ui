@@ -283,9 +283,6 @@
    <property name="text">
     <string>Print preview</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+Shift+P</string>
-   </property>
   </action>
   <action name="actionExit">
    <property name="text">

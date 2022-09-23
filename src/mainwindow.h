@@ -130,8 +130,8 @@ private Q_SLOTS:
     void underline();
     void strikethrough();
 
-    void insertText(const QString &, const bool = false);
-    void inserText(const QString &before, const QString &after);
+    void insertLongText(const QString &, const bool = false);
+    void inserText(QString what, const bool h = false);
 
     void onUrlClicked(const QString &);
 

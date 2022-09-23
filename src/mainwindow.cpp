@@ -365,6 +365,7 @@ void MainWindow::setupToolbar()
 #endif
     actionWidgetBox = ui->toolBarPreview->addWidget(widgetBox);
     ui->toolBarPreview->addAction(actionPreview);
+    actionWidgetBox->setPriority(QAction::HighPriority);
 
 #ifdef NO_SPELLCHECK
     ui->menuExtras->removeAction(ui->actionSpell_checking);
@@ -456,7 +457,7 @@ void MainWindow::insertTable()
     TableDialog dialog(this);
 
     if (dialog.exec() == QDialog::Rejected) return;
-    insertText(dialog.markdownTable(), true);
+    insertLongText(dialog.markdownTable(), true);
 }
 
 void MainWindow::insertTableOfContents()
@@ -466,10 +467,10 @@ void MainWindow::insertTableOfContents()
     TableOfContents dialog(currentEditor()->toPlainText(), this);
 
     if (dialog.exec() == QDialog::Rejected) return;
-    insertText(dialog.markdownTOC(), true);
+    insertLongText(dialog.markdownTOC(), true);
 }
 
-void MainWindow::insertText(const QString &text, const bool newLine)
+void MainWindow::insertLongText(const QString &text, const bool newLine)
 {
     if (text.isEmpty() || !currentEditor()) return;
 
@@ -485,7 +486,7 @@ void MainWindow::insertText(const QString &text, const bool newLine)
     c.endEditBlock();
 }
 
-void MainWindow::inserText(const QString &before, const QString &after)
+void MainWindow::inserText(QString what, const bool h)
 {
     if (!currentEditor()) return;
 
@@ -496,18 +497,21 @@ void MainWindow::inserText(const QString &before, const QString &after)
         c.select(QTextCursor::WordUnderCursor);
     }
 
-    const int start = c.selectionStart();
-    const int end = c.selectionEnd();
+    int start = c.selectionStart();
+    int end = c.selectionEnd();
 
     c.setPosition(start);
-    c.insertText(before);
-    c.setPosition(end + before.size());
-    c.insertText(after);
+    c.insertText(what);
+    c.setPosition(end + what.size());
+    c.insertText(h ? what.insert(1, u'/')
+                   : what);
 
     c.endEditBlock();
 
+    if (h) { --start; --end; }
+
     // Reselect the text
-    c.setPosition(start + before.size());
+    c.setPosition(start + what.size());
     c.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, end - start);
 
     currentEditor()->setTextCursor(c);
@@ -525,22 +529,22 @@ void MainWindow::insertImage()
 
 void MainWindow::bold()
 {
-    inserText(STR("**"), STR("**"));
+    inserText(STR("**"));
 }
 
 void MainWindow::italic()
 {
-    inserText(QChar(u'*'), QChar(u'*'));
+    inserText(QChar(u'*'));
 }
 
 void MainWindow::underline()
 {
-    inserText(STR("<u>"), STR("</u>"));
+    inserText(STR("<u>"), true);
 }
 
 void MainWindow::strikethrough()
 {
-    inserText(QChar(u'~'), QChar(u'~'));
+    inserText(QChar(u'~'));
 }
 
 void MainWindow::closeCurrEditor()

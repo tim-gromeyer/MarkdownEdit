@@ -24,6 +24,7 @@
 #include <QLocale>
 #include <QTranslator>
 
+
 #ifndef NOT_SUPPORTET
 #include "singleapplication.h"
 #endif
@@ -93,7 +94,6 @@ auto main(int argc, char *argv[]) -> int
         &w, &MainWindow::receivedMessage
     );
 #endif
-
 
 #ifdef Q_OS_ANDROID
     w.showFullScreen();
