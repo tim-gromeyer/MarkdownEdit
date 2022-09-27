@@ -5,6 +5,7 @@
 
 QT_BEGIN_NAMESPACE
 class QTableWidget;
+class QToolBar;
 QT_END_NAMESPACE
 
 
@@ -15,7 +16,7 @@ public:
     TableDialog(QWidget *parent = nullptr);
     ~TableDialog() override;
 
-    auto markdownTable() const -> QString;
+    [[nodiscard]] auto markdownTable() const -> QString;
 
 private Q_SLOTS:
     void onContextMenuRequest(const QPoint p);
@@ -24,7 +25,11 @@ private Q_SLOTS:
     void handleColumn();
 
 private:
+    void populateToolbar();
+
     QTableWidget *table;
+
+    QToolBar *toolbar;
 };
 
 #endif // TABLEWIDGET_H
