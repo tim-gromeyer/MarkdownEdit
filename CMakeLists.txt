@@ -12,8 +12,8 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR}/ui)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools PrintSupport)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools PrintSupport)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
 
 if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" AND NOT CMAKE_CROSSCOMPILING)
     set(LINUX TRUE)
@@ -134,14 +134,8 @@ else()
     endif()
 endif()
 
-# Svg package needed for android
-if(ANDROID OR WIN32)
-    find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Svg)
-    list(APPEND 3rdparty Qt${QT_VERSION_MAJOR}::Svg)
-endif()
-
 target_include_directories(markdownedit PRIVATE ${CMAKE_SOURCE_DIR}/src)
-target_link_libraries(markdownedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport ${ENCHANT} ${INTL_LDFLAGS} ${3rdparty})
+target_link_libraries(markdownedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport Qt${QT_VERSION_MAJOR}::Svg ${ENCHANT} ${INTL_LDFLAGS} ${3rdparty})
 
 target_compile_definitions(markdownedit PUBLIC
     APP_VERSION="${PROJECT_VERSION}"
