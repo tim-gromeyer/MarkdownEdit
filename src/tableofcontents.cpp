@@ -1,4 +1,5 @@
 #include "tableofcontents.h"
+#include "markdownparser.h"
 #include "settings.h"
 
 #include <utility>
@@ -9,6 +10,10 @@
 #include <QDialogButtonBox>
 #include <QListWidget>
 #include <QMetaObject>
+#include <QTextDocument>
+
+using StringPair = QPair<QString, QString>;
+using StringPairList = QList<StringPair>;
 
 
 TableOfContents::TableOfContents(QString text, QWidget *parent)
@@ -39,7 +44,7 @@ TableOfContents::TableOfContents(QString text, QWidget *parent)
 
 auto TableOfContents::markdownTOC() -> QString
 {
-    QStringList selected;
+    StringPairList selected;
     QString out;
 
     auto count = list->count();
@@ -49,31 +54,20 @@ auto TableOfContents::markdownTOC() -> QString
 
         if (item->checkState() == Qt::Unchecked) continue;
 
-        selected.append(item->data(0).toString());
+        selected.append(StringPair(item->text(), item->data(14).toString()));
     }
 
     const bool numberList = box->isChecked();
 
     for (int i = 0; i < selected.size(); ++i) {
-        QString heading = selected[i];
-        if (heading.startsWith(u'[')) {
-            static QRegularExpression text(STR(R"(\[(.*)\])"));
-            QRegularExpressionMatch match = text.match(heading);
-
-            const QStringList matches = match.capturedTexts();
-
-            if (!matches.isEmpty())
-                heading = matches.last(); // The first match contains []
-        }
-        QString link = heading.toLower().replace(u' ', u'-').remove(u':').remove(u'.');
-        link.prepend(u'#');
+        auto &pair = selected[i];
 
         if (numberList)
             out.append(STR("%1. ").arg(QString::number(i +1)));
         else
             out.append(L1("- "));
 
-        out.append(STR("[%2](%3)\n").arg(heading, link));
+        out.append(STR("[%2](#%3)\n").arg(pair.first, pair.second));
     }
 
     return out;
@@ -87,29 +81,37 @@ void TableOfContents::parseText()
     // Separate by line
     QStringList list = in.split(u'\n');
 
+    StringPairList headings;
+
+    QTextDocument doc;
+
     // Loop through each line
     for (const QString &line : list) {
         // If the line doesn't start with # move to the next line
         if (!line.startsWith(u'#')) continue;
 
-        // In case it's a heading find the whitespace between the #'s and the text
-        auto pos = line.indexOf(u' ');
-        // If not found or greater than 6 move to next line
-        if (pos == -1 || pos > 6) continue;
+        const QString html = Parser::heading2HTML(line);
+        doc.setHtml(html);
 
-        // Get the string from 0 til 1 - 6
-        const QString first = line.mid(0, pos);
-        // Get the heading number
-        auto count = first.count(u'#');
+        QString text = doc.toPlainText().trimmed();
+        if (text.endsWith(u':'))
+            text.remove(text.size() -1, 1);
 
-        headings.append(line.mid(++count));
+        // (?:id="([^"]*)")
+        static const QRegularExpression id(STR("(?:id=\"([^\"]*)\")"));
+        const QStringList matches = id.match(html).capturedTexts();
+        if (matches.isEmpty()) continue;
+
+        const QString &link = matches.last();
+
+        headings.append(StringPair(text, link));
     }
 
-    for (const QString &heading : qAsConst(headings)) {
-        auto *item = new QListWidgetItem(heading, this->list);
+    for (const auto &heading : qAsConst(headings)) {
+        auto *item = new QListWidgetItem(heading.first, this->list);
         item->setCheckState(Qt::Unchecked);
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable);
-        item->setData(0, heading);
+        item->setData(14, heading.second);
         this->list->addItem(item);
     }
 

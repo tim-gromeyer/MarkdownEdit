@@ -24,8 +24,6 @@ private Q_SLOTS:
 private:
     QString in;
 
-    QStringList headings;
-
     QListWidget *list;
 
     QCheckBox *box;

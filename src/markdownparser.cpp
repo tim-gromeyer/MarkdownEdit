@@ -66,6 +66,18 @@ auto Parser::toHtml(const QString &in, const int dia) -> QString
     return QString::fromUtf8(out);
 }
 
+auto Parser::heading2HTML(const QString &in) -> QString
+{
+    const QByteArray array = in.toUtf8(); // Use UTF-8 for better support
+
+    QByteArray out;
+
+    md_html(array.constData(), array.size(), &captureHtmlFragment, &out,
+            parser_flags, MD_HTML_FLAG_SKIP_UTF8_BOM);
+
+    return QString::fromUtf8(out);
+}
+
 auto Parser::toMarkdown(QString in) -> QString
 {
     // replace Windows line breaks
