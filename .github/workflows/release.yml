@@ -25,6 +25,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - run: git submodule update --init --depth=1 --recursive
 
     - name:  Install Qt
       run: |
