@@ -7,3 +7,6 @@
 [submodule "3rdparty/md4c"]
 	path = 3rdparty/md4c
 	url = https://github.com/software-made-easy/MarkdownEdit_md4c
+[submodule "3rdparty/html2md"]
+	path = 3rdparty/html2md
+	url = https://github.com/kstenschke/html2md
