@@ -43,11 +43,13 @@ MarkdownEditor::MarkdownEditor(QWidget *parent)
 void MarkdownEditor::dragEnterEvent(QDragEnterEvent *event)
 {
     event->accept();
+    QMarkdownTextEdit::dragEnterEvent(event);
 }
 
 void MarkdownEditor::dragMoveEvent(QDragMoveEvent *event)
 {
     event->accept();
+    QMarkdownTextEdit::dragMoveEvent(event);
 }
 
 void MarkdownEditor::dropEvent(QDropEvent *event)

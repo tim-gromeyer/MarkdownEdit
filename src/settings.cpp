@@ -16,7 +16,6 @@
  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-
 #include "settings.h"
 
 #include <QDir>
@@ -26,9 +25,8 @@
 #include <QString>
 #include <QVariant>
 
-
 static QHash<QString, QVariant> languages_map;
-static QString currentDir;
+
 
 auto getLanguageMap() -> QHash<QString, QVariant>
 {
@@ -55,15 +53,6 @@ auto mapContains(const QString &s) -> bool
     return languages_map.contains(s);
 }
 
-auto currDir() -> QString {
-    return currentDir;
-}
-
-void setCurrDir(const QString &newDir)
-{
-    currentDir = newDir;
-}
-
 namespace settings {
 auto isDarkMode() -> bool
 {
@@ -75,7 +64,7 @@ auto isDarkMode() -> bool
 
     return dark;
 }
-}
+} // namespace settings
 
 namespace common {
 auto homeDict() -> const QString
@@ -88,4 +77,4 @@ auto languages() -> const QStringList
 {
     return QLocale::system().uiLanguages();
 }
-}
+} // namespace common

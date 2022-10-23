@@ -39,7 +39,7 @@
 
 static auto red() -> const QColor
 {
-    static const QColor red = QColor(255, 0, 0);
+    static const QColor red(255, 0, 0); // constexpr doesn't work in every Qt version
     return red;
 }
 
@@ -68,8 +68,6 @@ SpellChecker::SpellChecker(QPlainTextEdit *parent, const QString &lang)
     : SpellCheckerBaseClass{parent->document()},
     textEdit(parent)
 {
-    Q_ASSERT(parent);
-
     if (!lang.isEmpty())
         setLanguage(lang);
 

@@ -35,7 +35,7 @@ jobs:
         key: ${{ runner.os }}-QtCache-${{ matrix.qt-version }}-2
     # https://github.com/marketplace/actions/install-qt
     - name: Install Qt
-      uses: jurplel/install-qt-action@v2
+      uses: jurplel/install-qt-action@v3
       with:
         version: ${{ matrix.qt-version }}
         cached: ${{ steps.cache-qt.outputs.cache-hit }}
@@ -53,6 +53,6 @@ jobs:
     - name: Build MarkdownEdit using CMake
       run: |
         mkdir build-cmake && cd build-cmake
-        cmake ..
+        cmake -DCMAKE_BUILD_TYPE=Release ..
         cmake --build . -j8
         cd ..

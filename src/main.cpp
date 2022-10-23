@@ -31,8 +31,8 @@
 
 #if defined(Q_OS_WASM) && QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
 #error You must use Qt 5.14 or newer // Because of the file dialog
-#elif QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
-#error You must use Qt 5.10 or newer // Because of QGuiApplication::screenAt
+#elif QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
+#error You must use Qt 5.12 or newer // Because of QTextBlockFormat::headingLevel()
 #endif
 
 #define S(str) QStringLiteral(str)

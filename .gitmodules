@@ -9,4 +9,4 @@
 	url = https://github.com/software-made-easy/MarkdownEdit_md4c
 [submodule "3rdparty/html2md"]
 	path = 3rdparty/html2md
-	url = https://github.com/kstenschke/html2md
+	url = https://github.com/software-made-easy/html2md

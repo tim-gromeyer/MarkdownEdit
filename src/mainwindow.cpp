@@ -37,6 +37,7 @@
 #include <QFileInfo>
 #include <QFileSystemWatcher>
 #include <QHBoxLayout>
+#include <QInputDialog>
 #include <QLabel>
 #include <QMessageBox>
 #include <QSaveFile>
@@ -57,6 +58,9 @@
 #include <QtPrintSupport/QPrintPreviewDialog>
 #endif
 
+#ifndef QT_NO_DEBUG
+#include <QSvgGenerator>
+#endif
 
 using namespace std::chrono_literals;
 
@@ -70,6 +74,24 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
 {
     // we keep it here so the startup looks better
     ui->setupUi(this);
+
+    // Setup settings to load settings
+    settings = new QSettings(STR("SME"), STR("MarkdownEdit"), this);
+
+#ifndef Q_OS_WASM
+    const QByteArray geo = settings->value(STR("geometry"), QByteArrayLiteral("")).toByteArray();
+    if (geo.isEmpty()) {
+        const QRect availableGeometry = QGuiApplication::screenAt(pos())->availableGeometry();
+        resize(availableGeometry.width() / 2, (availableGeometry.height() * 2) / 3);
+        move((availableGeometry.width() - width()) / 2,
+             (availableGeometry.height() - height()) / 2);
+    }
+    else {
+        restoreGeometry(geo);
+    }
+
+    restoreState(settings->value(STR("state"), QByteArrayLiteral("")).toByteArray());
+#endif
 
 #ifndef MOBILE
     QMetaObject::invokeMethod(this, [this, files]{
@@ -342,6 +364,8 @@ void MainWindow::setupConnections()
             this, &MainWindow::onFileChanged);
     connect(ui->tabWidget_2, &QTabWidget::tabCloseRequested,
             this, &MainWindow::closeEditor);
+    connect(ui->actionHTML, &QAction::triggered,
+            this, &MainWindow::onImportHTML);
 }
 
 void MainWindow::setupToolbar()
@@ -431,8 +455,6 @@ void MainWindow::setupToolbar()
     // connect(aInsertImage, &QAction::triggered, this, &MainWindow::insertImage);
     // connect(aInsertLink, &QAction::triggered, this, &MainWindow::insertLink);
 
-
-
     ui->toolBarTools->addAction(aBold);
     ui->toolBarTools->addAction(aItalic);
     ui->toolBarTools->addAction(aUnderline);
@@ -448,6 +470,17 @@ void MainWindow::setupToolbar()
     ui->toolBarTools->addAction(aInsertTable);
     ui->toolBarTools->addAction(aInsertTableOfContents);
 
+#ifndef QT_NO_DEBUG
+    auto *aScreenshot = new QAction(QIcon::fromTheme(STR("gnome-screenshot")), tr("Take screenshot"), this);
+    connect(aScreenshot, &QAction::triggered, this, [this, aScreenshot]{
+        aScreenshot->setVisible(false);
+        QTimer::singleShot(1s, this, [this, aScreenshot]{
+            grab().save(STR("/home/tim/qtprojegt/MarkdownEdit/doc/images/Example.png"), "PNG", 0);
+            aScreenshot->setVisible(true);
+        });
+    });
+    ui->toolBarTools->addAction(aScreenshot);
+#endif
 }
 
 void MainWindow::insertTable()
@@ -804,26 +837,18 @@ void MainWindow::loadIcons()
     loadIcon(STR("document-revert"), ui->actionReload);
     loadIcon(STR("text-wrap"), ui->actionWord_wrap);
     loadIcon(STR("media-playback-pause"), ui->actionPause_preview);
+    loadIcon(STR("text-html"), ui->actionExportHtml);
+    loadIcon(STR("application-pdf"), ui->actionExportPdf);
 
-#ifndef FLATPAK
-    ui->actionExportHtml->setIcon(QIcon::fromTheme(STR("text-html"),
-                                             QIcon(STR(":/icons/text-html_16.png"))));
-    ui->actionExportPdf->setIcon(QIcon::fromTheme(STR("application-pdf"),
-                                                   QIcon(STR(":/icons/application-pdf_16.png"))));
+    loadIcon(STR("document-export"), ui->menuExport);
+    loadIcon(STR("document-import"), ui->menuImport_from);
 
-    ui->menuExport->setIcon(QIcon::fromTheme(STR("document-export"),
-                                             QIcon(STR(":/icons/document-export.svg"))));
-#else
-    ui->actionExportHtml->setIcon(QIcon(STR(":/icons/text-html_16.png")));
-    ui->actionExportPdf->setIcon(QIcon(STR(":/icons/application-pdf_16.png")));
-
-    ui->menuExport->setIcon(QIcon(STR(":/icons/document-export.svg")));
-#endif
     ui->menuRecentlyOpened->setIcon(ui->actionOpen_last_document_on_start->icon());
 
 #ifndef Q_OS_WASM
     toolbutton->setIcon(ui->menuRecentlyOpened->icon());
 #endif
+    ui->actionHTML->setIcon(ui->actionExportHtml->icon());
 
     setWindowIcon(QIcon(STR(":/logo/Icon.svg")));
 }
@@ -834,6 +859,15 @@ void MainWindow::loadIcon(const QString &name, QAction* a)
     a->setIcon(QIcon::fromTheme(name, QIcon(STR(":/icons/%1.svg").arg(name))));
 #else
     a->setIcon(QIcon(STR(":/icons/%1.svg").arg(name)));
+#endif
+}
+
+void MainWindow::loadIcon(const QString &name, QMenu *m)
+{
+#ifndef FLATPAK
+    m->setIcon(QIcon::fromTheme(name, QIcon(STR(":/icons/%1.svg").arg(name))));
+#else
+    m->setIcon(QIcon(STR(":/icons/%1.svg").arg(name)));
 #endif
 }
 
@@ -1609,26 +1643,6 @@ void MainWindow::resizeEvent(QResizeEvent *e)
 }
 
 void MainWindow::loadSettings() {
-    // Setup settings to load settings
-    settings = new QSettings(STR("SME"),
-                             STR("MarkdownEdit"), this);
-
-#ifndef Q_OS_WASM
-    const QByteArray geo = settings->value(STR("geometry"),
-                                           QByteArrayLiteral("")).toByteArray();
-    if (geo.isEmpty()) {
-        const QRect availableGeometry = QGuiApplication::screenAt(pos())->availableGeometry();
-        resize(availableGeometry.width() / 2, (availableGeometry.height() * 2) / 3);
-        move((availableGeometry.width() - width()) / 2,
-             (availableGeometry.height() - height()) / 2);
-    }
-    else {
-        restoreGeometry(geo);
-    }
-
-    restoreState(settings->value(STR("state"), QByteArrayLiteral("")).toByteArray());
-#endif
-
     highlighting = settings->value(STR("highlighting"), true).toBool();
     ui->actionHighlighting_activated->setChecked(highlighting);
 
@@ -1656,7 +1670,6 @@ void MainWindow::loadSettings() {
 
     spelling = settings->value(STR("spelling"), true).toBool();
     ui->actionSpell_checking->setChecked(spelling);
-    // changeSpelling(spelling); not loaded yet
 
     ui->splitter->setSizes(QList<int>() << QWIDGETSIZE_MAX << QWIDGETSIZE_MAX);
 }
@@ -1673,6 +1686,22 @@ void MainWindow::saveSettings() {
     settings->setValue(STR("lineWrap"), ui->actionWord_wrap->isChecked());
     settings->setValue(STR("languagesMap"), getLanguageMap());
     settings->setValue(STR("preview"), preview);
+}
+
+void MainWindow::onImportHTML()
+{
+    QInputDialog dia(this);
+    dia.setInputMode(QInputDialog::TextInput);
+    dia.setLabelText(tr("Enter HTML"));
+    dia.setWindowTitle(tr("Import from HTML"));
+
+    const auto out = dia.exec();
+    if (out == QDialog::Rejected) return;
+
+    const QString html = dia.textValue();
+
+    onFileNew();
+    currentEditor()->setText(Parser::toMarkdown(html).toLocal8Bit());
 }
 
 MainWindow::~MainWindow()

@@ -69,6 +69,8 @@ private Q_SLOTS:
     bool onFileSaveAs();
     void onFileReload();
 
+    void onImportHTML();
+
     void loadIcons();
 
     void onFileChanged(const QString &);
@@ -146,6 +148,7 @@ private:
     void setText(const int);
 
     static void loadIcon(const QString &name, QAction* a);
+    static void loadIcon(const QString &name, QMenu *m);
 
     auto createEditor() -> MarkdownEditor *;
     auto currentEditor() -> MarkdownEditor *;

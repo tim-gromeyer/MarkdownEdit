@@ -18,6 +18,7 @@
 
 
 #include "previewwidget.h"
+#include "settings.h"
 
 #include <QDesktopServices>
 #include <QFile>
@@ -60,7 +61,7 @@ void PreviewWidget::openUrl(const QUrl &url)
     const QString s = url.toString();
     const QString filePath = property("dir").toString() + u'/' + s;
 
-    if (s.startsWith(QLatin1String("http")))
+    if (s.startsWith(L1("http")))
         QDesktopServices::openUrl(url);
 
     else if (QFile::exists(filePath))

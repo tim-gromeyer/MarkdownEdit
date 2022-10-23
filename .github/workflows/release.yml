@@ -1,0 +1,63 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  publish:
+    name: Publish for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-20.04
+            artifact_name: markdownedit*.deb
+            asset_name: ${{ matrix.artifact_name }}+ubuntu20.04
+          - os: ubuntu-22.04
+            artifact_name: markdownedit*.deb
+            asset_name: ${{ matrix.artifact_name }}+ubuntu22.04
+          - os: windows-latest
+            artifact_name: Release/markdownedit.exe
+            asset_name: markdownedit.exe
+          - os: macos-latest
+            artifact_name: markdownedit.app
+            asset_name: markdownedit.app
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name:  Install Qt
+      run:   |
+        if [ "$RUNNER_OS" == "Linux" ]; then
+            sudo apt update
+            sudo apt install -y qtbase5-dev qtdeclarative5-dev qt5ct dpkg-dev
+        elif [ "$RUNNER_OS" == "Windows" ]; then
+            choco install qt5-default
+        else [ "$RUNNER_OS" == "macOS" ]; then
+            brew install qt5
+            brew link qt5 --force
+        fi
+      shell: bash
+
+    - name: Build
+      run: |
+        mkdir build
+        cd build
+        cmake -DCMAKE_BUILD_TYPE=Release .
+        cmake --build . -j8
+        if [ "$RUNNER_OS" == "Linux" ]; then
+            cpack -G DEB
+        fi
+
+      shell: bash
+
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: ${{ matrix.artifact_name }}
+        asset_name: ${{ matrix.asset_name }}
+        tag: ${{ github.ref }}
+

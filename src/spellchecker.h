@@ -50,6 +50,9 @@ public:
 #ifdef CHECK_MARKDOWN
     void setMarkdownHighlightingEnabled(const bool);
     [[nodiscard]] inline auto isMarkdownHighlightingEnabled() const -> bool { return markdownhig; };
+
+    friend class MarkdownHighlighter;
+    using MarkdownHighlighter::_formats;
 #endif
 
     void setSpellCheckingEnabled(const bool);
