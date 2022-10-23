@@ -20,8 +20,6 @@
 #include <QByteArray>
 #include <QRegularExpression>
 
-#include <qdebug.h>
-
 #include "html2md.h"
 
 #include "common.h" // needed for MD_UNDERLINE
@@ -60,7 +58,7 @@ auto Parser::toHtml(const QString &in, const int dia) -> QString
     out.reserve(array.size() *1.28 + 115);
 
     md_html(array.constData(), array.size(), &captureHtmlFragment, &out,
-            parser_flags, MD_HTML_FLAG_SKIP_UTF8_BOM | MD_HTML_FLAG_DEBUG);
+            parser_flags, MD_HTML_FLAG_SKIP_UTF8_BOM);
 
     out.append("</body>\n"
                "</html>\n");
@@ -87,8 +85,6 @@ auto Parser::toMarkdown(const QString &in) -> QString
 
     html2md::Converter c(html);
     auto md = c.Convert2Md();
-
-    qDebug() << c.ok();
 
     // auto md = html2md::Convert(html);
 

@@ -58,10 +58,6 @@
 #include <QtPrintSupport/QPrintPreviewDialog>
 #endif
 
-#ifndef QT_NO_DEBUG
-#include <QSvgGenerator>
-#endif
-
 using namespace std::chrono_literals;
 
 QT_REQUIRE_CONFIG(mainwindow);
