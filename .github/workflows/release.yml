@@ -19,9 +19,9 @@ jobs:
           - os: windows-latest
             artifact_name: Release/markdownedit.exe
             asset_name: markdownedit.exe
-          - os: macos-latest
-            artifact_name: markdownedit.app
-            asset_name: markdownedit.app
+#          - os: macos-latest
+#            artifact_name: markdownedit.app
+#            asset_name: markdownedit.app
 
     steps:
     - uses: actions/checkout@v2
