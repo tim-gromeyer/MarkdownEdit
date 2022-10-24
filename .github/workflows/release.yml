@@ -1,9 +1,9 @@
 name: Publish
 
 on:
-  push:
-    tags:
-      - '*'
+#  push:
+#    tags:
+#      - '*'
   workflow_dispatch:
 
 jobs:
@@ -11,6 +11,7 @@ jobs:
     name: Publish for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         include:
           - os: ubuntu-20.04
@@ -29,7 +30,7 @@ jobs:
 
     - if: contains( matrix.os, 'windows') || contains( matrix.os, 'macos')
       name: Install Qt on Windows and Mac
-      uses: jurplel/install-qt-action@v2
+      uses: jurplel/install-qt-action@v3
       with:
         version: 6.2.4
 
@@ -37,7 +38,7 @@ jobs:
       name: Install Qt on Linux
       run: |
         sudo apt-get update
-        sudo apt-get install -y qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev qt5ct dpkg-dev
+        sudo apt-get install -y qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev libenchant-2-dev qt5ct dpkg-dev
 
     - name: Build
       run: |
