@@ -27,18 +27,17 @@ jobs:
     - uses: actions/checkout@v2
     - run: git submodule update --init --depth=1 --recursive
 
-    - name:  Install Qt
+    - runs-on: [windows-latest]
+      name: Install Qt(Windows)
+      uses: jurplel/install-qt-action@v3
+      with:
+        version: ${{ matrix.qt-version }}
+
+    - runs-on: [ubuntu-20.04]
+      name: Install Qt(Linux)
       run: |
-        if [ "$RUNNER_OS" == "Linux" ]; then
-            sudo apt-get update
-            sudo apt-get install -y qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev qt5ct dpkg-dev
-        elif [ "$RUNNER_OS" == "Windows" ]; then
-            choco install qt5-default
-        elif [ "$RUNNER_OS" == "macOS" ]; then
-            brew install qt5
-            brew link qt5 --force
-        fi
-      shell: bash
+        sudo apt-get update
+        sudo apt-get install -y qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev qt5ct dpkg-dev
 
     - name: Build
       run: |
