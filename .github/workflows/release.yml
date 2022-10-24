@@ -27,14 +27,14 @@ jobs:
     - uses: actions/checkout@v2
     - run: git submodule update --init --depth=1 --recursive
 
-    - runs-on: [windows-latest]
-      name: Install Qt(Windows)
-      uses: jurplel/install-qt-action@v3
+    - if: contains( matrix.os, 'windows') || contains( matrix.os, 'macos')
+      name: Install Qt on Windows and Mac
+      uses: jurplel/install-qt-action@v2
       with:
-        version: ${{ matrix.qt-version }}
+        version: 6.2.4
 
-    - runs-on: [ubuntu-20.04]
-      name: Install Qt(Linux)
+    - if: contains( matrix.os, 'ubuntu')
+      name: Install Qt on Linux
       run: |
         sudo apt-get update
         sudo apt-get install -y qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev qt5ct dpkg-dev
