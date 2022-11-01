@@ -5,39 +5,51 @@ on:
     tags:
       - '*'
   workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Test scenario tags'
+        required: true 
+        type: string
 
 jobs:
-  publish:
+  build:
     name: Publish for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         include:
           - os: ubuntu-20.04
-            artifact_name: build/markdownedit*.deb
-            asset_name: MarkdownEdit.deb
+            files: packages/MarkdownEdit*.deb
           - os: windows-latest
-            artifact_name: build/Release/markdownedit.exe
-            asset_name: markdownedit.exe
+            files: |
+              packages/MarkdownEdit*.exe
+              packages/MarkdownEdit*.zip
 #          - os: macos-latest
 #            artifact_name: markdownedit.app
 #            asset_name: markdownedit.app
 
     steps:
-    - uses: actions/checkout@v2
-    - run: git submodule update --init --depth=1 --recursive
+    - name: Checkout repo and submodules
+      uses: actions/checkout@v3
+      with:
+        submodules: 'true'
 
     - if: contains( matrix.os, 'windows') || contains( matrix.os, 'macos')
       name: Install Qt on Windows and Mac
-      uses: jurplel/install-qt-action@v2
+      uses: jurplel/install-qt-action@v3
       with:
         version: 6.2.4
 
+#    - if: contains( matrix.os, 'windows') || contains( matrix.os, 'macos')
+#      name: Install enchant on Windows and Mac
+#      run: 
+
     - if: contains( matrix.os, 'ubuntu')
-      name: Install Qt on Linux
+      name: Install Qt and enchant-2 on Linux
       run: |
         sudo apt-get update
-        sudo apt-get install -y qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev qt5ct dpkg-dev
+        sudo apt-get install -y qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev libenchant-2-dev qt5ct dpkg-dev
 
     - name: Build
       run: |
@@ -45,19 +57,32 @@ jobs:
         cd build
         cmake -DCMAKE_BUILD_TYPE=Release ..
         cmake --build . -j8
-        if [ "$RUNNER_OS" == "Linux" ]; then
-            cpack -G DEB
-        fi
+        cmake --build . --target=package -j3
 
       shell: bash
 
-    - name: Upload binaries to release
-      uses: svenstaro/upload-release-action@v2
+    - name: Upload package
+      uses: actions/upload-artifact@v3
       with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ${{ matrix.artifact_name }}
-        asset_name: ${{ matrix.asset_name }}
-        tag: ${{ github.ref }}
-        overwrite: true
-        file_glob: true
+        path: ${{ matrix.files }}
+
+  publish:
+    name: Create release and upload files
+    needs: build
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Download files
+      uses: actions/download-artifact@v3
+      with:
+        path: packages
+
+    - name: Create changelog
+      run: |
+        git clone https://github.com/software-made-easy/MarkdownEdit old --depth=1
+        grep -Fvx -f old/CHANGELOG.md CHANGELOG.md > changes.md
+
 

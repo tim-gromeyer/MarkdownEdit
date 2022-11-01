@@ -337,6 +337,22 @@ Willst du trotzdem verlassen?</translation>
         <source>Strikethrough</source>
         <translation>Durchgestrichen</translation>
     </message>
+    <message>
+        <source>Import</source>
+        <translation>Importieren</translation>
+    </message>
+    <message>
+        <source>Take screenshot</source>
+        <translation>Screenshot machen</translation>
+    </message>
+    <message>
+        <source>Enter HTML</source>
+        <translation>HTML eingeben</translation>
+    </message>
+    <message>
+        <source>Import from HTML</source>
+        <translation>Aus HTML importieren</translation>
+    </message>
 </context>
 <context>
     <name>SpellChecker</name>
@@ -386,6 +402,10 @@ Willst du trotzdem verlassen?</translation>
     <message>
         <source>Remove column</source>
         <translation>Spalte entfernen</translation>
+    </message>
+    <message>
+        <source>Manage table</source>
+        <translation>Tabelle verwalten</translation>
     </message>
 </context>
 <context>

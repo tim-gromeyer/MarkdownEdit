@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(MarkdownEdit VERSION 1.4.5 LANGUAGES CXX C HOMEPAGE_URL "https://software-made-easy.github.io/MarkdownEdit/")
+project(MarkdownEdit VERSION 1.4.4
+    DESCRIPTION "Simple program for editing Markdown files"
+    HOMEPAGE_URL "https://software-made-easy.github.io/md_MarkdownEdit.html"
+    LANGUAGES C CXX)
+set(PROJECT_CONTACT "sakul8826@gmail.com")
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -9,26 +13,42 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_SOURCE_DIR}/ui)
 
+# Require c++17
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Find Qt
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
 
+# Detect if it's on linux
 if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" AND NOT CMAKE_CROSSCOMPILING)
     set(LINUX TRUE)
 endif()
+
+# Set default build type
+if (NOT CMAKE_BUILD_TYPE)
+    message(STATUS "Build type not specified. Release is used.")
+    set(CMAKE_BUILD_TYPE "Release")
+else()
+    message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+endif()
+
+# Improve performance
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
     string(REPLACE "-O2" "-O3" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
     string(REPLACE "-O2" "-O3" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 endif()
 
+# Spell checker will not work with cross compilation
 if(CMAKE_CROSSCOMPILING)
     message(STATUS "Cross compilation. The spell checker is not available!")
     option(DISABLE_SPELLCHECK "Turn off spell checker" ON)
 else()
     option(DISABLE_SPELLCHECK "Turn off spell checker" OFF)
 endif()
+
+# For flatpak. Obsolete
 option(FLATPAK "Build for flatpak" OFF)
 
 if(FLATPAK)
@@ -45,15 +65,13 @@ if(FLATPAK)
     )
 endif()
 
+# Project files
 set(TS_FILES translations/MarkdownEdit_de_DE.ts)
 set(RC_FILES
     ressources/icons.qrc
     ressources/ressources.qrc
     translations/translations.qrc
 )
-
-include(3rdparty/CMakeLists.txt)
-include(cmake/TranslationUtils.cmake)
 
 set(PROJECT_SOURCES
     common.h
@@ -80,6 +98,11 @@ set(PROJECT_SOURCES
     ${RC_FILES}
 )
 
+# Include 3rdparty libs and translations
+include(3rdparty/CMakeLists.txt)
+include(cmake/TranslationUtils.cmake)
+
+# Build it!
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_translation(QM_FILES ${TS_FILES})
     add_app_translations_resource(APP_RES ${QM_FILES})
@@ -90,9 +113,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${APP_RES}
     )
 
+    # Dir for android settings
     set_property(TARGET markdownedit APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
                  ${CMAKE_CURRENT_SOURCE_DIR}/android)
-
 else()
     qt5_add_translation(QM_FILES ${TS_FILES})
     add_app_translations_resource(APP_RES ${QM_FILES})
@@ -113,10 +136,12 @@ else()
     endif()
 endif()
 
+# Nessesary for windows
 IF(WIN32)
     SET(INTL_LDFLAGS -lintl)
 ENDIF(WIN32)
 
+# Find enchant-2
 if(DISABLE_SPELLCHECK)
     message(STATUS "Spell check disabled")
     target_compile_definitions(markdownedit PUBLIC NO_SPELLCHECK)
@@ -140,6 +165,7 @@ target_link_libraries(markdownedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT
 target_compile_definitions(markdownedit PUBLIC
     APP_VERSION="${PROJECT_VERSION}"
     CHECK_MARKDOWN
+    HOMEPAGE="${PROJECT_HOMEPAGE_URL}"
     QT_DISABLE_DEPRECATED_BEFORE=0x051208
     QT_NO_CAST_FROM_ASCII
     QT_NO_CAST_FROM_BYTEARRAY
@@ -164,12 +190,14 @@ if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(markdownedit)
 endif()
 
-if(FLATPAK)
-    install(TARGETS markdownedit ${INSTALL_TARGETS_DEFAULT_ARGS})
+# Packaging
+include(GNUInstallDirs)
 
-    install(PROGRAMS packaging/flatpak/MarkdownEdit.desktop DESTINATION ${KDE_INSTALL_APPDIR})
-    install(FILES packaging/flatpak/appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
-
+find_package(ECM 5.86.0 QUIET NO_MODULE)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+if(ECM_FOUND)
+    # install icons
+    include(ECMInstallIcons)
     ecm_install_icons(
         ICONS
             ressources/logo/16-apps-MarkdownEdit.png
@@ -179,33 +207,17 @@ if(FLATPAK)
             ressources/logo/64-apps-MarkdownEdit.png
             ressources/logo/128-apps-MarkdownEdit.png
             ressources/logo/256-apps-MarkdownEdit.png
-        DESTINATION ${KDE_INSTALL_ICONDIR}
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons
         THEME hicolor
     )
-elseif(LINUX AND NOT WIN32)
-    include(GNUInstallDirs)
+endif()
 
-    find_package(ECM 5.86.0 QUIET NO_MODULE)
-    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
-    if(ECM_FOUND)
-        include(ECMInstallIcons)
-        ecm_install_icons(
-            ICONS
-                ressources/logo/16-apps-MarkdownEdit.png
-                ressources/logo/24-apps-MarkdownEdit.png
-                ressources/logo/32-apps-MarkdownEdit.png
-                ressources/logo/48-apps-MarkdownEdit.png
-                ressources/logo/64-apps-MarkdownEdit.png
-                ressources/logo/128-apps-MarkdownEdit.png
-                ressources/logo/256-apps-MarkdownEdit.png
-            DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons
-            THEME hicolor
-        )
-    endif(ECM_FOUND)
+install(TARGETS markdownedit DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-    install(TARGETS markdownedit RUNTIME)
+# Desktop shortcut for linux
+if(LINUX)
     install(FILES packaging/MarkdownEdit.desktop
             DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications)
-
-    include(cmake/Packaging.cmake)
 endif()
+
+include(cmake/Packaging.cmake)

@@ -136,7 +136,7 @@
     </widget>
     <widget class="QMenu" name="menuImport_from">
      <property name="title">
-      <string>Import from</string>
+      <string>Import</string>
      </property>
      <addaction name="actionHTML"/>
     </widget>

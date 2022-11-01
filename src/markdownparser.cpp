@@ -25,6 +25,7 @@
 #include "common.h" // needed for MD_UNDERLINE
 #include "markdownparser.h"
 #include "md4c-html.h"
+#include "qdebug.h"
 
 /* Global options. */
 #if MD_UNDERLINE
@@ -85,6 +86,7 @@ auto Parser::toMarkdown(const QString &in) -> QString
 
     html2md::Converter c(html);
     auto md = c.Convert2Md();
+    qDebug() << c.ok();
 
     // auto md = html2md::Convert(html);
 

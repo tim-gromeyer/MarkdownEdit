@@ -471,7 +471,7 @@ void MainWindow::setupToolbar()
     connect(aScreenshot, &QAction::triggered, this, [this, aScreenshot]{
         aScreenshot->setVisible(false);
         QTimer::singleShot(1s, this, [this, aScreenshot]{
-            grab().save(STR("/home/tim/qtprojegt/MarkdownEdit/doc/images/Example.png"), "PNG", 0);
+            qDebug() << "Screenshot saved successfully:" << grab().save(STR("/home/tim/qtprojegt/Website/images/MarkdownEdit.png"), "PNG", 0);
             aScreenshot->setVisible(true);
         });
     });
@@ -1545,7 +1545,7 @@ void MainWindow::onHelpAbout()
                                                           "</tr>\n"
                                                           "<tr>\n"
                                                           "<td>Homepage:</td>\n"
-                                                          "<td><span style=\"font-size: medium; white-space: pre-wrap; background-color: transparent; font-style: italic; color: #a8abb0;\"><a href=\"https://software-made-easy.github.io/MarkdownEdit/\">https://software-made-easy.github.io/MarkdownEdit/</a></span></td>\n"
+                                                          "<td><span style=\"font-size: medium; white-space: pre-wrap; background-color: transparent; font-style: italic; color: #a8abb0;\"><a href=\"%3\">%3</a></span></td>\n"
                                                           "</tr>\n"
                                                           "</tbody>\n"
                                                           "</table>\n"
@@ -1553,7 +1553,7 @@ void MainWindow::onHelpAbout()
                                                           "<p>Thanks to <a href=\"https://github.com/Waqar144\">Waqar Ahmed</a> for help with development.</p>\n"
                                                           "<p>The conversion from Markdown to HTML is done using the <a href=\"https://github.com/mity/md4c\">md4c</a> library by <em>Martin Mit&aacute;&scaron;</em>.</p>\n"
                                                           "<p>The <a href=\"https://github.com/pbek/qmarkdowntextedit\">widget</a> used for writing was created by <em>Patrizio Bekerle</em>.</p>"
-                                                          ).arg(QStringLiteral(APP_VERSION), QLatin1String(qVersion())));
+                                                          ).arg(QStringLiteral(APP_VERSION), QLatin1String(qVersion()), QStringLiteral(HOMEPAGE)));
 }
 
 void MainWindow::openRecent() {
