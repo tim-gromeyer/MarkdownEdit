@@ -70,6 +70,8 @@ jobs:
     name: Create release and upload files
     needs: build
     runs-on: ubuntu-22.04
+    permissions:
+      contents: write
     strategy:
       fail-fast: false
     steps:
@@ -83,6 +85,13 @@ jobs:
     - name: Create changelog
       run: |
         git clone https://github.com/software-made-easy/MarkdownEdit old --depth=1
-        grep -Fvx -f old/CHANGELOG.md CHANGELOG.md > changes.md
+        grep -Fvx -f old/CHANGELOG.md CHANGELOG.md > ${{ github.workspace }}-CHANGELOG.txt
 
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        body_path: ${{ github.workspace }}-CHANGELOG.md
+        generate_release_notes: true
+        files: packages/*
 
