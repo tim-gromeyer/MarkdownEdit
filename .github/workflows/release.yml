@@ -23,8 +23,8 @@ jobs:
             files: packages/MarkdownEdit*.deb
           - os: windows-latest
             files: |
-              packages/MarkdownEdit*.exe
-              packages/MarkdownEdit*.zip
+              build/packages/MarkdownEdit*.exe
+              build/packages/MarkdownEdit*.zip
 #          - os: macos-latest
 #            artifact_name: markdownedit.app
 #            asset_name: markdownedit.app
