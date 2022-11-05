@@ -33,6 +33,7 @@
 #include <QDebug>
 #include <QDesktopServices>
 #include <QDialogButtonBox>
+#include <QDirIterator>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QFileSystemWatcher>
@@ -124,11 +125,26 @@ void MainWindow::androidPreview(const bool c)
 
 void MainWindow::onHelpSyntax()
 {
-    QString file = STR(":/syntax_en.md");
+    QString file = STR(":/syntax/en.md");
     QString language = STR("en_US");
 
     const QStringList uiLanguages = QLocale::system().uiLanguages(); // ex. de-DE
     const QStringList languages = SpellChecker::getLanguageList(); // ex. de_DE
+
+    /*
+    QDirIterator it(STR(":/syntax"));
+    while (it.hasNext()) {
+        QString lang = it.next().mid(9); // The language
+        lang.remove(L1(".md"));
+
+        lang.replace(u'_', u'-');
+
+        if (uiLanguages.contains(lang)) {
+            file = STR(":/syntax/") + lang + L1(".md");
+            break;
+        }
+    }
+    */
 
     qInfo() << "System languages:" << uiLanguages;
     qInfo() << "Languages available for spell check:" << languages;
@@ -846,7 +862,7 @@ void MainWindow::loadIcons()
 #endif
     ui->actionHTML->setIcon(ui->actionExportHtml->icon());
 
-    setWindowIcon(QIcon(STR(":/logo/Icon.svg")));
+    qApp->setWindowIcon(QIcon(STR(":/logo/Icon.svg")));
 }
 
 void MainWindow::loadIcon(const QString &name, QAction* a)

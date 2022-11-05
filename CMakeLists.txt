@@ -98,6 +98,11 @@ set(PROJECT_SOURCES
     ${RC_FILES}
 )
 
+# Include windows icon
+if(WIN32)
+    list(APPEND PROJECT_SOURCES ressources/logo/Icon.rc)
+endif()
+
 # Include 3rdparty libs and translations
 include(3rdparty/CMakeLists.txt)
 include(cmake/TranslationUtils.cmake)
@@ -222,6 +227,12 @@ install(TARGETS markdownedit DESTINATION ${CMAKE_INSTALL_BINDIR})
 if(LINUX)
     install(FILES packaging/MarkdownEdit.desktop
             DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications)
+endif()
+
+# Icon for windows
+if(WIN32)
+    install(FILES ressources/logo/Icon.ico
+            DESTINATION .)
 endif()
 
 include(cmake/Packaging.cmake)

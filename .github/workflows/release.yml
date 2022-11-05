@@ -20,7 +20,8 @@ jobs:
       matrix:
         include:
           - os: ubuntu-20.04
-            files: packages/MarkdownEdit*.deb
+            files: |
+              build/packages/MarkdownEdit*.deb
           - os: windows-latest
             files: |
               build/packages/MarkdownEdit*.exe

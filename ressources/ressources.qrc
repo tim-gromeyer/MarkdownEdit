@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
-        <file>syntax_de.md</file>
-        <file>syntax_en.md</file>
+        <file>syntax/de.md</file>
+        <file>syntax/en.md</file>
         <file>logo/Icon.svg</file>
     </qresource>
 </RCC>
