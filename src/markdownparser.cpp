@@ -27,12 +27,6 @@
 #include "md4c-html.h"
 #include "qdebug.h"
 
-/* Global options. */
-#if MD_UNDERLINE
-static unsigned parser_flags = MD_FLAG_UNDERLINE;
-#else
-static unsigned parser_flags = 0;
-#endif
 
 const QByteArray templateArray = QByteArrayLiteral("<!DOCTYPE html>\n"
                                                     "<html>\n"
@@ -47,8 +41,14 @@ void captureHtmlFragment(const MD_CHAR* data, const MD_SIZE data_size, void* use
     array->append(data, data_size);
 }
 
-auto Parser::toHtml(const QString &in, const int dia) -> QString
+auto Parser::toHtml(const QString &in, const int dia, const size_t toc_depth) -> QString
 {
+#if MD_UNDERLINE
+    unsigned parser_flags = MD_FLAG_UNDERLINE;
+#else
+    unsigned parser_flags = 0;
+#endif
+
     if (dia == GitHub)
         parser_flags |= MD_DIALECT_GITHUB;
     else
@@ -58,8 +58,12 @@ auto Parser::toHtml(const QString &in, const int dia) -> QString
     QByteArray out = templateArray;
     out.reserve(array.size() *1.28 + 115);
 
+    static MD_TOC_OPTIONS toc;
+    toc.depth = toc_depth;
+    toc.toc_placeholder = "[TOC]";
+
     md_html(array.constData(), array.size(), &captureHtmlFragment, &out,
-            parser_flags, MD_HTML_FLAG_SKIP_UTF8_BOM);
+            parser_flags, MD_HTML_FLAG_SKIP_UTF8_BOM, &toc);
 
     out.append("</body>\n"
                "</html>\n");
@@ -75,7 +79,7 @@ auto Parser::heading2HTML(const QString &in) -> QString
     QByteArray out;
 
     md_html(array.constData(), array.size(), &captureHtmlFragment, &out,
-            parser_flags, MD_HTML_FLAG_SKIP_UTF8_BOM);
+            0, MD_HTML_FLAG_SKIP_UTF8_BOM, nullptr);
 
     return QString::fromUtf8(out);
 }

@@ -80,6 +80,7 @@ SpellChecker::SpellChecker(QPlainTextEdit *parent, const QString &lang)
 
 void SpellChecker::highlightBlock(const QString &text)
 {
+
 #ifdef CHECK_MARKDOWN
     if (markdownhig)
         MarkdownHighlighter::highlightMarkdown(text);

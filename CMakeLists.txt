@@ -235,4 +235,6 @@ if(WIN32)
             DESTINATION .)
 endif()
 
+include(InstallRequiredSystemLibraries)
+
 include(cmake/Packaging.cmake)
