@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 
 project(MarkdownEdit VERSION 1.4.4
     DESCRIPTION "Simple program for editing Markdown files"
-    HOMEPAGE_URL "https://software-made-easy.github.io/md_MarkdownEdit.html"
+    HOMEPAGE_URL "https://tim-gromeyer.github.io/md_MarkdownEdit.html"
     LANGUAGES C CXX)
 set(PROJECT_CONTACT "sakul8826@gmail.com")
 

@@ -190,9 +190,9 @@ void MainWindow::onHelpSyntax()
 
 void MainWindow::toForeground()
 {
-    setWindowState(windowState() & ~Qt::WindowMinimized);
-    raise();
-    activateWindow();
+    setWindowState( (windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+    raise();  // For MacOS
+    activateWindow(); // For Windows
 }
 
 void MainWindow::onFileReload()
@@ -1459,7 +1459,7 @@ auto MainWindow::onFileSave() -> bool
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
 #if defined(Q_OS_WASM)
-    QFileDialog::saveFileContent(currentEditor()->toPlainText().toUtf8(), path);
+    QFileDialog::saveFileContent(currentEditor()->toPlainText().toUtf8());
 #else
 
     watcher->removePath(path);

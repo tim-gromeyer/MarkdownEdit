@@ -28,11 +28,12 @@
 #include "qdebug.h"
 
 
-const QByteArray templateArray = QByteArrayLiteral("<!DOCTYPE html>\n"
-                                                    "<html>\n"
-                                                    "<head>\n"
-                                                    "</head>\n"
-                                                    "<body class=\"preview\">\n");
+const QByteArray templateArray =
+        QByteArrayLiteral("<!DOCTYPE html>\n"
+                          "<html>\n"
+                          "<head>\n"
+                          "</head>\n"
+                          "<body class=\"preview\">\n");
 
 
 void captureHtmlFragment(const MD_CHAR* data, const MD_SIZE data_size, void* userData) {
@@ -78,8 +79,11 @@ auto Parser::heading2HTML(const QString &in) -> QString
 
     QByteArray out;
 
+    static MD_TOC_OPTIONS toc;
+    toc.depth = 0;
+
     md_html(array.constData(), array.size(), &captureHtmlFragment, &out,
-            0, MD_HTML_FLAG_SKIP_UTF8_BOM, nullptr);
+            MD_FLAG_HEADINGAUTOID, MD_HTML_FLAG_SKIP_UTF8_BOM, &toc);
 
     return QString::fromUtf8(out);
 }
