@@ -1,11 +1,11 @@
 ![Made with C++](https://forthebadge.com/images/badges/made-with-c-plus-plus.svg)
 [![Powered by Qt](https://forthebadge.com/images/badges/powered-by-qt.svg)](https://qt.io)
-[![CodeFactor](https://www.codefactor.io/repository/github/software-made-easy/markdownedit/badge/main)](https://www.codefactor.io/repository/github/software-made-easy/markdownedit/overview/main)
+[![CodeFactor](https://www.codefactor.io/repository/github/tim-gromeyer/markdownedit/badge/main)](https://www.codefactor.io/repository/github/tim-gromeyer/markdownedit/overview/main)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![GitHub release](https://img.shields.io/github/release/software-made-easy/MarkdownEdit.svg)](https://github.com/software-made-easy/MarkdownEdit/releases/)
+[![GitHub release](https://img.shields.io/github/release/tim-gromeyer/MarkdownEdit.svg)](https://github.com/tim-gromeyer/MarkdownEdit/releases/)
 
 
-# [MarkdownEdit](https://software-made-easy.github.io/MarkdownEdit/)
+# [MarkdownEdit](https://tim-gromeyer.github.io/MarkdownEdit/)
 
 MarkdownEdit is, as the name suggests, a simple and lightweight program for creating and editing Markdown files.
 
@@ -37,7 +37,7 @@ MarkdownEdit is, as the name suggests, a simple and lightweight program for crea
 
 ## Preview
 
-A preview is available [here](https://software-made-easy.github.io/MarkdownEdit/markdownedit.html).
+A preview is available [here](https://tim-gromeyer.github.io/MarkdownEdit/markdownedit.html).
 
 Important:
 - Performance might be bad
@@ -58,7 +58,7 @@ Important:
 
 Run the [build script](scripts/build.sh) or follow the instructions below.
 
-- Clone MarkdownEdit: `git clone https://github.com/software-made-easy/MarkdownEdit --depth=1 && cd MarkdownEdit`.
+- Clone MarkdownEdit: `git clone https://github.com/tim-gromeyer/MarkdownEdit --depth=1 && cd MarkdownEdit`.
 - Clone all repositories required by MarkdownEdit by running the command `git submodule update --init --recursive -j 3 --depth=1`.
 - Create the build folder: `mkdir build && cd build`.
 - Now create a Makefile with CMake: `cmake ..`.
@@ -67,7 +67,7 @@ Run the [build script](scripts/build.sh) or follow the instructions below.
 Summarize:
 
 ```bash
-git clone https://github.com/software-made-easy/MarkdownEdit --depth=1 && cd MarkdownEdit
+git clone https://github.com/tim-gromeyer/MarkdownEdit --depth=1 && cd MarkdownEdit
 git submodule update --init --recursive -j 3 --depth=1
 mkdir build && cd build
 cmake ..

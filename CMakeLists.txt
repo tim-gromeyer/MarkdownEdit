@@ -221,7 +221,10 @@ if(ECM_FOUND)
     )
 endif()
 
-install(TARGETS markdownedit DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(TARGETS markdownedit
+        BUNDLE  DESTINATION .
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
 
 # Desktop shortcut for linux
 if(LINUX)
@@ -235,6 +238,9 @@ if(WIN32)
             DESTINATION .)
 endif()
 
-include(InstallRequiredSystemLibraries)
+#get_target_property(target_type Qt${QT_VERSION_MAJOR}::Core TYPE)
+#if(WIN32 AND target_type STREQUAL SHARED_LIBRARY)
+#    message(STATUS "Windows build with shared Qt")
+#endif()
 
 include(cmake/Packaging.cmake)

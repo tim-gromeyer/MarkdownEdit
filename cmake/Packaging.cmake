@@ -1,3 +1,5 @@
+include(InstallRequiredSystemLibraries)
+
 set(CPACK_STRIP_FILES ON)
 set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
 set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})

@@ -83,10 +83,10 @@ jobs:
       with:
         path: packages
 
-    - name: Create changelog
-      run: |
-        git clone https://github.com/software-made-easy/MarkdownEdit old --depth=1
-        grep -Fvx -f old/CHANGELOG.md CHANGELOG.md > ${{ github.workspace }}-CHANGELOG.txt
+#    - name: Create changelog
+#      run: |
+#        git clone https://github.com/software-made-easy/MarkdownEdit old --depth=1
+#        grep -Fvx -f old/CHANGELOG.md CHANGELOG.md > ${{ github.workspace }}-CHANGELOG.txt
 
     - name: Release
       uses: softprops/action-gh-release@v1
