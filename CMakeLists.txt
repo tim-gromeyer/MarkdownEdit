@@ -238,6 +238,15 @@ if(WIN32)
             DESTINATION .)
 endif()
 
+if(${QT_VERSION} GREATER_EQUAL 6.3)
+    qt_generate_deploy_app_script(
+        TARGET markdownedit
+        FILENAME_VARIABLE deploy_script
+        NO_UNSUPPORTED_PLATFORM_ERROR
+    )
+    install(SCRIPT ${deploy_script})
+endif()
+
 #get_target_property(target_type Qt${QT_VERSION_MAJOR}::Core TYPE)
 #if(WIN32 AND target_type STREQUAL SHARED_LIBRARY)
 #    message(STATUS "Windows build with shared Qt")

@@ -40,7 +40,7 @@ jobs:
       name: Install Qt on Windows and Mac
       uses: jurplel/install-qt-action@v3
       with:
-        version: 6.2.4
+        version: 6.4.1
 
 #    - if: contains( matrix.os, 'windows') || contains( matrix.os, 'macos')
 #      name: Install enchant on Windows and Mac
