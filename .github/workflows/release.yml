@@ -83,7 +83,13 @@ jobs:
       with:
         path: packages
 
-    - run: echo "FILES=$(find packages/ -name "*" -type f)" >> $GITHUB_ENV
+    - name: Find all files
+      id: files
+      run: |
+        echo "FILES<<EOF" >> $GITHUB_ENV
+        find packages/ -name "*" -type f >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
+
 #    - name: Create changelog
 #      run: |
 #        git clone https://github.com/software-made-easy/MarkdownEdit old --depth=1
