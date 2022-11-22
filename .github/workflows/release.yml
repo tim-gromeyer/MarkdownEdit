@@ -83,6 +83,7 @@ jobs:
       with:
         path: packages
 
+    - run: FILES=$(find packages/ -name "*" -type f)
 #    - name: Create changelog
 #      run: |
 #        git clone https://github.com/software-made-easy/MarkdownEdit old --depth=1
@@ -94,5 +95,5 @@ jobs:
       with:
         body_path: ${{ github.workspace }}-CHANGELOG.md
         generate_release_notes: true
-        files: packages/*
+        files: ${{ env.FILES }}
 

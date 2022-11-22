@@ -247,9 +247,4 @@ if(${QT_VERSION} GREATER_EQUAL 6.3)
     install(SCRIPT ${deploy_script})
 endif()
 
-#get_target_property(target_type Qt${QT_VERSION_MAJOR}::Core TYPE)
-#if(WIN32 AND target_type STREQUAL SHARED_LIBRARY)
-#    message(STATUS "Windows build with shared Qt")
-#endif()
-
 include(cmake/Packaging.cmake)
