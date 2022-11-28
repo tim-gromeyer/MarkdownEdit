@@ -128,8 +128,8 @@ void MainWindow::onHelpSyntax()
     QString file = STR(":/syntax/en.md");
     QString language = STR("en_US");
 
-    const QStringList uiLanguages = QLocale::system().uiLanguages(); // ex. de-DE
-    const QStringList languages = SpellChecker::getLanguageList(); // ex. de_DE
+    static const QStringList uiLanguages = QLocale::system().uiLanguages(); // ex. de-DE
+    static const QStringList languages = SpellChecker::getLanguageList(); // ex. de_DE
 
     /*
     QDirIterator it(STR(":/syntax"));
@@ -154,8 +154,8 @@ void MainWindow::onHelpSyntax()
         //  get first to characters
         const QString lang2 = lang.right(2);
 
-        if (QFile::exists(STR(":/syntax_%1.md").arg(lang2))) {
-            file = STR(":/syntax_%1.md").arg(lang2);
+        if (QFile::exists(STR(":/syntax/%1.md").arg(lang2))) {
+            file = STR(":/syntax/%1.md").arg(lang2);
             language = lang;
             break;
         }
