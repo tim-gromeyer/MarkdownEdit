@@ -42,15 +42,11 @@ jobs:
       with:
         version: 6.4.1
 
-#    - if: contains( matrix.os, 'windows') || contains( matrix.os, 'macos')
-#      name: Install enchant on Windows and Mac
-#      run:
-
     - if: contains( matrix.os, 'ubuntu')
-      name: Install Qt and enchant-2 on Linux
+      name: Install Qt, enchant-2 and ECM on Linux
       run: |
         sudo apt-get update
-        sudo apt-get install -y qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev libenchant-2-dev qt5ct dpkg-dev
+        sudo apt-get install -y qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev libenchant-2-dev qt5ct dpkg-dev extra-cmake-modules
 
     - name: Build
       run: |
@@ -58,9 +54,11 @@ jobs:
         cd build
         cmake -DCMAKE_BUILD_TYPE=Release ..
         cmake --build . -j8
-        cmake --build . --target=package -j3
-
       shell: bash
+
+    - name: Package
+      run: |
+        cmake --build . --target=package -j3
 
     - name: Upload package
       uses: actions/upload-artifact@v3
@@ -76,8 +74,6 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-    - uses: actions/checkout@v3
-
     - name: Download files
       uses: actions/download-artifact@v3
       with:
@@ -89,11 +85,6 @@ jobs:
         echo "FILES<<EOF" >> $GITHUB_ENV
         find packages/ -name "*" -type f >> $GITHUB_ENV
         echo "EOF" >> $GITHUB_ENV
-
-#    - name: Create changelog
-#      run: |
-#        git clone https://github.com/software-made-easy/MarkdownEdit old --depth=1
-#        grep -Fvx -f old/CHANGELOG.md CHANGELOG.md > ${{ github.workspace }}-CHANGELOG.txt
 
     - name: Release
       uses: softprops/action-gh-release@v1
