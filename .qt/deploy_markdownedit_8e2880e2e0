@@ -1,0 +1,3 @@
+
+include(/home/tim/qtprojegt/MarkdownEdit/.qt/QtDeploySupport.cmake)
+_qt_internal_show_skip_runtime_deploy_message("static Qt libs")

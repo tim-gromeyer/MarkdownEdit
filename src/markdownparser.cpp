@@ -94,9 +94,6 @@ auto Parser::toMarkdown(const QString &in) -> QString
 
     html2md::Converter c(html);
     auto md = c.Convert2Md();
-    qDebug() << c.ok();
-
-    // auto md = html2md::Convert(html);
 
     return QString::fromStdString(md);
 }

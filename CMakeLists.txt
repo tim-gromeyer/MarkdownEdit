@@ -21,11 +21,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
 
-# Detect if it's on linux
-if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Linux" AND NOT CMAKE_CROSSCOMPILING)
-    set(LINUX TRUE)
-endif()
-
 # Set default build type
 if (NOT CMAKE_BUILD_TYPE)
     message(STATUS "Build type not specified. Release is used.")
@@ -105,30 +100,28 @@ endif()
 
 # Include 3rdparty libs and translations
 include(3rdparty/CMakeLists.txt)
-include(cmake/TranslationUtils.cmake)
+include(cmake/Translation.cmake)
 
 # Build it!
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_translation(QM_FILES ${TS_FILES})
-    add_app_translations_resource(APP_RES ${QM_FILES})
+    add_translations(TS ${TS_FILES})
 
     qt_add_executable(markdownedit
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        ${APP_RES}
+        ${TS}
     )
 
     # Dir for android settings
     set_property(TARGET markdownedit APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
                  ${CMAKE_CURRENT_SOURCE_DIR}/android)
 else()
-    qt5_add_translation(QM_FILES ${TS_FILES})
-    add_app_translations_resource(APP_RES ${QM_FILES})
+    add_translations(TS ${TS_FILES})
 
     if(ANDROID)
         add_library(markdownedit SHARED
             ${PROJECT_SOURCES}
-            ${APP_RES}
+            ${TS}
         )
 
         set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
@@ -136,7 +129,7 @@ else()
     else()
         add_executable(markdownedit
             ${PROJECT_SOURCES}
-            ${APP_RES}
+            ${TS}
         )
     endif()
 endif()
@@ -169,7 +162,14 @@ else()
 endif()
 
 target_include_directories(markdownedit PRIVATE ${CMAKE_SOURCE_DIR}/src)
-target_link_libraries(markdownedit PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::PrintSupport Qt${QT_VERSION_MAJOR}::Svg ${ENCHANT} ${INTL_LDFLAGS} ${3rdparty})
+target_link_libraries(markdownedit PRIVATE
+    Qt${QT_VERSION_MAJOR}::Widgets
+    Qt${QT_VERSION_MAJOR}::PrintSupport
+    Qt${QT_VERSION_MAJOR}::Svg
+    ${ENCHANT}
+    ${INTL_LDFLAGS}
+    ${3rdparty}
+)
 
 target_compile_definitions(markdownedit PUBLIC
     APP_VERSION="${PROJECT_VERSION}"
@@ -227,7 +227,7 @@ install(TARGETS markdownedit
 )
 
 # Desktop shortcut for linux
-if(LINUX)
+if(UNIX AND NOT EXMSCRIPTEN AND NOT ANDROID)
     install(FILES packaging/MarkdownEdit.desktop
             DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications)
 endif()
