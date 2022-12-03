@@ -1,7 +1,7 @@
 #pragma once
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-/// Options: Modifi the following "Code" to change some things in MarkdownEdit
+/// Options: Modify the following "code" to change some things in MarkdownEdit
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Options
@@ -9,11 +9,11 @@
 
 // Set the following variables to  "true" or "false"
 
-// use _ for underline instead of italic
+// Use _ for underline instead of italic
 #define MD_UNDERLINE true
 
 // Enable or disable spell check.
-#define SPELLCHECK true  // Note: Not avaiable on android and webassembly
+#define SPELLCHECK true  // Note: Not available on android and web assembly
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /// End of options
