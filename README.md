@@ -7,72 +7,58 @@
 
 # [MarkdownEdit](https://tim-gromeyer.github.io/MarkdownEdit/)
 
-MarkdownEdit is, as the name suggests, a simple and lightweight program for creating and editing Markdown files.
+Experience the speed and simplicity of MarkdownEdit.
 
 ## Table of Contents
 
 1. [Features](#features)
 2. [Preview](#preview)
 3. [Dependencies](#dependencies)
+4. [Build instructions](#build-instructions)
+5. [Credits](#credits)
 
--------
 
-## Features:
+## Features
 
-- Spell checker
-- Save and load Markdown files
-- Undo/Redo
-- Preview Markdown files in real time (<1 ms)
-- Editor with syntax highlighting
-- Auto-completion ( close brackets, list, ...)
-- Find/Replace (Ctrl+F/Ctrl+R)
+MarkdownEdit offers a range of powerful features to make editing and creating Markdown
+files quick and easy:
+
+- **Spell checker with language detection**
+- Save and load Markdown files quickly and easily
+- Powerful undo/redo capabilities
+- **Real-time Markdown preview with syntax highlighting**
+- Auto-completion for brackets, lists, and more
+- Find/replace functionality for efficient editing
 - Export to HTML and PDF
-- Poor in resources
-- Quick opening of recent files (toolbar button or file menu)
-- Open source
-- Native look and feel
-- Reminds spelling language for each document
+- Lightweight and resource-efficient
+- Quick access to recent files from the toolbar or file menu
+- Open source and native look and feel
 
 ![Example](doc/images/Example.png)
 
 ## Preview
 
-A preview is available [here](https://tim-gromeyer.github.io/MarkdownEdit/markdownedit.html).
+You can preview MarkdownEdit in action [here](https://tim-gromeyer.github.io/MarkdownEdit/markdownedit.html).
 
-Important:
-- Performance might be bad
-- Spell check is not available
-- Drag and Drop does not work
+Please note:
 
-## Dependencies:
+- The online preview may not perform as well as the actual app
+- Spell check is not available in the online preview
+- Drag and drop functionality is not supported in the online preview
 
-[Qt](https://qt.io/) and [enchant-2](https://github.com/AbiWord/enchant).
+## Dependencies
 
-## Note(s):
-
-- To improve performance when using images, disable the "Show images in preview" option (<u>V</u>iew menu).
-
--------
+MarkdownEdit requires [Qt](https://qt.io/) and [enchant-2](https://github.com/AbiWord/enchant) to be installed.
 
 ## Build instructions
 
-Run the [build script](scripts/build.sh) or follow the instructions below.
+To build MarkdownEdit, follow these steps:
 
-- Clone MarkdownEdit: `git clone https://github.com/tim-gromeyer/MarkdownEdit --depth=1 && cd MarkdownEdit`.
-- Clone all repositories required by MarkdownEdit by running the command `git submodule update --init --recursive -j 3 --depth=1`.
-- Create the build folder: `mkdir build && cd build`.
-- Now create a Makefile with CMake: `cmake ..`.
-- Build it: `cmake --build . -j4`
-
-Summarize:
-
-```bash
-git clone https://github.com/tim-gromeyer/MarkdownEdit --depth=1 && cd MarkdownEdit
-git submodule update --init --recursive -j 3 --depth=1
-mkdir build && cd build
-cmake ..
-cmake --build . -j4
-```
+1. Clone the MarkdownEdit repository: `git clone https://github.com/tim-gromeyer/MarkdownEdit --depth=1 && cd MarkdownEdit`
+2. Initialize and update the submodules: `git submodule update --init --recursive -j 3 --depth=1`
+3. Create a build directory and navigate to it: `mkdir build && cd build`
+4. Generate a Makefile using CMake: `cmake ..`
+5.  Build the project: `cmake --build . -j4`
 
 ## Credits
 
