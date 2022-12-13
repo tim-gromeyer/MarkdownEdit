@@ -23,10 +23,11 @@ Experience the speed and simplicity of MarkdownEdit.
 MarkdownEdit offers a range of powerful features to make editing and creating Markdown
 files quick and easy:
 
-- **Spell checker with language detection**
+- **Spell checker**
 - Save and load Markdown files quickly and easily
 - Powerful undo/redo capabilities
-- **Real-time Markdown preview with syntax highlighting**
+- **Real-time Markdown preview**
+- **Editor with syntax highlighting**
 - Auto-completion for brackets, lists, and more
 - Find/replace functionality for efficient editing
 - Export to HTML and PDF
