@@ -1,6 +1,6 @@
 /**
  ** This file is part of the MarkdownEdit project.
- ** Copyright 2022 Tim Gromeyer <sakul8826@gmail.com>.
+ ** Copyright 2022 - 2023 Tim Gromeyer <sakul8826@gmail.com>.
  **
  ** This program is free software: you can redistribute it and/or modify
  ** it under the terms of the GNU General Public License as published by
@@ -249,9 +249,9 @@ void MainWindow::setupThings()
     // Setup a file watcher
     watcher = new QFileSystemWatcher(this);
 
-    // Setup ComboBox to choose between Commonmark and GitHub
+    // Setup ComboBox to choose between Commonmark, GitHub and Doxygen
     mode = new QComboBox(ui->Edit);
-    mode->addItems(QStringList() << STR("Commonmark") << STR("GitHub"));
+    mode->addItems(QStringList() << STR("Commonmark") << STR("GitHub") << STR("Doxygen"));
     mode->setCurrentIndex(1);
 
     // Setup ComboBox to choose between Preview and Raw HTML
@@ -608,7 +608,7 @@ void MainWindow::editorMoved(const int from, const int to)
 void MainWindow::closeEditor(const int index)
 {
     overrideEditor = true;
-    overrideVal = index;
+    overrideVal = (short)index;
 
     auto *editor = editorList.at(index);
 
@@ -1247,7 +1247,7 @@ void MainWindow::exportHtml()
 
 void MainWindow::changeMode(const int i)
 {
-    _mode = i;
+    _mode = (short)i;
     onTextChanged();
 }
 

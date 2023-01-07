@@ -1,6 +1,6 @@
 /**
  ** This file is part of the MarkdownEdit project.
- ** Copyright 2022 Tim Gromeyer <sakul8826@gmail.com>.
+ ** Copyright 2022 - 2023 Tim Gromeyer <sakul8826@gmail.com>.
  **
  ** This program is free software: you can redistribute it and/or modify
  ** it under the terms of the GNU General Public License as published by
@@ -27,10 +27,11 @@ class Parser
 public:
     enum Dialect {
         Commonmark = 0,
-        GitHub = 1
+        GitHub = 1,
+        Doxygen = 2
     };
 
-    Q_REQUIRED_RESULT static auto toHtml(const QString &in, const int dia = GitHub, const size_t = 0) -> QString;
+    Q_REQUIRED_RESULT static auto toHtml(const QString &in, const int dia = GitHub, const size_t = 3) -> QString;
     Q_REQUIRED_RESULT static auto heading2HTML(const QString &in) -> QString;
 
     Q_REQUIRED_RESULT static auto toMarkdown(const QString &in) -> QString;

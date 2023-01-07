@@ -1,6 +1,6 @@
 /**
  ** This file is part of the MarkdownEdit project.
- ** Copyright 2022 Tim Gromeyer <sakul8826@gmail.com>.
+ ** Copyright 2022 - 2023 Tim Gromeyer <sakul8826@gmail.com>.
  **
  ** This program is free software: you can redistribute it and/or modify
  ** it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@
 #include "common.h" // needed for MD_UNDERLINE
 #include "markdownparser.h"
 #include "md4c-html.h"
-#include "qdebug.h"
 
 
 const QByteArray templateArray =
@@ -39,7 +38,7 @@ const QByteArray templateArray =
 void captureHtmlFragment(const MD_CHAR* data, const MD_SIZE data_size, void* userData) {
     auto *array = static_cast<QByteArray*>(userData);
 
-    array->append(data, data_size);
+    array->append(data, (int)data_size);
 }
 
 auto Parser::toHtml(const QString &in, const int dia, const size_t toc_depth) -> QString
@@ -50,18 +49,30 @@ auto Parser::toHtml(const QString &in, const int dia, const size_t toc_depth) ->
     unsigned parser_flags = 0;
 #endif
 
-    if (dia == GitHub)
+    switch (dia) {
+    case Doxygen:
+    case GitHub:
         parser_flags |= MD_DIALECT_GITHUB;
-    else
+        break;
+    case Commonmark:
         parser_flags |= MD_DIALECT_COMMONMARK;
+        break;
+    default:
+        break;
+    }
 
     const QByteArray array = in.toUtf8(); // Use UTF-8 for better support
     QByteArray out = templateArray;
     out.reserve(array.size() *1.28 + 115);
 
     static MD_TOC_OPTIONS toc;
-    toc.depth = toc_depth;
-    toc.toc_placeholder = "[TOC]";
+    if (dia  == Doxygen) {
+        toc.toc_placeholder = "[TOC]";
+        toc.depth = (int8_t)toc_depth;
+    } else {
+        toc.toc_placeholder = "";
+        toc.depth = 0;
+    }
 
     md_html(array.constData(), array.size(), &captureHtmlFragment, &out,
             parser_flags, MD_HTML_FLAG_SKIP_UTF8_BOM, &toc);
@@ -92,8 +103,5 @@ auto Parser::toMarkdown(const QString &in) -> QString
 {
     auto html = in.toStdString();
 
-    html2md::Converter c(html);
-    auto md = c.Convert2Md();
-
-    return QString::fromStdString(md);
+    return QString::fromStdString(html2md::Convert(html));
 }

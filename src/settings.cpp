@@ -1,6 +1,6 @@
 /**
  ** This file is part of the MarkdownEdit project.
- ** Copyright 2022 Tim Gromeyer <sakul8826@gmail.com>.
+ ** Copyright 2022 - 2023 Tim Gromeyer <sakul8826@gmail.com>.
  **
  ** This program is free software: you can redistribute it and/or modify
  ** it under the terms of the GNU General Public License as published by
