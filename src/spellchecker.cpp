@@ -54,9 +54,10 @@ static auto red() -> const QColor
 SpellChecker::SpellChecker(QPlainTextEdit *parent, const QString &lang)
     : SpellCheckerBaseClass{parent->document()}
     , textEdit(parent)
-    , speller(new nuspell::Dictionary)
 {
+#ifndef NO_SPELLCHECK
     nuspell::append_default_dir_paths(dirs);
+#endif
 
     if (!lang.isEmpty())
         setLanguage(lang);
@@ -355,7 +356,7 @@ void SpellChecker::showContextMenu(const QPoint pos)
         if (!isCorrect(word)) {
             const QStringList suggestions = getSuggestion(word);
             if (!suggestions.isEmpty()) {
-                for (auto i = 0, n = qMin(10, suggestions.length()); i < n; ++i) {
+                for (int i = 0, n = qMin(10, suggestions.length()); i < n; ++i) {
                     auto *action = new QAction(suggestions.at(i), menu);
                     action->setProperty("wordPos", wordPos);
                     action->setProperty("suggestion", suggestions.at(i));
@@ -364,7 +365,7 @@ void SpellChecker::showContextMenu(const QPoint pos)
                 }
                 if (suggestions.length() > 10) {
                     auto *moreMenu = new QMenu(tr("More..."), menu);
-                    for (auto i = 10, n = suggestions.length(); i < n; ++i) {
+                    for (int i = 10, n = suggestions.length(); i < n; ++i) {
                         auto *action = new QAction(suggestions.at(i), moreMenu);
                         action->setProperty("wordPos", wordPos);
                         action->setProperty("suggestion", suggestions.at(i));
