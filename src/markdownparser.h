@@ -16,22 +16,17 @@
  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-
 #pragma once
 
 #include <QObject>
 
-
 class Parser
 {
 public:
-    enum Dialect {
-        Commonmark = 0,
-        GitHub = 1,
-        Doxygen = 2
-    };
+    enum Dialect { Commonmark = 0, GitHub = 1, Doxygen = 2 };
 
-    Q_REQUIRED_RESULT static auto toHtml(const QString &in, const int dia = GitHub, const size_t = 3) -> QString;
+    Q_REQUIRED_RESULT static auto toHtml(const QString &in, const int dia = GitHub, const size_t = 3)
+        -> QString;
     Q_REQUIRED_RESULT static auto heading2HTML(const QString &in) -> QString;
 
     Q_REQUIRED_RESULT static auto toMarkdown(const QString &in) -> QString;

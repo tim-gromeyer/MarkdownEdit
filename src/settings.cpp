@@ -27,7 +27,6 @@
 
 static QHash<QString, QVariant> languages_map;
 
-
 auto getLanguageMap() -> QHash<QString, QVariant>
 {
     return languages_map;

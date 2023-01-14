@@ -8,7 +8,6 @@
 #include <QToolBar>
 #include <QVBoxLayout>
 
-
 TableDialog::TableDialog(QWidget *parent)
     : QDialog(parent)
 {
@@ -26,7 +25,8 @@ TableDialog::TableDialog(QWidget *parent)
     table = new QTableWidget(3, 2, this);
 
     auto *box = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
-                                     Qt::Horizontal, this);
+                                     Qt::Horizontal,
+                                     this);
     connect(box, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(box, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
@@ -50,7 +50,6 @@ auto TableDialog::markdownTable() const -> QString
         int size = 0;
 
         for (int row = 0; row < rowCount; ++row) {
-
             if (!table->item(row, i))
                 continue;
 
@@ -65,7 +64,8 @@ auto TableDialog::markdownTable() const -> QString
     int size = 0;
     // Calculate size for the output string
     for (int i = 0; i < columnCount; ++i) {
-        size += (biggest[i] +4) * (rowCount +1); // +1 because of the extra row which marks the headers
+        size += (biggest[i] + 4)
+                * (rowCount + 1); // +1 because of the extra row which marks the headers
     }
     out.reserve(size);
 
@@ -73,22 +73,22 @@ auto TableDialog::markdownTable() const -> QString
         for (int column = 0; column < columnCount; ++column) {
             out.append(L1("| "));
             if (!table->item(row, column)) {
-                out.append(STR(" ").repeated(biggest[column] +1));
+                out.append(STR(" ").repeated(biggest[column] + 1));
                 continue;
             }
 
             const QString text = table->item(row, column)->text();
             out.append(text);
-            out.append(STR(" ").repeated(biggest[column] - text.size() +1));
-
+            out.append(STR(" ").repeated(biggest[column] - text.size() + 1));
         }
         out.append(u'|');
         out.append(u'\n');
-        if (row != 0) continue;
+        if (row != 0)
+            continue;
 
         for (int column = 0; column < columnCount; ++column) {
             out.append(u'|');
-            out.append(STR("-").repeated(biggest[column] +2));
+            out.append(STR("-").repeated(biggest[column] + 2));
             // out.append(u' ');
         }
         out.append(u'|');
@@ -124,32 +124,34 @@ void TableDialog::onContextMenuRequest(const QPoint p)
 
 void TableDialog::handleRow()
 {
-    auto *a = qobject_cast<QAction*>(sender());
+    auto *a = qobject_cast<QAction *>(sender());
 
     const QString s = a->data().toString();
 
     if (s == QLatin1String("above")) {
-        int i = table->currentRow() -1;
-        if (i == -1) ++i;
+        int i = table->currentRow() - 1;
+        if (i == -1)
+            ++i;
         table->insertRow(i);
     } else if (s == QLatin1String("below"))
-        table->insertRow(table->currentRow() +1);
+        table->insertRow(table->currentRow() + 1);
     else
         table->removeRow(table->currentRow());
 }
 
 void TableDialog::handleColumn()
 {
-    auto *a = qobject_cast<QAction*>(sender());
+    auto *a = qobject_cast<QAction *>(sender());
 
     const QString s = a->data().toString();
 
     if (s == QLatin1String("above")) {
-        int i = table->currentColumn() -1;
-        if (i == -1) ++i;
+        int i = table->currentColumn() - 1;
+        if (i == -1)
+            ++i;
         table->insertColumn(i);
     } else if (s == QLatin1String("below"))
-        table->insertColumn(table->currentColumn() +1);
+        table->insertColumn(table->currentColumn() + 1);
     else
         table->removeColumn(table->currentColumn());
 }
@@ -161,9 +163,14 @@ void TableDialog::populateToolbar()
     auto *aInsertRowBelow = new QAction(tr("Add row below"), toolbar);
     auto *aRemoveRow = new QAction(tr("Remove row"), toolbar);
 
-    aInsertRowAbove->setIcon(QIcon::fromTheme(STR("edit-table-insert-row-above"), QIcon(STR(":/icons/edit-table-insert-row-above.svg"))));
-    aInsertRowBelow->setIcon(QIcon::fromTheme(STR("edit-table-insert-row-below"), QIcon(STR(":/icons/edit-table-insert-row-below.svg"))));
-    aRemoveRow->setIcon(QIcon::fromTheme(STR("edit-table-delete-row"), QIcon(STR(":/icons/edit-table-delete-row.svg"))));
+    aInsertRowAbove->setIcon(
+        QIcon::fromTheme(STR("edit-table-insert-row-above"),
+                         QIcon(STR(":/icons/edit-table-insert-row-above.svg"))));
+    aInsertRowBelow->setIcon(
+        QIcon::fromTheme(STR("edit-table-insert-row-below"),
+                         QIcon(STR(":/icons/edit-table-insert-row-below.svg"))));
+    aRemoveRow->setIcon(QIcon::fromTheme(STR("edit-table-delete-row"),
+                                         QIcon(STR(":/icons/edit-table-delete-row.svg"))));
 
     aInsertRowAbove->setData(QStringLiteral("above"));
     aInsertRowBelow->setData(QStringLiteral("below"));
@@ -182,9 +189,14 @@ void TableDialog::populateToolbar()
     auto *aInsertColumnBelow = new QAction(tr("Add column to the right"), toolbar);
     auto *aRemoveColumn = new QAction(tr("Remove column"), toolbar);
 
-    aInsertColumnAbove->setIcon(QIcon::fromTheme(STR("edit-table-insert-column-left"), QIcon(STR(":/icons/edit-table-insert-column-left.svg"))));
-    aInsertColumnBelow->setIcon(QIcon::fromTheme(STR("edit-table-insert-column-right"), QIcon(STR(":/icons/edit-table-insert-column-right.svg"))));
-    aRemoveColumn->setIcon(QIcon::fromTheme(STR("edit-table-delete-column"), QIcon(STR(":/icons/edit-table-delete-column.svg"))));
+    aInsertColumnAbove->setIcon(
+        QIcon::fromTheme(STR("edit-table-insert-column-left"),
+                         QIcon(STR(":/icons/edit-table-insert-column-left.svg"))));
+    aInsertColumnBelow->setIcon(
+        QIcon::fromTheme(STR("edit-table-insert-column-right"),
+                         QIcon(STR(":/icons/edit-table-insert-column-right.svg"))));
+    aRemoveColumn->setIcon(QIcon::fromTheme(STR("edit-table-delete-column"),
+                                            QIcon(STR(":/icons/edit-table-delete-column.svg"))));
 
     aInsertColumnAbove->setData(QStringLiteral("above"));
     aInsertColumnBelow->setData(QStringLiteral("below"));

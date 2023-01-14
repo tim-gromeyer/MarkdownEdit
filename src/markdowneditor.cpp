@@ -16,7 +16,6 @@
  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-
 #include "markdowneditor.h"
 #include "settings.h"
 #include "spellchecker.h"
@@ -27,13 +26,13 @@
 #include <QMimeDatabase>
 #include <QSignalBlocker>
 
+#include <thread>
 
 MarkdownEditor::MarkdownEditor(QWidget *parent)
     : QMarkdownTextEdit(parent, false)
 {
     checker = new SpellChecker(this);
-    connect(checker, &SpellChecker::languageChanged,
-            this, &MarkdownEditor::onLanguageChanged);
+    connect(checker, &SpellChecker::languageChanged, this, &MarkdownEditor::onLanguageChanged);
 
     setAcceptDrops(true);
 
@@ -78,23 +77,23 @@ void MarkdownEditor::dropEvent(QDropEvent *event)
             Q_EMIT openFile(QFileInfo(file.toLocalFile()).absoluteFilePath());
 
         if (mime.startsWith(L1("image/"))) {
-            c.insertText(STR("![%1](%2)\n").arg(file.fileName(),
-                                                        path));
+            c.insertText(STR("![%1](%2)\n").arg(file.fileName(), path));
             continue;
         }
 
-        c.insertText(STR("[%1](%2)\n").arg(file.fileName(),
-                                                    path));
+        c.insertText(STR("[%1](%2)\n").arg(file.fileName(), path));
     }
     event->accept();
 }
 
 auto MarkdownEditor::setLanguage(const QString &lang) -> bool
 {
-    if (SpellChecker::getLanguageList().contains(lang))
-        return checker->setLanguage(lang);
-    else
+    if (!SpellChecker::getLanguageList().contains(lang))
         return false;
+
+    std::thread t(&SpellChecker::setLanguage, checker, lang);
+    t.join();
+    return true;
 }
 
 auto MarkdownEditor::filePath() -> QString
@@ -102,9 +101,9 @@ auto MarkdownEditor::filePath() -> QString
     if (getDir() == u'.')
         return getFileName() + STR("[*]");
     else {
-        return STR("%1[*] (%2)").arg(info.fileName(),
-                                                info.path()).replace(common::homeDict(),
-                                                                     QChar(u'~'));
+        return STR("%1[*] (%2)")
+            .arg(info.fileName(), info.path())
+            .replace(common::homeDict(), QChar(u'~'));
     }
 }
 
@@ -147,22 +146,25 @@ void MarkdownEditor::setText(const QByteArray &t, const QString &newFile, const 
         info.setFile(newFile);
 
     // Improve performance
-    QMetaObject::invokeMethod(this, [this, t, newFile]{
-        blockSignals(true);
+    QMetaObject::invokeMethod(
+        this,
+        [this, t, newFile] {
+            blockSignals(true);
 
-        checker->clearDirtyBlocks();
-        checker->setDocument(nullptr);
+            checker->clearDirtyBlocks();
+            checker->setDocument(nullptr);
 
-        if (mapContains(newFile))
-            setLanguage(mapAttribute(newFile));
+            if (mapContains(newFile))
+                setLanguage(mapAttribute(newFile));
 
-        document()->setPlainText(QString::fromLocal8Bit(t));
-        document()->setModified(false);
+            document()->setPlainText(QString::fromLocal8Bit(t));
+            document()->setModified(false);
 
-        checker->setDocument(document());
+            checker->setDocument(document());
 
-        blockSignals(false);
-    }, Qt::QueuedConnection);
+            blockSignals(false);
+        },
+        Qt::QueuedConnection);
 }
 
 MarkdownEditor::~MarkdownEditor() = default;

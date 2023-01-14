@@ -8,7 +8,6 @@ class QTableWidget;
 class QToolBar;
 QT_END_NAMESPACE
 
-
 class TableDialog : public QDialog
 {
     Q_OBJECT

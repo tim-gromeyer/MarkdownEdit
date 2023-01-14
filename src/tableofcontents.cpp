@@ -15,10 +15,9 @@
 using StringPair = QPair<QString, QString>;
 using StringPairList = QList<StringPair>;
 
-
 TableOfContents::TableOfContents(QString text, QWidget *parent)
-    : QDialog(parent),
-      in(std::move(text))
+    : QDialog(parent)
+    , in(std::move(text))
 {
     setWindowTitle(tr("Insert table of contents"));
 
@@ -29,7 +28,9 @@ TableOfContents::TableOfContents(QString text, QWidget *parent)
 
     box = new QCheckBox(tr("Number list"), this);
 
-    auto *bb = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, this);
+    auto *bb = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
+                                    Qt::Horizontal,
+                                    this);
     connect(bb, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(bb, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
@@ -52,7 +53,8 @@ auto TableOfContents::markdownTOC() -> QString
     for (int i = 0; i < count; ++i) {
         auto *item = list->item(i);
 
-        if (item->checkState() == Qt::Unchecked) continue;
+        if (item->checkState() == Qt::Unchecked)
+            continue;
 
         selected.append(StringPair(item->text(), item->data(14).toString()));
     }
@@ -63,7 +65,7 @@ auto TableOfContents::markdownTOC() -> QString
         auto &pair = selected[i];
 
         if (numberList)
-            out.append(STR("%1. ").arg(QString::number(i +1)));
+            out.append(STR("%1. ").arg(QString::number(i + 1)));
         else
             out.append(L1("- "));
 
@@ -88,19 +90,21 @@ void TableOfContents::parseText()
     // Loop through each line
     for (const QString &line : list) {
         // If the line doesn't start with # move to the next line
-        if (!line.startsWith(u'#')) continue;
+        if (!line.startsWith(u'#'))
+            continue;
 
         const QString html = Parser::heading2HTML(line);
         doc.setHtml(html);
 
         QString text = doc.toPlainText().trimmed();
         if (text.endsWith(u':'))
-            text.remove(text.size() -1, 1);
+            text.remove(text.size() - 1, 1);
 
         // (?:id="([^"]*)")
         static const QRegularExpression id(STR("(?:id=\"([^\"]*)\")"));
         const QStringList matches = id.match(html).capturedTexts();
-        if (matches.isEmpty()) continue;
+        if (matches.isEmpty())
+            continue;
 
         const QString &link = matches.last();
 

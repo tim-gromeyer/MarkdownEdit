@@ -216,54 +216,6 @@ Willst du trotzdem verlassen?</translation>
         <translation>Neues Dokument erstellt</translation>
     </message>
     <message>
-        <source>&lt;h2&gt;MarkdownEdit&lt;/h2&gt;
-&lt;p&gt;MarkdownEdit, as the name suggests, is a simple and easy program to create and edit Markdown files.&lt;/p&gt;
-&lt;h2&gt;About&lt;/h2&gt;
-&lt;table class=&quot;table&quot; style=&quot;border-style: none;&quot;&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Version:&lt;/td&gt;
-&lt;td&gt;%1&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Qt Version:&lt;/td&gt;
-&lt;td&gt;%2&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Homepage:&lt;/td&gt;
-&lt;td&gt;&lt;span style=&quot;font-size: medium; white-space: pre-wrap; background-color: transparent; font-style: italic; color: #a8abb0;&quot;&gt;&lt;a href=&quot;https://software-made-easy.github.io/MarkdownEdit/&quot;&gt;https://software-made-easy.github.io/MarkdownEdit/&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h2&gt;Credits&lt;/h2&gt;
-&lt;p&gt;Thanks to &lt;a href=&quot;https://github.com/Waqar144&quot;&gt;Waqar Ahmed&lt;/a&gt; for help with development.&lt;/p&gt;
-&lt;p&gt;The conversion from Markdown to HTML is done using the &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt; library by &lt;em&gt;Martin Mit&amp;aacute;&amp;scaron;&lt;/em&gt;.&lt;/p&gt;
-&lt;p&gt;The &lt;a href=&quot;https://github.com/pbek/qmarkdowntextedit&quot;&gt;widget&lt;/a&gt; used for writing was created by &lt;em&gt;Patrizio Bekerle&lt;/em&gt;.&lt;/p&gt;</source>
-        <translation>&lt;h2&gt;MarkdownEdit&lt;/h2&gt;
-&lt;p&gt;MarkdownEdit ist, wie der Name schon sagt, ein einfaches Programm zum Erstellen und Bearbeiten von Markdown-Dateien.&lt;/p&gt;
-&lt;h2&gt;Über&lt;/h2&gt;
-&lt;table class=&quot;table&quot; style=&quot;border-style: none;&quot;&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Version:&lt;/td&gt;
-&lt;td&gt;%1&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Qt-Version:&lt;/td&gt;
-&lt;td&gt;%2&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Homepage:&lt;/td&gt;
-&lt;td&gt;&lt;span style=&quot;font-size: medium; white-space: pre-wrap; background-color: transparent; font-style: italic; color: #a8abb0;&quot;&gt;&lt;a href=&quot;https:// software-made-easy.github.io/MarkdownEdit/&quot;&gt;https://software-made-easy.github.io/MarkdownEdit/&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h2&gt;Credits&lt;/h2&gt;
-&lt;p&gt;Dank an &lt;a href=&quot;https://github.com/Waqar144&quot;&gt;Waqar Ahmed&lt;/a&gt; für die Hilfe bei der Entwicklung.&lt;/p&gt;
-&lt;p&gt;Die Konvertierung von Markdown in HTML erfolgt mithilfe der &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt;-Bibliothek von &lt;em&gt;Martin Mit&amp;aacute;&amp;scaron;&lt;/em&gt;.&lt;/p&gt;
-&lt;p&gt;Das zum Schreiben verwendete &lt;a href=&quot;https://github.com/pbek/qmarkdowntextedit&quot;&gt;Widget&lt;/a&gt; wurde von &lt;em&gt;Patrizio Bekerle&lt;/em&gt; erstellt.&lt;/p&gt;</translation>
-    </message>
-    <message>
         <source>Could not open file &lt;em&gt;%1&lt;/em&gt;: %2</source>
         <translation>Datei &lt;em&gt;%1&lt;/em&gt; konnte nicht geöffnet werden: %2</translation>
     </message>
@@ -352,6 +304,32 @@ Willst du trotzdem verlassen?</translation>
     <message>
         <source>Import from HTML</source>
         <translation>Aus HTML importieren</translation>
+    </message>
+    <message>
+        <source>&lt;h2&gt;MarkdownEdit&lt;/h2&gt;
+&lt;p&gt;MarkdownEdit, as the name suggests, is a simple and easy program to create and edit Markdown files.&lt;/p&gt;
+&lt;h2&gt;About&lt;/h2&gt;
+&lt;table class=&quot;table&quot; style=&quot;border-style: none;&quot;&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Version:&lt;/td&gt;
+&lt;td&gt;%1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Qt Version:&lt;/td&gt;
+&lt;td&gt;%2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Homepage:&lt;/td&gt;
+&lt;td&gt;&lt;span style=&quot;font-size: medium; white-space: pre-wrap; background-color: transparent; font-style: italic; color: #a8abb0;&quot;&gt;&lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2&gt;Credits&lt;/h2&gt;
+&lt;p&gt;Thanks to &lt;a href=&quot;https://github.com/Waqar144&quot;&gt;Waqar Ahmed&lt;/a&gt; for help with development.&lt;/p&gt;
+&lt;p&gt;The conversion from Markdown to HTML is done using the &lt;a href=&quot;https://github.com/mity/md4c&quot;&gt;md4c&lt;/a&gt; library by &lt;em&gt;Martin Mit&amp;aacute;&amp;scaron;&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;The &lt;a href=&quot;https://github.com/pbek/qmarkdowntextedit&quot;&gt;widget&lt;/a&gt; used for writing was created by &lt;em&gt;Patrizio Bekerle&lt;/em&gt;.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

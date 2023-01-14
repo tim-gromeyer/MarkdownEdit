@@ -16,14 +16,12 @@
  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-
 #include "mainwindow.h"
 
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QLocale>
 #include <QTranslator>
-
 
 #ifndef NOT_SUPPORTET
 #include "singleapplication.h"
@@ -36,7 +34,6 @@
 #endif
 
 #define S(str) QStringLiteral(str)
-
 
 auto main(int argc, char *argv[]) -> int
 {
@@ -52,32 +49,28 @@ auto main(int argc, char *argv[]) -> int
     QTranslator translator, qtTranslator;
 
     // load translation for Qt
-    if (qtTranslator.load(QLocale::system(), S("qtbase"),
-                          S("_"), S(":/qtTranslations/"))) {
+    if (qtTranslator.load(QLocale::system(), S("qtbase"), S("_"), S(":/qtTranslations/"))) {
         QApplication::installTranslator(&qtTranslator);
     }
 
     // try to load translation for current locale from resource file
-    if (translator.load(QLocale::system(), S("MarkdownEdit"),
-                        S("_"), S(":/translations"))) {
+    if (translator.load(QLocale::system(), S("MarkdownEdit"), S("_"), S(":/translations"))) {
         QApplication::installTranslator(&translator);
     }
 
     QCommandLineParser parser;
     parser.addHelpOption();
     parser.addVersionOption();
-    parser.setApplicationDescription(translator.translate(
-        "main", "Simple program for editing Markdown files"
-        ));
+    parser.setApplicationDescription(
+        translator.translate("main", "Simple program for editing Markdown files"));
     parser.addPositionalArgument(translator.translate("main", "Files"),
-                                 translator.translate(
-                                             "main", "Files to open."));
+                                 translator.translate("main", "Files to open."));
     parser.process(a);
 
 #ifndef NOT_SUPPORTET
     if (a.isSecondary()) {
-        a.sendMessage(QByteArrayLiteral("file://") %
-                          parser.positionalArguments().join(u' ').toLatin1());
+        a.sendMessage(QByteArrayLiteral("file://")
+                      % parser.positionalArguments().join(u' ').toLatin1());
         return 0;
     }
 #endif
@@ -85,14 +78,9 @@ auto main(int argc, char *argv[]) -> int
     MainWindow w(parser.positionalArguments());
 
 #ifndef NOT_SUPPORTET
-    QObject::connect(
-        &a, &SingleApplication::instanceStarted,
-        &w, &MainWindow::toForeground
-    );
+    QObject::connect(&a, &SingleApplication::instanceStarted, &w, &MainWindow::toForeground);
 
-    QObject::connect(&a, &SingleApplication::receivedMessage,
-        &w, &MainWindow::receivedMessage
-    );
+    QObject::connect(&a, &SingleApplication::receivedMessage, &w, &MainWindow::receivedMessage);
 #endif
 
 #ifdef Q_OS_ANDROID

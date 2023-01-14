@@ -16,11 +16,12 @@
  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-
 #ifndef SPELLCHECKER_H
 #define SPELLCHECKER_H
 
 #include <QSyntaxHighlighter>
+
+#include <filesystem>
 
 #ifdef CHECK_MARKDOWN
 #include "markdownhighlighter.h"
@@ -30,12 +31,19 @@
 #endif
 
 QT_BEGIN_NAMESPACE
-namespace enchant { class Dict; };
+namespace enchant {
+class Dict;
+};
 class QMenu;
-template <typename Key, typename T> class QHash;
+template<typename Key, typename T>
+class QHash;
 class QPlainTextEdit;
+namespace nuspell {
+inline namespace v5 {
+class Dictionary;
+}
+} // namespace nuspell
 QT_END_NAMESPACE
-
 
 class SpellChecker : public SpellCheckerBaseClass
 {
@@ -49,14 +57,20 @@ public:
 
 #ifdef CHECK_MARKDOWN
     void setMarkdownHighlightingEnabled(const bool);
-    [[nodiscard]] inline auto isMarkdownHighlightingEnabled() const -> bool { return markdownhig; };
+    [[nodiscard]] inline auto isMarkdownHighlightingEnabled() const -> bool
+    {
+        return markdownhig;
+    };
 
     friend class MarkdownHighlighter;
     using MarkdownHighlighter::_formats;
 #endif
 
     void setSpellCheckingEnabled(const bool);
-    [[nodiscard]] inline auto isSpellCheckingEnabled() const -> bool { return spellingEnabled && speller; };
+    [[nodiscard]] inline auto isSpellCheckingEnabled() const -> bool
+    {
+        return spellingEnabled && speller;
+    };
 
     Q_REQUIRED_RESULT static auto getLanguageList() -> const QStringList;
 
@@ -103,11 +117,14 @@ private:
 
     QPlainTextEdit *textEdit = nullptr;
 
-    auto encodeLanguageString(const QString &langString) -> QString;
+    static auto encodeLanguageString(const QString &langString) -> QString;
 
-    enchant::Dict *speller = nullptr;
+    nuspell::Dictionary *speller = nullptr;
 
-    QHash<QString, QString> langMap;
+    QStringList wordList;
+    QStringList sessionWordList;
+
+    std::vector<std::filesystem::path> dirs;
 };
 
 #endif // SPELLCHECKER_H

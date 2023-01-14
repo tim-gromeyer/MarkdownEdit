@@ -16,7 +16,6 @@
  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-
 #pragma once
 
 #include "common.h"
@@ -33,7 +32,7 @@ auto mapAttribute(const QString &) -> const QString;
 auto mapContains(const QString &) -> bool;
 
 namespace settings {
-    auto isDarkMode() -> bool;
+auto isDarkMode() -> bool;
 } // namespace settings
 
 namespace common {
@@ -42,20 +41,20 @@ auto languages() -> const QStringList;
 }; // namespace common
 
 namespace literals {
-constexpr std::size_t length(const char* str)
+constexpr std::size_t length(const char *str)
 {
     return std::char_traits<char>::length(str);
 }
 
-constexpr QLatin1String make_latin1(const char* str)
+constexpr QLatin1String make_latin1(const char *str)
 {
     return QLatin1String{str, static_cast<int>(length(str))};
 }
 } // namespace literals
 
 // QLatin1String literal
-# define L1(str) literals::make_latin1(str)
-# define STR(str) QStringLiteral(str)
+#define L1(str) literals::make_latin1(str)
+#define STR(str) QStringLiteral(str)
 
 #if !SPELLCHECK
 #define NO_SPELLCHECK

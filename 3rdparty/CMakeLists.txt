@@ -60,7 +60,6 @@ if(NOT ANDROID AND NOT EMSCRIPTEN)
 else()
     add_compile_definitions(NOT_SUPPORTET)
 endif()
-# include(${CMAKE_CURRENT_LIST_DIR}/hunspell.cmake)
 
 set(3rdparty
     md4c-html

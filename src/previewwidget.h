@@ -16,12 +16,10 @@
  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-
 #ifndef PREVIEWWIDGET_H
 #define PREVIEWWIDGET_H
 
 #include <QTextBrowser>
-
 
 class PreviewWidget : public QTextBrowser
 {
@@ -32,9 +30,15 @@ public:
 
     void scrollToHeader(QString name);
 
-    inline void setSearchPaths(const QStringList &searchPaths) { QTextBrowser::setSearchPaths(searchPaths); };
+    inline void setSearchPaths(const QStringList &searchPaths)
+    {
+        QTextBrowser::setSearchPaths(searchPaths);
+    };
     inline auto searchPaths() -> QStringList { return QTextBrowser::searchPaths(); };
-    inline void appenSearchPath(const QString &path) { QTextBrowser::setSearchPaths(QTextBrowser::searchPaths() << path); };
+    inline void appenSearchPath(const QString &path)
+    {
+        QTextBrowser::setSearchPaths(QTextBrowser::searchPaths() << path);
+    };
 
     inline void setLoadImages(const bool ok) { load = ok; };
     inline auto loadImages() -> bool { return load; };

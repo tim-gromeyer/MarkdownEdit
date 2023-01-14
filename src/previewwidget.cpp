@@ -16,7 +16,6 @@
  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-
 #include "previewwidget.h"
 #include "settings.h"
 
@@ -25,7 +24,6 @@
 #include <QFileInfo>
 #include <QScrollBar>
 #include <QUrl>
-
 
 PreviewWidget::PreviewWidget(QWidget *parent)
     : QTextBrowser(parent)
@@ -36,8 +34,7 @@ PreviewWidget::PreviewWidget(QWidget *parent)
     QTextEdit::setUndoRedoEnabled(false);
     QTextEdit::setAcceptRichText(false);
 
-    connect(this, &QTextBrowser::anchorClicked,
-            this, &PreviewWidget::openUrl);
+    connect(this, &QTextBrowser::anchorClicked, this, &PreviewWidget::openUrl);
 }
 
 void PreviewWidget::setHtml(const QString &html)
@@ -90,7 +87,8 @@ void PreviewWidget::scrollToHeader(QString name)
     while (true) {
         i = text.indexOf(name, i, Qt::CaseInsensitive);
 
-        if (i == -1) return;
+        if (i == -1)
+            return;
 
         c.setPosition(i, QTextCursor::KeepAnchor);
 
@@ -101,8 +99,9 @@ void PreviewWidget::scrollToHeader(QString name)
 
             // Center the cursor
             // cursorRect().center().x() is always 4
-            verticalScrollBar()->setValue(verticalScrollBar()->value() + (cursorRect().top() - rect().center().x())
-                                          - (cursorRect().height() /2));
+            verticalScrollBar()->setValue(verticalScrollBar()->value()
+                                          + (cursorRect().top() - rect().center().x())
+                                          - (cursorRect().height() / 2));
 
             return;
         }

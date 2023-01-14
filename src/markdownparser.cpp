@@ -16,7 +16,6 @@
  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-
 #include <QByteArray>
 #include <QRegularExpression>
 
@@ -26,19 +25,17 @@
 #include "markdownparser.h"
 #include "md4c-html.h"
 
+const QByteArray templateArray = QByteArrayLiteral("<!DOCTYPE html>\n"
+                                                   "<html>\n"
+                                                   "<head>\n"
+                                                   "</head>\n"
+                                                   "<body class=\"preview\">\n");
 
-const QByteArray templateArray =
-        QByteArrayLiteral("<!DOCTYPE html>\n"
-                          "<html>\n"
-                          "<head>\n"
-                          "</head>\n"
-                          "<body class=\"preview\">\n");
+void captureHtmlFragment(const MD_CHAR *data, const MD_SIZE data_size, void *userData)
+{
+    auto *array = static_cast<QByteArray *>(userData);
 
-
-void captureHtmlFragment(const MD_CHAR* data, const MD_SIZE data_size, void* userData) {
-    auto *array = static_cast<QByteArray*>(userData);
-
-    array->append(data, (int)data_size);
+    array->append(data, (int) data_size);
 }
 
 auto Parser::toHtml(const QString &in, const int dia, const size_t toc_depth) -> QString
@@ -63,19 +60,24 @@ auto Parser::toHtml(const QString &in, const int dia, const size_t toc_depth) ->
 
     const QByteArray array = in.toUtf8(); // Use UTF-8 for better support
     QByteArray out = templateArray;
-    out.reserve(array.size() *1.28 + 115);
+    out.reserve(array.size() * 1.28 + 115);
 
     static MD_TOC_OPTIONS toc;
-    if (dia  == Doxygen) {
+    if (dia == Doxygen) {
         toc.toc_placeholder = "[TOC]";
-        toc.depth = (int8_t)toc_depth;
+        toc.depth = (int8_t) toc_depth;
     } else {
         toc.toc_placeholder = "";
         toc.depth = 0;
     }
 
-    md_html(array.constData(), array.size(), &captureHtmlFragment, &out,
-            parser_flags, MD_HTML_FLAG_SKIP_UTF8_BOM, &toc);
+    md_html(array.constData(),
+            array.size(),
+            &captureHtmlFragment,
+            &out,
+            parser_flags,
+            MD_HTML_FLAG_SKIP_UTF8_BOM,
+            &toc);
 
     out.append("</body>\n"
                "</html>\n");
@@ -93,8 +95,13 @@ auto Parser::heading2HTML(const QString &in) -> QString
     static MD_TOC_OPTIONS toc;
     toc.depth = 0;
 
-    md_html(array.constData(), array.size(), &captureHtmlFragment, &out,
-            MD_FLAG_HEADINGAUTOID, MD_HTML_FLAG_SKIP_UTF8_BOM, &toc);
+    md_html(array.constData(),
+            array.size(),
+            &captureHtmlFragment,
+            &out,
+            MD_FLAG_HEADINGAUTOID,
+            MD_HTML_FLAG_SKIP_UTF8_BOM,
+            &toc);
 
     return QString::fromUtf8(out);
 }

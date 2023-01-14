@@ -18,7 +18,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Find Qt
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
+find_package(QT NAMES Qt5 Qt6 REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
 
 # Set default build type
@@ -139,26 +139,18 @@ IF(WIN32)
     SET(INTL_LDFLAGS -lintl)
 ENDIF(WIN32)
 
-find_package(PkgConfig QUIET)
-
-# Find enchant-2
+# Find nuspell
 if(DISABLE_SPELLCHECK)
-    message(STATUS "Spell check disabled")
     target_compile_definitions(markdownedit PUBLIC NO_SPELLCHECK)
-elseif(PKG_CONFIG_FOUND)
-    pkg_check_modules(ENCHANT enchant-2)
-
-    if(ENCHANT_FOUND)
-        message(STATUS "enchant-2 found. Enable spell check")
-        target_include_directories(markdownedit PUBLIC ${ENCHANT_INCLUDE_DIRS})
-        set(ENCHANT ${ENCHANT_LDFLAGS})
-    else()
-        target_compile_definitions(markdownedit PUBLIC NO_SPELLCHECK)
-        message(STATUS "enchant-2 not found. Disable spell check.")
-    endif()
 else()
-    message(WARNING "PkgConfig not found!")
-    target_compile_definitions(markdownedit PUBLIC NO_SPELLCHECK)
+    find_package(Nuspell QUIET)
+
+    if (Nuspell_FOUND)
+        list(APPEND 3rdparty Nuspell::nuspell)
+    else()
+        message(WARNING "Nuspell not found. Disable spellchecker.")
+        target_compile_definitions(markdownedit PUBLIC NO_SPELLCHECK)
+    endif()
 endif()
 
 target_include_directories(markdownedit PRIVATE ${CMAKE_SOURCE_DIR}/src)
@@ -166,7 +158,6 @@ target_link_libraries(markdownedit PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::PrintSupport
     Qt${QT_VERSION_MAJOR}::Svg
-    ${ENCHANT}
     ${INTL_LDFLAGS}
     ${3rdparty}
 )

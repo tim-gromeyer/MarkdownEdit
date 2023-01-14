@@ -12,7 +12,7 @@ class TableOfContents : public QDialog
 {
     Q_OBJECT
 public:
-    explicit TableOfContents(QString text, QWidget *parent  = nullptr);
+    explicit TableOfContents(QString text, QWidget *parent = nullptr);
 
     auto markdownTOC() -> QString;
 

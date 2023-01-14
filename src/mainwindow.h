@@ -16,16 +16,16 @@
  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
 #include <QtCore/qcontainerfwd.h>
 
-
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; };
+namespace Ui {
+class MainWindow;
+};
 class QPrinter;
 class QSettings;
 class QToolButton;
@@ -36,7 +36,6 @@ class MarkdownEditor;
 class QShortcut;
 class QWidgetAction;
 QT_END_NAMESPACE
-
 
 class MainWindow : public QMainWindow
 {
@@ -147,12 +146,12 @@ private:
     void openRecent();
     void setText(const int);
 
-    static void loadIcon(const QString &name, QAction* a);
+    static void loadIcon(const QString &name, QAction *a);
     static void loadIcon(const QString &name, QMenu *m);
 
     auto createEditor() -> MarkdownEditor *;
     auto currentEditor() -> MarkdownEditor *;
-    QList<MarkdownEditor*> editorList;
+    QList<MarkdownEditor *> editorList;
     QStringList fileList;
 
     QShortcut *shortcutNew;

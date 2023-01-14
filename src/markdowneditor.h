@@ -16,7 +16,6 @@
  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-
 #ifndef MARKDOWNEDITOR_H
 #define MARKDOWNEDITOR_H
 
@@ -28,7 +27,6 @@ QT_BEGIN_NAMESPACE
 class SpellChecker;
 QT_END_NAMESPACE
 
-
 class MarkdownEditor : public QMarkdownTextEdit
 {
     Q_OBJECT
@@ -36,11 +34,13 @@ public:
     explicit MarkdownEditor(QWidget *parent = nullptr);
     ~MarkdownEditor() override;
 
-    void setText(const QByteArray &, const QString &newFile = QLatin1String(), const bool setLangugae = true);
+    void setText(const QByteArray &,
+                 const QString &newFile = QLatin1String(),
+                 const bool setLangugae = true);
 
     auto setLanguage(const QString & = QLatin1String()) -> bool;
 
-    inline auto getChecker() -> SpellChecker* { return checker; };
+    inline auto getChecker() -> SpellChecker * { return checker; };
 
     void changeSpelling(const bool);
 
