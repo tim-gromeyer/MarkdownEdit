@@ -17,11 +17,14 @@
  **/
 
 #include "mainwindow.h"
+#include "spellchecker.h"
 
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QLocale>
 #include <QTranslator>
+
+#include <thread>
 
 #ifndef NOT_SUPPORTET
 #include "singleapplication.h"
@@ -37,6 +40,7 @@
 
 auto main(int argc, char *argv[]) -> int
 {
+    std::thread t(&SpellChecker::populateLangMap);
     Q_INIT_RESOURCE(media);
 
 #ifndef NOT_SUPPORTET
@@ -45,18 +49,16 @@ auto main(int argc, char *argv[]) -> int
     QApplication a(argc, argv);
 #endif
     QApplication::setApplicationVersion(QStringLiteral(APP_VERSION));
-
+    QApplication::setApplicationName(QStringLiteral("MarkdownEdit"));
     QTranslator translator, qtTranslator;
 
     // load translation for Qt
-    if (qtTranslator.load(QLocale::system(), S("qtbase"), S("_"), S(":/qtTranslations/"))) {
+    if (qtTranslator.load(QLocale::system(), S("qtbase"), S("_"), S(":/qtTranslations/")))
         QApplication::installTranslator(&qtTranslator);
-    }
 
     // try to load translation for current locale from resource file
-    if (translator.load(QLocale::system(), S("MarkdownEdit"), S("_"), S(":/translations"))) {
+    if (translator.load(QLocale::system(), S("MarkdownEdit"), S("_"), S(":/translations")))
         QApplication::installTranslator(&translator);
-    }
 
     QCommandLineParser parser;
     parser.addHelpOption();
@@ -74,6 +76,7 @@ auto main(int argc, char *argv[]) -> int
         return 0;
     }
 #endif
+    t.join();
 
     MainWindow w(parser.positionalArguments());
 

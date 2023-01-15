@@ -21,8 +21,6 @@
 
 #include <QSyntaxHighlighter>
 
-#include <filesystem>
-
 #ifdef CHECK_MARKDOWN
 #include "markdownhighlighter.h"
 #define SpellCheckerBaseClass MarkdownHighlighter
@@ -80,9 +78,11 @@ public:
 
     Q_REQUIRED_RESULT auto getSuggestion(const QString &) const -> QStringList;
 
-    void addWort(const QString &);
+    void addWord(const QString &);
 
     void ignoreWord(const QString &);
+
+    static void populateLangMap();
 
 public Q_SLOTS:
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
@@ -110,6 +110,9 @@ private:
     auto getWord(const QTextBlock &, const int) -> QString;
 #endif
 
+    bool saveUserDict();
+    void loadUserDict(const QString &);
+
     void showContextMenu(const QPoint);
 
     QString language;
@@ -123,8 +126,6 @@ private:
 
     QStringList wordList;
     QStringList sessionWordList;
-
-    std::vector<std::filesystem::path> dirs;
 };
 
 #endif // SPELLCHECKER_H

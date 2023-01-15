@@ -88,11 +88,7 @@ void MarkdownEditor::dropEvent(QDropEvent *event)
 
 auto MarkdownEditor::setLanguage(const QString &lang) -> bool
 {
-    if (!SpellChecker::getLanguageList().contains(lang))
-        return false;
-
-    std::thread t(&SpellChecker::setLanguage, checker, lang);
-    t.join();
+    std::thread(&SpellChecker::setLanguage, checker, lang).detach();
     return true;
 }
 

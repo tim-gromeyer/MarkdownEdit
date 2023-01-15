@@ -17,17 +17,26 @@
  **/
 
 #include "spellchecker.h"
+#include "settings.h"
 
 #include <QActionGroup>
+#include <QDataStream>
 #include <QDebug> // needed for qWaring()
+#include <QFile>
 #include <QLocale>
 #include <QMenu>
 #include <QPlainTextEdit>
+#include <QStandardPaths>
+
+#include <thread>
 
 #ifndef NO_SPELLCHECK
 #include <nuspell/dictionary.hxx>
 #include <nuspell/finder.hxx>
 #endif
+
+static const QString userDictDir = QStandardPaths::writableLocation(
+    QStandardPaths::AppLocalDataLocation);
 
 struct Language
 {
@@ -55,10 +64,6 @@ SpellChecker::SpellChecker(QPlainTextEdit *parent, const QString &lang)
     : SpellCheckerBaseClass{parent->document()}
     , textEdit(parent)
 {
-#ifndef NO_SPELLCHECK
-    nuspell::append_default_dir_paths(dirs);
-#endif
-
     if (!lang.isEmpty())
         setLanguage(lang);
 
@@ -69,7 +74,11 @@ SpellChecker::SpellChecker(QPlainTextEdit *parent, const QString &lang)
             this,
             &SpellChecker::showContextMenu);
 #endif
-    connect(this, &SpellChecker::languageChanged, this, &QSyntaxHighlighter::rehighlight);
+    connect(this,
+            &SpellChecker::languageChanged,
+            this,
+            &QSyntaxHighlighter::rehighlight,
+            Qt::QueuedConnection);
 }
 
 void SpellChecker::highlightBlock(const QString &text)
@@ -79,7 +88,7 @@ void SpellChecker::highlightBlock(const QString &text)
         MarkdownHighlighter::highlightMarkdown(text);
 #endif
 
-    if (spellingEnabled)
+    if (spellingEnabled && !language.isEmpty())
         checkSpelling(text);
 }
 
@@ -103,7 +112,7 @@ void SpellChecker::checkSpelling(QStringView text)
 
     const auto textLength = text.length();
 
-    for (auto i = 0; i < textLength; ++i) {
+    for (int i = 0; i < textLength; ++i) {
         const QChar c = text[i];
         const bool isLetterOrNumber = c.isLetterOrNumber();
 
@@ -114,7 +123,7 @@ void SpellChecker::checkSpelling(QStringView text)
         if (c == u'h') {
             if (textLength - i >= 11) { // http 4; :// 7; * >1; .de 11
                 if (SUBSTR(text, i, 4) == QStringView(u"http", 4)) {
-                    i = text.indexOf(u')', i);
+                    i = (int) text.indexOf(u')', (qsizetype) i);
 
                     if (i == -1)
                         break;
@@ -145,17 +154,17 @@ void SpellChecker::checkSpelling(QStringView text)
 #endif
 #endif
 
-    auto index = 0;
+    qsizetype index = 0;
 
     for (const QString &word_ : qAsConst(wordList)) {
         index = text.indexOf(word_, index);
 
         if (!isCorrect(word_)) {
-            QTextCharFormat fmt = QSyntaxHighlighter::format(index);
+            QTextCharFormat fmt = QSyntaxHighlighter::format((int) index);
             fmt.setFontUnderline(true);
             fmt.setUnderlineStyle(QTextCharFormat::SpellCheckUnderline);
             fmt.setUnderlineColor(red());
-            setFormat(index, word_.length(), fmt);
+            setFormat((int) index, word_.length(), fmt);
         }
         index += word_.length();
     }
@@ -171,6 +180,8 @@ auto SpellChecker::isCorrect(const QString &word) const -> bool
         return true;
 
     if (word.length() < 2)
+        return true;
+    if (wordList.contains(word) || sessionWordList.contains(word))
         return true;
 
     return speller->spell(word.toStdString());
@@ -190,21 +201,28 @@ auto SpellChecker::setLanguage(const QString &lang) -> bool
         return setLanguage(QLocale::system().name());
 
     auto dic = langPathMap[lang];
-    if (dic.dir.empty())
-        return false;
+    if (dic.dir.empty()) {
+        dic = langPathMap[lang + L1("_frami")];
+        if (dic.dir.empty())
+            return false;
+    }
+
+    delete speller;
+    language.clear();
 
     try {
-        delete speller;
-
         speller = new nuspell::Dictionary();
         speller->load_aff_dic(dic.dir);
         language = lang;
-        Q_EMIT languageChanged(lang);
     } catch (const nuspell::Dictionary_Loading_Error &e) {
         qWarning() << "Failed to load dictionary: " << e.what();
         language.clear();
         return false;
     }
+
+    loadUserDict(lang);
+
+    Q_EMIT languageChanged(lang);
 
     return true;
 #endif
@@ -215,36 +233,16 @@ auto SpellChecker::getLanguage() const -> QString
     return language;
 }
 
-void SpellChecker::addWort(const QString &word)
+void SpellChecker::populateLangMap()
 {
-#ifdef NO_SPELLCHECK
-    Q_UNUSED(word);
-    return;
-#else
-    if (!speller)
+#ifndef NO_SPELLCHECK
+    if (!langPathMap.isEmpty())
         return;
-
-    // TODO: Implement
-    // speller->add(word.toStdString());
-    checkSpelling(word);
-#endif
-}
-
-auto SpellChecker::getLanguageList() -> const QStringList
-{
-#ifdef NO_SPELLCHECK
-    return QStringList();
-#else
-
-    if (!langPathMap.isEmpty()) {
-        return langPathMap.keys();
-    }
 
     static const auto dicts = nuspell::search_default_dirs_for_dicts();
 
     if (dicts.empty()) {
         qWarning() << "No language dict found";
-        return {};
     }
 
     struct Language l;
@@ -255,6 +253,16 @@ auto SpellChecker::getLanguageList() -> const QStringList
         l.encodedName = encodeLanguageString(l.name);
         langPathMap[l.name] = l;
     }
+#endif
+}
+
+auto SpellChecker::getLanguageList() -> const QStringList
+{
+#ifdef NO_SPELLCHECK
+    return QStringList();
+#else
+    if (langPathMap.isEmpty())
+        populateLangMap();
 
     return langPathMap.keys();
 #endif
@@ -262,22 +270,26 @@ auto SpellChecker::getLanguageList() -> const QStringList
 
 auto SpellChecker::getSuggestion(const QString &word) const -> QStringList
 {
-    QStringList list = {}; // Fix warning
 #ifdef NO_SPELLCHECK
     Q_UNUSED(word);
+    return {};
 #else
-    if (speller) {
-        std::vector<std::string> suggestions;
-        speller->suggest(word.toUtf8().data(), suggestions);
+    QStringList list = {}; // Fix warning
 
-        list.reserve((int) suggestions.size());
+    if (!speller || language.isEmpty())
+        return {};
 
-        for (std::string &suggestion : suggestions) {
-            list.append(QString::fromStdString(suggestion));
-        }
+    std::vector<std::string> suggestions;
+    speller->suggest(word.toStdString(), suggestions);
+
+    list.reserve((int) suggestions.size());
+
+    for (std::string &suggestion : suggestions) {
+        list.append(QString::fromStdString(suggestion));
     }
-#endif
+
     return list;
+#endif
 }
 
 #ifdef CHECK_MARKDOWN
@@ -352,11 +364,10 @@ void SpellChecker::showContextMenu(const QPoint pos)
         c.select(QTextCursor::WordUnderCursor);
         const QString word = c.selectedText();
 #endif
-
         if (!isCorrect(word)) {
             const QStringList suggestions = getSuggestion(word);
             if (!suggestions.isEmpty()) {
-                for (int i = 0, n = qMin(10, suggestions.length()); i < n; ++i) {
+                for (int i = 0, n = qMin(5, suggestions.length()); i < n; ++i) {
                     auto *action = new QAction(suggestions.at(i), menu);
                     action->setProperty("wordPos", wordPos);
                     action->setProperty("suggestion", suggestions.at(i));
@@ -397,11 +408,11 @@ void SpellChecker::showContextMenu(const QPoint pos)
     for (const Language &lang : qAsConst(langPathMap))
         sorted[lang.encodedName] = lang;
 
-    for (const QString &lang : sorted.keys()) {
-        auto *action = new QAction(sorted[lang].encodedName, languagesMenu);
-        action->setData(lang);
+    for (const Language &lang : qAsConst(sorted)) {
+        auto *action = new QAction(lang.encodedName, languagesMenu);
+        action->setData(lang.name);
         action->setCheckable(true);
-        action->setChecked(lang == language);
+        action->setChecked(lang.name == language);
         connect(action, &QAction::triggered, this, &SpellChecker::slotSetLanguage);
         languagesMenu->addAction(action);
         actionGroup->addAction(action);
@@ -441,7 +452,7 @@ auto SpellChecker::encodeLanguageString(const QString &langString) -> QString
 void SpellChecker::slotAddWord()
 {
     auto *a = qobject_cast<QAction *>(sender());
-    addWort(a->data().toString());
+    addWord(a->data().toString());
 
     rehighlight();
 }
@@ -450,6 +461,8 @@ void SpellChecker::slotIgnoreWord()
 {
     auto *a = qobject_cast<QAction *>(sender());
     ignoreWord(a->data().toString());
+
+    rehighlight();
 }
 
 void SpellChecker::slotReplaceWord()
@@ -460,29 +473,25 @@ void SpellChecker::slotReplaceWord()
 
 void SpellChecker::slotSetLanguage(const bool checked)
 {
-    if (!checked)
+    if (!checked) // if deselected
         return;
 
     auto *action = qobject_cast<QAction *>(sender());
     const QString lang = action->data().toString();
 
-    if (!setLanguage(lang))
-        action->setChecked(false);
-    language.clear();
+    std::thread(&SpellChecker::setLanguage, this, lang).detach();
+}
+
+void SpellChecker::addWord(const QString &word)
+{
+    wordList.append(word);
+
+    saveUserDict();
 }
 
 void SpellChecker::ignoreWord(const QString &word)
 {
-#ifdef NO_SPELLCHECK
-    Q_UNUSED(word);
-#else
-    if (!speller)
-        return;
-
-    // TODO: Implement
-    // speller->add_to_session(word.toUtf8().data());
-    rehighlight();
-#endif
+    sessionWordList.append(word);
 }
 
 void SpellChecker::replaceWord(const int wordPos, const QString &newWord)
@@ -512,6 +521,32 @@ void SpellChecker::setSpellCheckingEnabled(const bool enabled)
 
         QSyntaxHighlighter::rehighlight();
     }
+}
+
+bool SpellChecker::saveUserDict()
+{
+    if (language.isEmpty())
+        return false;
+
+    QFile f(userDictDir + STR("/user-dict-") + language + STR(".dic"));
+    if (f.open(QIODevice::WriteOnly)) {
+        QDataStream out(&f);
+        out << wordList;
+    }
+    f.close();
+    return true;
+}
+
+void SpellChecker::loadUserDict(const QString &lang)
+{
+    wordList.clear();
+
+    QFile f(userDictDir + STR("/user-dict-") + lang + STR(".dic"));
+    if (!f.open(QIODevice::ReadOnly))
+        return;
+
+    QDataStream in(&f);
+    in >> wordList;
 }
 
 SpellChecker::~SpellChecker()
