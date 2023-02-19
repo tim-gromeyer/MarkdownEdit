@@ -19,12 +19,15 @@
 #include "markdowneditor.h"
 #include "settings.h"
 #include "spellchecker.h"
+#include "utils.h"
 
 #include <QDir>
 #include <QFileInfo>
 #include <QMimeData>
 #include <QMimeDatabase>
+#include <QRunnable>
 #include <QSignalBlocker>
+#include <QThreadPool>
 
 #include <thread>
 
@@ -88,7 +91,12 @@ void MarkdownEditor::dropEvent(QDropEvent *event)
 
 auto MarkdownEditor::setLanguage(const QString &lang) -> bool
 {
-    std::thread(&SpellChecker::setLanguage, checker, lang).detach();
+    static QRunnable *runnable = nullptr;
+    if (!runnable)
+        threading::runFunction([this, lang] { checker->setLanguage(lang); });
+    else
+        QThreadPool::globalInstance()->start(runnable);
+
     return true;
 }
 

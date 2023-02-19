@@ -47,6 +47,7 @@
 #include <QShortcut>
 #include <QTemporaryFile>
 #include <QTextStream>
+#include <QThreadPool>
 #include <QTimer>
 #include <QToolButton>
 #include <QWidgetAction>
@@ -93,8 +94,7 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
         this,
         [this, files] {
 #endif
-            loadSettings(); // load the settings
-
+            loadSettings();     // load the settings
             setupThings();      // Setup things
             loadIcons();        // load icons
             setupToolbar();     // setup toolbars
@@ -130,24 +130,6 @@ void MainWindow::onHelpSyntax()
 
     static const QStringList uiLanguages = QLocale::system().uiLanguages(); // ex. de-DE
     static const QStringList languages = SpellChecker::getLanguageList();   // ex. de_DE
-
-    /*
-    QDirIterator it(STR(":/syntax"));
-    while (it.hasNext()) {
-        QString lang = it.next().mid(9); // The language
-        lang.remove(L1(".md"));
-
-        lang.replace(u'_', u'-');
-
-        if (uiLanguages.contains(lang)) {
-            file = STR(":/syntax/") + lang + L1(".md");
-            break;
-        }
-    }
-    */
-
-    qInfo() << "System languages:" << uiLanguages;
-    qInfo() << "Languages available for spell check:" << languages;
 
     // loop thought the languages
     for (const QString &lang : uiLanguages) {
@@ -330,25 +312,37 @@ void MainWindow::setupThings()
 
 void MainWindow::setupConnections()
 {
-    connect(ui->actionNew, &QAction::triggered, this, &MainWindow::onFileNew);
-    connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::onFileOpen);
-    connect(ui->actionSave, &QAction::triggered, this, &MainWindow::onFileSave);
-    connect(ui->actionSaveAs, &QAction::triggered, this, &MainWindow::onFileSaveAs);
-    connect(ui->actionExit, &QAction::triggered, this, &QWidget::close);
+    connect(mode, qOverload<int>(&QComboBox::currentIndexChanged), this, &MainWindow::changeMode);
     connect(ui->actionAbout, &QAction::triggered, this, &MainWindow::onHelpAbout);
     connect(ui->actionAboutQt, &QAction::triggered, qApp, &QApplication::aboutQt);
+    connect(ui->actionCopy, &QAction::triggered, this, &MainWindow::copy);
+    connect(ui->actionCut, &QAction::triggered, this, &MainWindow::cut);
+    connect(ui->actionExit, &QAction::triggered, this, &QWidget::close);
     connect(ui->actionExportHtml, &QAction::triggered, this, &MainWindow::exportHtml);
     connect(ui->actionExportPdf, &QAction::triggered, this, &MainWindow::exportPdf);
+    connect(ui->actionHTML, &QAction::triggered, this, &MainWindow::onImportHTML);
+    connect(ui->actionMarkdown_Syntax, &QAction::triggered, this, &MainWindow::onHelpSyntax);
+    connect(ui->actionNew, &QAction::triggered, this, &MainWindow::onFileNew);
+    connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::onFileOpen);
+    connect(ui->actionOpen_in_web_browser, &QAction::triggered, this, &MainWindow::openInWebBrowser);
+    connect(ui->actionPaste, &QAction::triggered, this, &MainWindow::paste);
+    connect(ui->actionPause_preview, &QAction::triggered, this, &MainWindow::pausePreview);
     connect(ui->actionPrint, &QAction::triggered, this, &MainWindow::filePrint);
     connect(ui->actionPrintPreview, &QAction::triggered, this, &MainWindow::filePrintPreview);
-    connect(ui->actionCut, &QAction::triggered, this, &MainWindow::cut);
-    connect(ui->actionCopy, &QAction::triggered, this, &MainWindow::copy);
-    connect(ui->actionPaste, &QAction::triggered, this, &MainWindow::paste);
+    connect(ui->actionRedo, &QAction::triggered, this, &MainWindow::redo);
+    connect(ui->actionReload, &QAction::triggered, this, &MainWindow::onFileReload);
+    connect(ui->actionSave, &QAction::triggered, this, &MainWindow::onFileSave);
+    connect(ui->actionSaveAs, &QAction::triggered, this, &MainWindow::onFileSaveAs);
+    connect(ui->actionSelectAll, &QAction::triggered, this, &MainWindow::selectAll);
+    connect(ui->actionSpell_checking, &QAction::triggered, this, &MainWindow::changeSpelling);
+    connect(ui->actionUndo, &QAction::triggered, this, &MainWindow::undo);
+    connect(ui->actionWord_wrap, &QAction::triggered, this, &MainWindow::changeWordWrap);
+    connect(ui->tabWidget, &QStackedWidget::currentChanged, this, &MainWindow::setText);
+    connect(ui->tabWidget_2, &QTabWidget::currentChanged, this, &MainWindow::onEditorChanged);
+    connect(ui->tabWidget_2, &QTabWidget::tabCloseRequested, this, &MainWindow::closeEditor);
+    connect(ui->tabWidget_2->tabBar(), &QTabBar::tabMoved, this, &MainWindow::editorMoved);
+    connect(watcher, &QFileSystemWatcher::fileChanged, this, &MainWindow::onFileChanged);
 
-    connect(ui->actionHighlighting_activated,
-            &QAction::triggered,
-            this,
-            &MainWindow::changeHighlighting);
     connect(ui->actionAuto_add_file_path_to_icon_path,
             &QAction::triggered,
             this,
@@ -357,26 +351,14 @@ void MainWindow::setupConnections()
         disablePreview(c);
         preview = !c;
     });
-    connect(ui->actionPause_preview, &QAction::triggered, this, &MainWindow::pausePreview);
-    connect(ui->actionSpell_checking, &QAction::triggered, this, &MainWindow::changeSpelling);
-    connect(ui->tabWidget, &QStackedWidget::currentChanged, this, &MainWindow::setText);
-    connect(ui->actionWord_wrap, &QAction::triggered, this, &MainWindow::changeWordWrap);
-    connect(ui->actionReload, &QAction::triggered, this, &MainWindow::onFileReload);
-    connect(ui->actionOpen_in_web_browser, &QAction::triggered, this, &MainWindow::openInWebBrowser);
-    connect(mode, qOverload<int>(&QComboBox::currentIndexChanged), this, &MainWindow::changeMode);
+    connect(ui->actionHighlighting_activated,
+            &QAction::triggered,
+            this,
+            &MainWindow::changeHighlighting);
     connect(widgetBox,
             qOverload<int>(&QComboBox::currentIndexChanged),
             ui->tabWidget,
             &QStackedWidget::setCurrentIndex);
-    connect(ui->tabWidget_2, &QTabWidget::currentChanged, this, &MainWindow::onEditorChanged);
-    connect(ui->actionSelectAll, &QAction::triggered, this, &MainWindow::selectAll);
-    connect(ui->actionUndo, &QAction::triggered, this, &MainWindow::undo);
-    connect(ui->actionRedo, &QAction::triggered, this, &MainWindow::redo);
-    connect(ui->actionMarkdown_Syntax, &QAction::triggered, this, &MainWindow::onHelpSyntax);
-    connect(ui->tabWidget_2->tabBar(), &QTabBar::tabMoved, this, &MainWindow::editorMoved);
-    connect(watcher, &QFileSystemWatcher::fileChanged, this, &MainWindow::onFileChanged);
-    connect(ui->tabWidget_2, &QTabWidget::tabCloseRequested, this, &MainWindow::closeEditor);
-    connect(ui->actionHTML, &QAction::triggered, this, &MainWindow::onImportHTML);
 }
 
 void MainWindow::setupToolbar()
@@ -433,13 +415,13 @@ void MainWindow::setupToolbar()
 
     qApp->setStyleSheet(STR("QSplitter { border: none; } QToolBar { border: none; }"));
 #endif
-    auto *aBold = new QAction(tr("Bold"));
-    auto *aItalic = new QAction(tr("Italic"));
-    auto *aUnderline = new QAction(tr("Underline"));
-    auto *aStrikethrough = new QAction(tr("Strikethrough"));
+    aBold = new QAction(tr("Bold"));
+    aItalic = new QAction(tr("Italic"));
+    aUnderline = new QAction(tr("Underline"));
+    aStrikethrough = new QAction(tr("Strikethrough"));
 
-    auto *aInsertTable = new QAction(tr("Insert table"));
-    auto *aInsertTableOfContents = new QAction(tr("Insert Table of Contents"));
+    aInsertTable = new QAction(tr("Insert table"));
+    aInsertTableOfContents = new QAction(tr("Insert Table of Contents"));
 
     // auto *aInsertLink = new QAction(tr("Insert link"));
     // auto *aInsertImage = new QAction(tr("Insert image"));
@@ -555,9 +537,8 @@ void MainWindow::inserText(QString what, const bool h)
     QTextCursor c = currentEditor()->textCursor();
     c.beginEditBlock();
 
-    if (!c.hasSelection()) {
+    if (!c.hasSelection())
         c.select(QTextCursor::WordUnderCursor);
-    }
 
     int start = c.selectionStart();
     int end = c.selectionEnd();
@@ -763,8 +744,6 @@ void MainWindow::receivedMessage(const quint32 id, const QByteArray &msg)
     QString f = QString::fromLatin1(msg); // is a bit faster
     f.remove(0, 7);                       // Removing "file://", which is added programmatically
 
-    qInfo() << "MarkdownEdit: instance" << id << "started and the following message was sent:" << f;
-
     if (f.isEmpty()) // it's the case when you start a new app
         onFileNew();
     else
@@ -849,29 +828,29 @@ void MainWindow::onFileChanged(const QString &f)
 void MainWindow::loadIcons()
 {
     loadIcon(STR("application-exit"), ui->actionExit);
+    loadIcon(STR("application-pdf"), ui->actionExportPdf);
     loadIcon(STR("document-new"), ui->actionNew);
-    loadIcon(STR("document-open-recent"), ui->actionOpen_last_document_on_start);
     loadIcon(STR("document-open"), ui->actionOpen);
-    loadIcon(STR("document-print-preview"), ui->actionPrintPreview);
+    loadIcon(STR("document-open-recent"), ui->actionOpen_last_document_on_start);
     loadIcon(STR("document-print"), ui->actionPrint);
-    loadIcon(STR("document-save-as"), ui->actionSaveAs);
+    loadIcon(STR("document-print-preview"), ui->actionPrintPreview);
+    loadIcon(STR("document-revert"), ui->actionReload);
     loadIcon(STR("document-save"), ui->actionSave);
+    loadIcon(STR("document-save-as"), ui->actionSaveAs);
+    loadIcon(STR("edit-copy"), ui->actionCopy);
     loadIcon(STR("edit-copy"), ui->actionCopy);
     loadIcon(STR("edit-cut"), ui->actionCut);
     loadIcon(STR("edit-paste"), ui->actionPaste);
     loadIcon(STR("edit-redo"), ui->actionRedo);
     loadIcon(STR("edit-select-all"), ui->actionSelectAll);
     loadIcon(STR("edit-undo"), ui->actionUndo);
-    loadIcon(STR("edit-copy"), ui->actionCopy);
     loadIcon(STR("help-about"), ui->actionAbout);
     loadIcon(STR("help-contents"), ui->actionMarkdown_Syntax);
-    loadIcon(STR("text-wrap"), ui->actionWord_wrap);
-    loadIcon(STR("tools-check-spelling"), ui->actionSpell_checking);
-    loadIcon(STR("document-revert"), ui->actionReload);
-    loadIcon(STR("text-wrap"), ui->actionWord_wrap);
     loadIcon(STR("media-playback-pause"), ui->actionPause_preview);
     loadIcon(STR("text-html"), ui->actionExportHtml);
-    loadIcon(STR("application-pdf"), ui->actionExportPdf);
+    loadIcon(STR("text-wrap"), ui->actionWord_wrap);
+    loadIcon(STR("text-wrap"), ui->actionWord_wrap);
+    loadIcon(STR("tools-check-spelling"), ui->actionSpell_checking);
 
     loadIcon(STR("document-export"), ui->menuExport);
     loadIcon(STR("document-import"), ui->menuImport_from);
@@ -1752,6 +1731,13 @@ void MainWindow::onImportHTML()
 
 MainWindow::~MainWindow()
 {
+    int activeThreadCount = QThreadPool::globalInstance()->activeThreadCount();
+    if (activeThreadCount > 0) {
+        qInfo() << "Waiting for" << activeThreadCount << "threads to finish...";
+        QThreadPool::globalInstance()->waitForDone();
+        qInfo() << "All threads ended!";
+    }
+
     delete ui;
     delete htmlHighliter;
     delete toolbutton;

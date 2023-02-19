@@ -16,14 +16,15 @@
  ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
  **/
 
-#include <QByteArray>
-#include <QRegularExpression>
+#include "markdownparser.h"
+#include "common.h" // needed for MD_UNDERLINE
 
 #include "html2md.h"
-
-#include "common.h" // needed for MD_UNDERLINE
-#include "markdownparser.h"
 #include "md4c-html.h"
+
+#include <QByteArray>
+
+#include <sstream>
 
 const QByteArray templateArray = QByteArrayLiteral("<!DOCTYPE html>\n"
                                                    "<html>\n"
@@ -46,30 +47,24 @@ auto Parser::toHtml(const QString &in, const int dia, const size_t toc_depth) ->
     unsigned parser_flags = 0;
 #endif
 
+    MD_TOC_OPTIONS toc;
+
     switch (dia) {
     case Doxygen:
+        toc.toc_placeholder = "[TOC]";
+        toc.depth = (int8_t) toc_depth;
     case GitHub:
         parser_flags |= MD_DIALECT_GITHUB;
         break;
     case Commonmark:
-        parser_flags |= MD_DIALECT_COMMONMARK;
-        break;
     default:
-        break;
-    }
-
-    const QByteArray array = in.toUtf8(); // Use UTF-8 for better support
-    QByteArray out = templateArray;
-    out.reserve(array.size() * 1.28 + 115);
-
-    static MD_TOC_OPTIONS toc;
-    if (dia == Doxygen) {
-        toc.toc_placeholder = "[TOC]";
-        toc.depth = (int8_t) toc_depth;
-    } else {
-        toc.toc_placeholder = "";
+        parser_flags |= MD_DIALECT_COMMONMARK;
         toc.depth = 0;
     }
+
+    const QByteArray array = in.toLocal8Bit();
+    QByteArray out = templateArray;
+    out.reserve(array.size() * 1.28 + 115);
 
     md_html(array.constData(),
             array.size(),
@@ -86,24 +81,30 @@ auto Parser::toHtml(const QString &in, const int dia, const size_t toc_depth) ->
     return QString::fromUtf8(out);
 }
 
-auto Parser::heading2HTML(const QString &in) -> QString
+void captureHeading(const MD_CHAR *data, const MD_SIZE data_size, void *userData)
+{
+    auto *ss = (std::stringstream *) userData;
+    ss->write(data, data_size);
+};
+
+auto Parser::heading2HTML(const QString &in) -> std::string
 {
     const QByteArray array = in.toUtf8(); // Use UTF-8 for better support
 
-    QByteArray out;
+    std::stringstream out;
 
     static MD_TOC_OPTIONS toc;
     toc.depth = 0;
 
     md_html(array.constData(),
             array.size(),
-            &captureHtmlFragment,
+            &captureHeading,
             &out,
             MD_FLAG_HEADINGAUTOID,
             MD_HTML_FLAG_SKIP_UTF8_BOM,
             &toc);
 
-    return QString::fromUtf8(out);
+    return out.str();
 }
 
 auto Parser::toMarkdown(const QString &in) -> QString

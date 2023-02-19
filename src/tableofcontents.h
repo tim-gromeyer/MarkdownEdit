@@ -12,20 +12,14 @@ class TableOfContents : public QDialog
 {
     Q_OBJECT
 public:
-    explicit TableOfContents(QString text, QWidget *parent = nullptr);
+    explicit TableOfContents(const QString &, QWidget *parent = nullptr);
 
     auto markdownTOC() -> QString;
 
-private Q_SLOTS:
-    void parseText();
-
-    // void selectionChanged();
-
 private:
-    QString in;
+    void parseText(const QString &);
 
     QListWidget *list;
-
     QCheckBox *box;
 };
 

@@ -2,28 +2,26 @@
 #include "markdownparser.h"
 #include "settings.h"
 
-#include <utility>
-
-#include "QGuiApplication"
-#include "QHBoxLayout"
 #include <QCheckBox>
 #include <QDialogButtonBox>
+#include <QGuiApplication>
+#include <QHBoxLayout>
 #include <QListWidget>
-#include <QMetaObject>
-#include <QTextDocument>
+
+#include <thread>
 
 using StringPair = QPair<QString, QString>;
 using StringPairList = QList<StringPair>;
 
-TableOfContents::TableOfContents(QString text, QWidget *parent)
+TableOfContents::TableOfContents(const QString &text, QWidget *parent)
     : QDialog(parent)
-    , in(std::move(text))
+    , list(new QListWidget(this))
 {
+    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
     setWindowTitle(tr("Insert table of contents"));
 
     auto *l = new QVBoxLayout(this);
 
-    list = new QListWidget(this);
     list->setDragDropMode(QListWidget::InternalMove);
 
     box = new QCheckBox(tr("Number list"), this);
@@ -39,8 +37,8 @@ TableOfContents::TableOfContents(QString text, QWidget *parent)
     l->addWidget(bb);
     setLayout(l);
 
-    // Don't block GUI
-    QMetaObject::invokeMethod(this, "parseText", Qt::QueuedConnection);
+    parseText(text);
+    QGuiApplication::restoreOverrideCursor();
 }
 
 auto TableOfContents::markdownTOC() -> QString
@@ -75,17 +73,12 @@ auto TableOfContents::markdownTOC() -> QString
     return out;
 }
 
-void TableOfContents::parseText()
+void TableOfContents::parseText(const QString &in)
 {
-    // Show wait cursor
-    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
-
     // Separate by line
     QStringList list = in.split(u'\n');
 
     StringPairList headings;
-
-    QTextDocument doc;
 
     // Loop through each line
     for (const QString &line : list) {
@@ -93,22 +86,38 @@ void TableOfContents::parseText()
         if (!line.startsWith(u'#'))
             continue;
 
-        const QString html = Parser::heading2HTML(line);
-        doc.setHtml(html);
+        const std::string html = Parser::heading2HTML(line);
 
-        QString text = doc.toPlainText().trimmed();
-        if (text.endsWith(u':'))
-            text.remove(text.size() - 1, 1);
+        QString id;
+        QString text;
 
-        // (?:id="([^"]*)")
-        static const QRegularExpression id(STR("(?:id=\"([^\"]*)\")"));
-        const QStringList matches = id.match(html).capturedTexts();
-        if (matches.isEmpty())
-            continue;
+        bool inAttribute = false;
+        bool inTag = false;
 
-        const QString &link = matches.last();
+        for (char c : html) {
+            switch (c) {
+            case '<':
+                inTag = true;
+                break;
+            case '>':
+                inTag = false;
+                continue;
+            case '"':
+                inAttribute = !inAttribute;
+                continue;
+            case '\n':
+                continue;
+            default:
+                break;
+            }
 
-        headings.append(StringPair(text, link));
+            if (inAttribute)
+                id.append(QChar::fromLatin1(c));
+            else if (!inTag)
+                text.append(QChar::fromLatin1(c));
+        }
+
+        headings.append(StringPair(text, id));
     }
 
     for (const auto &heading : qAsConst(headings)) {
@@ -118,7 +127,4 @@ void TableOfContents::parseText()
         item->setData(14, heading.second);
         this->list->addItem(item);
     }
-
-    // Restore the normal cursor
-    QGuiApplication::restoreOverrideCursor();
 }

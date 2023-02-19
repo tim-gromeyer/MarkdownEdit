@@ -69,6 +69,7 @@ set(RC_FILES
 )
 
 set(PROJECT_SOURCES
+    ${RC_FILES}
     common.h
     src/highlighter.cpp
     src/highlighter.h
@@ -85,12 +86,13 @@ set(PROJECT_SOURCES
     src/settings.h
     src/spellchecker.cpp
     src/spellchecker.h
+    src/tableofcontents.cpp
+    src/tableofcontents.h
     src/tablewidget.cpp
     src/tablewidget.h
-    src/tableofcontents.h
-    src/tableofcontents.cpp
+    src/utils.cpp
+    src/utils.h
     ui/mainwindow.ui
-    ${RC_FILES}
 )
 
 # Include windows icon

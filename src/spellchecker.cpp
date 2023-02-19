@@ -18,6 +18,7 @@
 
 #include "spellchecker.h"
 #include "settings.h"
+#include "utils.h"
 
 #include <QActionGroup>
 #include <QDataStream>
@@ -26,9 +27,9 @@
 #include <QLocale>
 #include <QMenu>
 #include <QPlainTextEdit>
+#include <QRunnable>
 #include <QStandardPaths>
-
-#include <thread>
+#include <QThreadPool>
 
 #ifndef NO_SPELLCHECK
 #include <nuspell/dictionary.hxx>
@@ -479,7 +480,11 @@ void SpellChecker::slotSetLanguage(const bool checked)
     auto *action = qobject_cast<QAction *>(sender());
     const QString lang = action->data().toString();
 
-    std::thread(&SpellChecker::setLanguage, this, lang).detach();
+    static QRunnable *runnable = nullptr;
+    if (!runnable)
+        threading::runFunction([this, lang] { setLanguage(lang); });
+    else
+        QThreadPool::globalInstance()->start(runnable);
 }
 
 void SpellChecker::addWord(const QString &word)

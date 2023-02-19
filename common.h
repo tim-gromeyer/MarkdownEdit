@@ -5,7 +5,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Options
-#define RECENT_OPENED_LIST_LENGTH 8
+enum {
+RECENT_OPENED_LIST_LENGTH = 8
+};
 
 // Set the following variables to  "true" or "false"
 
@@ -13,7 +15,7 @@
 #define MD_UNDERLINE true
 
 // Enable or disable spell check.
-#define SPELLCHECK true  // Note: Not available on android and web assembly
+#define SPELLCHECK true // Note: Not available on android and web assembly
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 /// End of options

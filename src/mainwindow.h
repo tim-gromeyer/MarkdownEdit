@@ -154,8 +154,8 @@ private:
     QList<MarkdownEditor *> editorList;
     QStringList fileList;
 
-    QShortcut *shortcutNew;
-    QShortcut *shortcutClose;
+    QShortcut *shortcutNew = nullptr;
+    QShortcut *shortcutClose = nullptr;
 
     Ui::MainWindow *ui;
 
@@ -187,6 +187,13 @@ private:
     QComboBox *widgetBox = nullptr;
     QAction *actionWidgetBox = nullptr;
     QAction *actionPreview = nullptr;
+
+    QAction *aBold = nullptr;
+    QAction *aItalic = nullptr;
+    QAction *aUnderline = nullptr;
+    QAction *aStrikethrough = nullptr;
+    QAction *aInsertTable = nullptr;
+    QAction *aInsertTableOfContents = nullptr;
 
     QComboBox *mode = nullptr;
     QTimer *timer = nullptr;
