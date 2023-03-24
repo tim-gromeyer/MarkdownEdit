@@ -104,10 +104,10 @@ endif()
 include(3rdparty/CMakeLists.txt)
 include(cmake/Translation.cmake)
 
+add_translations(TS ${TS_FILES})
+
 # Build it!
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    add_translations(TS ${TS_FILES})
-
     qt_add_executable(markdownedit
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
@@ -118,8 +118,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     set_property(TARGET markdownedit APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
                  ${CMAKE_CURRENT_SOURCE_DIR}/android)
 else()
-    add_translations(TS ${TS_FILES})
-
     if(ANDROID)
         add_library(markdownedit SHARED
             ${PROJECT_SOURCES}
@@ -150,7 +148,7 @@ else()
     if (Nuspell_FOUND)
         list(APPEND 3rdparty Nuspell::nuspell)
     else()
-        message(WARNING "Nuspell not found. Disable spellchecker.")
+        message(WARNING "Nuspell not found. Spell checker is disabled!")
         target_compile_definitions(markdownedit PUBLIC NO_SPELLCHECK)
     endif()
 endif()
@@ -168,7 +166,6 @@ target_compile_definitions(markdownedit PUBLIC
     APP_VERSION="${PROJECT_VERSION}"
     CHECK_MARKDOWN
     HOMEPAGE="${PROJECT_HOMEPAGE_URL}"
-    QT_DISABLE_DEPRECATED_BEFORE=0x051208
     QT_NO_CAST_FROM_ASCII
     QT_NO_CAST_FROM_BYTEARRAY
     QT_NO_CAST_TO_ASCII
