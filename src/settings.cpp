@@ -25,7 +25,7 @@
 #include <QString>
 #include <QVariant>
 
-static QHash<QString, QVariant> languages_map;
+QHash<QString, QVariant> languages_map;
 
 auto getLanguageMap() -> QHash<QString, QVariant>
 {

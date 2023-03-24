@@ -59,9 +59,6 @@ public:
     {
         return markdownhig;
     };
-
-    friend class MarkdownHighlighter;
-    using MarkdownHighlighter::_formats;
 #endif
 
     void setSpellCheckingEnabled(const bool);
