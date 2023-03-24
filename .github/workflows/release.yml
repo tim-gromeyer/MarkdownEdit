@@ -49,19 +49,13 @@ jobs:
         sudo apt-get update
         sudo apt-fast install -y qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev qt5ct dpkg-dev extra-cmake-modules # Note: nuspell version is to low
 
-    - name: Build
+    - name: Build and package
       run: |
         mkdir build
         cd build
         cmake .. -DCMAKE_BUILD_TYPE=Release
-        cmake --build . --config Release
-        cd ..
-      shell: bash
-
-    - name: Package
-      run: |
-        cd build/
         cmake --build . --config Release --target package
+      shell: bash
 
     - name: Upload package
       uses: actions/upload-artifact@v3
