@@ -22,6 +22,7 @@ jobs:
           - os: ubuntu-20.04
             files: |
               build/packages/MarkdownEdit*.deb
+              build/packages/MarkdownEdit*.tar.gz
           - os: windows-latest
             files: |
               build/packages/MarkdownEdit*.exe
@@ -40,25 +41,25 @@ jobs:
       name: Install Qt on Windows and Mac
       uses: jurplel/install-qt-action@v3
       with:
-        version: 6.4.1
+        version: 6.5.0
 
     - if: contains( matrix.os, 'ubuntu')
       name: Install Qt, enchant-2 and ECM on Linux
       run: |
         sudo apt-get update
-        sudo apt-get install -y qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev libenchant-2-dev qt5ct dpkg-dev extra-cmake-modules
+        sudo apt-fast install -y qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev libnuspell-dev qt5ct dpkg-dev extra-cmake-modules # Note: nuspell version is to low
 
     - name: Build
       run: |
         mkdir build
         cd build
-        cmake -DCMAKE_BUILD_TYPE=Release ..
-        cmake --build . -j8
+        cmake .. -DCMAKE_BUILD_TYPE=Release
+        cmake --build . --config Release
       shell: bash
 
     - name: Package
       run: |
-        cmake --build . --target=package -j3
+        cmake --build . --config Release --target package
 
     - name: Upload package
       uses: actions/upload-artifact@v3
