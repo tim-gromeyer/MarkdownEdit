@@ -67,7 +67,11 @@ void MarkdownEditor::dropEvent(QDropEvent *event)
 
     QDir dir(getDir());
 
+#if QT5
     QTextCursor c = cursorForPosition(event->pos());
+#else
+    QTextCursor c = cursorForPosition(event->position().toPoint());
+#endif
 
     QMimeDatabase base;
 

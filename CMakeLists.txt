@@ -145,8 +145,8 @@ if(DISABLE_SPELLCHECK)
 else()
     find_package(Nuspell QUIET)
 
-    if (Nuspell_FOUND)
-        list(APPEND 3rdparty Nuspell::nuspell)
+    if (Nuspell_FOUND AND Nuspell_VERSION GREATER_EQUAL 5.1.0)
+        list(APPEND 3rdparty Nuspell::nuspell icuuc)
     else()
         message(WARNING "Nuspell not found. Spell checker is disabled!")
         target_compile_definitions(markdownedit PUBLIC NO_SPELLCHECK)
@@ -175,6 +175,7 @@ target_compile_definitions(markdownedit PUBLIC
     QT_NO_URL_CAST_FROM_STRING
     QT_STRICT_ITERATORS
     QT_USE_QSTRINGBUILDER
+    QT${QT_VERSION_MAJOR}=1
 )
 
 set_target_properties(markdownedit PROPERTIES
