@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+	<id>com.github.tim_gromeyer.MarkdownEdit</id>
+	<name>MarkdownEdit</name>
+	<project_license>GPL-3</project_license>
+	<metadata_license>GPL-3</metadata_license>
+	<summary>Qt Markdown Editor</summary>
+	<developer_name>Tim Gromeyer</developer_name>
+	<description>
+		<p>
+		A Qt-based, free and open source Markdown editor with live HTML preview, code and markdown syntax highlighting.
+		</p>
+		<p>Features:</p>
+		<ul>
+			<li>Live HTML Preview</li>
+			<li>HTML and PDF Export</li>
+			<li>Code Syntax Highlighting</li>
+			<li>Spell Checking</li>
+		​</ul>
+	</description>
+	<screenshots>
+		<screenshot type="default">
+		<image type="source">https://github.com/software-made-easy/MarkdownEdit/blob/main/doc/images/Example.png?raw=true</image>
+		</screenshot>
+	</screenshots>
+	<releases>
+		<release version="1.4.5" date="2022-09-04" />
+	</releases>
+	<content_rating type="oars-1.1" />
+	<url type="homepage">https://github.com/tim-gromeyer/MarkdownEdit</url>
+	<url type="bugtracker">https://github.com/tim-gromeyer/MarkdownEdit/issues</url>
+	<url type="help">https://github.com/tim-gromeyer/MarkdownEdit/blob/main/README.md</url>
+</component>

@@ -7,5 +7,6 @@ wasm/
 packaging/flatpak/build/*
 packaging/flatpak/.flatpak-builder/*
 packaging/flatpak/repo/*
-build*
+build*/
 .qt/
+.flatpak-builder/

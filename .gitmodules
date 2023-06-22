@@ -1,12 +1,12 @@
 [submodule "3rdparty/SingleApplication"]
 	path = 3rdparty/SingleApplication
 	url = https://github.com/itay-grudev/SingleApplication
-[submodule "3rdparty/md4c"]
-	path = 3rdparty/md4c
-	url = https://github.com/tim-gromeyer/MarkdownEdit_md4c
 [submodule "3rdparty/html2md"]
 	path = 3rdparty/html2md
 	url = https://github.com/tim-gromeyer/html2md
 [submodule "3rdparty/qmarkdowntextedit"]
 	path = 3rdparty/qmarkdowntextedit
 	url = https://github.com/tim-gromeyer/qmarkdowntextedit.git
+[submodule "3rdparty/md4c"]
+	path = 3rdparty/md4c
+	url = https://github.com/tim-gromeyer/MarkdownEdit_md4c.git
