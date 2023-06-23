@@ -232,7 +232,7 @@ if(WIN32)
             DESTINATION .)
 endif()
 
-if(${QT_VERSION} GREATER_EQUAL 6.3)
+if(${QT_VERSION} GREATER_EQUAL 6.3 AND NOT FLATPAK)
     qt_generate_deploy_app_script(
         TARGET markdownedit
         FILENAME_VARIABLE deploy_script
