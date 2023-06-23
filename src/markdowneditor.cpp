@@ -27,7 +27,6 @@
 #include <QMimeDatabase>
 #include <QRunnable>
 #include <QSignalBlocker>
-#include <QThreadPool>
 
 #include <thread>
 
@@ -95,11 +94,7 @@ void MarkdownEditor::dropEvent(QDropEvent *event)
 
 auto MarkdownEditor::setLanguage(const QString &lang) -> bool
 {
-    static QRunnable *runnable = nullptr;
-    if (!runnable)
-        threading::runFunction([this, lang] { checker->setLanguage(lang); });
-    else
-        QThreadPool::globalInstance()->start(runnable);
+    threading::runFunction([this, lang] { checker->setLanguage(lang); });
 
     return true;
 }

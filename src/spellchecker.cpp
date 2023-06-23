@@ -29,7 +29,6 @@
 #include <QPlainTextEdit>
 #include <QRunnable>
 #include <QStandardPaths>
-#include <QThreadPool>
 
 #ifndef NO_SPELLCHECK
 #include <nuspell/dictionary.hxx>
@@ -480,11 +479,7 @@ void SpellChecker::slotSetLanguage(const bool checked)
     auto *action = qobject_cast<QAction *>(sender());
     const QString lang = action->data().toString();
 
-    static QRunnable *runnable = nullptr;
-    if (!runnable)
-        threading::runFunction([this, lang] { setLanguage(lang); });
-    else
-        QThreadPool::globalInstance()->start(runnable);
+    threading::runFunction([this, lang] { setLanguage(lang); });
 }
 
 void SpellChecker::addWord(const QString &word)
