@@ -51,7 +51,7 @@ Please note:
 
 ## Dependencies
 
-MarkdownEdit requires [Qt](https://qt.io/) and [enchant-2](https://github.com/AbiWord/enchant) to be installed.
+MarkdownEdit requires [Qt](https://qt.io/) and [nuspell](https://github.com/nuspell/nuspell) (optional) to be installed.
 
 ## Build instructions
 

@@ -870,7 +870,7 @@ void MainWindow::loadIcon(const QString &name, QAction *a)
 #ifndef FLATPAK
     a->setIcon(QIcon::fromTheme(name, QIcon(STR(":/icons/%1.svg").arg(name))));
 #else
-    a->setIcon(QIcon(STR(":/icons/%1.svg").arg(name)));
+    a->setIcon(QIcon::fromTheme(name));
 #endif
 }
 
@@ -879,7 +879,7 @@ void MainWindow::loadIcon(const QString &name, QMenu *m)
 #ifndef FLATPAK
     m->setIcon(QIcon::fromTheme(name, QIcon(STR(":/icons/%1.svg").arg(name))));
 #else
-    m->setIcon(QIcon(STR(":/icons/%1.svg").arg(name)));
+    m->setIcon(QIcon::fromTheme(name));
 #endif
 }
 

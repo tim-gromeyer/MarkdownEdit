@@ -2,6 +2,9 @@ app-id: com.github.tim_gromeyer.MarkdownEdit
 runtime: org.kde.Platform
 runtime-version: '6.5'
 sdk: org.kde.Sdk
+rename-icon: MarkdownEdit
+rename-appdata-file: appdata.xml
+rename-desktop-file: MarkdownEdit.desktop
 command: markdownedit
 finish-args:
   - --device=dri
@@ -10,6 +13,16 @@ finish-args:
   - --socket=fallback-x11
   - --socket=wayland
 modules:
+  - name: nuspell
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+     - -DCMAKE_BUILD_TYPE=Release
+    sources:
+     - type: git
+       url: https://github.com/nuspell/nuspell.git
+       tag: v5.1.2
+
   - name: markdownedit
     buildsystem: cmake-ninja
     builddir: true

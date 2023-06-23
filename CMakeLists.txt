@@ -61,6 +61,8 @@ if(FLATPAK)
     add_compile_definitions(
         FLATPAK
     )
+
+    install(FILES include/flatpak/appdata.xml)
 endif()
 
 # Project files
