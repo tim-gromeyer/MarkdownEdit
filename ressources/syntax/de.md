@@ -1,170 +1,127 @@
-# Markdown-Syntax
+# Markdown Syntax Guide (GitHub Flavor)
 
-Der Kern dessen, was MD4C verstehen kann, ist in der [CommonMark-Spezifikation](http://spec.commonmark.org/0.27/) definiert.
-Daher ist das Folgende nur eine verkürzte Zusammenfassung.
+Markdown ist eine leichtgewichtige Auszeichnungssprache, die es Ihnen ermöglicht, formatierten Text mithilfe einer einfachen Textsyntax zu schreiben.
+Sie wird weit verbreitet auf Plattformen wie Reddit zur Formatierung von Kommentaren oder auf GitHub zur Erstellung von Dokumentationen, README-Dateien und anderen textbasierten Inhalten verwendet.
 
-* Klartext (zwei Absätze):
-```
-Dies ist der erste Absatz.
+Diese Anleitung bietet eine umfassende Übersicht über die Markdown-Syntax mit Beispielen.
 
-Und dies ist der zweite Absatz.
-```
 
-* Kursivschrift:
+## Inhaltsverzeichnis
 
-```
-Text, der in *einzelne Sternchen* oder _einzelne Unterstriche_ eingeschlossen ist, wird
-als Hervorhebung erkannt und in der Regel als kursiver Text wiedergegeben.
-```
+- [Überschriften](#überschriften)
+- [Textformatierung](#textformatierung)
+- [Listen](#listen)
+- [Links](#links)
+- [Bilder](#bilder)
+- [Tabellen](#tabellen)
+- [Codeblöcke](#codeblöcke)
+- [Zitate](#zitate)
+- [Horizontale Linien](#horizontale-linien)
 
-* Fettdruck:
 
-```
-In ähnlicher Weise wird Text, der von **doppelten Sternchen** oder __doppelten Unterstrichen__
-eingeschlossener Text wird als starke Betonung erkannt und normalerweise als fetter
-Text.
-```
+## Überschriften
 
-* Fett kursiv:
-
-```
-*Kursiv* und **fetter Text** können zu ***fett kursiv*** kombiniert werden, sogar 
-__auf recht __komplizierte_ Weise__.
-```
-
-* Überschriften:
-
-```markdown
-# Überschrift Ebene 1
-## Überschrift Ebene 2
-## Überschrift Ebene 3
-#### Überschrift Ebene 4
-##### Kopfzeile Ebene 5
-###### Überschriftsebene 6
-
-Die ersten beiden Überschriftenebenen können alternativ auch mit einem Unterstrich geschrieben werden:
-
-Überschriftsebene 1
-==============
-
-Kopfzeile Ebene 2
---------------
-```
-
-* Link: 
-
-```
-Inline-Link: [Linktext](http://www.example.com)
-
-Oder Link unter Verwendung einer Referenzdefinition:
-
-[Verweislink][1]
-
-[1]: http://www.example.com
-```
-
-* Bild: 
-
-```
-Inline-Bild: ![image alt text](http://www.example.com/image.png)
-
-Oder Bild unter Verwendung einer Referenzdefinition:
-
-![image alt text][2]
-
-[2]: http://www.example.com/image.png
-```
-
-* Ungeordnete Listen:
-
-```
-* Listenelement 1
-* Listenpunkt 2
-* Listenpunkt 3
-
-oder
-
-- Punkt 1 der Liste
-- Punkt 2 der Liste
-- Listenpunkt 3
-```
-
-* Geordnete Listen:
-
-```
-1. Listenpunkt 1
-2. Listenpunkt 2
-3. Punkt 3 auflisten
-
-oder
-
-1) Punkt 1 auflisten
-2) Punkt 2 auflisten
-3) Punkt 3 auflisten
-```
-
-* Verschachtelte Listen:
-
-```
-* Foo
-* Unterpunkt von Foo
-* Bar
-* Bar's Unterpunkt 1
-* Bar's subitem 2
-* Bar's subitem 3
-* Baz
-* Baz' Unterpunkt 1
-* Baz's Unterpunkt 2
-```
-
-* Blockquote:
-
-```
-> Ein Teil des Dokuments, dessen Zeilen mit ">" eingeleitet werden, wird als "Blockquote" behandelt.
-> Blockquote behandelt.
->
-> > Er kann auch verschachtelte Anführungszeichen oder Listen enthalten:
-> 
-> * Listenelement 1
-> * Aufzählungspunkt 2
-```
-
-* Inline-Code (auch bekannt als Code-Spanne):
-
-```
-Shell-Befehl `ls` ausführen, um den Inhalt des aktuellen Verzeichnisses zu ermitteln.
-```
-
-* Code-Block:
-
-```
-Satz von Linien, die in einer Linie eingeschlossen sind, die aus drei (oder mehr) aufeinanderfolgenden Linien besteht
-Backticks (```) oder Tilden (~~~) werden als Codeblock erkannt.
-
-Alternativ kann der Code auch nur um vier oder mehr Leerzeichen eingerückt werden:
-
-  $ ./configure
-  $ make
-  $ make install
-
-Nach dem Öffnungscodezaun kann ein [Info-String] bereitgestellt werden.
-Obwohl diese Spezifikation keine besondere Behandlung von vorschreibt
-Der Info-String, das erste Wort wird normalerweise zur Angabe verwendet
-die Sprache des Codeblocks. Bei der HTML-Ausgabe ist die Sprache
-normalerweise durch Hinzufügen einer Klasse zum Element "Code" angegeben, bestehend aus
-von `language-`, gefolgt vom Namen der Sprache.
+Überschriften in Markdown werden mit Hashtags (#) erstellt, gefolgt von einem Leerzeichen und dem Überschriftentext. Die Anzahl der Hashtags bestimmt das Überschriftenlevel, wobei ein Hashtag das höchste Level (H1) darstellt und sechs Hashtags das niedrigste Level (H6).
 
 Beispiel:
+```
+# Überschrift 1
+## Überschrift 2
+### Überschrift 3
+```
 
-~~~ruby
-def foo(x)
-  return 3
-end
-~~~
 
-wird zu:
+## Textformatierung
 
-<pre><code class="language-ruby">def foo(x)
-  return 3
-end
-</code></pre>
+Sie können verschiedene Formatierungsoptionen auf Ihren Text anwenden:
+
+- **Fett**: Umgeben Sie den Text mit doppelten Sternchen oder doppelten Unterstrichen (`**fetter Text**` oder `__fetter Text__`).
+- *Kursiv*: Umgeben Sie den Text mit einfachen Sternchen oder einfachen Unterstrichen (`*kursiver Text*` oder `_kursiver Text_`).
+- ~~Durchgestrichen~~: Verwenden Sie zwei Tilde-Symbole (`~~durchgestrichener Text~~`).
+
+
+## Listen
+
+Es gibt zwei Arten von Listen in Markdown: geordnete und ungeordnete Listen.
+
+**Geordnete Liste:**
+
+1. Eintrag 1
+2. Eintrag 2
+3. Eintrag 3
+
+Um eine geordnete Liste zu erstellen, beginnen Sie jede Zeile mit einer Zahl, gefolgt von einem Punkt.
+
+**Ungeordnete Liste:**
+
+- Eintrag 1
+- Eintrag 2
+- Eintrag 3
+
+Um eine ungeordnete Liste zu erstellen, beginnen Sie jede Zeile mit einem Bindestrich (-), Pluszeichen (+) oder einem Sternchen (*).
+
+
+## Links
+
+Sie können Links zu anderen Webseiten oder Abschnitten im Dokument erstellen.
+
+[MarkdownEdit](https://github.com/tim-gromeyer/MarkdownEdit)
+
+## Bilder
+
+Sie können auch Bilder in Ihre Markdown-Dateien einfügen.
+
+![Alternativer Text](image.jpg)
+
+
+## Tabellen
+
+Markdown ermöglicht es Ihnen, Tabellen mit Spalten und Zeilen zu erstellen.
+
+| Überschrift 1 | Überschrift 2 |
+| ------------- | ------------- |
+| Zelle 1       | Zelle 2       |
+| Zelle 3       | Zelle 4       |
+
+Um eine Tabelle zu erstellen, verwenden Sie Pipe-Zeichen (|), um Spalten zu trennen, und Bindestriche (-), um die Tabellenüberschrift zu definieren.
+
+
+## Codeblöcke
+
+Sie können Codeausschnitte oder -blöcke mithilfe von Backticks anzeigen.
+
+**Inline-Code:** Verwenden Sie einzelne Backticks (`code`).
+
+**Codeblock:**
+
+```js
+function grüßen() {
+  console.log("Hallo, Welt!");
+}
+```
+
+
+## Zitate
+
+Zitate werden verwendet, um zitierten Inhalt anzuzeigen.
+
+> Dies ist ein Zitat.
+> Es kann sich über mehrere Zeilen erstrecken.
+
+Um ein Zitat zu erstellen, fügen Sie jedem Zeilenvorlauf ein größer-als-Symbol (>) und ein Leerzeichen hinzu.
+
+
+## Horizontale Linien
+
+Sie können horizontale Linien hinzufügen, um Abschnitte optisch voneinander zu trennen.
+
+---
+___
+
+Verwenden Sie drei Bindestriche (-), Unterstriche (_) oder Sternchen (*) in einer eigenen Zeile, um eine horizontale Linie zu erstellen.
+
+---
+
+Diese Anleitung behandelt die grundlegende Syntax von Markdown. Sie sollte Ihnen einen guten Ausgangspunkt für die Erstellung schön formatierter Dokumente auf GitHub oder anderen Plattformen, die Markdown unterstützen, bieten.
+
+Für fortgeschrittene Funktionen lesen Sie die offizielle Markdown-Dokumentation nach.~~~
