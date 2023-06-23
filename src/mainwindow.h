@@ -160,7 +160,7 @@ private:
     Ui::MainWindow *ui;
 
     QString path;
-    short _mode = 1; // 0 = Commonmark, 1 = GitHub
+    int _mode = 1; // 0 = Commonmark, 1 = GitHub
 
     QSettings *settings;
 

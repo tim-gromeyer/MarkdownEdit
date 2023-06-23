@@ -1246,6 +1246,7 @@ void MainWindow::changeMode(const int i)
 {
     _mode = (short) i;
     onTextChanged();
+    currentEditor()->setFocus();
 }
 
 void MainWindow::onTextChanged()
