@@ -39,7 +39,7 @@ void captureHtmlFragment(const MD_CHAR *data, const MD_SIZE data_size, void *use
     array->append(data, (int) data_size);
 }
 
-auto Parser::toHtml(const QString &in, const int dia, const size_t toc_depth) -> QString
+auto Parser::toHtml(const QString &in, const int dia, const int toc_depth) -> QString
 {
 #if MD_UNDERLINE
     unsigned parser_flags = MD_FLAG_UNDERLINE;
@@ -49,6 +49,7 @@ auto Parser::toHtml(const QString &in, const int dia, const size_t toc_depth) ->
 
     MD_TOC_OPTIONS toc;
     toc.depth = 0;
+    toc.toc_placeholder = nullptr;
 
     switch (dia) {
     case Doxygen:
@@ -58,9 +59,11 @@ auto Parser::toHtml(const QString &in, const int dia, const size_t toc_depth) ->
         parser_flags |= MD_DIALECT_GITHUB;
         break;
     case Commonmark:
-    default:
         parser_flags |= MD_DIALECT_COMMONMARK;
         toc.depth = 0;
+        break;
+    default:
+        break;
     }
 
     const QByteArray array = in.toLocal8Bit();
