@@ -39,6 +39,8 @@ files quick and easy:
 
 ## Preview
 
+(Note: Bugs are expected, it's a desktop app and not a web app)
+
 You can preview MarkdownEdit in action [here](https://tim-gromeyer.github.io/MarkdownEdit/markdownedit.html).
 
 Please note:
