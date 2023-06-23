@@ -62,7 +62,7 @@ if(FLATPAK)
         FLATPAK
     )
 
-    install(FILES include/flatpak/appdata.xml)
+    install(FILES include/flatpak/appdata.xml DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/metainfo/)
 endif()
 
 # Project files
