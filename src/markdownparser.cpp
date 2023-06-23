@@ -49,12 +49,11 @@ auto Parser::toHtml(const QString &in, const int dia, const size_t toc_depth) ->
 
     MD_TOC_OPTIONS toc;
     toc.depth = 0;
-    toc.toc_placeholder = "";
 
     switch (dia) {
     case Doxygen:
         toc.toc_placeholder = "[TOC]";
-        toc.depth = (int8_t) toc_depth;
+        toc.depth = toc_depth;
     case GitHub:
         parser_flags |= MD_DIALECT_GITHUB;
         break;
