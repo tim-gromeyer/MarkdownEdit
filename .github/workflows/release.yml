@@ -42,6 +42,7 @@ jobs:
       uses: jurplel/install-qt-action@v3
       with:
         version: 6.4.3
+        cache: true
 
     - if: contains( matrix.os, 'ubuntu')
       name: Install Qt, enchant-2 and ECM on Linux
