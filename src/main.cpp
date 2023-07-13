@@ -73,6 +73,7 @@ auto main(int argc, char *argv[]) -> int
     if (a.isSecondary()) {
         a.sendMessage(QByteArrayLiteral("file://")
                       % parser.positionalArguments().join(u' ').toLatin1());
+        t.join();
         return 0;
     }
 #endif

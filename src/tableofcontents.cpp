@@ -8,8 +8,6 @@
 #include <QHBoxLayout>
 #include <QListWidget>
 
-#include <thread>
-
 using StringPair = QPair<QString, QString>;
 using StringPairList = QList<StringPair>;
 

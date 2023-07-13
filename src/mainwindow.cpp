@@ -470,7 +470,7 @@ void MainWindow::setupToolbar()
     ui->toolBarTools->addAction(aInsertTable);
     ui->toolBarTools->addAction(aInsertTableOfContents);
 
-#ifndef QT_NO_DEBUG
+#ifdef QT_DEBUG
     auto *aScreenshot = new QAction(QIcon::fromTheme(STR("gnome-screenshot")),
                                     tr("Take screenshot"),
                                     this);
@@ -478,9 +478,7 @@ void MainWindow::setupToolbar()
         aScreenshot->setVisible(false);
         QTimer::singleShot(1s, this, [this, aScreenshot] {
             qDebug() << "Screenshot saved successfully:"
-                     << grab().save(STR("/home/tim/qtprojegt/Website/images/MarkdownEdit.png"),
-                                    "PNG",
-                                    0);
+                     << grab().save(STR("/home/tim/Bilder/MarkdownEdit.png"), "PNG", 0);
             aScreenshot->setVisible(true);
         });
     });

@@ -10,3 +10,5 @@ packaging/flatpak/repo/*
 build*/
 .qt/
 .flatpak-builder/
+*.flatpak
+export/

@@ -5,5 +5,5 @@
 class QRunnable;
 
 namespace threading {
-QRunnable *runFunction(std::function<void()>);
-}
+void runFunction(const std::function<void()> &);
+} // namespace threading

@@ -20,6 +20,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Find Qt
 find_package(QT NAMES Qt5 Qt6 REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
+find_package(Qt${QT_VERSION_MAJOR} OPTIONAL_COMPONENTS Concurrent)
 
 # Set default build type
 if (NOT CMAKE_BUILD_TYPE)
@@ -58,9 +59,7 @@ if(FLATPAK)
 
     include(ECMInstallIcons)
 
-    add_compile_definitions(
-        FLATPAK
-    )
+    add_compile_definitions(FLATPAK)
 
     install(FILES include/flatpak/appdata.xml DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/metainfo/)
 endif()
@@ -98,6 +97,8 @@ set(PROJECT_SOURCES
     src/utils.cpp
     src/utils.h
     ui/mainwindow.ui
+    src/todoobjectinterface.cpp # Experiment
+    src/todoobjectinterface.h
 )
 
 # Include windows icon
@@ -156,6 +157,11 @@ else()
         message(WARNING "Nuspell not found. Spell checker is disabled!")
         target_compile_definitions(markdownedit PUBLIC NO_SPELLCHECK)
     endif()
+endif()
+
+if(Qt${QT_VERSION_MAJOR}Concurrent_FOUND)
+    add_compile_definitions(CONCURRENT)
+    list(APPEND 3rdparty Qt${QT_VERSION_MAJOR}::Concurrent)
 endif()
 
 target_include_directories(markdownedit PRIVATE ${CMAKE_SOURCE_DIR}/src)

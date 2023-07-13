@@ -3,6 +3,10 @@
 #include <QRunnable>
 #include <QThreadPool>
 
+#ifdef CONCURRENT
+#include <QtConcurrent/QtConcurrentRun>
+#else
+
 class FunctionRunnable : public QRunnable
 {
     std::function<void()> m_functionToRun;
@@ -13,16 +17,21 @@ public:
     {}
     void run() override { m_functionToRun(); }
 };
+#endif
 
 namespace threading {
-QRunnable *runFunction(std::function<void()> f)
+void runFunction(const std::function<void()> &f)
 {
     if (!f)
-        return nullptr;
+        return;
 
+#ifdef CONCURRENT
+    std::ignore = QtConcurrent::run(f);
+    return;
+#else
     QRunnable *runnable = new FunctionRunnable(std::move(f));
     runnable->setAutoDelete(false);
     QThreadPool::globalInstance()->start(runnable);
-    return runnable;
+#endif
 }
 } // namespace threading
