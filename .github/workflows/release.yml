@@ -41,7 +41,8 @@ jobs:
       name: Install Qt on Windows and Mac
       uses: jurplel/install-qt-action@v3
       with:
-        version: 6.4.3
+        version: 6.6.0
+        aqtversion: '==3.1.*'
         cache: true
 
     - if: contains( matrix.os, 'ubuntu')
