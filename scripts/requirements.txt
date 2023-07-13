@@ -3,9 +3,9 @@ libbsd0
 libc6
 libcom-err2
 libdouble-conversion3
+libenchant-2-2
 libfreetype6
 libgcc-s1
-libenchant-2-2
 libgl1
 libglib2.0-0
 libglvnd0

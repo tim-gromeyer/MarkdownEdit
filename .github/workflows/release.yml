@@ -51,11 +51,7 @@ jobs:
 
     - name: Build and package
       run: |
-        mkdir build
-        cd build
-        cmake .. -DCMAKE_BUILD_TYPE=Release
-        cmake --build . --config Release --target package
-      shell: bash
+        sh scripts/build.sh
 
     - name: Upload package
       uses: actions/upload-artifact@v3
