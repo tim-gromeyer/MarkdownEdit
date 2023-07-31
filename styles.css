@@ -44,17 +44,17 @@ header h1 {
         align-items: center;
         z-index: 1000;
     }
-    
+
     .nav-item {
         margin-left: 5rem;
     }
-    
-    .nav-link{
+
+    .nav-link {
         font-size: 1.6rem;
         font-weight: 400;
         color: #475569;
     }
-    
+
     .nav-menu {
         position: fixed;
         left: -100%;
@@ -65,8 +65,7 @@ header h1 {
         border-radius: 10px;
         text-align: center;
         transition: 0.3s;
-        box-shadow:
-            0 10px 27px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
     }
 
     .nav-menu.active {
@@ -97,7 +96,6 @@ header h1 {
     }
 }
 
-
 nav ul {
     list-style: none;
     margin: 0;
@@ -114,7 +112,6 @@ nav ul li a {
     text-decoration: none;
     color: #333;
 }
-
 
 .logo {
     display: flex;
