@@ -73,7 +73,7 @@ header h1 {
     }
 
     .nav-item {
-        margin: 2.5rem 0;
+        margin: 1.5rem 0;
     }
 
     .hamburger {
@@ -183,6 +183,11 @@ body.dark-mode {
     color: #f0f0f0;
 }
 
+body.dark-mode #dark-mode-toggle {
+    /* Rotate the button 360 degrees in dark mode */
+    transform: rotate(360deg);
+}
+
 .dark-mode header {
     background-color: #222;
     color: #f0f0f0;
@@ -193,7 +198,7 @@ body.dark-mode {
 }
 
 .dark-mode .bar {
-    background-color: #f0f0f0;
+    background-color: #fff;
 }
 
 .dark-mode .nav-menu {
@@ -241,6 +246,9 @@ body.dark-mode {
     font-size: 24px;
     text-align: center;
     display: flex;
+
+    /* Add transition for rotation */
+    transition: transform 0.3s ease;
 }
 
 /* Features Section */
@@ -264,11 +272,14 @@ body.dark-mode {
     border-radius: 15px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    transition: transform 0.3s ease;
+
+    /* Add transition for scaling */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .feature-item:hover {
-    transform: translateY(-5px);
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .feature-icon img {
