@@ -19,7 +19,6 @@
 #include "markdowneditor.h"
 #include "settings.h"
 #include "spellchecker.h"
-#include "todoobjectinterface.h"
 #include "utils.h"
 
 #include <QDir>

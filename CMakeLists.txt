@@ -97,8 +97,6 @@ set(PROJECT_SOURCES
     src/utils.cpp
     src/utils.h
     ui/mainwindow.ui
-    src/todoobjectinterface.cpp # Experiment
-    src/todoobjectinterface.h
 )
 
 # Include windows icon
