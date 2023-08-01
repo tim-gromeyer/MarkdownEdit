@@ -227,11 +227,6 @@ body.dark-mode #dark-mode-toggle {
     background-color: #ff6600;
 }
 
-.dark-mode #features ul {
-    list-style: square;
-    margin-left: 20px;
-}
-
 .dark-mode footer {
     background-color: #222;
     color: #f0f0f0;
