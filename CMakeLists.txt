@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(MarkdownEdit VERSION 1.4.5
+project(MarkdownEdit VERSION 1.5.0
     DESCRIPTION "Simple program for editing Markdown files"
     HOMEPAGE_URL "https://tim-gromeyer.github.io/MarkdownEdit"
     LANGUAGES C CXX)
@@ -18,8 +18,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Find Qt
-find_package(QT NAMES Qt5 Qt6 REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools PrintSupport Svg)
+find_package(QT NAMES Qt5 Qt6 REQUIRED COMPONENTS Widgets PrintSupport Svg)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets PrintSupport Svg)
 find_package(Qt${QT_VERSION_MAJOR} OPTIONAL_COMPONENTS Concurrent)
 
 # Set default build type
