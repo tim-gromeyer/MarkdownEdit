@@ -93,8 +93,6 @@ void TableOfContents::parseText(const QString &in)
     // Convert the markdown headings to HTML
     lines = QString::fromStdString(Parser::heading2HTML(lines));
 
-    qDebug() << lines;
-
     for (const QString &line : lines.split(u'\n')) {
         QString id;
         QString text;
