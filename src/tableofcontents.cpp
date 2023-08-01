@@ -76,6 +76,8 @@ void TableOfContents::parseText(const QString &in)
     // Separate by line
     QStringList list = in.split(u'\n');
 
+    QString lines;
+
     StringPairList headings;
 
     // Loop through each line
@@ -84,15 +86,30 @@ void TableOfContents::parseText(const QString &in)
         if (!line.startsWith(u'#'))
             continue;
 
-        const std::string html = Parser::heading2HTML(line);
+        lines.append(line);
+        lines.append(u'\n');
+    }
 
+    // Convert the markdown headings to HTML
+    lines = QString::fromStdString(Parser::heading2HTML(lines));
+
+    qDebug() << lines;
+
+    for (const QString &line : lines.split(u'\n')) {
         QString id;
         QString text;
+
+        static const QRegularExpression idRegex(
+            QStringLiteral("<h[1-6][^>]*id\\s*=\\s*[\"']([^\"']*)[\"'][^>]*>"));
+        QRegularExpressionMatch idMatch = idRegex.match(line);
+        if (idMatch.hasMatch()) {
+            id = idMatch.captured(1);
+        }
 
         bool inAttribute = false;
         bool inTag = false;
 
-        for (char c : html) {
+        for (char c : line.toStdString()) {
             switch (c) {
             case '<':
                 inTag = true;
@@ -109,13 +126,12 @@ void TableOfContents::parseText(const QString &in)
                 break;
             }
 
-            if (inAttribute)
-                id.append(QChar::fromLatin1(c));
-            else if (!inTag)
+            if (!inTag)
                 text.append(QChar::fromLatin1(c));
         }
 
-        headings.append(StringPair(text, id));
+        if (!text.isEmpty() && !id.isEmpty())
+            headings.append(StringPair(text, id));
     }
 
     for (const auto &heading : qAsConst(headings)) {
