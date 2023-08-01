@@ -148,12 +148,20 @@ nav ul li a {
     animation: fadeInUp 1s ease-out forwards;
 }
 
-#hero img {
+.hero-image {
     max-width: 100%;
     display: block;
     margin: 0 auto 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+
+    /* Add transition for scaling */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hero-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* Download Now Button */
