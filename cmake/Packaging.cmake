@@ -84,7 +84,6 @@ elseif(UNIX AND NOT EXMSCRIPTEN AND NOT ANDROID)
 
  elseif(distribution MATCHES "openSUSE*")
  set(CPACK_GENERATOR "RPM")
- message(STATUS "Package name: ${CPACK_PACKAGE_NAME}\nPackage version: ${CPACK_PACKAGE_VERSION}\nRelease: ${release}\nArchitecture: ${CPACK_RPM_PACKAGE_ARCHITECTURE}")
  set(CPACK_PACKAGE_FILE_NAME ${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${release}.${CPACK_RPM_PACKAGE_ARCHITECTURE})
 
  elseif(distribution STREQUAL "Fedora")
