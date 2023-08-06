@@ -7,11 +7,11 @@ rename-appdata-file: appdata.xml
 rename-desktop-file: MarkdownEdit.desktop
 command: markdownedit
 finish-args:
-  - --device=dri
-  - --filesystem=host
-  - --share=ipc
+  - --device=dri # hardware acceleration
+  - --filesystem=home
   - --socket=fallback-x11
   - --socket=wayland
+  - --socket=cups # printers
 modules:
   - name: nuspell
     buildsystem: cmake-ninja
