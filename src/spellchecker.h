@@ -119,8 +119,8 @@ private:
 
     static auto encodeLanguageString(const QString &langString) -> QString;
 
+    // Spell checker
     nuspell::Dictionary *speller = nullptr;
-
     QStringList wordList;
     QStringList sessionWordList;
 };

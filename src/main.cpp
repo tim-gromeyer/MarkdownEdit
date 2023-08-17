@@ -26,7 +26,7 @@
 
 #include <thread>
 
-#ifndef NOT_SUPPORTET
+#if SINGLEAPP
 #include "singleapplication.h"
 #endif
 
@@ -36,29 +36,43 @@
 #error You must use Qt 5.12 or newer // Because of QTextBlockFormat::headingLevel()
 #endif
 
-#define S(str) QStringLiteral(str)
+// Helper function for loading translator
+bool loadTranslator(QTranslator &translator, const QString &name)
+{
+    if (translator.load(QLocale::system(),
+                        name,
+                        QStringLiteral("_"),
+                        QStringLiteral(":/translations"))) {
+        QApplication::installTranslator(&translator);
+        return true;
+    }
+    return false;
+}
 
 auto main(int argc, char *argv[]) -> int
 {
     std::thread t(&SpellChecker::populateLangMap);
     Q_INIT_RESOURCE(media);
 
-#ifndef NOT_SUPPORTET
+#if SINGLEAPP
     SingleApplication a(argc, argv, true, SingleApplication::Mode::SecondaryNotification);
 #else
     QApplication a(argc, argv);
 #endif
     QApplication::setApplicationVersion(QStringLiteral(APP_VERSION));
     QApplication::setApplicationName(QStringLiteral("MarkdownEdit"));
+
     QTranslator translator, qtTranslator;
 
-    // load translation for Qt
-    if (qtTranslator.load(QLocale::system(), S("qtbase"), S("_"), S(":/qtTranslations/")))
-        QApplication::installTranslator(&qtTranslator);
+    // Load translation for Qt
+    if (loadTranslator(qtTranslator, QStringLiteral("qtbase"))) {
+        qInfo("Qt translations loaded successfully.");
+    }
 
-    // try to load translation for current locale from resource file
-    if (translator.load(QLocale::system(), S("MarkdownEdit"), S("_"), S(":/translations")))
-        QApplication::installTranslator(&translator);
+    // Load translation for the application
+    if (loadTranslator(translator, QStringLiteral("MarkdownEdit"))) {
+        qInfo("Application translations loaded successfully.");
+    }
 
     QCommandLineParser parser;
     parser.addHelpOption();
@@ -69,7 +83,7 @@ auto main(int argc, char *argv[]) -> int
                                  translator.translate("main", "Files to open."));
     parser.process(a);
 
-#ifndef NOT_SUPPORTET
+#if SINGLEAPP
     if (a.isSecondary()) {
         a.sendMessage(QByteArrayLiteral("file://")
                       % parser.positionalArguments().join(u' ').toLatin1());
@@ -81,7 +95,7 @@ auto main(int argc, char *argv[]) -> int
 
     MainWindow w(parser.positionalArguments());
 
-#ifndef NOT_SUPPORTET
+#if SINGLEAPP
     QObject::connect(&a, &SingleApplication::instanceStarted, &w, &MainWindow::toForeground);
 
     QObject::connect(&a, &SingleApplication::receivedMessage, &w, &MainWindow::receivedMessage);

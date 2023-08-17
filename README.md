@@ -20,8 +20,7 @@ Experience the speed and simplicity of MarkdownEdit.
 
 ## Features
 
-MarkdownEdit offers a range of powerful features to make editing and creating Markdown
-files quick and easy:
+MarkdownEdit offers a range of powerful features to make editing and creating Markdown files quick and easy:
 
 - **Spell checker**
 - Save and load Markdown files quickly and easily
@@ -61,7 +60,8 @@ To build MarkdownEdit, follow these steps:
 2. Initialize and update the submodules: `git submodule update --init --recursive -j 3 --depth=1`
 3. Create a build directory and navigate to it: `mkdir build && cd build`
 4. Generate a Makefile using CMake: `cmake ..`
-5.  Build the project: `cmake --build . -j4`
+5. Build the project: `cmake --build . -j4`
+
 
 ## Credits
 

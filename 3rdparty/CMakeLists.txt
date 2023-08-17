@@ -50,8 +50,9 @@ if(NOT ANDROID AND NOT EMSCRIPTEN)
     set(QAPPLICATION_CLASS QApplication CACHE STRING "Inheritance class for SingleApplication")
     add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/SingleApplication)
     set(singleapp SingleApplication::SingleApplication)
+    add_compile_definitions(SINGLEAPP=1)
 else()
-    add_compile_definitions(NOT_SUPPORTET)
+    add_compile_definitions(SINGLEAPP=0)
 endif()
 
 set(3rdparty

@@ -75,27 +75,18 @@ set(RC_FILES
 set(PROJECT_SOURCES
     ${RC_FILES}
     common.h
-    src/highlighter.cpp
-    src/highlighter.h
+    src/highlighter.cpp     src/highlighter.h
     src/main.cpp
-    src/mainwindow.cpp
-    src/mainwindow.h
-    src/markdowneditor.cpp
-    src/markdowneditor.h
-    src/markdownparser.cpp
-    src/markdownparser.h
-    src/previewwidget.cpp
-    src/previewwidget.h
-    src/settings.cpp
-    src/settings.h
-    src/spellchecker.cpp
-    src/spellchecker.h
-    src/tableofcontents.cpp
-    src/tableofcontents.h
-    src/tablewidget.cpp
-    src/tablewidget.h
-    src/utils.cpp
-    src/utils.h
+    src/mainwindow.cpp      src/mainwindow.h
+    src/markdowndialog.cpp  src/markdowndialog.h
+    src/markdowneditor.cpp  src/markdowneditor.h
+    src/markdownparser.cpp  src/markdownparser.h
+    src/previewwidget.cpp   src/previewwidget.h
+    src/settings.cpp        src/settings.h
+    src/spellchecker.cpp    src/spellchecker.h
+    src/tableofcontents.cpp src/tableofcontents.h
+    src/tablewidget.cpp     src/tablewidget.h
+    src/utils.cpp           src/utils.h
     ui/mainwindow.ui
 )
 
@@ -116,6 +107,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         ${TS}
+        src/markdowndialog.h src/markdowndialog.cpp
     )
 
     # Dir for android settings

@@ -64,6 +64,10 @@ SpellChecker::SpellChecker(QPlainTextEdit *parent, const QString &lang)
     : SpellCheckerBaseClass{parent->document()}
     , textEdit(parent)
 {
+#ifdef CHECK_MARKDOWN
+    setHighlightingOptions(MarkdownHighlighter::Underline);
+#endif
+
     if (!lang.isEmpty())
         setLanguage(lang);
 
