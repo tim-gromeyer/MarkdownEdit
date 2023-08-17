@@ -19,6 +19,7 @@
 // project imports
 #include "mainwindow.h"
 #include "highlighter.h"
+#include "markdowndialog.h"
 #include "markdowneditor.h"
 #include "markdownparser.h"
 #include "settings.h"
@@ -423,8 +424,8 @@ void MainWindow::setupToolbar()
     aInsertTable = new QAction(tr("Insert table"));
     aInsertTableOfContents = new QAction(tr("Insert Table of Contents"));
 
-    // auto *aInsertLink = new QAction(tr("Insert link"));
-    // auto *aInsertImage = new QAction(tr("Insert image"));
+    auto *aInsertLink = new QAction(tr("Insert link"));
+    auto *aInsertImage = new QAction(tr("Insert image"));
 
     aBold->setIcon(
         QIcon::fromTheme(STR("format-text-bold"), QIcon(STR(":/icons/format-text-bold.svg"))));
@@ -441,8 +442,11 @@ void MainWindow::setupToolbar()
         QIcon::fromTheme(STR("insert-table-of-contents"),
                          QIcon(STR(":/icons/insert-table-of-contents.svg"))));
 
-    // aInsertLink->setIcon(QIcon::fromTheme(STR("insert-link"), QIcon(STR(":/icons/insert-link.svg"))));
-    // aInsertImage->setIcon(QIcon::fromTheme(STR("insert-image"), QIcon(STR(":/icons/insert-image.svg"))));
+    aInsertImage->setIcon(
+        QIcon::fromTheme(STR("insert-image"), QIcon(STR(":/icons/insert-image.svg"))));
+
+    aInsertLink->setIcon(
+        QIcon::fromTheme(STR("insert-link"), QIcon(STR(":/icons/insert-link.svg"))));
 
     connect(aBold, &QAction::triggered, this, &MainWindow::bold);
     connect(aItalic, &QAction::triggered, this, &MainWindow::italic);
@@ -452,19 +456,17 @@ void MainWindow::setupToolbar()
     connect(aInsertTable, &QAction::triggered, this, &MainWindow::insertTable);
     connect(aInsertTableOfContents, &QAction::triggered, this, &MainWindow::insertTableOfContents);
 
-    // connect(aInsertImage, &QAction::triggered, this, &MainWindow::insertImage);
-    // connect(aInsertLink, &QAction::triggered, this, &MainWindow::insertLink);
+    connect(aInsertLink, &QAction::triggered, this, &MainWindow::insertLink);
+    connect(aInsertImage, &QAction::triggered, this, &MainWindow::insertImage);
 
     ui->toolBarTools->addAction(aBold);
     ui->toolBarTools->addAction(aItalic);
     ui->toolBarTools->addAction(aUnderline);
     ui->toolBarTools->addAction(aStrikethrough);
 
-    /*
     ui->toolBarTools->addSeparator();
-    ui->toolBarTools->addAction(aInsertImage);
     ui->toolBarTools->addAction(aInsertLink);
-    */
+    ui->toolBarTools->addAction(aInsertImage);
 
     ui->toolBarTools->addSeparator();
     ui->toolBarTools->addAction(aInsertTable);
@@ -522,12 +524,15 @@ void MainWindow::insertLongText(const QString &text, const bool newLine)
     if (newLine && !c.block().text().isEmpty())
         c.insertText(QChar(u'\n'));
 
-    c.insertText(text + u'\n');
+    c.insertText(text);
+
+    if (newLine)
+        c.insertText(QChar(u'\n'));
 
     c.endEditBlock();
 }
 
-void MainWindow::inserText(QString what, const bool h)
+void MainWindow::insertText(QString what, const bool h)
 {
     if (!currentEditor())
         return;
@@ -560,34 +565,36 @@ void MainWindow::inserText(QString what, const bool h)
     currentEditor()->setTextCursor(c);
 }
 
-/*
 void MainWindow::insertLink()
 {
+    MarkdownDialog dialog(MarkdownDialog::Link, this);
+    insertLongText(dialog.getMarkdown(), false);
 }
 
 void MainWindow::insertImage()
 {
+    MarkdownDialog dialog(MarkdownDialog::Image, this);
+    insertLongText(dialog.getMarkdown(), false);
 }
-*/
 
 void MainWindow::bold()
 {
-    inserText(STR("**"));
+    insertText(STR("**"));
 }
 
 void MainWindow::italic()
 {
-    inserText(QChar(u'*'));
+    insertText(QChar(u'*'));
 }
 
 void MainWindow::underline()
 {
-    inserText(STR("<u>"), true);
+    insertText(STR("<u>"), true);
 }
 
 void MainWindow::strikethrough()
 {
-    inserText(QChar(u'~'));
+    insertText(QChar(u'~'));
 }
 
 void MainWindow::closeCurrEditor()
