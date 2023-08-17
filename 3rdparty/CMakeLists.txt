@@ -14,14 +14,7 @@ set(MD4C_FILES
 add_library(md4c-html STATIC ${MD4C_FILES})
 target_include_directories(md4c-html PUBLIC ${CMAKE_CURRENT_LIST_DIR}/md4c/src)
 
-
-set(HTML2MD_FILES
-    ${CMAKE_CURRENT_LIST_DIR}/html2md/include/html2md.h
-    ${CMAKE_CURRENT_LIST_DIR}/html2md/src/html2md.cpp
-)
-
-add_library(html2md STATIC ${HTML2MD_FILES})
-target_include_directories(html2md PUBLIC ${CMAKE_CURRENT_LIST_DIR}/html2md/include)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/html2md)
 
 set(QMARKDOWNTEXTEDIT_FILES
     ${CMAKE_CURRENT_LIST_DIR}/qmarkdowntextedit/linenumberarea.h
