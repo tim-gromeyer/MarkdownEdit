@@ -28,11 +28,13 @@ MarkdownDialog::MarkdownDialog(MarkdownType type, QWidget *parent)
     auto *layout = new QFormLayout;
     layout->addRow(tr("Link:"), linkLineEdit);
     layout->addRow(tr("Text:"), textLineEdit);
-    layout->addRow(tr("Title:"), titleLineEdit);
 
-    if (markdownType == Link) {
-        layout->setRowVisible(2, false);
+    if (markdownType == Image) {
+        layout->addRow(tr("Title:"), titleLineEdit);
+    } else {
+        delete titleLineEdit;
     }
+
     layout->addRow(buttonBox);
 
     setLayout(layout);
