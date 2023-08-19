@@ -1,1 +1,1 @@
-Repository for MarkdownEdit's [website](https://software-made-easy.github.io/MarkdownEdit/)
+Repository for MarkdownEdit's [website](https://tim-gromeyer.github.io/MarkdownEdit/)
