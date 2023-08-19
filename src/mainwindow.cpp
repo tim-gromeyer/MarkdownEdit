@@ -63,6 +63,7 @@
 #endif
 
 using namespace std::chrono_literals;
+using std::as_const;
 
 QT_REQUIRE_CONFIG(mainwindow);
 QT_REQUIRE_CONFIG(filedialog);
@@ -207,7 +208,7 @@ void MainWindow::onFileReload()
         return;
     }
 
-    for (MarkdownEditor *editor : qAsConst(editorList)) {
+    for (MarkdownEditor *editor : as_const(editorList)) {
         if (!editor)
             return;
 
@@ -920,7 +921,7 @@ void MainWindow::setText(const int index)
 
 void MainWindow::changeWordWrap(const bool c)
 {
-    for (MarkdownEditor *editor : qAsConst(editorList)) {
+    for (MarkdownEditor *editor : as_const(editorList)) {
         if (c)
             editor->setLineWrapMode(QPlainTextEdit::WidgetWidth);
         else
@@ -1068,7 +1069,7 @@ void MainWindow::changeAddtoIconPath(const bool c)
     QStringList searchPaths;
     searchPaths.reserve(editorList.size());
 
-    for (const QString &file : qAsConst(fileList)) {
+    for (const QString &file : as_const(fileList)) {
         searchPaths << QFileInfo(file).absolutePath();
     }
 
@@ -1096,7 +1097,7 @@ void MainWindow::changeHighlighting(const bool enabled)
         }
     }
 
-    for (MarkdownEditor *editor : qAsConst(editorList)) {
+    for (MarkdownEditor *editor : as_const(editorList)) {
         editor->getChecker()->setMarkdownHighlightingEnabled(enabled);
     }
 
@@ -1635,7 +1636,7 @@ void MainWindow::updateOpened()
 
 void MainWindow::closeEvent(QCloseEvent *e)
 {
-    for (MarkdownEditor *editor : qAsConst(editorList)) {
+    for (MarkdownEditor *editor : as_const(editorList)) {
         if (editor->document()->isModified()) {
             const auto button = QMessageBox::question(this,
                                                       tr("Save changes?"),

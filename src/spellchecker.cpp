@@ -35,6 +35,8 @@
 #include <nuspell/finder.hxx>
 #endif
 
+using std::as_const;
+
 static const QString userDictDir = QStandardPaths::writableLocation(
     QStandardPaths::AppLocalDataLocation);
 
@@ -160,7 +162,7 @@ void SpellChecker::checkSpelling(QStringView text)
 
     qsizetype index = 0;
 
-    for (const QString &word_ : qAsConst(wordList)) {
+    for (const QString &word_ : as_const(wordList)) {
         index = text.indexOf(word_, index);
 
         if (!isCorrect(word_)) {
@@ -409,10 +411,10 @@ void SpellChecker::showContextMenu(const QPoint pos)
     auto *actionGroup = new QActionGroup(languagesMenu); // Fix warning
 
     QMap<QString, Language> sorted;
-    for (const Language &lang : qAsConst(langPathMap))
+    for (const Language &lang : as_const(langPathMap))
         sorted[lang.encodedName] = lang;
 
-    for (const Language &lang : qAsConst(sorted)) {
+    for (const Language &lang : as_const(sorted)) {
         auto *action = new QAction(lang.encodedName, languagesMenu);
         action->setData(lang.name);
         action->setCheckable(true);

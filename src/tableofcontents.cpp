@@ -10,6 +10,7 @@
 
 using StringPair = QPair<QString, QString>;
 using StringPairList = QList<StringPair>;
+using std::as_const;
 
 TableOfContents::TableOfContents(const QString &text, QWidget *parent)
     : QDialog(parent)
@@ -132,7 +133,7 @@ void TableOfContents::parseText(const QString &in)
             headings.append(StringPair(text, id));
     }
 
-    for (const auto &heading : qAsConst(headings)) {
+    for (const auto &heading : as_const(headings)) {
         auto *item = new QListWidgetItem(heading.first, this->list);
         item->setCheckState(Qt::Unchecked);
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable);
