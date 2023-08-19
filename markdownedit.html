@@ -27,7 +27,6 @@
     </figure>
     <div id="screen"></div>
 
-    <script src="coi-serviceworker.min.js"></script>
     <script type="text/javascript">
         async function init()
         {
@@ -60,10 +59,12 @@
                         },
                         entryFunction: window.createQtAppInstance,
                         containerElements: [screen],
+                        
                     }
                 });
             } catch (e) {
                 console.error(e);
+                console.error(e.stack);
                 status.innerHTML = e.message;
                 showUi(spinner);
             }

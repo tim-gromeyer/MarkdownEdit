@@ -21,6 +21,31 @@
  *      Called when the module has loaded.
  * - entryFunction: (emscriptenConfig: object) => Promise<EmscriptenModule>
  *      Qt always uses emscripten's MODULARIZE option. This is the MODULARIZE entry function.
+ * - module: Promise<WebAssembly.Module>
+ *      The module to create the instance from (optional). Specifying the module allows optimizing
+ *      use cases where several instances are created from a single WebAssembly source.
+ * - qtdir: string
+ *      Path to Qt installation. This path will be used for loading Qt shared libraries and plugins.
+ *      The path is set to 'qt' by default, and is relative to the path of the web page's html file.
+ *      This property is not in use when static linking is used, since this build mode includes all
+ *      libraries and plugins in the wasm file.
+ * - preload: [string]: Array of file paths to json-encoded files which specifying which files to preload.
+ *      The preloaded files will be downloaded at application startup and copied to the in-memory file
+ *      system provided by Emscripten.
+ *
+ *      Each json file must contain an array of source, destination objects:
+ *      [
+ *           {
+ *               "source": "path/to/source",
+ *               "destination": "/path/to/destination"
+ *           },
+ *           ...
+ *      ]
+ *      The source path is relative to the html file path. The destination path must be
+ *      an absolute path.
+ *
+ *      $QTDIR may be used as a placeholder for the "qtdir" configuration property (see @qtdir), for instance:
+ *          "source": "$QTDIR/plugins/imageformats/libqjpeg.so"
  *
  * @return Promise<{
  *             instance: EmscriptenModule,
@@ -46,12 +71,25 @@ async function qtLoad(config)
             throw new Error('ENV must be exported if environment variables are passed');
     };
 
+    const throwIfFsUsedButNotExported = (instance, config) =>
+    {
+        const environment = config.environment;
+        if (!environment || Object.keys(environment).length === 0)
+            return;
+        const isFsExported = typeof instance.FS === 'object';
+        if (!isFsExported)
+            throw new Error('FS must be exported if preload is used');
+    };
+
     if (typeof config !== 'object')
         throw new Error('config is required, expected an object');
     if (typeof config.qt !== 'object')
         throw new Error('config.qt is required, expected an object');
     if (typeof config.qt.entryFunction !== 'function')
         config.qt.entryFunction = window.createQtAppInstance;
+
+    config.qt.qtdir ??= 'qt';
+    config.qt.preload ??= [];
 
     config.qtContainerElements = config.qt.containerElements;
     delete config.qt.containerElements;
@@ -65,11 +103,11 @@ async function qtLoad(config)
     const circuitBreaker = new Promise((_, reject) => { circuitBreakerReject = reject; });
 
     // If module async getter is present, use it so that module reuse is possible.
-    if (config.qt.modulePromise) {
+    if (config.qt.module) {
         config.instantiateWasm = async (imports, successCallback) =>
         {
             try {
-                const module = await config.qt.modulePromise;
+                const module = await config.qt.module;
                 successCallback(
                     await WebAssembly.instantiate(module, imports), module);
             } catch (e) {
@@ -86,9 +124,42 @@ async function qtLoad(config)
         throwIfEnvUsedButNotExported(instance, config);
         for (const [name, value] of Object.entries(config.qt.environment ?? {}))
             instance.ENV[name] = value;
+
+        const makeDirs = (FS, filePath) => {
+            const parts = filePath.split("/");
+            let path = "/";
+            for (let i = 0; i < parts.length - 1; ++i) {
+                const part = parts[i];
+                if (part == "")
+                    continue;
+                path += part + "/";
+                try {
+                    FS.mkdir(path);
+                } catch (error) {
+                    const EEXIST = 20;
+                    if (error.errno != EEXIST)
+                        throw error;
+                }
+            }
+        }
+
+        throwIfFsUsedButNotExported(instance, config);
+        for ({destination, data} of self.preloadData) {
+            makeDirs(instance.FS, destination);
+            instance.FS.writeFile(destination, new Uint8Array(data));
+        }
     };
 
     config.onRuntimeInitialized = () => config.qt.onLoaded?.();
+
+    const originalLocateFile = config.locateFile;
+    config.locateFile = filename =>
+    {
+        const originalLocatedFilename = originalLocateFile ? originalLocateFile(filename) : filename;
+        if (originalLocatedFilename.startsWith('libQt6'))
+            return `${config.qt.qtdir}/lib/${originalLocatedFilename}`;
+        return originalLocatedFilename;
+    }
 
     // This is needed for errors which occur right after resolving the instance promise but
     // before exiting the function (i.e. on call to main before stack unwinding).
@@ -122,6 +193,22 @@ async function qtLoad(config)
             crashed: true
         });
     };
+
+    const fetchPreloadFiles = async () => {
+        const fetchJson = async path => (await fetch(path)).json();
+        const fetchArrayBuffer = async path => (await fetch(path)).arrayBuffer();
+        const loadFiles = async (paths) => {
+            const source = paths['source'].replace('$QTDIR', config.qt.qtdir);
+            return {
+                destination: paths['destination'],
+                data: await fetchArrayBuffer(source)
+            };
+        }
+        const fileList = (await Promise.all(config.qt.preload.map(fetchJson))).flat();
+        self.preloadData = (await Promise.all(fileList.map(loadFiles))).flat();
+    }
+
+    await fetchPreloadFiles();
 
     // Call app/emscripten module entry function. It may either come from the emscripten
     // runtime script or be customized as needed.
