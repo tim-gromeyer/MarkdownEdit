@@ -171,17 +171,25 @@ void MainWindow::onHelpSyntax()
     openFile(file, language);
 }
 
-// TODO: Fix it!
 void MainWindow::toForeground()
 {
     setWindowState((windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
     raise();          // For MacOS
     activateWindow(); // For Windows
 
-    auto eFlags = windowFlags();
+    // Store the current window flags
+    Qt::WindowFlags eFlags = windowFlags();
+
+    // Set the "Stay on top" flag
     setWindowFlags(eFlags | Qt::WindowStaysOnTopHint);
+
+    // Show the window with the new flags
     show();
+
+    // Reset the window flags to the original ones
     setWindowFlags(eFlags);
+
+    // Show the window again to apply the original flags
     show();
 }
 
