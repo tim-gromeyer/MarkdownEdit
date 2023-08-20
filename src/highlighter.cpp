@@ -26,32 +26,28 @@ Highliter::Highliter(QTextDocument *doc)
     QTextCharFormat format;
 
     _formats[Token::CodeBlock] = format;
-
-    format.setForeground(QColor(249, 38, 114));
     _formats[Token::CodeKeyWord] = format;
-    format.clearForeground();
-
-    format.setForeground(QColor(163, 155, 78));
     _formats[Token::CodeString] = format;
-    format.clearForeground();
-
-    format.setForeground(QColor(1, 138, 15));
     _formats[Token::CodeBuiltIn] = format;
+
+    _formats[Token::CodeKeyWord].setForeground(QColor(249, 38, 114));
+    _formats[Token::CodeString].setForeground(QColor(163, 155, 78));
+    _formats[Token::CodeBuiltIn].setForeground(QColor(1, 138, 15));
 }
 
 void Highliter::highlightBlock(const QString &text)
 {
-    if (currentBlock() == document()->firstBlock()) {
-        setCurrentBlockState(228);
-    } else {
-        previousBlockState() == 228 ? setCurrentBlockState(228) : setCurrentBlockState(229);
-    }
+    int state = (currentBlock() == document()->firstBlock()) ? 228
+                : (previousBlockState() == 228)              ? 228
+                                                             : 229;
+
+    setCurrentBlockState(state);
 
     const auto textLen = text.length();
     if (textLen == 0)
         return;
 
-    setFormat(0, textLen, _formats[CodeBlock]);
+    setFormat(0, textLen, _formats[Token::CodeBlock]);
 
     for (int i = 0; i < textLen; ++i) {
         if (text[i] == u'<' && text[i + 1] != u'!') {
@@ -60,16 +56,14 @@ void Highliter::highlightBlock(const QString &text)
                 ++i;
                 if (text[i] == u'/')
                     ++i;
-                setFormat(i, found - i, _formats[CodeKeyWord]);
+                setFormat(i, found - i, _formats[Token::CodeKeyWord]);
             }
         }
 
         if (text[i] == u'=') {
-            int lastSpace = text.lastIndexOf(u' ', i);
-            if (lastSpace == i - 1)
-                lastSpace = text.lastIndexOf(u' ', i - 2);
+            int lastSpace = text.lastIndexOf(u' ', i - (text[i - 1] == u' ' ? 2 : 1));
             if (lastSpace > 0) {
-                setFormat(lastSpace, i - lastSpace, _formats[CodeBuiltIn]);
+                setFormat(lastSpace, i - lastSpace, _formats[Token::CodeBuiltIn]);
             }
         }
 
@@ -77,9 +71,6 @@ void Highliter::highlightBlock(const QString &text)
             const int pos = i;
             int cnt = 1;
             ++i;
-            //bound check
-            if ((i + 1) >= textLen)
-                return;
             while (i < textLen) {
                 if (text[i] == u'\"') {
                     ++cnt;
@@ -88,13 +79,12 @@ void Highliter::highlightBlock(const QString &text)
                 }
                 ++i;
                 ++cnt;
-                //bound check
                 if ((i + 1) >= textLen) {
                     ++cnt;
                     break;
                 }
             }
-            setFormat(pos, cnt, _formats[CodeString]);
+            setFormat(pos, cnt, _formats[Token::CodeString]);
         }
     }
 }
