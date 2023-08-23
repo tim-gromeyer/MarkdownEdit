@@ -25,11 +25,12 @@ Highliter::Highliter(QTextDocument *doc)
 {
     QTextCharFormat format;
 
-    _formats[Token::CodeBlock] = format;
+    _formats[Token::Doctype] = format;
     _formats[Token::CodeKeyWord] = format;
     _formats[Token::CodeString] = format;
     _formats[Token::CodeBuiltIn] = format;
 
+    _formats[Token::Doctype].setForeground(QColor(143, 89, 2));
     _formats[Token::CodeKeyWord].setForeground(QColor(249, 38, 114));
     _formats[Token::CodeString].setForeground(QColor(163, 155, 78));
     _formats[Token::CodeBuiltIn].setForeground(QColor(1, 138, 15));
@@ -37,17 +38,18 @@ Highliter::Highliter(QTextDocument *doc)
 
 void Highliter::highlightBlock(const QString &text)
 {
-    int state = (currentBlock() == document()->firstBlock()) ? 228
-                : (previousBlockState() == 228)              ? 228
-                                                             : 229;
-
-    setCurrentBlockState(state);
-
     const auto textLen = text.length();
     if (textLen == 0)
         return;
 
-    setFormat(0, textLen, _formats[Token::CodeBlock]);
+    // Highlight !DOCTYPE declaration
+    int doctypeIndex = text.indexOf(QLatin1String("!DOCTYPE", 8));
+    if (doctypeIndex != -1) {
+        int endOfDoctype = text.indexOf(u'>', doctypeIndex);
+        if (endOfDoctype != -1) {
+            setFormat(doctypeIndex, endOfDoctype - doctypeIndex, _formats[Token::Doctype]);
+        }
+    }
 
     for (int i = 0; i < textLen; ++i) {
         if (text[i] == u'<' && text[i + 1] != u'!') {
@@ -56,7 +58,7 @@ void Highliter::highlightBlock(const QString &text)
                 ++i;
                 if (text[i] == u'/')
                     ++i;
-                setFormat(i, found - i, _formats[Token::CodeKeyWord]);
+                setFormat(i, (int) found - i, _formats[Token::CodeKeyWord]);
             }
         }
 

@@ -26,7 +26,7 @@ public:
     explicit Highliter(QTextDocument *doc);
 
     enum Token {
-        CodeBlock,
+        Doctype,
         CodeKeyWord,
         CodeString,
         CodeBuiltIn,
