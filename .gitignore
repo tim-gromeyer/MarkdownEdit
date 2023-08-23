@@ -10,4 +10,4 @@ build*/
 .qt/
 .flatpak-builder/
 *.flatpak
-export/
+export-flatpak/
