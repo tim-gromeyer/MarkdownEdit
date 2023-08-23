@@ -720,6 +720,7 @@ void MainWindow::onEditorChanged(const int index)
 auto MainWindow::createEditor() -> MarkdownEditor *
 {
     auto *editor = new MarkdownEditor(this);
+    editor->getChecker()->setHeaderColor(QColor(78, 154, 6)); // Green
     editor->changeSpelling(spelling);
     editor->getChecker()->setMarkdownHighlightingEnabled(highlighting);
 
