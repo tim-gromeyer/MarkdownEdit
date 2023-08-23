@@ -25,9 +25,8 @@ TableOfContents::TableOfContents(const QString &text, QWidget *parent)
 
     box = new QCheckBox(tr("Number list"), this);
 
-    auto *bb = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
-                                    Qt::Horizontal,
-                                    this);
+    auto *bb = new QDialogButtonBox(Qt::Horizontal, this);
+    bb->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     connect(bb, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(bb, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
@@ -46,14 +45,13 @@ auto TableOfContents::markdownTOC() -> QString
     QString out;
 
     auto count = list->count();
+    selected.reserve(count);
 
     for (int i = 0; i < count; ++i) {
         auto *item = list->item(i);
 
-        if (item->checkState() == Qt::Unchecked)
-            continue;
-
-        selected.append(StringPair(item->text(), item->data(14).toString()));
+        if (item->checkState() == Qt::Checked)
+            selected.append(StringPair(item->text(), item->data(14).toString()));
     }
 
     const bool numberList = box->isChecked();
