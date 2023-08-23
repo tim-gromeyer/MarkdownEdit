@@ -262,10 +262,8 @@ void MainWindow::setupThings()
     htmlHighliter = new Highliter(ui->raw->document());
 
     // Setup a action used to hide the editor and show the preview
-    actionPreview = new QAction(QIcon::fromTheme(STR("view-preview"),
-                                                 QIcon(STR(":/icons/view-preview.svg"))),
-                                tr("Preview"),
-                                this);
+    actionPreview = new QAction(tr("Preview"), this);
+    loadIcon(STR("view-preview"), actionPreview);
     actionPreview->setPriority(QAction::HighPriority);
     actionPreview->setCheckable(true);
     connect(actionPreview, &QAction::triggered, this, &MainWindow::androidPreview);
@@ -971,23 +969,12 @@ void MainWindow::disablePreview(const bool checked)
 
     ui->actionDisable_preview->setChecked(checked);
 
-    if (!checked) {
-        onTextChanged();
-#ifndef FLATPAK
-        ui->actionDisable_preview->setIcon(
-            QIcon::fromTheme(STR("media-playback-stop"),
-                             QIcon(STR(":/icons/media-playback-stop.svg"))));
-#else
-        ui->actionDisable_preview->setIcon(QIcon(STR(":/icons/media-playback-stop.svg")));
-#endif
-    } else
-#ifndef FLATPAK
-        ui->actionDisable_preview->setIcon(
-            QIcon::fromTheme(STR("media-playback-start"),
-                             QIcon(STR(":/icons/media-playback-start.svg"))));
-#else
-        ui->actionDisable_preview->setIcon(QIcon(STR(":/icons/media-playback-start.svg")));
-#endif
+    actionMode->setVisible(!checked);
+    actionWidgetBox->setVisible(!checked);
+
+    onTextChanged();
+    const QString iconTheme = checked ? STR("media-playback-start") : STR("media-playback-stop");
+    loadIcon(iconTheme, ui->actionDisable_preview);
 }
 
 void MainWindow::pausePreview(const bool checked)
