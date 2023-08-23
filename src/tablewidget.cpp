@@ -24,9 +24,8 @@ TableDialog::TableDialog(QWidget *parent)
 
     table = new QTableWidget(3, 2, this);
 
-    auto *box = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
-                                     Qt::Horizontal,
-                                     this);
+    auto *box = new QDialogButtonBox(Qt::Horizontal, this);
+    box->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     connect(box, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(box, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
@@ -42,67 +41,38 @@ auto TableDialog::markdownTable() const -> QString
     const auto rowCount = table->rowCount();
     const auto columnCount = table->columnCount();
 
-    QList<int> biggest;
-    biggest.reserve(columnCount);
+    QList<int> biggest(columnCount, 0);
 
     // Find the longest text in each column
     for (int i = 0; i < columnCount; ++i) {
-        int size = 0;
-
         for (int row = 0; row < rowCount; ++row) {
-            if (!table->item(row, i))
-                continue;
-
-            const QString text = table->item(row, i)->text();
-
-            if (text.size() > size)
-                size = text.size();
+            if (QTableWidgetItem *item = table->item(row, i)) {
+                biggest[i] = qMax(biggest[i], item->text().size());
+            }
         }
-        biggest.append(size);
     }
-
-    int size = 0;
-    // Calculate size for the output string
-    for (int i = 0; i < columnCount; ++i) {
-        size += (biggest[i] + 4)
-                * (rowCount + 1); // +1 because of the extra row which marks the headers
-    }
-    out.reserve(size);
 
     for (int row = 0; row < rowCount; ++row) {
         for (int column = 0; column < columnCount; ++column) {
-            out.append(L1("| "));
-            if (!table->item(row, column)) {
-                out.append(STR(" ").repeated(biggest[column] + 1));
-                continue;
+            out += L1("| ");
+            if (QTableWidgetItem *item = table->item(row, column)) {
+                out += item->text();
+                out += QString(biggest[column] - item->text().size() + 1, u' ');
+            } else {
+                out += QString(biggest[column] + 1, u' ');
             }
-
-            const QString text = table->item(row, column)->text();
-            out.append(text);
-            out.append(STR(" ").repeated(biggest[column] - text.size() + 1));
         }
-        out.append(u'|');
-        out.append(u'\n');
-        if (row != 0)
-            continue;
+        out += L1("|\n");
 
-        for (int column = 0; column < columnCount; ++column) {
-            out.append(u'|');
-            out.append(STR("-").repeated(biggest[column] + 2));
-            // out.append(u' ');
+        if (row == 0) {
+            for (int column = 0; column < columnCount; ++column) {
+                out += u'|';
+                out += QString(biggest[column] + 2, u'-');
+            }
+            out += L1("|\n");
         }
-        out.append(u'|');
-        out.append(u'\n');
     }
-    // Expected output:
-    /*
-     * | 1              |       |
-     * |----------------|-------|
-     * | Test           | Hello |
-     * | This is a test |       |
-    */
 
-    out.squeeze();
     return out;
 }
 
@@ -128,12 +98,12 @@ void TableDialog::handleRow()
 
     const QString s = a->data().toString();
 
-    if (s == QLatin1String("above")) {
+    if (s == L1("above")) {
         int i = table->currentRow() - 1;
         if (i == -1)
             ++i;
         table->insertRow(i);
-    } else if (s == QLatin1String("below"))
+    } else if (s == L1("below"))
         table->insertRow(table->currentRow() + 1);
     else
         table->removeRow(table->currentRow());
@@ -145,12 +115,12 @@ void TableDialog::handleColumn()
 
     const QString s = a->data().toString();
 
-    if (s == QLatin1String("above")) {
+    if (s == L1("above")) {
         int i = table->currentColumn() - 1;
         if (i == -1)
             ++i;
         table->insertColumn(i);
-    } else if (s == QLatin1String("below"))
+    } else if (s == L1("below"))
         table->insertColumn(table->currentColumn() + 1);
     else
         table->removeColumn(table->currentColumn());
