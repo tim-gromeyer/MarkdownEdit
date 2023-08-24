@@ -21,12 +21,7 @@
 
 #include <QSyntaxHighlighter>
 
-#ifdef CHECK_MARKDOWN
 #include "markdownhighlighter.h"
-#define SpellCheckerBaseClass MarkdownHighlighter
-#else
-#define SpellCheckerBaseClass QSyntaxHighlighter
-#endif
 
 QT_BEGIN_NAMESPACE
 namespace enchant {
@@ -43,7 +38,7 @@ class Dictionary;
 } // namespace nuspell
 QT_END_NAMESPACE
 
-class SpellChecker : public SpellCheckerBaseClass
+class SpellChecker : public MarkdownHighlighter
 {
     Q_OBJECT
 public:
@@ -53,19 +48,26 @@ public:
     auto setLanguage(const QString &) -> bool;
     [[nodiscard]] auto getLanguage() const -> QString;
 
-#ifdef CHECK_MARKDOWN
     void setMarkdownHighlightingEnabled(const bool);
     [[nodiscard]] inline auto isMarkdownHighlightingEnabled() const -> bool
     {
         return markdownhig;
     };
-#endif
 
     void setSpellCheckingEnabled(const bool);
     [[nodiscard]] inline auto isSpellCheckingEnabled() const -> bool
     {
         return spellingEnabled && speller;
     };
+
+    inline void setHeaderColor(QColor color)
+    {
+        // set all header colors to the same color
+        for (int i = HighlighterState::H1; i <= HighlighterState::H6; ++i) {
+            _formats[static_cast<HighlighterState>(i)].setForeground(color);
+        }
+    }
+    [[nodiscard]] inline QColor getHeaderColor() { return _formats[H1].foreground().color(); }
 
     Q_REQUIRED_RESULT static auto getLanguageList() -> const QStringList;
 
@@ -102,10 +104,9 @@ private Q_SLOTS:
 
 private:
     bool spellingEnabled = true;
-#ifdef CHECK_MARKDOWN
     bool markdownhig = true;
+
     auto getWord(const QTextBlock &, const int) -> QString;
-#endif
 
     bool saveUserDict();
     void loadUserDict(const QString &);

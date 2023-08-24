@@ -55,20 +55,12 @@ QHash<QString, Language> langPathMap;
 #define SUBSTR(text, pos, len) text.sliced(pos, len)
 #endif
 
-static auto red() -> const QColor
-{
-    static const QColor red(255, 0, 0); // constexpr doesn't work in every Qt version
-    return red;
-}
-
 // NOTE: Language format: de_DE, en_US
 SpellChecker::SpellChecker(QPlainTextEdit *parent, const QString &lang)
-    : SpellCheckerBaseClass{parent->document()}
+    : MarkdownHighlighter{parent->document()}
     , textEdit(parent)
 {
-#ifdef CHECK_MARKDOWN
-    setHighlightingOptions(MarkdownHighlighter::Underline);
-#endif
+    _formats[InlineCodeBlock].setBackground(QColor(255, 0, 0));
 
     if (!lang.isEmpty())
         setLanguage(lang);
@@ -89,10 +81,8 @@ SpellChecker::SpellChecker(QPlainTextEdit *parent, const QString &lang)
 
 void SpellChecker::highlightBlock(const QString &text)
 {
-#ifdef CHECK_MARKDOWN
     if (markdownhig)
-        MarkdownHighlighter::highlightMarkdown(text);
-#endif
+        MarkdownHighlighter::highlightBlock(text);
 
     if (spellingEnabled && !language.isEmpty())
         checkSpelling(text);
@@ -107,11 +97,12 @@ void SpellChecker::checkSpelling(QStringView text)
     if (!speller || !spellingEnabled)
         return;
 
-#ifdef CHECK_MARKDOWN
+#ifdef NO_SPELLCHECK
+    return;
+#endif
+
     QStringList wordList;
     QString word;
-
-    const auto currentBlockNumber = currentBlock().blockNumber();
 
     if (isCodeBlock(currentBlockState()))
         return;
@@ -122,7 +113,7 @@ void SpellChecker::checkSpelling(QStringView text)
         const QChar c = text[i];
         const bool isLetterOrNumber = c.isLetterOrNumber();
 
-        if (isPosInACodeSpan(currentBlockNumber, i))
+        if (isPosInACodeSpan(currentBlock().blockNumber(), i))
             continue;
 
         // Check for link
@@ -152,13 +143,6 @@ void SpellChecker::checkSpelling(QStringView text)
             word.clear();
         }
     }
-#else
-#if QT_VERSION > QT_VERSION_CHECK(5, 14, 0)
-    const QStringList wordList = text.split(expr, Qt::SkipEmptyParts);
-#else
-    const QStringList wordList = text.split(expr, QString::SkipEmptyParts);
-#endif
-#endif
 
     qsizetype index = 0;
 
@@ -169,7 +153,7 @@ void SpellChecker::checkSpelling(QStringView text)
             QTextCharFormat fmt = QSyntaxHighlighter::format((int) index);
             fmt.setFontUnderline(true);
             fmt.setUnderlineStyle(QTextCharFormat::SpellCheckUnderline);
-            fmt.setUnderlineColor(red());
+            fmt.setUnderlineColor(QColor(255, 0, 0)); // Red
             setFormat((int) index, word_.length(), fmt);
         }
         index += word_.length();
@@ -298,7 +282,6 @@ auto SpellChecker::getSuggestion(const QString &word) const -> QStringList
 #endif
 }
 
-#ifdef CHECK_MARKDOWN
 auto SpellChecker::getWord(const QTextBlock &block, const int pos) -> QString
 {
     if (MarkdownHighlighter::isPosInACodeSpan(block.blockNumber(), pos)
@@ -350,7 +333,6 @@ auto SpellChecker::getWord(const QTextBlock &block, const int pos) -> QString
 
     return QLatin1String();
 }
-#endif
 
 void SpellChecker::showContextMenu(const QPoint pos)
 {
@@ -364,12 +346,8 @@ void SpellChecker::showContextMenu(const QPoint pos)
     if (speller && spellingEnabled) {
         c.clearSelection();
 
-#ifdef CHECK_MARKDOWN
         const QString word = getWord(c.block(), c.positionInBlock());
-#else
-        c.select(QTextCursor::WordUnderCursor);
-        const QString word = c.selectedText();
-#endif
+
         if (!isCorrect(word)) {
             const QStringList suggestions = getSuggestion(word);
             if (!suggestions.isEmpty()) {
@@ -509,7 +487,6 @@ void SpellChecker::replaceWord(const int wordPos, const QString &newWord)
     c.insertText(newWord);
 }
 
-#ifdef CHECK_MARKDOWN
 void SpellChecker::setMarkdownHighlightingEnabled(const bool enabled)
 {
     if ((enabled && !markdownhig) || (!enabled && markdownhig)) {
@@ -518,7 +495,6 @@ void SpellChecker::setMarkdownHighlightingEnabled(const bool enabled)
         QSyntaxHighlighter::rehighlight();
     }
 }
-#endif
 
 void SpellChecker::setSpellCheckingEnabled(const bool enabled)
 {
