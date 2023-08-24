@@ -41,7 +41,8 @@ auto TableDialog::markdownTable() const -> QString
     const auto rowCount = table->rowCount();
     const auto columnCount = table->columnCount();
 
-    QList<int> biggest(columnCount, 0);
+    QList<int> biggest;
+    biggest.reserve(columnCount);
 
     // Find the longest text in each column
     for (int i = 0; i < columnCount; ++i) {
