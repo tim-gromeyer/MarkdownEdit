@@ -157,8 +157,8 @@ void MarkdownEditor::setText(const QByteArray &t, const QString &newFile, const 
             checker->clearDirtyBlocks();
             checker->setDocument(nullptr);
 
-            if (mapContains(newFile))
-                setLanguage(mapAttribute(newFile));
+            if (mapContains(info.filePath()))
+                setLanguage(mapAttribute(info.filePath()));
 
             document()->setPlainText(QString::fromLocal8Bit(t));
             document()->setModified(false);

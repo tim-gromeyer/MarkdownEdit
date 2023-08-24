@@ -52,15 +52,13 @@ public:
 
     auto filePath() -> QString; // aka window title
 
-    bool bigFile = false;
-
 Q_SIGNALS:
     void openFile(const QString);
 
 protected:
-    void dragEnterEvent(QDragEnterEvent *) override;
-    void dragMoveEvent(QDragMoveEvent *) override;
-    void dropEvent(QDropEvent *) override;
+    void dragEnterEvent(QDragEnterEvent *e) override;
+    void dragMoveEvent(QDragMoveEvent *e) override;
+    void dropEvent(QDropEvent *e) override;
 
 private Q_SLOTS:
     void onLanguageChanged(const QString &);

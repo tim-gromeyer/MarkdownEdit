@@ -102,6 +102,8 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
             setupToolbar();     // setup toolbars
             setupConnections(); // connect everything before we load the files
             loadFiles(files);   // load the files or create an new document
+
+            disablePreview(!preview);
 #ifndef MOBILE
         },
         Qt::QueuedConnection);
@@ -385,7 +387,7 @@ void MainWindow::setupToolbar()
     ui->Edit->addAction(ui->actionCut);
     ui->Edit->addAction(ui->actionCopy);
     ui->Edit->addAction(ui->actionPaste);
-    ui->toolBarPreview->addWidget(mode);
+    actionMode = ui->toolBarPreview->addWidget(mode);
     ui->toolBarPreview->addSeparator();
 #endif
     actionWidgetBox = ui->toolBarPreview->addWidget(widgetBox);
@@ -693,7 +695,6 @@ void MainWindow::onEditorChanged(const int index)
     ui->actionUndo->setEnabled(editor->document()->isUndoAvailable());
 
     path = editor->getPath();
-    bigFile = editor->bigFile;
     onOrientationChanged(orientation);
 
     if (path == tr("Untitled.md")) {
@@ -901,18 +902,13 @@ void MainWindow::onOrientationChanged(const Qt::ScreenOrientation t)
     if (!actionPreview || !actionWidgetBox)
         return;
 
-    if (t == Qt::PortraitOrientation || bigFile) {
-        actionWidgetBox->setVisible(false);
-        actionPreview->setVisible(true);
-    } else {
-        actionPreview->setVisible(false);
-        actionWidgetBox->setVisible(true);
-    }
+    const bool showWidgetBox = !(t == Qt::PortraitOrientation);
+
+    actionWidgetBox->setVisible(showWidgetBox && preview);
+    actionPreview->setVisible(!showWidgetBox);
+
     androidPreview(false);
     actionPreview->setChecked(false);
-
-    if (preview)
-        disablePreview(t == Qt::PortraitOrientation || bigFile);
 }
 
 void MainWindow::setText(const int index)
@@ -960,8 +956,12 @@ void MainWindow::changeSpelling(const bool checked)
 
 void MainWindow::disablePreview(const bool checked)
 {
-    if (!bigFile)
-        ui->tabWidget->setVisible(!checked);
+    if (orientation == Qt::PortraitOrientation && !checked) {
+        androidPreview(true);
+        return;
+    }
+
+    ui->tabWidget->setVisible(!checked);
 
     dontUpdate = checked;
 
@@ -1331,10 +1331,7 @@ void MainWindow::openFile(const QString &newFile, const QString &lang)
 
             return;
         }
-
-        bigFile = true;
-    } else
-        bigFile = false;
+    }
 
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
@@ -1348,14 +1345,11 @@ void MainWindow::openFile(const QString &newFile, const QString &lang)
 
     auto *editor = createEditor();
     editor->setFile(newFile);
-    // Store it there so we can use it later
-    editor->bigFile = bigFile;
     ui->tabWidget_2->insertTab(editorList.length() - 1, editor, editor->getFileName());
     ui->tabWidget_2->setCurrentIndex(editorList.length() - 1);
     ui->tabWidget_2->tabBar()->setTabToolTip(editorList.length() - 1,
                                              QDir::toNativeSeparators(newFile));
-
-    editor->setText(f.readAll(), newFile);
+    editor->setText(f.readAll());
 
     setWindowTitle(editor->filePath());
     ui->actionReload->setText(tr("Reload \"%1\"").arg(editor->getFileName()));
@@ -1415,7 +1409,6 @@ void MainWindow::onFileOpen()
             ui->tabWidget_2->insertTab(editorList.length() - 1, editor, editor->getFileName());
             ui->tabWidget_2->setCurrentIndex(editorList.length() - 1);
             editor->setText(fileContent, newFile);
-            editor->bigFile = bigFile;
 
             setWindowTitle(editor->filePath());
             ui->actionReload->setText(tr("Reload \"%1\"").arg(editor->getFileName()));

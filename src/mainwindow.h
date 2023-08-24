@@ -25,7 +25,7 @@
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
-};
+} // namespace Ui
 class QPrinter;
 class QSettings;
 class QToolButton;
@@ -194,6 +194,8 @@ private:
     QAction *aInsertTableOfContents = nullptr;
 
     QComboBox *mode = nullptr;
+    QAction *actionMode = nullptr;
+
     QTimer *timer = nullptr;
 
     QFileSystemWatcher *watcher = nullptr;
