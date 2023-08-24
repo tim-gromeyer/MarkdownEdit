@@ -60,7 +60,7 @@ SpellChecker::SpellChecker(QPlainTextEdit *parent, const QString &lang)
     : MarkdownHighlighter{parent->document()}
     , textEdit(parent)
 {
-    _formats[InlineCodeBlock].setBackground(QColor(255, 0, 0));
+    // _formats[InlineCodeBlock].setBackground(QColor(255, 0, 0)); TODO: Add some color
 
     if (!lang.isEmpty())
         setLanguage(lang);
