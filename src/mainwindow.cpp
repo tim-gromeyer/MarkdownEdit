@@ -76,7 +76,7 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
     ui->setupUi(this);
 
     // Setup settings to load settings
-    settings = new QSettings(STR("SME"), STR("MarkdownEdit"), this);
+    settings = new QSettings(STR("Tim Gromeyer"), STR("MarkdownEdit"), this);
 
 #ifndef Q_OS_WASM
     const QByteArray geo = settings->value(STR("geometry"), QByteArrayLiteral("")).toByteArray();
@@ -88,7 +88,7 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
         restoreGeometry(geo);
     }
 
-    restoreState(settings->value(STR("state"), QByteArrayLiteral("")).toByteArray());
+    restoreState(settings->value(STR("state"), QByteArray()).toByteArray());
 #endif
 
 #ifndef MOBILE
@@ -129,46 +129,44 @@ void MainWindow::androidPreview(const bool c)
 
 void MainWindow::onHelpSyntax()
 {
-    QString file = STR(":/syntax/en.md");
-    QString language = STR("en_US");
+    QString file = QStringLiteral(":/syntax/en.md");
+    QString language = QStringLiteral("en_US");
 
-    static const QStringList uiLanguages = QLocale::system().uiLanguages(); // ex. de-DE
-    static const QStringList languages = SpellChecker::getLanguageList();   // ex. de_DE
+    static const QStringList uiLanguages = QLocale::system().uiLanguages();
+    static const QStringList languages = SpellChecker::getLanguageList();
 
-    // loop thought the languages
     for (const QString &lang : uiLanguages) {
-        //  get first to characters
         const QString lang2 = lang.right(2);
-
-        if (QFile::exists(STR(":/syntax/%1.md").arg(lang2))) {
-            file = STR(":/syntax/%1.md").arg(lang2);
+        if (QFile::exists(QStringLiteral(":/syntax/%1.md").arg(lang2))) {
+            file = QStringLiteral(":/syntax/%1.md").arg(lang2);
             language = lang;
             break;
         }
     }
 
-    // Correct language format
     language.replace(u'-', u'_');
 
     if (!languages.isEmpty() && !languages.contains(language)) {
         if (language.length() > 2)
-            // Get the first 2 characters
-            language = language.mid(0, 2);
+            language = language.left(2);
 
-        // Assuming language = de, try de_DE
-        const QString newLang = STR("%1_%2").arg(language, language.toUpper());
-        // If the language dict exists
+        const QString newLang = QStringLiteral("%1_%2").arg(language, language.toUpper());
         if (languages.contains(newLang)) {
             language = newLang;
         } else {
-            language = *std::find_if(languages.begin(),
-                                     languages.end(),
-                                     [language](const QString &lang) {
-                                         return lang.contains(language);
-                                     });
+            auto langIt = std::find_if(languages.begin(),
+                                       languages.end(),
+                                       [language](const QString &lang) {
+                                           return lang.contains(language);
+                                       });
+
+            if (langIt != languages.end()) {
+                language = *langIt;
+            }
         }
-    } else
+    } else {
         language.clear();
+    }
 
     openFile(file, language);
 }
@@ -436,26 +434,16 @@ void MainWindow::setupToolbar()
     auto *aInsertLink = new QAction(tr("Insert link"));
     auto *aInsertImage = new QAction(tr("Insert image"));
 
-    aBold->setIcon(
-        QIcon::fromTheme(STR("format-text-bold"), QIcon(STR(":/icons/format-text-bold.svg"))));
-    aItalic->setIcon(
-        QIcon::fromTheme(STR("format-text-italic"), QIcon(STR(":/icons/format-text-italic.svg"))));
-    aUnderline->setIcon(QIcon::fromTheme(STR("format-text-underline"),
-                                         QIcon(STR(":/icons/format-text-underline.svg"))));
-    aStrikethrough->setIcon(QIcon::fromTheme(STR("format-text-strikethrough"),
-                                             QIcon(STR(":/icons/format-text-strikethrough.svg"))));
+    loadIcon(STR("format-text-bold"), aBold);
+    loadIcon(STR("format-text-italic"), aItalic);
+    loadIcon(STR("format-text-underline"), aUnderline);
+    loadIcon(STR("format-text-strikethrough"), aStrikethrough);
 
-    aInsertTable->setIcon(
-        QIcon::fromTheme(STR("insert-table"), QIcon(STR(":/icons/insert-table.svg"))));
-    aInsertTableOfContents->setIcon(
-        QIcon::fromTheme(STR("insert-table-of-contents"),
-                         QIcon(STR(":/icons/insert-table-of-contents.svg"))));
+    loadIcon(STR("insert-table"), aInsertTable);
+    loadIcon(STR("insert-table-of-contents"), aInsertTableOfContents);
 
-    aInsertImage->setIcon(
-        QIcon::fromTheme(STR("insert-image"), QIcon(STR(":/icons/insert-image.svg"))));
-
-    aInsertLink->setIcon(
-        QIcon::fromTheme(STR("insert-link"), QIcon(STR(":/icons/insert-link.svg"))));
+    loadIcon(STR("insert-image"), aInsertImage);
+    loadIcon(STR("insert-link"), aInsertLink);
 
     connect(aBold, &QAction::triggered, this, &MainWindow::bold);
     connect(aItalic, &QAction::triggered, this, &MainWindow::italic);
@@ -622,10 +610,9 @@ void MainWindow::editorMoved(const int from, const int to)
 void MainWindow::closeEditor(const int index)
 {
     overrideEditor = true;
-    overrideVal = (short) index;
+    overrideVal = static_cast<short>(index);
 
     auto *editor = editorList.at(index);
-
     path = editor->getPath();
 
     onOrientationChanged(orientation);
@@ -633,28 +620,25 @@ void MainWindow::closeEditor(const int index)
     if (path == tr("Untitled.md")) {
         path.clear();
         if (editor->document()->isModified()) {
-            QMessageBox d(this);
-            d.setText(tr("The document has been edited, do you want to save it?"));
-            d.setStandardButtons(QMessageBox::Yes | QMessageBox::No | QMessageBox::Abort);
-            d.setDefaultButton(QMessageBox::Yes);
-            d.setIcon(QMessageBox::Question);
+            QMessageBox confirmSave(this);
+            confirmSave.setText(tr("The document has been edited, do you want to save it?"));
+            confirmSave.setStandardButtons(QMessageBox::Yes | QMessageBox::No | QMessageBox::Abort);
+            confirmSave.setDefaultButton(QMessageBox::Yes);
+            confirmSave.setIcon(QMessageBox::Question);
 
-            const auto retVal = d.exec();
+            const int result = confirmSave.exec();
 
-            if (retVal == QMessageBox::Abort) {
+            if (result == QMessageBox::Abort) {
                 overrideEditor = false;
                 return;
             }
-            if (retVal == QMessageBox::Yes) {
-                if (!onFileSaveAs()) {
-                    overrideEditor = false;
-                    return;
-                }
+            if (result == QMessageBox::Yes && !onFileSaveAs()) {
+                overrideEditor = false;
+                return;
             }
         }
-    } else if (editor->document()->isModified()) {
-        if (!onFileSave())
-            return;
+    } else if (editor->document()->isModified() && !onFileSave()) {
+        return;
     }
 
     if (!path.isEmpty()) {
@@ -667,15 +651,14 @@ void MainWindow::closeEditor(const int index)
     editorList.removeAt(index);
     ui->tabWidget_2->removeTab(index);
     editor->deleteLater();
-    delete editor;
 
-    if (editorList.isEmpty()) {                 // If all editors are closed
-        html.clear();                           // Clear HTML
-        setText(ui->tabWidget->currentIndex()); // apply the empty HTML to the preview widget
+    if (editorList.isEmpty()) {
+        html.clear();
+        setText(ui->tabWidget->currentIndex());
         ui->actionReload->setText(tr("Reload \"%1\"").remove(L1("%1")));
         ui->actionReload->setEnabled(false);
         setWindowModified(false);
-        setWindowTitle(STR("MarkdownEdit"));
+        setWindowTitle(tr("MarkdownEdit"));
     }
 }
 
@@ -699,7 +682,7 @@ void MainWindow::onEditorChanged(const int index)
 
     if (path == tr("Untitled.md")) {
         path.clear();
-        ui->actionReload->setText(tr("Reload \"%1\"").arg('\0'));
+        ui->actionReload->setText(tr("Reload \"%1\"").remove(L1("%1")));
         ui->actionReload->setEnabled(false);
     } else {
         ui->actionReload->setText(tr("Reload \"%1\"").arg(editor->getFileName()));
@@ -985,13 +968,9 @@ void MainWindow::pausePreview(const bool checked)
 
     if (!checked) {
         onTextChanged();
-        ui->actionPause_preview->setIcon(
-            QIcon::fromTheme(STR("media-playback-pause"),
-                             QIcon(STR(":/icons/media-playback-pause.svg"))));
+        loadIcon(STR("media-playback-pause"), ui->actionPause_preview);
     } else
-        ui->actionPause_preview->setIcon(
-            QIcon::fromTheme(STR("media-playback-start"),
-                             QIcon(STR(":/icons/media-playback-start.svg"))));
+        loadIcon(STR("media-playback-start"), ui->actionPause_preview);
 }
 
 void MainWindow::cut()
@@ -1597,25 +1576,24 @@ void MainWindow::openRecent()
 
 void MainWindow::updateOpened()
 {
-    for (QAction *&a : ui->menuRecentlyOpened->actions()) { // Fixed warning
+    for (QAction *a : ui->menuRecentlyOpened->actions()) {
         disconnect(a, &QAction::triggered, this, &MainWindow::openRecent);
         a->deleteLater();
-        delete a;
     }
 
-    ui->menuRecentlyOpened->clear(); // Clear the menu
+    ui->menuRecentlyOpened->clear();
 
-    if (recentOpened.contains(path) && recentOpened.at(0) != path)
+    if (recentOpened.contains(path) && recentOpened.first() != path)
         recentOpened.move(recentOpened.indexOf(path), 0);
     else if (!path.isEmpty() && !recentOpened.contains(path))
         recentOpened.prepend(path);
 
     if (recentOpened.count() > RECENT_OPENED_LIST_LENGTH)
-        recentOpened.takeLast();
+        recentOpened.removeLast();
 
     for (int i = 0; i < recentOpened.count(); ++i) {
-        const QString document = recentOpened.at(i);
-        auto *action = new QAction(STR("&%1 | %2").arg(QString::number(i + 1), document), this);
+        const QString &document = recentOpened.at(i);
+        auto *action = new QAction(QString::number(i + 1) + L1(" | ") + document, this);
         connect(action, &QAction::triggered, this, &MainWindow::openRecent);
 
         action->setData(document);
@@ -1640,7 +1618,6 @@ void MainWindow::closeEvent(QCloseEvent *e)
     }
 
     saveSettings();
-    e->accept();
     QMainWindow::closeEvent(e);
 }
 
@@ -1649,12 +1626,13 @@ void MainWindow::resizeEvent(QResizeEvent *e)
     const QSize size = e->size();
     const QSize old = e->oldSize();
 
-    if (size.height() > size.width() && (!old.isValid() || old.height() <= old.width())) {
-        onOrientationChanged(Qt::PortraitOrientation);
-        orientation = Qt::PortraitOrientation;
-    } else if (size.height() < size.width() && (!old.isValid() || old.height() >= old.width())) {
-        onOrientationChanged(Qt::LandscapeOrientation);
-        orientation = Qt::LandscapeOrientation;
+    Qt::ScreenOrientation newOrientation = (size.height() > size.width())
+                                               ? Qt::PortraitOrientation
+                                               : Qt::LandscapeOrientation;
+
+    if (!old.isValid() || (newOrientation != orientation)) {
+        onOrientationChanged(newOrientation);
+        orientation = newOrientation;
     }
 
     e->accept();
