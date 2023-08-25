@@ -5,7 +5,7 @@
 
 # [MarkdownEdit](https://tim-gromeyer.github.io/MarkdownEdit/)
 
-Experience the speed and simplicity of MarkdownEdit.
+Experience the speed and simplicity of MarkdownEdit
 
 ## Table of Contents
 
@@ -32,7 +32,7 @@ MarkdownEdit offers a range of powerful features to make editing and creating Ma
 - Quick access to recent files from the toolbar or file menu
 - Open source and native look and feel
 
-![Example](doc/images/Example.png)
+![Example](screenshots/live-preview.png)
 
 ## Preview
 
