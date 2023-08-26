@@ -79,7 +79,7 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
     settings = new QSettings(STR("Tim Gromeyer"), STR("MarkdownEdit"), this);
 
 #ifndef Q_OS_WASM
-    const QByteArray geo = settings->value(STR("geometry"), QByteArrayLiteral("")).toByteArray();
+    const QByteArray geo = settings->value(STR("geometry"), QByteArray()).toByteArray();
     if (geo.isEmpty()) {
         const QRect availableGeometry = QGuiApplication::screenAt(pos())->availableGeometry();
         resize(availableGeometry.width() / 2, (availableGeometry.height() * 2) / 3);
@@ -529,37 +529,49 @@ void MainWindow::insertLongText(const QString &text, const bool newLine)
     c.endEditBlock();
 }
 
-void MainWindow::insertText(QString what, const bool h)
+void MainWindow::insertText(const QString &textToInsert, const bool shouldCloseHTMLTag)
 {
+    // Check if there's a current text editor
     if (!currentEditor())
         return;
 
-    QTextCursor c = currentEditor()->textCursor();
-    c.beginEditBlock();
+    auto textSize = textToInsert.size();
 
-    if (!c.hasSelection())
-        c.select(QTextCursor::WordUnderCursor);
+    QTextCursor cursor = currentEditor()->textCursor();
+    cursor.beginEditBlock();
 
-    int start = c.selectionStart();
-    int end = c.selectionEnd();
+    // If no text is selected, select the word under the cursor
+    if (!cursor.hasSelection())
+        cursor.select(QTextCursor::WordUnderCursor);
 
-    c.setPosition(start);
-    c.insertText(what);
-    c.setPosition(end + what.size());
-    c.insertText(h ? what.insert(1, u'/') : what);
+    int selectionStart = cursor.selectionStart();
+    int selectionEnd = cursor.selectionEnd();
 
-    c.endEditBlock();
+    // Insert the initial text at the cursor position
+    cursor.setPosition(selectionStart);
+    cursor.insertText(textToInsert);
+    cursor.setPosition(selectionEnd + textSize);
+    cursor.insertText(textToInsert);
 
-    if (h) {
-        --start;
-        --end;
+    // Move cursor to the end of the inserted text
+    cursor.setPosition(selectionEnd + textSize);
+
+    // Insert closing HTML tag if needed
+    if (shouldCloseHTMLTag) {
+        cursor.setPosition(selectionEnd + textSize + 1);
+        cursor.insertText(QChar(u'/'));
     }
 
-    // Reselect the text
-    c.setPosition(start + what.size());
-    c.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, end - start);
+    cursor.endEditBlock();
 
-    currentEditor()->setTextCursor(c);
+    // Reselect the inserted text
+    cursor.setPosition(selectionStart + textSize);
+    cursor.movePosition(QTextCursor::NextCharacter,
+                        QTextCursor::KeepAnchor,
+                        selectionEnd - selectionStart);
+
+    // Update the text editor's cursor
+    currentEditor()->setTextCursor(cursor);
 }
 
 void MainWindow::insertLink()
@@ -736,15 +748,15 @@ auto MainWindow::createEditor() -> MarkdownEditor *
     return editor;
 }
 
-void MainWindow::receivedMessage(const quint32 id, const QByteArray &msg)
+void MainWindow::receivedMessage(const quint32 /*id*/, const QByteArray &msg)
 {
-    QString f = QString::fromLatin1(msg); // is a bit faster
-    f.remove(0, 7);                       // Removing "file://", which is added programmatically
+    QString file = QString::fromUtf8(msg);
+    file.remove(0, 7); // Remove "file://", which is added programmatically
 
-    if (f.isEmpty()) // it's the case when you start a new app
+    if (file.isEmpty()) // it's the case when you start a new app
         onFileNew();
     else
-        openFiles(f.split(u' ')); // if you selected files
+        openFiles(file.split(u' ')); // if you selected files
 }
 
 void MainWindow::onUrlClicked(const QString &url)

@@ -130,7 +130,7 @@ private Q_SLOTS:
     void strikethrough();
 
     void insertLongText(const QString &, const bool = false);
-    void insertText(QString what, const bool h = false);
+    void insertText(const QString &what, const bool shouldCloseHTMLTag = false);
 
     void onUrlClicked(const QString &);
 
