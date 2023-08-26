@@ -58,7 +58,7 @@ void PreviewWidget::openUrl(const QUrl &url)
     const QString urlString = url.toString();
     const QString filePath = property("dir").toString() + u'/' + urlString;
 
-    if (isLink(urlString))
+    if (mightBeLink(urlString))
         QDesktopServices::openUrl(url);
 
     else if (QFile::exists(filePath))

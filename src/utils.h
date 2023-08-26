@@ -10,7 +10,7 @@ namespace threading {
 void runFunction(const std::function<void()> &);
 } // namespace threading
 
-inline bool isLink(const QString &text)
+inline bool mightBeLink(const QString &text)
 {
     static const QLatin1String supportedSchemes[]
         = {L1("http://"), L1("https://"),  L1("file://"),  L1("www."),   L1("ftp://"),
