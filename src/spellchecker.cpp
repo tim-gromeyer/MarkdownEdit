@@ -305,9 +305,7 @@ auto SpellChecker::getWord(const QTextBlock &block, const int pos) -> QString
 
         if (c == u'h') {
             if (SUBSTR(text, i, 4) == QStringView(u"http", 4)) {
-                if (text.indexOf(QChar(QChar::Space), i) > pos)
-                    return QLatin1String();
-                else if (text.indexOf(u')', i) > pos)
+                if (text.indexOf(QChar(QChar::Space), i) > pos || text.indexOf(u')', i) > pos)
                     return QLatin1String();
 
                 isLink = true;
