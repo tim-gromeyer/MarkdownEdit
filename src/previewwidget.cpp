@@ -17,7 +17,7 @@
  **/
 
 #include "previewwidget.h"
-#include "settings.h"
+#include "utils.h"
 
 #include <QDesktopServices>
 #include <QFile>
@@ -55,17 +55,17 @@ void PreviewWidget::setHtml(const QString &html)
 
 void PreviewWidget::openUrl(const QUrl &url)
 {
-    const QString s = url.toString();
-    const QString filePath = property("dir").toString() + u'/' + s;
+    const QString urlString = url.toString();
+    const QString filePath = property("dir").toString() + u'/' + urlString;
 
-    if (s.startsWith(L1("http")))
+    if (isLink(urlString))
         QDesktopServices::openUrl(url);
 
     else if (QFile::exists(filePath))
         QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
 
-    else if (s.startsWith(u'#'))
-        scrollToHeader(s);
+    else if (urlString.startsWith(u'#'))
+        scrollToHeader(urlString);
 }
 
 void PreviewWidget::scrollToHeader(QString name)
