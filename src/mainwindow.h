@@ -132,7 +132,7 @@ private Q_SLOTS:
     void insertLongText(const QString &, const bool = false);
     void insertText(const QString &what, const bool shouldCloseHTMLTag = false);
 
-    void onUrlClicked(const QString &);
+    void onUrlClicked(const QString &urlString);
 
     // Android specific
     void androidPreview(const bool);

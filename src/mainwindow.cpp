@@ -68,6 +68,8 @@ using std::as_const;
 QT_REQUIRE_CONFIG(mainwindow);
 QT_REQUIRE_CONFIG(filedialog);
 
+enum { MESSAGE_DISPLAY_TIME = 3000 };
+
 MainWindow::MainWindow(const QStringList &files, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -275,7 +277,7 @@ void MainWindow::setupThings()
 
     // Setup a timer to hide the status bar
     timer = new QTimer(this);
-    timer->setInterval(5s);
+    timer->setInterval(MESSAGE_DISPLAY_TIME);
     timer->setSingleShot(true);
     timer->setTimerType(Qt::VeryCoarseTimer);
     connect(timer, &QTimer::timeout, statusBar(), &QStatusBar::hide);
@@ -753,21 +755,19 @@ void MainWindow::receivedMessage(const quint32 /*id*/, const QByteArray &msg)
     QString file = QString::fromUtf8(msg);
     file.remove(0, 7); // Remove "file://", which is added programmatically
 
-    if (file.isEmpty()) // it's the case when you start a new app
-        onFileNew();
-    else
+    if (!file.isEmpty())
         openFiles(file.split(u' ')); // if you selected files
 }
 
-void MainWindow::onUrlClicked(const QString &url)
+void MainWindow::onUrlClicked(const QString &urlString)
 {
-    const QUrl urlFromString = QUrl(url);
-    const bool isRelativeFileUrl = url.startsWith(L1("file://"));
+    const QUrl url = QUrl(urlString);
+    const bool isRelativeFileUrl = urlString.startsWith(L1("file://"));
 
-    if (!urlFromString.isValid() || isRelativeFileUrl)
+    if (!url.isValid() || isRelativeFileUrl)
         return;
 
-    ui->textBrowser->openUrl(urlFromString);
+    ui->textBrowser->openUrl(url);
 }
 
 void MainWindow::onModificationChanged(const bool m)
@@ -1160,7 +1160,8 @@ void MainWindow::exportPdf()
 
 #ifndef Q_OS_ANDROID
     statusBar()->show();
-    statusBar()->showMessage(tr("Pdf exported to %1").arg(QDir::toNativeSeparators(file)), 0);
+    statusBar()->showMessage(tr("Pdf exported to %1").arg(QDir::toNativeSeparators(file)),
+                             MESSAGE_DISPLAY_TIME);
     timer->start();
 #endif
 }
@@ -1227,7 +1228,8 @@ void MainWindow::exportHtml()
 
 #ifndef Q_OS_ANDROID
     statusBar()->show();
-    statusBar()->showMessage(tr("HTML exported to %1").arg(QDir::toNativeSeparators(file)), 0);
+    statusBar()->showMessage(tr("HTML exported to %1").arg(QDir::toNativeSeparators(file)),
+                             MESSAGE_DISPLAY_TIME);
     timer->start();
 #endif
 
@@ -1351,7 +1353,8 @@ void MainWindow::openFile(const QString &newFile, const QString &lang)
 
 #ifndef Q_OS_ANDROID
     statusBar()->show();
-    statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 0);
+    statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)),
+                             MESSAGE_DISPLAY_TIME);
     timer->start();
 #endif
 
@@ -1362,11 +1365,14 @@ void MainWindow::openFile(const QString &newFile, const QString &lang)
 
 void MainWindow::onFileNew()
 {
+    static const QString file = tr("Untitled %1.md");
+    static int newNumberCount = 0;
+
     path.clear();
-    static const QString file = tr("Untitled.md");
+    ++newNumberCount;
 
     auto *editor = createEditor();
-    editor->setFile(file);
+    editor->setFile(file.arg(QString::number(newNumberCount)));
 
     ui->tabWidget_2->insertTab(editorList.length() - 1, editor, editor->getFileName());
     ui->tabWidget_2->setCurrentIndex(editorList.length() - 1);
@@ -1376,7 +1382,7 @@ void MainWindow::onFileNew()
 
 #ifndef Q_OS_ANDROID
     statusBar()->show();
-    statusBar()->showMessage(tr("New document created"), 0);
+    statusBar()->showMessage(tr("New document created"), MESSAGE_DISPLAY_TIME);
     timer->start();
 #endif
 }
@@ -1407,7 +1413,8 @@ void MainWindow::onFileOpen()
             fileList.append(newFile);
 
             statusBar()->show();
-            statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)), 0);
+            statusBar()->showMessage(tr("Opened %1").arg(QDir::toNativeSeparators(path)),
+                                     MESSAGE_DISPLAY_TIME);
             timer->start();
 
             updateOpened();
@@ -1476,7 +1483,8 @@ auto MainWindow::onFileSave() -> bool
 
 #ifndef Q_OS_ANDROID
     statusBar()->show();
-    statusBar()->showMessage(tr("Wrote %1").arg(QDir::toNativeSeparators(path)), 0);
+    statusBar()->showMessage(tr("Wrote %1").arg(QDir::toNativeSeparators(path)),
+                             MESSAGE_DISPLAY_TIME);
     timer->start();
 #endif
 
@@ -1564,7 +1572,9 @@ void MainWindow::onHelpAbout()
            "Mit&aacute;&scaron;</em>.</p>\n"
            "<p>The <a href=\"https://github.com/pbek/qmarkdowntextedit\">widget</a> used for "
            "writing was created by <em>Patrizio Bekerle</em>.</p>")
-            .arg(QStringLiteral(APP_VERSION), QLatin1String(qVersion()), QStringLiteral(HOMEPAGE)));
+            .arg(QStringLiteral(APP_VERSION),
+                 QString::fromLatin1(qVersion()),
+                 QStringLiteral(HOMEPAGE)));
 }
 
 void MainWindow::openRecent()
