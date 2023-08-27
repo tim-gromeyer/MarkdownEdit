@@ -4,6 +4,10 @@ BUILD_DIR="build-flatpak"
 EXPORT_DIR="export-flatpak"
 EXPORT_FILENAME="MarkdownEdit.flatpak"
 
+# Install KDE Sdk and Platform
+printf "\nInstalling deps...\n----------------------------\n\n\n"
+flatpak install --noninteractive org.kde.Sdk/x86_64/6.5 org.kde.Platform/x86_64/6.5
+
 # Clean the build directory
 printf "\nBuilding...\n----------------------------\n\n\n"
 flatpak-builder "$BUILD_DIR" "include/flatpak/$APP_ID.yml" --force-clean
