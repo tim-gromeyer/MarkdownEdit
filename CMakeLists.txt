@@ -202,6 +202,7 @@ endif()
 
 install(TARGETS markdownedit
         BUNDLE  DESTINATION .
+        LIBRARY DESTINATION . # For android
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 

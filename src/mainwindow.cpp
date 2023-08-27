@@ -965,7 +965,9 @@ void MainWindow::disablePreview(const bool checked)
 
     ui->actionDisable_preview->setChecked(checked);
 
+#ifndef Q_OS_ANDROID
     actionMode->setVisible(!checked);
+#endif
     actionWidgetBox->setVisible(!checked);
 
     onTextChanged();
