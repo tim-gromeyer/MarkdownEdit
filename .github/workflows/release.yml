@@ -15,6 +15,7 @@ jobs:
   build:
     name: Publish for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    continue-on-error: true
     strategy:
       fail-fast: false
       matrix:
@@ -22,7 +23,9 @@ jobs:
           - os: ubuntu-20.04
             files: |
               build/packages/MarkdownEdit*.deb
+              build/packages/MarkdownEdit*.rpm
               build/packages/MarkdownEdit*.tar.gz
+              MarkdownEdit.flatpak
           - os: windows-latest
             files: |
               build/packages/MarkdownEdit*.exe
@@ -49,13 +52,17 @@ jobs:
       name: Install Qt, enchant-2 and ECM on Linux
       run: |
         sudo apt-get update
-        sudo apt-fast install -y qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev qt5ct dpkg-dev extra-cmake-modules rpm # Note: nuspell version is to low
+        sudo apt-fast install -y qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev qt5ct dpkg-dev extra-cmake-modules rpm flatpak-builder # Note: nuspell version is to low
         # rpm to generate a rpm package
 
     - name: Build and package
       run: |
         ./scripts/build.sh
       shell: bash
+
+    - if: contains( matrix.os, 'ubuntu')
+      name: Build flatpak
+      run: ./scripts/build-flatpak.sh
 
     - name: Upload package
       uses: actions/upload-artifact@v3
