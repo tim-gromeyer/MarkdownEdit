@@ -52,7 +52,7 @@ jobs:
       name: Install Qt, enchant-2 and ECM on Linux
       run: |
         sudo apt-get update
-        sudo apt-fast install -y qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev qt5ct dpkg-dev extra-cmake-modules rpm flatpak-builder # Note: nuspell version is to low
+        sudo apt-fast install -y qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev qt5ct dpkg-dev extra-cmake-modules rpm flatpak-builder catch2
         # rpm to generate a rpm package
 
     - name: Build and package
@@ -62,7 +62,9 @@ jobs:
 
     - if: contains( matrix.os, 'ubuntu')
       name: Build flatpak
-      run: ./scripts/build-flatpak.sh
+      run: |
+        # ./scripts/build-flatpak.sh
+        echo "Dropped for now"
 
     - name: Upload package
       uses: actions/upload-artifact@v3
