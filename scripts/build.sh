@@ -30,7 +30,7 @@ fi
 mkdir -p build && cd build
 
 # Configure the project with CMake
-cmake .. -DCMAKE_BUILD_TYPE=Release -G "Ninja Multi-Config"
+cmake .. -DCMAKE_BUILD_TYPE=Release -G "Ninja"
 
 # Build the project using all available CPU cores
 cmake --build . --config Release
