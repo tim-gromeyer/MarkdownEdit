@@ -52,7 +52,7 @@ jobs:
       name: Install Qt, enchant-2 and ECM on Linux
       run: |
         sudo apt-get update
-        sudo apt-fast install -y ninja qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev qt5ct dpkg-dev extra-cmake-modules rpm flatpak-builder
+        sudo apt-fast install -y ninja-build qtbase5-dev qtdeclarative5-dev qttools5-dev libqt5svg5-dev qt5ct dpkg-dev extra-cmake-modules rpm flatpak-builder
         # rpm to generate a rpm package
 
     - if: contains( matrix.os, 'windows')
