@@ -1,0 +1,51 @@
+/* Dark Mode Stylesheet */
+QWidget {
+    background-color: #333333; /* Dark background color */
+    color: #FFFFFF; /* Text color */
+}
+
+/* Menu Bar Styles */
+QMenuBar {
+    background-color: #444444; /* Menu bar background color */
+    color: #FFFFFF; /* Menu bar text color */
+}
+
+/* QMenu Styles */
+QMenu {
+    background-color: #444444; /* Menu background color */
+    color: #FFFFFF; /* Menu text color */
+}
+
+/* QMenuItem Styles */
+QMenu::item {
+    background-color: #444444; /* Menu item background color */
+    color: #FFFFFF; /* Menu item text color */
+    padding: 5px 15px; /* Adjust padding as needed */
+}
+
+QMenu::item:selected {
+    background-color: #555555; /* Highlighted menu item background color */
+}
+
+/* Hyperlink Styles (for QLabels or similar) */
+QLabel {
+    color: #007BFF; /* Hyperlink text color */
+    text-decoration: underline; /* Underline the hyperlink text */
+}
+
+QLabel:hover {
+    color: #0056b3; /* Hovered hyperlink text color */
+}
+
+/* Add styles for other widgets as needed */
+
+QScrollBar:vertical {
+    border: none;
+    background: #333333;
+    width: 12px;
+}
+
+QScrollBar::handle:vertical {
+    background: #555555;
+}
+

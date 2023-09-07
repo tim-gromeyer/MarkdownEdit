@@ -3,5 +3,6 @@
         <file>syntax/de.md</file>
         <file>syntax/en.md</file>
         <file>logo/Icon.svg</file>
+        <file>dark_theme.qss</file>
     </qresource>
 </RCC>

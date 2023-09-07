@@ -17,10 +17,12 @@
  **/
 
 #include "mainwindow.h"
+#include "settings.h"
 #include "spellchecker.h"
 
 #include <QApplication>
 #include <QCommandLineParser>
+#include <QFile>
 #include <QLocale>
 #include <QTranslator>
 
@@ -61,6 +63,18 @@ auto main(int argc, char *argv[]) -> int
 #endif
     QApplication::setApplicationVersion(QStringLiteral(APP_VERSION));
     QApplication::setApplicationName(QStringLiteral("MarkdownEdit"));
+
+#ifdef Q_OS_WASM
+    if (settings::isDarkMode()) {
+        // Load the stylesheet
+        QFile styleFile(QStringLiteral(":/dark_theme.qss")); // Use the correct file path
+        if (styleFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            QString style = QString::fromLocal8Bit(styleFile.readAll());
+            a.setStyleSheet(style);
+            styleFile.close();
+        }
+    }
+#endif
 
     QTranslator translator, qtTranslator;
 

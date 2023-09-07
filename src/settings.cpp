@@ -25,6 +25,10 @@
 #include <QString>
 #include <QVariant>
 
+#ifdef Q_OS_WASM
+#include <emscripten.h>
+#endif
+
 QHash<QString, QVariant> languages_map;
 
 auto getLanguageMap() -> QHash<QString, QVariant>
@@ -53,8 +57,14 @@ auto mapContains(const QString &s) -> bool
 }
 
 namespace settings {
+#ifdef Q_OS_WASM
+EM_JS(bool, is_dark_mode, (), { return window.matchMedia("(prefers-color-scheme: dark)").matches; });
+#endif
 auto isDarkMode() -> bool
 {
+#ifdef Q_OS_WASM
+    return is_dark_mode();
+#endif
     static const QColor back = QPalette().base().color();
     static int r, g, b, a;
     back.getRgb(&r, &g, &b, &a);
