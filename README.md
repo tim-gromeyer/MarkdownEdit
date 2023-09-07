@@ -60,7 +60,6 @@ To build MarkdownEdit, follow these steps:
 4. Generate a Makefile using CMake: `cmake ..`
 5. Build the project: `cmake --build . -j4`
 
-
 ## Credits
 
 - Thanks to [Waqar Ahmed](https://github.com/Waqar144) for help with development.
