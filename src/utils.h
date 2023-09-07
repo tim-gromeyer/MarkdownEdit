@@ -6,6 +6,9 @@
 
 #include <functional>
 
+class QAction;
+class QMenu;
+
 namespace threading {
 void runFunction(const std::function<void()> &);
 } // namespace threading
@@ -26,3 +29,7 @@ inline bool mightBeLink(const QString &text)
 
     return false;
 }
+
+void loadIcon(const QString &name, QAction *a);
+
+void loadIcon(const QString &name, QMenu *m);

@@ -144,9 +144,6 @@ private:
     void openRecent();
     void setText(const int);
 
-    static void loadIcon(const QString &name, QAction *a);
-    static void loadIcon(const QString &name, QMenu *m);
-
     auto createEditor() -> MarkdownEditor *;
     auto currentEditor() -> MarkdownEditor *;
     QList<MarkdownEditor *> editorList;

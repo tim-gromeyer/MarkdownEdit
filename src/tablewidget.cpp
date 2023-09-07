@@ -1,5 +1,6 @@
 #include "tablewidget.h"
 #include "settings.h"
+#include "utils.h"
 
 #include <QDialogButtonBox>
 #include <QList>
@@ -134,14 +135,9 @@ void TableDialog::populateToolbar()
     auto *aInsertRowBelow = new QAction(tr("Add row below"), toolbar);
     auto *aRemoveRow = new QAction(tr("Remove row"), toolbar);
 
-    aInsertRowAbove->setIcon(
-        QIcon::fromTheme(STR("edit-table-insert-row-above"),
-                         QIcon(STR(":/icons/edit-table-insert-row-above.svg"))));
-    aInsertRowBelow->setIcon(
-        QIcon::fromTheme(STR("edit-table-insert-row-below"),
-                         QIcon(STR(":/icons/edit-table-insert-row-below.svg"))));
-    aRemoveRow->setIcon(QIcon::fromTheme(STR("edit-table-delete-row"),
-                                         QIcon(STR(":/icons/edit-table-delete-row.svg"))));
+    loadIcon(STR("edit-table-insert-row-above"), aInsertRowAbove);
+    loadIcon(STR("edit-table-insert-row-below"), aInsertRowBelow);
+    loadIcon(STR("edit-table-delete-row"), aRemoveRow);
 
     aInsertRowAbove->setData(QStringLiteral("above"));
     aInsertRowBelow->setData(QStringLiteral("below"));
@@ -160,14 +156,9 @@ void TableDialog::populateToolbar()
     auto *aInsertColumnBelow = new QAction(tr("Add column to the right"), toolbar);
     auto *aRemoveColumn = new QAction(tr("Remove column"), toolbar);
 
-    aInsertColumnAbove->setIcon(
-        QIcon::fromTheme(STR("edit-table-insert-column-left"),
-                         QIcon(STR(":/icons/edit-table-insert-column-left.svg"))));
-    aInsertColumnBelow->setIcon(
-        QIcon::fromTheme(STR("edit-table-insert-column-right"),
-                         QIcon(STR(":/icons/edit-table-insert-column-right.svg"))));
-    aRemoveColumn->setIcon(QIcon::fromTheme(STR("edit-table-delete-column"),
-                                            QIcon(STR(":/icons/edit-table-delete-column.svg"))));
+    loadIcon(STR("edit-table-insert-column-left"), aInsertColumnAbove);
+    loadIcon(STR("edit-table-insert-column-right"), aInsertColumnBelow);
+    loadIcon(STR("edit-table-delete-column"), aRemoveColumn);
 
     aInsertColumnAbove->setData(QStringLiteral("above"));
     aInsertColumnBelow->setData(QStringLiteral("below"));

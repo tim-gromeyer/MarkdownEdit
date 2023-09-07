@@ -27,6 +27,7 @@
 #include "tableofcontents.h"
 #include "tablewidget.h"
 #include "ui_mainwindow.h"
+#include "utils.h"
 
 // Qt imports
 #include <QComboBox>
@@ -872,32 +873,6 @@ void MainWindow::loadIcons()
     ui->actionHTML->setIcon(ui->actionExportHtml->icon());
 
     qApp->setWindowIcon(QIcon(STR(":/logo/Icon.svg")));
-}
-
-void MainWindow::loadIcon(const QString &name, QAction *a)
-{
-#ifndef FLATPAK
-    a->setIcon(QIcon::fromTheme(name,
-                                QIcon(STR(":/icons/%1/%2.svg")
-                                          .arg(settings::isDarkMode() ? QStringLiteral("dark")
-                                                                      : QStringLiteral("light"),
-                                               name))));
-#else
-    a->setIcon(QIcon::fromTheme(name));
-#endif
-}
-
-void MainWindow::loadIcon(const QString &name, QMenu *m)
-{
-#ifndef FLATPAK
-    m->setIcon(QIcon::fromTheme(name,
-                                QIcon(STR(":/icons/%1/%2.svg")
-                                          .arg(settings::isDarkMode() ? QStringLiteral("dark")
-                                                                      : QStringLiteral("light"),
-                                               name))));
-#else
-    m->setIcon(QIcon::fromTheme(name));
-#endif
 }
 
 void MainWindow::onOrientationChanged(const Qt::ScreenOrientation t)

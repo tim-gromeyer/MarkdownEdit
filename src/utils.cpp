@@ -1,5 +1,8 @@
 #include "utils.h"
 
+#include <QAction>
+#include <QIcon>
+#include <QMenu>
 #include <QRunnable>
 #include <QThreadPool>
 
@@ -35,3 +38,29 @@ void runFunction(const std::function<void()> &f)
 #endif
 }
 } // namespace threading
+
+void loadIcon(const QString &name, QAction *a)
+{
+#ifndef FLATPAK
+    a->setIcon(QIcon::fromTheme(name,
+                                QIcon(STR(":/icons/%1/%2.svg")
+                                          .arg(settings::isDarkMode() ? QStringLiteral("dark")
+                                                                      : QStringLiteral("light"),
+                                               name))));
+#else
+    a->setIcon(QIcon::fromTheme(name));
+#endif
+}
+
+void loadIcon(const QString &name, QMenu *m)
+{
+#ifndef FLATPAK
+    m->setIcon(QIcon::fromTheme(name,
+                                QIcon(STR(":/icons/%1/%2.svg")
+                                          .arg(settings::isDarkMode() ? QStringLiteral("dark")
+                                                                      : QStringLiteral("light"),
+                                               name))));
+#else
+    m->setIcon(QIcon::fromTheme(name));
+#endif
+}
