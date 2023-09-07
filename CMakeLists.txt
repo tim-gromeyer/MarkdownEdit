@@ -107,7 +107,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         ${TS}
-        src/markdowndialog.h src/markdowndialog.cpp
     )
 
     # Dir for android settings
@@ -184,6 +183,7 @@ include(GNUInstallDirs)
 find_package(ECM 5.86.0 QUIET NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 if(ECM_FOUND)
+    message(STATUS "ECM found, installing icons...")
     # install icons
     include(ECMInstallIcons)
     ecm_install_icons(
@@ -218,7 +218,7 @@ if(WIN32)
             DESTINATION .)
 endif()
 
-if(${QT_VERSION} GREATER_EQUAL 6.3 AND NOT FLATPAK)
+if(${QT_VERSION} GREATER_EQUAL 6.3 AND WIN32)
     qt_generate_deploy_app_script(
         TARGET markdownedit
         FILENAME_VARIABLE deploy_script
