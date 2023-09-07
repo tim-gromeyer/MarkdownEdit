@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(MarkdownEdit VERSION 1.5.0
+project(MarkdownEdit VERSION 1.5.1
     DESCRIPTION "Simple program for editing Markdown files"
     HOMEPAGE_URL "https://tim-gromeyer.github.io/MarkdownEdit"
     LANGUAGES C CXX)
