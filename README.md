@@ -32,7 +32,19 @@ MarkdownEdit offers a range of powerful features to make editing and creating Ma
 - Quick access to recent files from the toolbar or file menu
 - Open source and native look and feel
 
-![Example](screenshots/live-preview.png)
+
+# Screenshots
+
+<details><summary>Live preview enabled</summary>
+![Live preview enabled](screenshots/live-preview.png "Live preview enabled")
+</details>
+<details><summary>Live preview disabled</summary>
+![Live preview disabled](screenshots/live-preview-disabled.png "Live preview disabled")
+</details>
+<details><summary>Preview only</summary>
+![Preview only](screenshots/preview.png "Preview only")
+</details>
+
 
 ## Preview
 
