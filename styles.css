@@ -309,5 +309,5 @@ body.dark-mode #dark-mode-toggle {
 /* Web Version Section */
 #web-version {
     text-align: center; /* Center the inline-block elements */
-    padding: 40px 0;
+    padding: 40px;
 }
