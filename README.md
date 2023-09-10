@@ -36,13 +36,13 @@ MarkdownEdit offers a range of powerful features to make editing and creating Ma
 # Screenshots
 
 <details><summary>Live preview enabled</summary>
-![Live preview enabled](screenshots/live-preview.png "Live preview enabled")
+<img src="screenshots/live-preview.png" alt="Live preview enabled" title="Live preview enabled">
 </details>
 <details><summary>Live preview disabled</summary>
-![Live preview disabled](screenshots/live-preview-disabled.png "Live preview disabled")
+<img src="screenshots/live-preview-disabled.png" alt="Live preview disabled" title="Live preview disabled">
 </details>
 <details><summary>Preview only</summary>
-![Preview only](screenshots/preview.png "Preview only")
+<img src="screenshots/preview.png" alt="Preview only" title="Preview only"></p>
 </details>
 
 
