@@ -206,7 +206,7 @@ body.dark-mode #dark-mode-toggle {
 }
 
 .dark-mode .bar {
-    background-color: #fff;
+    background-image: url(images/white.jpg);
 }
 
 .dark-mode .nav-menu {
