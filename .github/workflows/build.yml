@@ -22,7 +22,7 @@ jobs:
         qt-version: ['5.12.8', '6.4.1']
         experimental: [false]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     # https://github.com/marketplace/actions/install-qt
     - name: Install Qt
