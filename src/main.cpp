@@ -64,6 +64,10 @@ auto main(int argc, char *argv[]) -> int
     QApplication::setApplicationVersion(QStringLiteral(APP_VERSION));
     QApplication::setApplicationName(QStringLiteral("MarkdownEdit"));
 
+#ifdef Q_OS_WIN
+    QApplication::setStyle(QStringLiteral("fusion"));
+#endif
+
 #ifdef Q_OS_WASM
     if (settings::isDarkMode()) {
         // Load the stylesheet
