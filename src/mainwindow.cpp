@@ -923,7 +923,7 @@ void MainWindow::changeWordWrap(const bool c)
 void MainWindow::changeSpelling(const bool checked)
 {
 #ifndef NO_SPELLCHECK
-    for (MarkdownEditor *editor : qAsConst(editorList)) {
+    for (MarkdownEditor *editor : std::as_const(editorList)) {
         editor->changeSpelling(checked);
     }
 
