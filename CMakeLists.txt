@@ -57,8 +57,6 @@ if(FLATPAK)
     include(KDEInstallDirs)
     include(KDECMakeSettings)
 
-    include(ECMInstallIcons)
-
     add_compile_definitions(FLATPAK)
 
     install(FILES include/flatpak/appdata.xml DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/metainfo/)
@@ -180,25 +178,15 @@ endif()
 # Packaging
 include(GNUInstallDirs)
 
-find_package(ECM 5.86.0 QUIET NO_MODULE)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
-if(ECM_FOUND)
-    message(STATUS "ECM found, installing icons...")
-    # install icons
-    include(ECMInstallIcons)
-    ecm_install_icons(
-        ICONS
-            ressources/logo/16-apps-MarkdownEdit.png
-            ressources/logo/24-apps-MarkdownEdit.png
-            ressources/logo/32-apps-MarkdownEdit.png
-            ressources/logo/48-apps-MarkdownEdit.png
-            ressources/logo/64-apps-MarkdownEdit.png
-            ressources/logo/128-apps-MarkdownEdit.png
-            ressources/logo/256-apps-MarkdownEdit.png
-        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons
-        THEME hicolor
-    )
-endif()
+# Installing icons
+message(STATUS "Installing icons")
+install(FILES ressources/logo/16-apps-MarkdownEdit.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/16x16/apps/ RENAME MarkdownEdit.png)
+install(FILES ressources/logo/24-apps-MarkdownEdit.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/24x24/apps/ RENAME MarkdownEdit.png)
+install(FILES ressources/logo/32-apps-MarkdownEdit.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/32x32/apps/ RENAME MarkdownEdit.png)
+install(FILES ressources/logo/48-apps-MarkdownEdit.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/48x48/apps/ RENAME MarkdownEdit.png)
+install(FILES ressources/logo/64-apps-MarkdownEdit.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/64x64/apps/ RENAME MarkdownEdit.png)
+install(FILES ressources/logo/128-apps-MarkdownEdit.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/128x128/apps/ RENAME MarkdownEdit.png)
+install(FILES ressources/logo/256-apps-MarkdownEdit.png DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/256x256/apps/ RENAME MarkdownEdit.png)
 
 install(TARGETS markdownedit
         BUNDLE  DESTINATION .
