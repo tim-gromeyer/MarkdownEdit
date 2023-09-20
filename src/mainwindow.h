@@ -160,6 +160,7 @@ private:
     QSettings *settings;
 
     QStringList recentOpened;
+    QStringList invalidFileNames;
 
     QString html;
 

@@ -171,6 +171,7 @@ void MainWindow::onHelpSyntax()
         language.clear();
     }
 
+    invalidFileNames.append(file);
     openFile(file, language);
 }
 
@@ -1350,14 +1351,16 @@ void MainWindow::openFile(const QString &newFile, const QString &lang)
 
 void MainWindow::onFileNew()
 {
-    static const QString file = tr("Untitled %1.md");
-    static int newNumberCount = 0;
+    static int newNumberCount = 1;
+
+    const QString newFileName = tr("Untitled %1.md").arg(newNumberCount);
+    invalidFileNames.append(newFileName);
 
     path.clear();
     ++newNumberCount;
 
     auto *editor = createEditor();
-    editor->setFile(file.arg(QString::number(newNumberCount)));
+    editor->setFile(newFileName);
 
     ui->tabWidget_2->insertTab(editorList.length() - 1, editor, editor->getFileName());
     ui->tabWidget_2->setCurrentIndex(editorList.length() - 1);
@@ -1429,7 +1432,7 @@ auto MainWindow::onFileSave() -> bool
         if (QFile::exists(path))
             return true;
 
-    if (path.isEmpty() || path.startsWith(L1(":/syntax_")))
+    if (path.isEmpty() || invalidFileNames.contains(path))
         return onFileSaveAs();
 
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
