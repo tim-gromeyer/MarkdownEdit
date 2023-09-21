@@ -65,11 +65,9 @@ auto isDarkMode() -> bool
 #ifdef Q_OS_WASM
     return is_dark_mode();
 #endif
-    static const QColor back = QPalette().base().color();
-    static int r, g, b, a;
-    back.getRgb(&r, &g, &b, &a);
-
-    static const bool dark = ((r + g + b + a) / 4) < 127;
+    static const QPalette defaultPalette;
+    static bool dark =  defaultPalette.color(QPalette::WindowText).lightness()
+           > defaultPalette.color(QPalette::Window).lightness();
 
     return dark;
 }
