@@ -62,6 +62,13 @@ SpellChecker::SpellChecker(QPlainTextEdit *parent, const QString &lang)
 {
     _formats[InlineCodeBlock].setForeground(QColor(52, 101, 164));
 
+    if (settings::isDarkMode()) {
+        QPalette p;
+
+        _formats[List].setForeground(QColor(218, 68, 83));
+        _formats[MaskedSyntax].setForeground(p.window().color().lighter());
+    }
+
     if (!lang.isEmpty())
         setLanguage(lang);
 
