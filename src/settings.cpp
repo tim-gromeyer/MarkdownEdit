@@ -66,8 +66,8 @@ auto isDarkMode() -> bool
     return is_dark_mode();
 #endif
     static const QPalette defaultPalette;
-    static bool dark =  defaultPalette.color(QPalette::WindowText).lightness()
-           > defaultPalette.color(QPalette::Window).lightness();
+    static bool dark = defaultPalette.color(QPalette::WindowText).lightness()
+                       > defaultPalette.color(QPalette::Window).lightness();
 
     return dark;
 }
@@ -86,20 +86,21 @@ auto languages() -> const QStringList
 }
 } // namespace common
 
-QPalette darkPalette() {
+QPalette darkPalette()
+{
     // Create a QPalette object
     QPalette darkPalette;
 
     // Set the background color and text color for QWidget
-    darkPalette.setColor(QPalette::Window, QColor(51, 51, 51));      // #333333
+    darkPalette.setColor(QPalette::Window, QColor(51, 51, 51));        // #333333
     darkPalette.setColor(QPalette::WindowText, QColor(255, 255, 255)); // #FFFFFF
 
     darkPalette.setColor(QPalette::HighlightedText, QColor(0, 123, 255)); // #007BFF
-    darkPalette.setColor(QPalette::Highlight, QColor(85, 85, 85));       // #555555
+    darkPalette.setColor(QPalette::Highlight, QColor(85, 85, 85));        // #555555
 
     // Set hyperlink text color and underline
-    darkPalette.setColor(QPalette::Link, QColor(0, 123, 255));         // #007BFF
-    darkPalette.setColor(QPalette::LinkVisited, QColor(0, 123, 255));  // #007BFF
+    darkPalette.setColor(QPalette::Link, QColor(0, 123, 255));        // #007BFF
+    darkPalette.setColor(QPalette::LinkVisited, QColor(0, 123, 255)); // #007BFF
     darkPalette.setColor(QPalette::Text, darkPalette.color(QPalette::WindowText));
 
     return darkPalette;
