@@ -60,21 +60,7 @@ SpellChecker::SpellChecker(QPlainTextEdit *parent, const QString &lang)
     : MarkdownHighlighter{parent->document()}
     , textEdit(parent)
 {
-    _formats[CodeBlock].setBackground(QColor(51, 51, 51));
-    _formats[InlineCodeBlock].setForeground(QColor(52, 101, 164));
-
-    if (settings::isDarkMode()) {
-        QPalette p;
-        QColor windowColor = p.window().color();
-        int windowLightness = windowColor.lightness();
-
-        _formats[List].setForeground(
-            _formats[List].foreground().color().lighter(255 - windowLightness));
-        _formats[BlockQuote].setForeground(
-            _formats[BlockQuote].foreground().color().lighter(255 - windowLightness));
-        _formats[MaskedSyntax].setForeground(p.dark());
-        _formats[Link].setForeground(p.link());
-    }
+    applyCustomStyle();
 
     if (!lang.isEmpty())
         setLanguage(lang);
@@ -91,6 +77,25 @@ SpellChecker::SpellChecker(QPlainTextEdit *parent, const QString &lang)
             this,
             &QSyntaxHighlighter::rehighlight,
             Qt::QueuedConnection);
+}
+
+void SpellChecker::applyCustomStyle()
+{
+    _formats[CodeBlock].setBackground(QColor(51, 51, 51));
+    _formats[InlineCodeBlock].setForeground(QColor(52, 101, 164));
+
+    if (settings::isDarkMode()) {
+        QPalette p;
+        QColor windowColor = p.window().color();
+        int windowLightness = windowColor.lightness();
+
+        _formats[List].setForeground(
+            _formats[List].foreground().color().lighter(255 - windowLightness));
+        _formats[BlockQuote].setForeground(
+            _formats[BlockQuote].foreground().color().lighter(255 - windowLightness));
+        _formats[MaskedSyntax].setForeground(p.dark());
+        _formats[Link].setForeground(p.link());
+    }
 }
 
 void SpellChecker::highlightBlock(const QString &text)
