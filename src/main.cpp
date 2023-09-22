@@ -70,6 +70,8 @@ auto main(int argc, char *argv[]) -> int
 
 #ifdef Q_OS_WASM
     if (settings::isDarkMode()) {
+        a.setPalette(darkPalette());
+
         // Load the stylesheet
         QFile styleFile(QStringLiteral(":/dark_theme.qss")); // Use the correct file path
         if (styleFile.open(QIODevice::ReadOnly | QIODevice::Text)) {

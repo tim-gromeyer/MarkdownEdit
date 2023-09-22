@@ -21,6 +21,7 @@
 #include "common.h"
 
 #include <QVariant>
+#include <QPalette>
 
 auto getLanguageMap() -> QHash<QString, QVariant>;
 void setLanguageMap(const QHash<QString, QVariant> &m);
@@ -43,6 +44,8 @@ constexpr QLatin1String L1(const char *str)
 {
     return QLatin1String{str, static_cast<int>(std::char_traits<char>::length(str))};
 }
+
+QPalette darkPalette();
 
 #if !SPELLCHECK
 #define NO_SPELLCHECK
