@@ -39,6 +39,10 @@ MarkdownEditor::MarkdownEditor(QWidget *parent)
     setAcceptDrops(true);
 
     searchWidget()->setDarkMode(settings::isDarkMode());
+
+    // FIXME: Zoom not working
+    // connect(this, &QMarkdownTextEdit::zoomIn, this, [this] { QPlainTextEdit::zoomIn(); });
+    // connect(this, &QMarkdownTextEdit::zoomOut, this, [this] { QPlainTextEdit::zoomOut(); });
 }
 
 void MarkdownEditor::dragEnterEvent(QDragEnterEvent *event)
