@@ -633,7 +633,7 @@ void MainWindow::closeEditor(const int index)
 
     onOrientationChanged(orientation);
 
-    if (path == tr("Untitled.md")) {
+    if (invalidFileNames.contains(path)) {
         path.clear();
         if (editor->document()->isModified()) {
             QMessageBox confirmSave(this);
@@ -696,7 +696,7 @@ void MainWindow::onEditorChanged(const int index)
     path = editor->getPath();
     onOrientationChanged(orientation);
 
-    if (path == tr("Untitled.md")) {
+    if (invalidFileNames.contains(path)) {
         path.clear();
         ui->actionReload->setText(tr("Reload \"%1\"").remove(L1("%1")));
         ui->actionReload->setEnabled(false);
