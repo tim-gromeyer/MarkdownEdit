@@ -14,6 +14,7 @@ set(MD4C_FILES
 add_library(md4c-html STATIC ${MD4C_FILES})
 target_include_directories(md4c-html PUBLIC ${CMAKE_CURRENT_LIST_DIR}/md4c/src)
 
+set(BUILD_SHARED_LIBS OFF)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/html2md)
 
 set(QMARKDOWNTEXTEDIT_FILES
