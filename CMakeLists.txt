@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(MarkdownEdit VERSION 1.5.1
+project(MarkdownEdit VERSION 1.5.3
     DESCRIPTION "Simple program for editing Markdown files"
     HOMEPAGE_URL "https://tim-gromeyer.github.io/MarkdownEdit"
     LANGUAGES C CXX)
@@ -30,7 +30,7 @@ else()
     message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 endif()
 
-# Link to pthread
+# Link to pthread (Wasm)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
 # Improve performance
