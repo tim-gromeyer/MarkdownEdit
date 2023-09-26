@@ -60,6 +60,8 @@ protected:
     void dragMoveEvent(QDragMoveEvent *e) override;
     void dropEvent(QDropEvent *e) override;
 
+    void openUrl(const QString & /**/) override{};
+
 private Q_SLOTS:
     void onLanguageChanged(const QString &);
 
