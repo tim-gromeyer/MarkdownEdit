@@ -196,7 +196,7 @@ install(TARGETS markdownedit
 
 # Desktop shortcut for linux
 if(UNIX AND NOT EXMSCRIPTEN AND NOT ANDROID)
-    install(FILES include/MarkdownEdit.desktop
+    install(FILES include/io.github.tim_gromeyer.MarkdownEdit.desktop
             DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications)
 endif()
 
