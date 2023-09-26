@@ -4,7 +4,6 @@ runtime-version: '6.5'
 sdk: org.kde.Sdk
 rename-icon: MarkdownEdit
 rename-appdata-file: appdata.xml
-rename-desktop-file: io.github.tim_gromeyer.MarkdownEdit.desktop
 command: markdownedit
 finish-args:
   - --device=dri # hardware acceleration
