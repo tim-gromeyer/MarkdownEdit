@@ -63,6 +63,7 @@ auto main(int argc, char *argv[]) -> int
 #endif
     QApplication::setApplicationVersion(QStringLiteral(APP_VERSION));
     QApplication::setApplicationName(QStringLiteral("MarkdownEdit"));
+    QApplication::setDesktopFileName(QStringLiteral("io.github.tim_gromeyer.MarkdownEdit"));
 
 #ifdef Q_OS_WIN
     QApplication::setStyle(QStringLiteral("fusion"));
