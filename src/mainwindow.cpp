@@ -111,6 +111,27 @@ MainWindow::MainWindow(const QStringList &files, QWidget *parent)
         },
         Qt::QueuedConnection);
 #endif
+
+    installEventFilter(this);
+}
+
+bool MainWindow::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() != QEvent::KeyPress)
+        return QMainWindow::eventFilter(obj, event);
+
+    auto *keyEvent = static_cast<QKeyEvent *>(event);
+
+    if (keyEvent->modifiers().testFlag(Qt::ControlModifier)) {
+        // Switch tab with Ctrl + index of tab
+        if (keyEvent->key() >= Qt::Key_1 && Qt::Key_9 >= keyEvent->key()) {
+            int index = keyEvent->key() - Qt::Key_0;
+            if (ui->tabWidget_2->count() >= index)
+                ui->tabWidget_2->setCurrentIndex(index - 1);
+        }
+    }
+
+    return QMainWindow::eventFilter(obj, event);
 }
 
 void MainWindow::androidPreview(const bool c)

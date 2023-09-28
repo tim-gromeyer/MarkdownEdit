@@ -138,6 +138,8 @@ private Q_SLOTS:
     void androidPreview(const bool);
 
 private:
+    bool eventFilter(QObject *obj, QEvent *event) override;
+
     void loadFiles(const QStringList &);
     void saveSettings();
     void updateOpened();
