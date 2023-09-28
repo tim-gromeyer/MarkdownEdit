@@ -20,7 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-20.04
+          - os: ubuntu-22.04
             files: |
               build/packages/MarkdownEdit*.deb
               build/packages/MarkdownEdit*.rpm
@@ -67,8 +67,7 @@ jobs:
     - if: contains( matrix.os, 'ubuntu')
       name: Build flatpak
       run: |
-        # ./scripts/build-flatpak.sh
-        echo "Dropped for now"
+        ./scripts/build-flatpak.sh
 
     - name: Upload package
       uses: actions/upload-artifact@v3
