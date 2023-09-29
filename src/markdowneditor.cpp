@@ -21,6 +21,7 @@
 #include "spellchecker.h"
 #include "utils.h"
 
+#include <QDebug>
 #include <QDir>
 #include <QFileInfo>
 #include <QMimeData>
@@ -28,6 +29,7 @@
 #include <QRunnable>
 #include <QSaveFile>
 #include <QSignalBlocker>
+#include <QTextStream>
 
 #include <thread>
 
