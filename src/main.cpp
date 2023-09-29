@@ -23,6 +23,7 @@
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QFile>
+#include <QLibraryInfo>
 #include <QLocale>
 #include <QTranslator>
 
@@ -39,12 +40,9 @@
 #endif
 
 // Helper function for loading translator
-bool loadTranslator(QTranslator &translator, const QString &name)
+bool loadTranslator(QTranslator &translator, const QString &path, const QString &name)
 {
-    if (translator.load(QLocale::system(),
-                        name,
-                        QStringLiteral("_"),
-                        QStringLiteral(":/translations"))) {
+    if (translator.load(QLocale::system(), name, QStringLiteral("_"), path)) {
         QApplication::installTranslator(&translator);
         return true;
     }
@@ -66,8 +64,11 @@ auto main(int argc, char *argv[]) -> int
     QApplication::setDesktopFileName(QStringLiteral("io.github.tim_gromeyer.MarkdownEdit"));
 
 #ifdef Q_OS_WIN
+    // Dark mode with Qt 6.4 and above
     QApplication::setStyle(QStringLiteral("fusion"));
 #endif
+
+    // TODO: Implement auto-save
 
 #ifdef Q_OS_WASM
     if (settings::isDarkMode()) {
@@ -84,16 +85,18 @@ auto main(int argc, char *argv[]) -> int
 #endif
 
     QTranslator translator, qtTranslator;
+#if QT5
+    QString qtTranslationsPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+#else
+    QString qtTranslationsPath = QLibraryInfo::path(QLibraryInfo::TranslationsPath);
+#endif
 
-    // Load translation for Qt
-    if (loadTranslator(qtTranslator, QStringLiteral("qtbase"))) {
-        qInfo("Qt translations loaded successfully.");
-    }
+    // load translation for Qt
+    if (!loadTranslator(qtTranslator, qtTranslationsPath, QStringLiteral("qt")))
+        loadTranslator(qtTranslator, QStringLiteral(":/translations"), QStringLiteral("qtbase"));
 
-    // Load translation for the application
-    if (loadTranslator(translator, QStringLiteral("MarkdownEdit"))) {
-        qInfo("Application translations loaded successfully.");
-    }
+    // try to load translation for current locale from resource file
+    loadTranslator(translator, QStringLiteral(":/translations"), QStringLiteral("MarkdownEdit"));
 
     QCommandLineParser parser;
     parser.addHelpOption();
