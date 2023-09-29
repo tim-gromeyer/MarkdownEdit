@@ -26,6 +26,7 @@
 #include <QMimeData>
 #include <QMimeDatabase>
 #include <QRunnable>
+#include <QSaveFile>
 #include <QSignalBlocker>
 
 #include <thread>
@@ -36,6 +37,17 @@ MarkdownEditor::MarkdownEditor(QWidget *parent)
     checker = new SpellChecker(this);
     connect(checker, &SpellChecker::languageChanged, this, &MarkdownEditor::onLanguageChanged);
 
+    autoSaveTimer = new QTimer(this);
+    autoSaveTimer->setInterval(5000);
+    autoSaveTimer->setTimerType(Qt::VeryCoarseTimer);
+    connect(autoSaveTimer, &QTimer::timeout, this, &MarkdownEditor::autoSave);
+    autoSaveTimer->start();
+
+    connect(document(),
+            &QTextDocument::modificationChanged,
+            this,
+            &MarkdownEditor::onModificationChanged);
+
     setAcceptDrops(true);
 
     searchWidget()->setDarkMode(settings::isDarkMode());
@@ -43,6 +55,48 @@ MarkdownEditor::MarkdownEditor(QWidget *parent)
     // FIXME: Zoom not working
     // connect(this, &QMarkdownTextEdit::zoomIn, this, [this] { QPlainTextEdit::zoomIn(); });
     // connect(this, &QMarkdownTextEdit::zoomOut, this, [this] { QPlainTextEdit::zoomOut(); });
+}
+
+void MarkdownEditor::onModificationChanged(bool modified)
+{
+    if (modified) {
+        autoSaveTimer->start();
+    } else {
+        autoSaveTimer->stop();
+        // Delete auto-save file
+        deleteAutoSaveFile();
+    }
+}
+
+void MarkdownEditor::autoSaveFile(const QString &content)
+{
+    QString fileName = File::getAutoSaveFileName(info);
+
+    QSaveFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        qWarning() << "Failed to open auto-save file" << fileName << file.errorString();
+        return;
+    }
+    file.setDirectWriteFallback(true);
+
+    QTextStream stream(&file);
+    stream << content;
+
+    if (!file.commit()) {
+        qWarning() << "Failed to write auto-save file" << fileName << file.errorString();
+    }
+}
+
+void MarkdownEditor::deleteAutoSaveFile()
+{
+    QFile::remove(File::getAutoSaveFileName(info));
+}
+
+void MarkdownEditor::autoSave()
+{
+    // We run this in a extra thread, we don't want a lag while typing
+    if (document()->isModified() && info.exists() && m_autoSaveEnabled)
+        threading::runFunction([this] { autoSaveFile(toPlainText()); });
 }
 
 void MarkdownEditor::dragEnterEvent(QDragEnterEvent *event)
@@ -144,7 +198,7 @@ void MarkdownEditor::setText(const QByteArray &t, const QString &newFile, const 
         if (checker)
             checker->clearDirtyBlocks();
 
-        document()->setPlainText(QString::fromLocal8Bit(t));
+        document()->setPlainText(QString::fromUtf8(t));
         document()->setModified(false);
         return;
     }
@@ -164,7 +218,7 @@ void MarkdownEditor::setText(const QByteArray &t, const QString &newFile, const 
             if (mapContains(info.filePath()))
                 setLanguage(mapAttribute(info.filePath()));
 
-            document()->setPlainText(QString::fromLocal8Bit(t));
+            document()->setPlainText(QString::fromUtf8(t));
             document()->setModified(false);
 
             checker->setDocument(document());

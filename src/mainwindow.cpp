@@ -1292,7 +1292,7 @@ void MainWindow::openFiles(const QStringList &files)
 
 void MainWindow::openFile(const QString &newFile, const QString &lang)
 {
-    // Check of file is already open
+    // Check if file is already open
     if (fileList.contains(newFile)) {
         for (auto i = 0; editorList.length() > i; ++i) {
             if (editorList.at(i)->getPath() == newFile) {
@@ -1305,7 +1305,22 @@ void MainWindow::openFile(const QString &newFile, const QString &lang)
     if (!lang.isEmpty())
         setMapAttribute(newFile, lang);
 
+    bool loadFromAutoSave = false;
+
     QFile f(newFile);
+
+    // Check is auto-save file exists
+    if (QFile::exists(File::getAutoSaveFileName(QFileInfo(newFile)))) {
+        const auto out
+            = QMessageBox::question(this,
+                                    tr("Load auto-save file?"),
+                                    tr("A automatically saved file was found , open it?"));
+
+        if (out == QMessageBox::Yes) {
+            f.setFileName(File::getAutoSaveFileName(QFileInfo(newFile)));
+            loadFromAutoSave = true;
+        }
+    }
 
     if (!f.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QMessageBox::warning(this,
@@ -1366,6 +1381,9 @@ void MainWindow::openFile(const QString &newFile, const QString &lang)
 #endif
 
     blockSignals(false);
+
+    if (loadFromAutoSave)
+        editor->deleteAutoSaveFile();
 
     QGuiApplication::restoreOverrideCursor();
 }
@@ -1645,6 +1663,8 @@ void MainWindow::closeEvent(QCloseEvent *e)
                 e->ignore();
                 return;
             }
+
+            editor->deleteAutoSaveFile();
         }
     }
 

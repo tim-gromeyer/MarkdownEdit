@@ -2,6 +2,7 @@
 
 #include "settings.h"
 
+#include <QFileInfo>
 #include <QString>
 
 #include <functional>
@@ -33,3 +34,12 @@ inline bool mightBeLink(const QString &text)
 void loadIcon(const QString &name, QAction *a);
 
 void loadIcon(const QString &name, QMenu *m);
+
+namespace File {
+inline const QString getAutoSaveFileName(const QFileInfo &info)
+{
+    // Hidden file with '.autosave' as extension
+    return QStringLiteral("%1/.%2.autosave").arg(info.path(), info.fileName());
+}
+
+} // namespace File

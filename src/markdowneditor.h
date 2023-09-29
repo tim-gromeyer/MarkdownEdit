@@ -30,6 +30,8 @@ QT_END_NAMESPACE
 class MarkdownEditor : public QMarkdownTextEdit
 {
     Q_OBJECT
+    Q_PROPERTY(bool autoSaveEnabled MEMBER m_autoSaveEnabled FINAL)
+
 public:
     explicit MarkdownEditor(QWidget *parent = nullptr);
     ~MarkdownEditor() override;
@@ -45,12 +47,25 @@ public:
     void changeSpelling(const bool);
 
     inline void setFile(const QString &file) { info.setFile(file); };
+    inline void setFile(const QFileInfo &i) { info = i; };
     inline auto getPath() -> QString { return info.filePath(); };
 
     auto getDir() -> QString;
     auto getFileName() -> QString;
 
     auto filePath() -> QString; // aka window title
+
+    inline void setAutoSaveEnabled(bool save)
+    {
+        m_autoSaveEnabled = save;
+        onModificationChanged(document()->isModified());
+    }
+    inline bool autoSaveEnabled() { return m_autoSaveEnabled; }
+
+    void deleteAutoSaveFile();
+
+public Q_SLOTS:
+    void autoSave();
 
 Q_SIGNALS:
     void openFile(const QString);
@@ -65,8 +80,16 @@ protected:
 private Q_SLOTS:
     void onLanguageChanged(const QString &);
 
+    // Auto-save related stuff
+    void onModificationChanged(bool modified);
+
 private:
+    void autoSaveFile(const QString &content);
+
     SpellChecker *checker = nullptr;
+
+    QTimer *autoSaveTimer = nullptr;
+    bool m_autoSaveEnabled = true;
 
     QFileInfo info;
 };
