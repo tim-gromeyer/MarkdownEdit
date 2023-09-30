@@ -132,11 +132,15 @@ void SpellChecker::checkSpelling(QStringView text)
         const QChar c = text[i];
         const bool isLetterOrNumber = c.isLetterOrNumber();
 
-        if (isPosInACodeSpan(currentBlock().blockNumber(), i))
+        if (isPosInACodeSpan(currentBlock().blockNumber(), i)) {
+            i = getSpanRange(RangeType::CodeSpan, currentBlock().blockNumber(), i).second;
             continue;
+        }
 
-        if (isPosInALink(currentBlock().blockNumber(), i))
+        if (isPosInALink(currentBlock().blockNumber(), i)) {
+            i = getSpanRange(RangeType::Link, currentBlock().blockNumber(), i).second;
             continue;
+        }
 
         // If last character and letter or number
         if (i == textLength - 1 && isLetterOrNumber) {
