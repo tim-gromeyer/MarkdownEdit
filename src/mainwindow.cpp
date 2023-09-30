@@ -776,7 +776,6 @@ auto MainWindow::createEditor() -> MarkdownEditor *
 void MainWindow::receivedMessage(const quint32 /*id*/, const QByteArray &msg)
 {
     QString file = QString::fromUtf8(msg);
-    file.remove(0, 7); // Remove "file://", which is added programmatically
 
     if (!file.isEmpty())
         openFiles(file.split(u' ')); // if you selected files
