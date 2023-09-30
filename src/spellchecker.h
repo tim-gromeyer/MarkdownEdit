@@ -85,13 +85,13 @@ public:
 
     void applyCustomStyle();
 
-public Q_SLOTS:
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
     using StringView = QString;
 #else
     using StringView = QStringView;
 #endif
 
+public Q_SLOTS:
     void checkSpelling(const StringView &);
 
 Q_SIGNALS:
