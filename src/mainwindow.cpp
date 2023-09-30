@@ -1380,8 +1380,9 @@ void MainWindow::onFileNew()
     auto *editor = createEditor();
     editor->setFile(newFileName);
 
-    ui->tabWidget_2->insertTab(editorList.length() - 1, editor, editor->getFileName());
-    ui->tabWidget_2->setCurrentIndex(editorList.length() - 1);
+    int tabIndex = editorList.length() - 1;
+    ui->tabWidget_2->insertTab(tabIndex, editor, editor->getFileName());
+    ui->tabWidget_2->setCurrentIndex(tabIndex);
 
     if (!editor->setLanguage(QLocale::system().name()))
         editor->setLanguage(STR("en_US"));
@@ -1395,6 +1396,7 @@ void MainWindow::onFileNew()
 
 void MainWindow::onFileOpen()
 {
+    // TODO: Maybe move wasm specific stuff into seperate file
 #if defined(Q_OS_WASM)
     static auto fileContentReady = [this](const QString &newFile, const QByteArray &fileContent) {
         if (!newFile.isEmpty()) {
@@ -1743,15 +1745,6 @@ MainWindow::~MainWindow()
     }
 
     delete ui;
-    delete htmlHighliter;
-    delete toolbutton;
-    delete widgetBox;
-    delete actionWidgetBox;
-    delete actionPreview;
-    delete mode;
-    delete timer;
-    delete watcher;
-    delete settings;
     delete shortcutNew;
     delete shortcutClose;
 }
