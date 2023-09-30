@@ -122,13 +122,11 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 
     auto *keyEvent = static_cast<QKeyEvent *>(event);
 
-    if (keyEvent->modifiers().testFlag(Qt::ControlModifier)) {
-        // Switch tab with Ctrl + index of tab
-        if (keyEvent->key() >= Qt::Key_1 && Qt::Key_9 >= keyEvent->key()) {
-            int index = keyEvent->key() - Qt::Key_0;
-            if (ui->tabWidget_2->count() >= index)
-                ui->tabWidget_2->setCurrentIndex(index - 1);
-        }
+    if (keyEvent->modifiers().testFlag(Qt::ControlModifier) && keyEvent->key() >= Qt::Key_1
+        && keyEvent->key() <= Qt::Key_9) {
+        int index = keyEvent->key() - Qt::Key_1;
+        if (index < ui->tabWidget_2->count())
+            ui->tabWidget_2->setCurrentIndex(index);
     }
 
     return QMainWindow::eventFilter(obj, event);
@@ -220,10 +218,10 @@ void MainWindow::toForeground()
 
 void MainWindow::onFileReload()
 {
-    QObject *sende = sender();
-    QWidget *widget = qobject_cast<QWidget *>(sende->parent());
+    QObject *senderObject = sender();
+    QWidget *widget = qobject_cast<QWidget *>(senderObject->parent());
 
-    const QString file = sende->property("file").toString();
+    const QString file = senderObject->property("file").toString();
     QStringList files = property("reloadFiles").toStringList();
 
     if (file.isEmpty())
@@ -242,20 +240,17 @@ void MainWindow::onFileReload()
     }
 
     for (MarkdownEditor *editor : as_const(editorList)) {
-        if (!editor)
-            return;
-
-        if (editor->getPath() == file) {
+        if (editor && editor->getPath() == file) {
             editor->setText(f.readAll(), QLatin1String(), false);
             break;
         }
     }
+
     files.removeOne(file);
     setProperty("reloadFiles", files);
 
-    if (widget->objectName() == STR("widgetReloadFile")) {
+    if (widget && widget->objectName() == STR("widgetReloadFile")) {
         widget->deleteLater();
-        delete widget;
     }
 }
 
@@ -633,10 +628,9 @@ void MainWindow::strikethrough()
 
 void MainWindow::closeCurrEditor()
 {
-    const int i = ui->tabWidget_2->currentIndex();
-
-    if (i != -1)
-        closeEditor(i);
+    int currentIndex = ui->tabWidget_2->currentIndex();
+    if (currentIndex != -1)
+        closeEditor(currentIndex);
 }
 
 void MainWindow::editorMoved(const int from, const int to)
@@ -784,12 +778,9 @@ void MainWindow::receivedMessage(const quint32 /*id*/, const QByteArray &msg)
 void MainWindow::onUrlClicked(const QString &urlString)
 {
     const QUrl url = QUrl(urlString);
-    const bool isRelativeFileUrl = urlString.startsWith(L1("file://"));
 
-    if (!url.isValid() || isRelativeFileUrl)
-        return;
-
-    ui->textBrowser->openUrl(url);
+    if (url.isValid())
+        ui->textBrowser->openUrl(url);
 }
 
 void MainWindow::onModificationChanged(const bool m)
@@ -797,15 +788,14 @@ void MainWindow::onModificationChanged(const bool m)
     setWindowModified(m);
 
     const int curr = ui->tabWidget_2->currentIndex();
+    QString tabText = ui->tabWidget_2->tabBar()->tabText(curr);
 
-    QString old = ui->tabWidget_2->tabBar()->tabText(curr);
+    if (m && !tabText.endsWith(u'*'))
+        tabText.append(u'*');
+    else if (!m && tabText.endsWith(u'*'))
+        tabText.chop(1);
 
-    if (m && !old.endsWith(u'*'))
-        old.append(u'*');
-    else if (!m && old.endsWith(u'*'))
-        old.remove(old.length() - 1, 1);
-
-    ui->tabWidget_2->tabBar()->setTabText(curr, old);
+    ui->tabWidget_2->tabBar()->setTabText(curr, tabText);
 }
 
 auto MainWindow::currentEditor() -> MarkdownEditor *
@@ -923,20 +913,14 @@ void MainWindow::setText(const int index)
 
 void MainWindow::changeWordWrap(const bool c)
 {
+    auto wrapMode = c ? QPlainTextEdit::WidgetWidth : QPlainTextEdit::NoWrap;
+
     for (MarkdownEditor *editor : as_const(editorList)) {
-        if (c)
-            editor->setLineWrapMode(QPlainTextEdit::WidgetWidth);
-        else
-            editor->setLineWrapMode(QPlainTextEdit::NoWrap);
+        editor->setLineWrapMode(wrapMode);
     }
 
-    if (c) {
-        ui->textBrowser->setLineWrapMode(QTextBrowser::WidgetWidth);
-        ui->raw->setLineWrapMode(QPlainTextEdit::WidgetWidth);
-    } else {
-        ui->textBrowser->setLineWrapMode(QTextBrowser::NoWrap);
-        ui->raw->setLineWrapMode(QPlainTextEdit::NoWrap);
-    }
+    ui->textBrowser->setLineWrapMode((QTextBrowser::LineWrapMode) wrapMode);
+    ui->raw->setLineWrapMode(wrapMode);
 
     ui->actionWord_wrap->setChecked(c);
 }
@@ -1060,7 +1044,7 @@ void MainWindow::changeAddtoIconPath(const bool c)
     }
 
     QStringList searchPaths;
-    searchPaths.reserve(editorList.size());
+    searchPaths.resize(editorList.size());
 
     for (const QString &file : as_const(fileList)) {
         searchPaths << QFileInfo(file).absolutePath();
@@ -1132,13 +1116,9 @@ void MainWindow::printPreview(QPrinter *printer)
 #ifdef QT_NO_PRINTER
     Q_UNUSED(printer);
 #else
-    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
-
     if (ui->tabWidget->currentIndex() == 1)
         ui->textBrowser->setHtml(html);
     ui->textBrowser->print(printer);
-
-    QGuiApplication::restoreOverrideCursor();
 #endif
 }
 
@@ -1271,9 +1251,9 @@ void MainWindow::loadFiles(const QStringList &files)
     ui->actionOpen_last_document_on_start->setChecked(openLast);
 
     if (files.isEmpty()) {
-        const QString last = settings->value(STR("last"), QLatin1String()).toString();
+        const QStringList last = settings->value(STR("last"), QStringList()).toStringList();
         if (openLast && !last.isEmpty())
-            openFile(last);
+            openFiles(last);
         else {
             onFileNew();
             updateOpened();
@@ -1728,7 +1708,7 @@ void MainWindow::saveSettings()
     settings->setValue(STR("highlighting"), highlighting);
     settings->setValue(STR("recent"), recentOpened);
     settings->setValue(STR("openLast"), ui->actionOpen_last_document_on_start->isChecked());
-    settings->setValue(STR("last"), path);
+    settings->setValue(STR("last"), fileList);
     settings->setValue(STR("setPath"), setPath);
     settings->setValue(STR("spelling"), spelling);
     settings->setValue(STR("lineWrap"), ui->actionWord_wrap->isChecked());
