@@ -129,12 +129,12 @@ void SpellChecker::checkSpelling(const StringView &text)
         const bool isLetterOrNumber = c.isLetterOrNumber();
 
         if (isPosInACodeSpan(currentBlock().blockNumber(), i)) {
-            i = getSpanRange(RangeType::CodeSpan, currentBlock().blockNumber(), i).second;
+            i = getSpanRange(RangeType::CodeSpan, currentBlock().blockNumber(), i).second - 1;
             continue;
         }
 
         if (isPosInALink(currentBlock().blockNumber(), i)) {
-            i = getSpanRange(RangeType::Link, currentBlock().blockNumber(), i).second;
+            i = getSpanRange(RangeType::Link, currentBlock().blockNumber(), i).second - 1;
             continue;
         }
 
