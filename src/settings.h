@@ -20,8 +20,8 @@
 
 #include "common.h"
 
-#include <QVariant>
 #include <QPalette>
+#include <QVariant>
 
 auto getLanguageMap() -> QHash<QString, QVariant>;
 void setLanguageMap(const QHash<QString, QVariant> &m);

@@ -49,10 +49,7 @@ public:
     [[nodiscard]] auto getLanguage() const -> QString;
 
     void setMarkdownHighlightingEnabled(const bool);
-    [[nodiscard]] inline auto isMarkdownHighlightingEnabled() const -> bool
-    {
-        return markdownhig;
-    };
+    [[nodiscard]] inline auto isMarkdownHighlightingEnabled() const -> bool { return markdownhig; };
 
     void setSpellCheckingEnabled(const bool);
     [[nodiscard]] inline auto isSpellCheckingEnabled() const -> bool
