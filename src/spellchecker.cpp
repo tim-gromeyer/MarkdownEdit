@@ -295,6 +295,7 @@ auto SpellChecker::getSuggestion(const QString &word) const -> QStringList
 auto SpellChecker::getWord(const QTextBlock &block, const int pos) -> QString
 {
     if (MarkdownHighlighter::isPosInACodeSpan(block.blockNumber(), pos)
+        || MarkdownHighlighter::isPosInALink(block.blockNumber(), pos)
         || MarkdownHighlighter::isCodeBlock(block.userState()))
         return QLatin1String();
 
@@ -305,28 +306,13 @@ auto SpellChecker::getWord(const QTextBlock &block, const int pos) -> QString
     QString text = block.text();
 #endif
 
-    bool isLink = false;
-
     const auto textLength = text.length();
 
     for (auto i = 0; i < textLength; ++i) {
         const QChar c = text[i];
         const bool isLetterOrNumber = c.isLetterOrNumber();
 
-        if (c == u'h') {
-            if (SUBSTR(text, i, 4) == QStringView(u"http", 4)) {
-                if (text.indexOf(QChar(QChar::Space), i) > pos || text.indexOf(u')', i) > pos)
-                    return QLatin1String();
-
-                isLink = true;
-            }
-        }
-
-        if (isLink) {
-            if (c.isSpace() || c == u')') {
-                isLink = false;
-            }
-        } else if (i == textLength - 1 && isLetterOrNumber) {
+        if (i == textLength - 1 && isLetterOrNumber) {
             word.append(c);
             return word;
         } else if (isLetterOrNumber)
