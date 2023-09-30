@@ -87,10 +87,12 @@ public:
 
 public Q_SLOTS:
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-    void checkSpelling(const QString &);
+    using StringView = QString;
 #else
-    void checkSpelling(QStringView);
+    using StringView = QStringView;
 #endif
+
+    void checkSpelling(const StringView &);
 
 Q_SIGNALS:
     void languageChanged(const QString &lang = QLatin1String());

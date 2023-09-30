@@ -107,11 +107,7 @@ void SpellChecker::highlightBlock(const QString &text)
         checkSpelling(text);
 }
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
-void SpellChecker::checkSpelling(const QString &text)
-#else
-void SpellChecker::checkSpelling(QStringView text)
-#endif
+void SpellChecker::checkSpelling(const StringView &text)
 {
     if (!speller || !spellingEnabled)
         return;
@@ -304,11 +300,7 @@ auto SpellChecker::getWord(const QTextBlock &block, const int pos) -> QString
         return QLatin1String();
 
     QString word;
-#if QT_VERSION > QT_VERSION_CHECK(5, 14, 0)
-    QStringView text = block.text();
-#else
-    QString text = block.text();
-#endif
+    const StringView text = block.text();
 
     const auto textLength = text.length();
 
