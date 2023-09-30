@@ -497,10 +497,7 @@ void SpellChecker::setSpellCheckingEnabled(const bool enabled)
 
 bool SpellChecker::saveUserDict()
 {
-    if (language.isEmpty())
-        return false;
-
-    QFile f(userDictDir + STR("/user-dict-") + language + STR(".dic"));
+    QFile f(userDictDir + STR("/user-dict.dic"));
     if (f.open(QIODevice::WriteOnly)) {
         QDataStream out(&f);
         out << wordList;
@@ -513,7 +510,7 @@ void SpellChecker::loadUserDict(const QString &lang)
 {
     wordList.clear();
 
-    QFile f(userDictDir + STR("/user-dict-") + lang + STR(".dic"));
+    QFile f(userDictDir + STR("/user-dict.dic"));
     if (!f.open(QIODevice::ReadOnly))
         return;
 
