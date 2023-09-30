@@ -135,17 +135,8 @@ void SpellChecker::checkSpelling(QStringView text)
         if (isPosInACodeSpan(currentBlock().blockNumber(), i))
             continue;
 
-        // Check for link
-        if (c == u'h') {
-            if (textLength - i >= 11) { // http 4; :// 7; * >1; .de 11
-                if (SUBSTR(text, i, 4) == QStringView(u"http", 4)) {
-                    i = (int) text.indexOf(u')', (qsizetype) i);
-
-                    if (i == -1)
-                        break;
-                }
-            }
-        }
+        if (isPosInALink(currentBlock().blockNumber(), i))
+            continue;
 
         // If last character and letter or number
         if (i == textLength - 1 && isLetterOrNumber) {
