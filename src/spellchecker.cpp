@@ -89,6 +89,11 @@ void SpellChecker::applyCustomStyle()
         QColor windowColor = p.window().color();
         int windowLightness = windowColor.lightness();
 
+        QColor masked = p.dark().color();
+        if (masked.lightness() < windowLightness) {
+            masked = windowColor.lighter(255 - windowLightness);
+        }
+
         _formats[List].setForeground(
             _formats[List].foreground().color().lighter(255 - windowLightness));
         _formats[BlockQuote].setForeground(
