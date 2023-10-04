@@ -1044,7 +1044,7 @@ void MainWindow::changeAddtoIconPath(const bool c)
     }
 
     QStringList searchPaths;
-    searchPaths.resize(editorList.size());
+    searchPaths.reserve(editorList.size());
 
     for (const QString &file : as_const(fileList)) {
         searchPaths << QFileInfo(file).absolutePath();
