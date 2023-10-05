@@ -98,7 +98,7 @@ void SpellChecker::applyCustomStyle()
             _formats[List].foreground().color().lighter(255 - windowLightness));
         _formats[BlockQuote].setForeground(
             _formats[BlockQuote].foreground().color().lighter(255 - windowLightness));
-        _formats[MaskedSyntax].setForeground(p.dark());
+        _formats[MaskedSyntax].setForeground(masked);
         _formats[Link].setForeground(p.link());
     }
 }
