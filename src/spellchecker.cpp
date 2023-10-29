@@ -224,6 +224,8 @@ auto SpellChecker::setLanguage(const QString &lang) -> bool
         dic = langPathMap[lang + L1("_frami")];
         if (dic.dir.empty())
             return false;
+    } else if (dic.dict) {
+        return true;
     }
 
     try {
@@ -458,7 +460,6 @@ void SpellChecker::slotSetLanguage(const bool checked)
     if (!checked) // deselected
     {
 #ifndef NO_SPELLCHECK
-        delete langPathMap[lang].dict;
         languages.removeAll(lang);
         rehighlight();
         return;
