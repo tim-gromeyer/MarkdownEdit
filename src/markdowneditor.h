@@ -40,6 +40,7 @@ public:
                  const QString &newFile = QLatin1String(),
                  const bool setLangugae = true);
 
+    auto setLanguages(const QStringList & = {}) -> bool;
     auto setLanguage(const QString & = QLatin1String()) -> bool;
 
     inline auto getChecker() -> SpellChecker * { return checker; };

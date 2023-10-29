@@ -191,7 +191,7 @@ void MainWindow::onHelpSyntax()
     }
 
     invalidFileNames.append(file);
-    openFile(file, language);
+    openFile(file, {language});
 }
 
 void MainWindow::toForeground()
@@ -1269,7 +1269,7 @@ void MainWindow::openFiles(const QStringList &files)
     }
 }
 
-void MainWindow::openFile(const QString &newFile, const QString &lang)
+void MainWindow::openFile(const QString &newFile, const QStringList &langs)
 {
     // Check if file is already open
     if (fileList.contains(newFile)) {
@@ -1281,8 +1281,8 @@ void MainWindow::openFile(const QString &newFile, const QString &lang)
         }
     }
 
-    if (!lang.isEmpty())
-        setMapAttribute(newFile, lang);
+    if (!langs.isEmpty())
+        setMapAttribute(newFile, langs);
 
     bool loadFromAutoSave = false;
 
@@ -1533,8 +1533,8 @@ auto MainWindow::onFileSaveAs() -> bool
 
     if (fileList.contains(file))
         openFile(file);
-
-    setMapAttribute(path, currentEditor()->getChecker()->getLanguage());
+    
+    setMapAttribute(path, currentEditor()->getChecker()->getLanguages());
 
     ui->tabWidget_2->tabBar()->setTabText(editorList.length() - 1, QFileInfo(file).fileName());
     ui->tabWidget_2->tabBar()->setTabToolTip(editorList.length() - 1, file);

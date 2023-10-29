@@ -31,11 +31,6 @@ class QMenu;
 template<typename Key, typename T>
 class QHash;
 class QPlainTextEdit;
-namespace nuspell {
-inline namespace v5 {
-class Dictionary;
-}
-} // namespace nuspell
 QT_END_NAMESPACE
 
 class SpellChecker : public MarkdownHighlighter
@@ -46,7 +41,7 @@ public:
     ~SpellChecker() override;
 
     auto setLanguage(const QString &) -> bool;
-    [[nodiscard]] auto getLanguage() const -> QString;
+    [[nodiscard]] auto getLanguages() const -> QStringList;
 
     void setMarkdownHighlightingEnabled(const bool);
     [[nodiscard]] inline auto isMarkdownHighlightingEnabled() const -> bool { return markdownhig; };
@@ -54,7 +49,7 @@ public:
     void setSpellCheckingEnabled(const bool);
     [[nodiscard]] inline auto isSpellCheckingEnabled() const -> bool
     {
-        return spellingEnabled && speller;
+        return spellingEnabled && spellerLoaded();
     };
 
     inline void setHeaderColor(QColor color)
@@ -72,7 +67,7 @@ public:
 
     Q_REQUIRED_RESULT auto isCorrect(const QString &word) const -> bool;
 
-    Q_REQUIRED_RESULT auto getSuggestion(const QString &) const -> QStringList;
+    Q_REQUIRED_RESULT auto getSuggestion(const QString &, const QString &lang) const -> QStringList;
 
     void addWord(const QString &);
 
@@ -107,14 +102,16 @@ private:
     bool spellingEnabled = true;
     bool markdownhig = true;
 
+    bool spellerLoaded() const;
+
     auto getWord(const QTextBlock &, const int) -> QString;
 
     bool saveUserDict();
-    void loadUserDict(const QString &);
+    void loadUserDict();
 
     void showContextMenu(const QPoint);
 
-    QString language;
+    QStringList languages;
     void replaceWord(const int wordPos, const QString &newWord);
 
     QPlainTextEdit *textEdit = nullptr;
@@ -122,7 +119,6 @@ private:
     static auto encodeLanguageString(const QString &langString) -> QString;
 
     // Spell checker
-    nuspell::Dictionary *speller = nullptr;
     QStringList wordList;
     QStringList sessionWordList;
 };

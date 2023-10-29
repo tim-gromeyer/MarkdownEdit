@@ -41,14 +41,14 @@ void setLanguageMap(const QHash<QString, QVariant> &m)
     languages_map = m;
 }
 
-void setMapAttribute(const QString &name, const QVariant &value)
+void setMapAttribute(const QString &name, const QStringList &value)
 {
     languages_map[name] = value;
 }
 
-auto mapAttribute(const QString &s) -> const QString
+auto mapAttribute(const QString &s) -> const QStringList
 {
-    return languages_map[s].toString();
+    return languages_map[s].toStringList();
 }
 
 auto mapContains(const QString &s) -> bool

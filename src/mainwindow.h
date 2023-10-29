@@ -45,7 +45,7 @@ public:
     explicit MainWindow(const QStringList &, QWidget *parent = nullptr);
     ~MainWindow() override;
 
-    void openFile(const QString &, const QString & = QLatin1String());
+    void openFile(const QString &, const QStringList & = {});
     void openFiles(const QStringList &);
 
 protected:

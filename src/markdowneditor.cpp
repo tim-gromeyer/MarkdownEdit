@@ -31,8 +31,6 @@
 #include <QSignalBlocker>
 #include <QTextStream>
 
-#include <thread>
-
 MarkdownEditor::MarkdownEditor(QWidget *parent)
     : QMarkdownTextEdit(parent, false)
 {
@@ -152,6 +150,15 @@ void MarkdownEditor::dropEvent(QDropEvent *event)
     event->accept();
 }
 
+auto MarkdownEditor::setLanguages(const QStringList &langs) -> bool
+{
+    for (const QString &lang : langs) {
+        setLanguage(lang);
+    }
+
+    return true;
+}
+
 auto MarkdownEditor::setLanguage(const QString &lang) -> bool
 {
     threading::runFunction([this, lang] { checker->setLanguage(lang); });
@@ -190,7 +197,7 @@ void MarkdownEditor::onLanguageChanged(const QString &l)
     const QString fileName = info.filePath();
 
     if (!fileName.isEmpty()) {
-        setMapAttribute(fileName, l);
+        setMapAttribute(fileName, checker->getLanguages());
     }
 }
 
@@ -218,7 +225,7 @@ void MarkdownEditor::setText(const QByteArray &t, const QString &newFile, const 
             checker->setDocument(nullptr);
 
             if (mapContains(info.filePath()))
-                setLanguage(mapAttribute(info.filePath()));
+                setLanguages(mapAttribute(info.filePath()));
 
             document()->setPlainText(QString::fromUtf8(t));
             document()->setModified(false);

@@ -26,8 +26,8 @@
 auto getLanguageMap() -> QHash<QString, QVariant>;
 void setLanguageMap(const QHash<QString, QVariant> &m);
 
-void setMapAttribute(const QString &, const QVariant &);
-auto mapAttribute(const QString &) -> const QString;
+void setMapAttribute(const QString &, const QStringList &);
+const QStringList mapAttribute(const QString &);
 auto mapContains(const QString &) -> bool;
 
 namespace settings {
