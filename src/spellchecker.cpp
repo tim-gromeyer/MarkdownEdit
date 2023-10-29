@@ -457,10 +457,12 @@ void SpellChecker::slotSetLanguage(const bool checked)
 
     if (!checked) // deselected
     {
+#ifndef NO_SPELLCHECK
         delete langPathMap[lang].dict;
         languages.removeAll(lang);
         rehighlight();
         return;
+#endif
     }
 
     threading::runFunction([this, lang] { setLanguage(lang); });
@@ -530,6 +532,9 @@ void SpellChecker::loadUserDict()
 
 bool SpellChecker::spellerLoaded() const
 {
+#ifdef NO_SPELLCHECK
+    return false;
+#else
     for (const QString &lang : languages) {
         if (langPathMap[lang].dict) {
             return true;
@@ -537,6 +542,7 @@ bool SpellChecker::spellerLoaded() const
     }
 
     return true;
+#endif
 }
 
 SpellChecker::~SpellChecker() = default;
