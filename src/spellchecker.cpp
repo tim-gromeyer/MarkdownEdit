@@ -48,6 +48,7 @@ struct Language
 
 #ifndef NO_SPELLCHECK
     nuspell::v5::Dictionary *dict = nullptr;
+    int instanceCount = 0;
 #endif
 };
 QHash<QString, Language> langPathMap;
@@ -225,12 +226,15 @@ auto SpellChecker::setLanguage(const QString &lang) -> bool
         if (dic.dir.empty())
             return false;
     } else if (dic.dict) {
+        ++dic.instanceCount;
+        languages.append(lang);
         return true;
     }
 
     try {
         dic.dict = new nuspell::Dictionary();
         dic.dict->load_aff_dic(dic.dir);
+        ++dic.instanceCount;
         languages.append(lang);
     } catch (const nuspell::Dictionary_Loading_Error &e) {
         qWarning() << "Failed to load dictionary: " << e.what();
@@ -461,6 +465,15 @@ void SpellChecker::slotSetLanguage(const bool checked)
     {
 #ifndef NO_SPELLCHECK
         languages.removeAll(lang);
+        Language &language = langPathMap[lang];
+        --language.instanceCount;
+
+        if (language.instanceCount == 0) {
+            qDebug() << __func__ << "Deleting dict:" << language.encodedName;
+            delete language.dict;
+            language.dict = nullptr;
+        }
+
         rehighlight();
         return;
 #endif
@@ -546,4 +559,18 @@ bool SpellChecker::spellerLoaded() const
 #endif
 }
 
-SpellChecker::~SpellChecker() = default;
+SpellChecker::~SpellChecker()
+{
+#ifndef NO_SPELLCHECK
+    for (const QString &lang : languages) {
+        Language &language = langPathMap[lang];
+        --language.instanceCount;
+
+        if (language.instanceCount == 0) {
+            qDebug() << __func__ << "Deleting dict:" << language.encodedName;
+            delete language.dict;
+            language.dict = nullptr;
+        }
+    }
+#endif
+};
