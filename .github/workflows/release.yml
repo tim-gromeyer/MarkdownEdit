@@ -42,7 +42,7 @@ jobs:
 
     - if: contains( matrix.os, 'windows') || contains( matrix.os, 'macos')
       name: Install Qt on Windows and Mac
-      uses: jurplel/install-qt-action@v3
+      uses: jurplel/install-qt-action@v4
       with:
         version: '6.5.1'
         aqtversion: '==3.1.*'
