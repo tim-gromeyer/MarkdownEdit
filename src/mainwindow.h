@@ -22,6 +22,8 @@
 #include <QMainWindow>
 #include <QtCore/qcontainerfwd.h>
 
+#include "markdownparser.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -157,7 +159,7 @@ private:
     Ui::MainWindow *ui;
 
     QString path;
-    int _mode = 1; // 0 = Commonmark, 1 = GitHub
+    Parser::Dialect _mode = Parser::GitHub;
 
     QSettings *settings;
 

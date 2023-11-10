@@ -39,7 +39,7 @@ void captureHtmlFragment(const MD_CHAR *data, const MD_SIZE data_size, void *use
     array->append(data, (int) data_size);
 }
 
-auto Parser::toHtml(const QString &in, const int dia, const int toc_depth) -> QString
+auto Parser::toHtml(const QString &in, const Dialect dia, const int toc_depth) -> QString
 {
 #if MD_UNDERLINE
     unsigned parser_flags = MD_FLAG_UNDERLINE;

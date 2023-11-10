@@ -27,7 +27,9 @@ class Parser
 public:
     enum Dialect { Commonmark = 0, GitHub = 1, Doxygen = 2 };
 
-    [[nodiscard]] static QString toHtml(const QString &in, const int dia = GitHub, const int = 3);
+    [[nodiscard]] static QString toHtml(const QString &in,
+                                        const Dialect dia = GitHub,
+                                        const int = 3);
     [[nodiscard]] static std::string heading2HTML(const QString &in);
 
     [[nodiscard]] static QString toMarkdown(const QString &in);

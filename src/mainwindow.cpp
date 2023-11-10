@@ -1225,7 +1225,7 @@ void MainWindow::exportHtml()
 
 void MainWindow::changeMode(const int i)
 {
-    _mode = (short) i;
+    _mode = (Parser::Dialect) i;
     onTextChanged();
     currentEditor()->setFocus();
 }
