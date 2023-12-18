@@ -71,7 +71,7 @@ jobs:
         echo "Dropped for now, since it doesn't work. It works on my machine and in a freshly set up vm..."
 
     - name: Upload package
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         path: ${{ matrix.files }}
 
