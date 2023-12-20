@@ -323,26 +323,21 @@ auto SpellChecker::getWord(const QTextBlock &block, const int pos) -> QString
     QString word;
     const StringView text = block.text();
 
-    const auto textLength = text.length();
-
-    for (auto i = 0; i < textLength; ++i) {
+    for (auto i = 0; i < text.length(); ++i) {
         const QChar c = text[i];
-        const bool isLetterOrNumber = c.isLetterOrNumber();
 
-        if (i == textLength - 1 && isLetterOrNumber) {
+        if (c.isLetterOrNumber())
             word.append(c);
+        else if ((c == u',' || c == u'.') && i > 0 && i < text.length() - 1
+                 && text[i - 1].isNumber() && text[i + 1].isNumber())
+            word.append(c);
+        else if (pos <= i)
             return word;
-        } else if (isLetterOrNumber)
-            word.append(c);
-        else {
-            if (pos <= i)
-                return word;
-            else
-                word.clear();
-        }
+        else
+            word.clear();
     }
 
-    return QLatin1String();
+    return word;
 }
 
 void SpellChecker::showContextMenu(const QPoint pos)
