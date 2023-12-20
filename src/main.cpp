@@ -109,7 +109,7 @@ auto main(int argc, char *argv[]) -> int
 
 #if SINGLEAPP
     if (a.isSecondary()) {
-        a.sendMessage(parser.positionalArguments().join(u' ').toLatin1());
+        a.sendMessage(parser.positionalArguments().join(u';').toLatin1());
         t.join();
         return 0;
     }

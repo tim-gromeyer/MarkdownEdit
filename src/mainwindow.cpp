@@ -769,10 +769,11 @@ auto MainWindow::createEditor() -> MarkdownEditor *
 
 void MainWindow::receivedMessage(const quint32 /*id*/, const QByteArray &msg)
 {
+    qDebug() << "Received message from another distance:" << msg;
     QString file = QString::fromUtf8(msg);
 
     if (!file.isEmpty())
-        openFiles(file.split(u' ')); // if you selected files
+        openFiles(file.split(u';')); // if you selected files
 }
 
 void MainWindow::onUrlClicked(const QString &urlString)
